@@ -1,0 +1,4 @@
+prefix=GLib
+modules=GLib::Raw::Types,
+backups=backup,bitbucket
+build_exclude=GLib::Roles::TreeData
