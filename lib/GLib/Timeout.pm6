@@ -2,11 +2,10 @@ use v6.c;
 
 use Method::Also;
 
-use GLib::Source;
 use GLib::Raw::Types;
 use GLib::Raw::Main;
 
-use GLib::Raw::Subs;
+use GLib::Source;
 
 class GLib::Timeout {
 
@@ -20,7 +19,7 @@ class GLib::Timeout {
     &function,
     gpointer $data = gpointer;
   ) {
-    my guint $i = resolve-uint($interval);
+    my guint $i = $interval;
 
     g_timeout_add($i, &function, $data);
   }
@@ -34,8 +33,8 @@ class GLib::Timeout {
   )
     is also<add-full>
   {
-    my gint $p = resolve-int($priority);
-    my guint $i = resolve-uint($interval);
+    my gint $p = $priority;
+    my guint $i = $interval;
 
     g_timeout_add_full($p, $i, &function, $data, $notify);
   }
@@ -47,7 +46,7 @@ class GLib::Timeout {
   )
     is also<add-seconds>
   {
-    my guint $i = resolve-uint($interval);
+    my guint $i = $interval;
 
     g_timeout_add_seconds($i, &function, $data);
   }
@@ -61,8 +60,8 @@ class GLib::Timeout {
   )
     is also<add-seconds-full>
   {
-    my gint $p = resolve-int($priority);
-    my guint $i = resolve-uint($interval);
+    my gint $p = $priority;
+    my guint $i = $interval;
 
     g_timeout_add_seconds_full($p, $i, &function, $data, $notify);
   }

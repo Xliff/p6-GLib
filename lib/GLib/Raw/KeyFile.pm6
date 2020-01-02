@@ -4,16 +4,16 @@ use NativeCall;
 
 use GLib::Raw::Types;
 
-unit package GTK::Compat::Raw::KeyFile;
+unit package GLib::Raw::KeyFile;
 
 sub g_key_file_error_quark ()
   returns GQuark
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
 sub g_key_file_free (GKeyFile $key_file)
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -24,7 +24,7 @@ sub g_key_file_get_boolean (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -36,7 +36,7 @@ sub g_key_file_get_boolean_list (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -47,7 +47,7 @@ sub g_key_file_get_comment (
   CArray[Pointer[GError]] $error
 )
   returns Str
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -58,7 +58,7 @@ sub g_key_file_get_double (
   CArray[Pointer[GError]] $error
 )
   returns gdouble
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -70,13 +70,13 @@ sub g_key_file_get_double_list (
   CArray[Pointer[GError]] $error
 )
   returns gdouble
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
 sub g_key_file_get_groups (GKeyFile $key_file, gsize $length)
   returns CArray[Str]
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -87,7 +87,7 @@ sub g_key_file_get_int64 (
   CArray[Pointer[GError]] $error
 )
   returns gint64
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -98,7 +98,7 @@ sub g_key_file_get_integer (
   CArray[Pointer[GError]] $error
 )
   returns gint
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -110,7 +110,7 @@ sub g_key_file_get_integer_list (
   CArray[Pointer[GError]] $error
 )
   returns gint
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -121,7 +121,7 @@ sub g_key_file_get_keys (
   CArray[Pointer[GError]] $error
 )
   returns CArray[Str]
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -132,7 +132,7 @@ sub g_key_file_get_locale_for_key (
   Str $locale
 )
   returns Str
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -144,7 +144,7 @@ sub g_key_file_get_locale_string (
   CArray[Pointer[GError]] $error
 )
   returns Str
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -157,13 +157,13 @@ sub g_key_file_get_locale_string_list (
   CArray[Pointer[GError]] $error
 )
   returns CArray[Str]
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
 sub g_key_file_get_start_group (GKeyFile $key_file)
   returns Str
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -174,7 +174,7 @@ sub g_key_file_get_string (
   CArray[Pointer[GError]] $error
 )
   returns Str
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -186,7 +186,7 @@ sub g_key_file_get_string_list (
   CArray[Pointer[GError]] $error
 )
   returns CArray[Str]
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -197,7 +197,7 @@ sub g_key_file_get_uint64 (
   CArray[Pointer[GError]] $error
 )
   returns guint64
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -208,13 +208,13 @@ sub g_key_file_get_value (
   CArray[Pointer[GError]] $error
 )
   returns Str
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
 sub g_key_file_has_group (GKeyFile $key_file, Str $group_name)
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -225,7 +225,7 @@ sub g_key_file_has_key (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -236,7 +236,7 @@ sub g_key_file_load_from_bytes (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -248,7 +248,7 @@ sub g_key_file_load_from_data (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -260,7 +260,7 @@ sub g_key_file_load_from_data_dirs (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -273,7 +273,7 @@ sub g_key_file_load_from_dirs (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -284,19 +284,19 @@ sub g_key_file_load_from_file (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
 sub g_key_file_new ()
   returns GKeyFile
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
 sub g_key_file_ref (GKeyFile $key_file)
   returns GKeyFile
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -307,7 +307,7 @@ sub g_key_file_remove_comment (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -317,7 +317,7 @@ sub g_key_file_remove_group (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -328,7 +328,7 @@ sub g_key_file_remove_key (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -338,7 +338,7 @@ sub g_key_file_save_to_file (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -348,7 +348,7 @@ sub g_key_file_set_boolean (
   Str $key,
   gboolean $value
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -360,7 +360,7 @@ sub g_key_file_set_comment (
   CArray[Pointer[GError]] $error
 )
   returns uint32
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -370,7 +370,7 @@ sub g_key_file_set_double (
   Str $key,
   gdouble $value
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -380,7 +380,7 @@ sub g_key_file_set_int64 (
   Str $key,
   gint64 $value
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -390,12 +390,12 @@ sub g_key_file_set_integer (
   Str $key,
   gint $value
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
 sub g_key_file_set_list_separator (GKeyFile $key_file, Str $separator)
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -406,7 +406,7 @@ sub g_key_file_set_locale_string (
   Str $locale,
   Str $string
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -416,7 +416,7 @@ sub g_key_file_set_string (
   Str $key,
   Str $string
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -426,7 +426,7 @@ sub g_key_file_set_uint64 (
   Str $key,
   guint64 $value
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -436,7 +436,7 @@ sub g_key_file_set_value (
   Str $key,
   Str $value
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -446,12 +446,12 @@ sub g_key_file_to_data (
   CArray[Pointer[GError]] $error
 )
   returns Str
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
 sub g_key_file_unref (GKeyFile $key_file)
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -462,7 +462,7 @@ sub g_key_file_set_string_list (
   CArray[Str]      $list,
   gsize            $length
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -474,7 +474,7 @@ sub g_key_file_set_locale_string_list (
   CArray[Str]      $list,
   gsize            $length
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -485,7 +485,7 @@ sub g_key_file_set_boolean_list (
   CArray[gboolean] $list,
   gsize            $length
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -496,7 +496,7 @@ sub g_key_file_set_double_list (
   CArray[gdouble] $list,
   gsize           $length
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }
 
@@ -507,6 +507,6 @@ sub g_key_file_set_integer_list (
   CArray[gint] $list,
   gsize        $length
 )
-  is native(gtk)
+  is native(glib)
   is export
 { * }

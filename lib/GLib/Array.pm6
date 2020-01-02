@@ -6,7 +6,7 @@ use GLib::Raw::Types;
 
 use GLib::Raw::Array;
 
-use GLib::Raw::Subs;
+
 
 class GLib::Array {
   also does Positional;

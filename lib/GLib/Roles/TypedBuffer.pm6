@@ -1,10 +1,9 @@
 use v6.c;
 
+use Method::Also;
 use NativeCall;
 
 use GLib::Raw::Types;
-
-use GLib::Raw::Subs;
 
 role GLib::Roles::TypedBuffer[::T] does Positional {
   has $!size;
@@ -23,7 +22,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     } else {
       die 'Must pass in $size' unless $size.defined;
 
-      my uint64 $s1 = resolve-uint64($!size = $size);
+      my uint64 $s1 = $!size = $size;
       $!b = calloc( $s1, nativesizeof(T) )
     }
   }
@@ -79,7 +78,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   method bind (Int() $pos, T $elem) {
-    my uint64 $p = resolve-uint($pos);
+    my uint64 $p = $pos;
 
     memcpy(
       Pointer.new( $!b + $p * nativesizeof(T) ),

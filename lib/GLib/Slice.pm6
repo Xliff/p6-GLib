@@ -4,7 +4,7 @@ use Method::Also;
 
 use NativeCall;
 
-use GLib::Raw::Subs;
+
 
 use GLib::Raw::Types;
 use GLib::Raw::Slice;

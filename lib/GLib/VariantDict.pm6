@@ -2,7 +2,7 @@ use v6.c;
 
 use Method::Also;
 
-use GLib::Raw::Subs;
+
 
 use GLib::Raw::Types;
 use GLib::Raw::Variant;

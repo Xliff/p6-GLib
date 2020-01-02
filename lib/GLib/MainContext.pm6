@@ -6,8 +6,6 @@ use NativeCall;
 use GLib::Raw::Types;
 use GLib::Raw::Main;
 
-use GLib::Raw::Subs;
-
 use GLib::Roles::TypedBuffer;
 
 class GLib::MainContext {
@@ -36,7 +34,7 @@ class GLib::MainContext {
   }
 
   method add_poll (GPollFD $fd, Int() $priority) is also<add-poll> {
-    my gint $p = resolve-int($priority);
+    my gint $p = $priority;
 
     g_main_context_add_poll($!mc, $fd, $p);
   }
@@ -54,7 +52,7 @@ class GLib::MainContext {
    gpointer $fds,           # Block of GPollFD
    Int() $n_fds
  ) {
-    my gint ($mp, $nf) = resolve-int($max_priority, $n_fds);
+    my gint ($mp, $nf) = $max_priority, $n_fds;
     g_main_context_check($!mc, $mp, $fds, $nf);
     my $fdb = $fds but GLib::Roles::TypedBuffer[GPollFD];
     my @pd;
@@ -80,7 +78,7 @@ class GLib::MainContext {
   }
 
    method find_source_by_id (Int() $source_id) is also<find-source-by-id> {
-     my guint $sid = resolve-uint($source_id);
+     my guint $sid = $source_id;
 
      g_main_context_find_source_by_id($!mc, $sid);
    }
@@ -107,7 +105,7 @@ class GLib::MainContext {
   )
     is also<invoke-full>
   {
-    my gint $p = resolve-int($priority);
+    my gint $p = $priority;
 
     g_main_context_invoke_full($!mc, $p, &function, $data, $notify);
   }
@@ -129,7 +127,7 @@ class GLib::MainContext {
     GMainContext $context = GMainContext,
     Int() $may_block = True
   ) {
-    my gboolean $mb = resolve-bool($may_block);
+    my gboolean $mb = $may_block;
 
     g_main_context_iteration($context, $mb);
   }
@@ -143,7 +141,7 @@ class GLib::MainContext {
   }
 
   method prepare (Int() $priority) {
-    my gint $p = resolve-int($priority);
+    my gint $p = $priority;
 
     g_main_context_prepare($!mc, $priority);
   }
@@ -167,7 +165,7 @@ class GLib::MainContext {
     gpointer $fds,           # Block of GPollFD
     Int() $n_fds
   ) {
-    my gint ($mp, $to, $nf) = resolve-int($max_priority, $timeout, $n_fds);
+    my gint ($mp, $to, $nf) = $max_priority, $timeout, $n_fds;
     g_main_context_query($!mc, $mp, $to, $fds, $nf);
     my $fdb = $fds but GLib::Roles::TypedBuffer[GPollFD];
     my @pd;

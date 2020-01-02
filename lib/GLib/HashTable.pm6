@@ -4,7 +4,7 @@ use NativeCall;
 
 use GLib::Raw::Types;
 
-use GLib::Raw::Subs;
+
 
 use GLib::Raw::HashTable;
 
@@ -174,9 +174,11 @@ class GLib::HashTable {
   # Keys can be of various types, so no easy way to do this. Will have to
   # consider the various options: Str, int32, int64, double, Pointer
   method get_keys_as_array (Int() $length is rw) {
-    my guint $l = resolve-uint($length);
-    $length = $l;
+    my guint $l = $length;
 
+    # ??? WTF???
+
+    $length = $l;
   }
 
   # Will return a list of POINTERS!

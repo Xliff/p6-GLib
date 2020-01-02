@@ -5,8 +5,6 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Raw::Main;
 
-use GLib::Raw::Subs;
-
 use GLib::MainContext;
 
 class GLib::Source {
@@ -29,7 +27,7 @@ class GLib::Source {
     GSourceFuncs $source_funcs,
     Int() $struct_size = GSourceFuncs.size-of
   ) {
-    my guint $ss = resolve-uint($struct_size);
+    my guint $ss = $struct_size;
     self.bless( source => g_source_new($source_funcs, $ss) );
   }
 
@@ -44,8 +42,8 @@ class GLib::Source {
   }
 
   method add_unix_fd (Int() $fd, Int() $events) is also<add-unix-fd> {
-    my gint $f = resolve-int($fd);
-    my guint $e = resolve-uint($events);
+    my gint $f = $fd;
+    my guint $e = $events;
     g_source_add_unix_fd($!gs, $fd, $e);
   }
 
@@ -76,12 +74,12 @@ class GLib::Source {
   method modify_unix_fd (gpointer $tag, Int() $new_events)
     is also<modify-unix-fd>
   {
-    my guint $ne = resolve-uint($new_events);
+    my guint $ne = $new_events;
     g_source_modify_unix_fd($!gs, $tag, $ne);
   }
 
   method query_unix_fd (gpointer $tag) is also<query-unix-fd> {
-    GIOCondition( g_source_query_unix_fd($!gs, $tag) );
+    GIOConditionEnum( g_source_query_unix_fd($!gs, $tag) );
   }
 
   method ref {
@@ -132,7 +130,7 @@ class GLib::Source {
   }
 
   method remove (GLib::Source:U: Int() $tag) {
-    my guint $t = resolve-uint($tag);
+    my guint $t = $tag;
 
     g_source_remove($t);
   }

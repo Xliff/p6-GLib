@@ -5,8 +5,6 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Raw::Main;
 
-use GLib::Raw::Subs;
-
 class GLib::MainLoop {
   has GMainLoop $!ml is implementor;
 
@@ -26,7 +24,7 @@ class GLib::MainLoop {
   }
   multi method new (
     GMainContext() $context, Int() $is_running) {
-    my gboolean $ir = resolve-bool($is_running);
+    my gboolean $ir = $is_running;
 
     self.bless( mainloop => g_main_loop_new($context, $ir) );
   }
@@ -59,8 +57,8 @@ class GLib::MainLoop {
   }
 
   method poll (gpointer $fds, Int() $nfds, Int() $timeout) {
-    my guint $nf = resolve-uint($nfds);
-    my gint $t = resolve-int($timeout);
+    my guint $nf = $nfds;
+    my gint $t = $timeout;
 
     g_poll($fds, $nf, $t);
   }

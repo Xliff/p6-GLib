@@ -4,10 +4,7 @@ use Method::Also;
 use NativeCall;
 
 use GLib::Object::IsType;
-
 use GLib::Raw::Types;
-
-use GTK::Raw::Subs;
 
 role GLib::Roles::Object {
   has GObject $!o;

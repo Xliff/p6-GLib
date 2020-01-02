@@ -3,10 +3,8 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
-use GLib::Raw::Value;
 use GLib::Raw::Types;
-use GTK::Raw::Subs;
-use GLib::Raw::Subs;
+use GLib::Raw::Value;
 
 class GLib::Value {
   has GValue $!v is implementor;
@@ -23,7 +21,7 @@ class GLib::Value {
   multi method new (Int $t = G_TYPE_NONE) {
     die "Invalid type passed to GLib::Value.new - { $t.^name }"
       unless $t ~~ Int || $t.^can('Int').elems;
-    my $type = resolve-ulint($t.Int);
+    my $type = $t.Int;
     self.bless(:$type);
   }
   multi method new (GValue $value) {
@@ -82,7 +80,7 @@ class GLib::Value {
         so g_value_get_boolean($!v);
       },
       STORE => sub ($, Int() $v_boolean is copy) {
-        g_value_set_boolean($!v, resolve-bool($v_boolean));
+        g_value_set_boolean($!v, $v_boolean);
       }
     );
   }
@@ -103,7 +101,7 @@ class GLib::Value {
       FETCH => sub ($) {
         g_value_get_char($!v);
       },
-      STORE => sub ($, $v_char is copy) {
+      STORE => sub ($, Str() $v_char is copy) {
         g_value_set_char($!v, $v_char);
       }
     );
@@ -116,6 +114,7 @@ class GLib::Value {
       },
       STORE => sub ($, Num() $v_double is copy) {
         my num64 $vd = $v_double;
+
         g_value_set_double($!v, $vd);
       }
     );
@@ -128,6 +127,7 @@ class GLib::Value {
       },
       STORE => sub ($, Num() $v_float is copy) {
         my num32 $vf = $v_float;
+
         g_value_set_float($!v, $vf);
       }
     );
@@ -140,7 +140,7 @@ class GLib::Value {
   #       GTypeEnum( g_value_get_gtype($!v) );
   #     },
   #     STORE => sub ($, Int() $v_gtype is copy) {
-  #       g_value_set_gtype($!v, self.RESOLVE-UINT($v_gtype));
+  #       g_value_set_gtype($!v, self.$v_gtype);
   #     }
   #   );
   # }
@@ -154,7 +154,7 @@ class GLib::Value {
         g_value_get_enum($!v);
       },
       STORE => sub ($, Int() $v_int is copy) {
-        g_value_set_enum($!v, resolve-int($v_int));
+        g_value_set_enum($!v, $v_int);
       }
     );
   }
@@ -165,7 +165,7 @@ class GLib::Value {
         g_value_get_enum($!v);
       },
       STORE => sub ($, Int() $v_uint is copy) {
-        g_value_set_enum($!v, resolve-uint($v_uint));
+        g_value_set_enum($!v, $v_uint);
       }
     );
   }
@@ -176,7 +176,7 @@ class GLib::Value {
         g_value_get_int($!v);
       },
       STORE => sub ($, Int() $v_int is copy) {
-        g_value_set_int($!v, resolve-int($v_int));
+        g_value_set_int($!v, $v_int);
       }
     );
   }
@@ -187,7 +187,7 @@ class GLib::Value {
         g_value_get_int64($!v);
       },
       STORE => sub ($, Int() $v_int64 is copy) {
-        g_value_set_int64($!v, resolve-lint($v_int64));
+        g_value_set_int64($!v, $v_int64);
       }
     );
   }
@@ -198,7 +198,7 @@ class GLib::Value {
         g_value_get_long($!v);
       },
       STORE => sub ($, $v_long is copy) {
-        g_value_set_long($!v, resolve-lint($v_long));
+        g_value_set_long($!v, $v_long);
       }
     );
   }
@@ -264,7 +264,7 @@ class GLib::Value {
         g_value_get_uint($!v);
       },
       STORE => sub ($, Int() $v_uint is copy) {
-        g_value_set_uint($!v, resolve-uint($v_uint));
+        g_value_set_uint($!v, $v_uint);
       }
     );
   }
@@ -274,8 +274,8 @@ class GLib::Value {
       FETCH => sub ($) {
         g_value_get_uint64($!v);
       },
-      STORE => sub ($, $v_uint64 is copy) {
-        g_value_set_uint64($!v, resolve-ulint($v_uint64));
+      STORE => sub ($, Int() $v_uint64 is copy) {
+        g_value_set_uint64($!v, $v_uint64);
       }
     );
   }
@@ -285,8 +285,8 @@ class GLib::Value {
       FETCH => sub ($) {
         g_value_get_ulong($!v);
       },
-      STORE => sub ($, $v_ulong is copy) {
-        g_value_set_ulong($!v, resolve-ulint($v_ulong));
+      STORE => sub ($, Int() $v_ulong is copy) {
+        g_value_set_ulong($!v, $v_ulong);
       }
     );
   }
@@ -308,7 +308,7 @@ class GLib::Value {
     g_gtype_get_type();
   }
 
-  method g_pointer_type_register_static(Str $name) {
+  method g_pointer_type_register_static(Str() $name) {
     g_pointer_type_register_static($name);
   }
   # End static methods
@@ -338,7 +338,7 @@ class GLib::Value {
     g_value_take_string($!v, $v_string);
   }
 
-  method take_variant (GVariant $variant) {
+  method take_variant (GVariant() $variant) {
     g_value_take_variant($!v, $variant);
   }
 

@@ -68,7 +68,8 @@ class GLib::VariantType {
   method new_tuple (CArray[Pointer[GVariantType]] $items, Int() $length)
     is also<new-tuple>
   {
-    my gint $l = resolve-int($length);
+    my gint $l = $length;
+    
     my $t = g_variant_type_new_tuple($items, $l);
 
     $t ?? self.bless( type => $t ) !! Nil;

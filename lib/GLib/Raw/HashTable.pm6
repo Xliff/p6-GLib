@@ -10,18 +10,18 @@ unit package GLib::Raw::HashTable;
 
 sub g_hash_table_add (GHashTable $hash_table, gpointer $key)
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_contains (GHashTable $hash_table, gpointer $key)
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_destroy (GHashTable $hash_table)
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -31,7 +31,7 @@ sub g_hash_table_find (
   gpointer $user_data
 )
   returns Pointer
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -40,7 +40,7 @@ sub g_hash_table_foreach (
   &func (Pointer $a, Pointer $b),
   gpointer $user_data
 )
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -50,7 +50,7 @@ sub g_hash_table_foreach_remove (
   gpointer $user_data
 )
   returns guint
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -60,73 +60,73 @@ sub g_hash_table_foreach_steal (
   gpointer $user_data
 )
   returns guint
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_direct_equal (gpointer $v1, gpointer $v2)
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_direct_hash (gpointer $v)
   returns guint
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_double_equal (CArray[num64] $v1, CArray[num64] $v2)
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_double_hash (CArray[num64] $v)
   returns guint
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_int64_equal (CArray[gint64] $v1, CArray[gint64] $v2)
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_int64_hash (CArray[int64] $v)
   returns guint
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_int_equal (CArray[gint] $v1, CArray[gint] $v2)
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_int_hash (CArray[gint] $v)
   returns guint
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_str_equal (Str $v1, Str $v2)
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_str_hash (Str $v)
   returns guint
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_get_keys (GHashTable $hash_table)
   returns GList
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -135,13 +135,13 @@ sub g_hash_table_get_keys_as_array (
   guint $length is rw
 )
   returns Pointer
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_get_values (GHashTable $hash_table)
   returns GList
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -151,7 +151,7 @@ sub g_hash_table_insert_str (
   Str $value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -161,7 +161,7 @@ sub g_hash_table_insert_int (
   CArray[uint32] $value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -171,7 +171,7 @@ sub g_hash_table_insert_int64 (
   CArray[uint64] $value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -181,7 +181,7 @@ sub g_hash_table_insert_double (
   CArray[num64] $value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -191,7 +191,7 @@ sub g_hash_table_insert_pointer (
   gpointer $value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -201,13 +201,13 @@ sub g_hash_table_insert (
   gpointer $value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_iter_get_hash_table (GHashTableIter $iter)
   returns GHashTable
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -215,7 +215,7 @@ sub g_hash_table_iter_init (
   GHashTableIter $iter,
   GHashTable $hash_table
 )
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -225,29 +225,29 @@ sub g_hash_table_iter_next (
   gpointer $value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_iter_remove (GHashTableIter $iter)
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_iter_replace (GHashTableIter $iter, gpointer $value)
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_iter_steal (GHashTableIter $iter)
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 # Will need to be typed!
 sub g_hash_table_lookup (GHashTable $hash_table, gpointer $key)
   returns Pointer
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -259,7 +259,7 @@ sub g_hash_table_lookup_extended (
   gpointer $value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -268,7 +268,7 @@ sub g_hash_table_new (
   &equal_func (Pointer $a, Pointer $b --> gboolean)
 )
   returns GHashTable
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -279,13 +279,13 @@ sub g_hash_table_new_full (
   GDestroyNotify $value_destroy_func
 )
   returns GHashTable
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_ref (GHashTable $hash_table)
   returns GHashTable
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -294,12 +294,12 @@ sub g_hash_table_remove (
   gpointer $key
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_remove_all (GHashTable $hash_table)
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -309,24 +309,24 @@ sub g_hash_table_replace (
   gpointer $value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_size (GHashTable $hash_table)
   returns guint
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_steal (GHashTable $hash_table, gpointer $key)
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_steal_all (GHashTable $hash_table)
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
@@ -337,11 +337,11 @@ sub g_hash_table_steal_extended (
   gpointer $stolen_value
 )
   returns uint32
-  is native(gio)
+  is native(glib)
   is export
   { * }
 
 sub g_hash_table_unref (GHashTable $hash_table)
-  is native(gio)
+  is native(glib)
   is export
   { * }

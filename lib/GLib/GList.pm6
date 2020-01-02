@@ -3,9 +3,9 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
+use GLib::Raw::Definitions;
+use GLib::Raw::Structs;
 use GLib::Raw::Subs;
-
-use GLib::Raw::Types;
 use GLib::Raw::GList;
 
 # See if this will work properly:
@@ -17,8 +17,8 @@ class GLib::GList {
   #also does Positional;
   #also does Iterator;
 
-  has GLib::Raw::Structs::GList $!list;
-  has GLib::Raw::Structs::GList $!cur;
+  has GList $!list;
+  has GList $!cur;
 
   # Left active, but see NOTE.
   has $.dirty;

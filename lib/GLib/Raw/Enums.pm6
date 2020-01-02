@@ -39,6 +39,51 @@ our enum GErrorTypeEnum     is export <
   G_ERR_FLOAT_MALFORMED
 >;
 
+constant GIOChannelError is export := guint;
+our enum GIOChannelErrorEnum is export <
+  G_IO_CHANNEL_ERROR_FBIG
+  G_IO_CHANNEL_ERROR_INVAL
+  G_IO_CHANNEL_ERROR_IO
+  G_IO_CHANNEL_ERROR_ISDIR
+  G_IO_CHANNEL_ERROR_NOSPC
+  G_IO_CHANNEL_ERROR_NXIO
+  G_IO_CHANNEL_ERROR_OVERFLOW
+  G_IO_CHANNEL_ERROR_PIPE
+  G_IO_CHANNEL_ERROR_FAILED
+>;
+
+# cw: These values are for LINUX!
+constant GIOCondition is export := guint;
+our enum GIOConditionEnum is export (
+  G_IO_IN     => 1,
+  G_IO_OUT    => 4,
+  G_IO_PRI    => 2,
+  G_IO_ERR    => 8,
+  G_IO_HUP    => 16,
+  G_IO_NVAL   => 32,
+);
+
+constant GIOFlags is export := guint;
+our enum GIOFlagsEnum is export (
+  G_IO_FLAG_APPEND       => 1,
+  G_IO_FLAG_NONBLOCK     => 2,
+  G_IO_FLAG_IS_READABLE  => 1 +< 2,      # Read only flag
+  G_IO_FLAG_IS_WRITABLE  => 1 +< 3,      # Read only flag
+  G_IO_FLAG_IS_WRITEABLE => 1 +< 3,      # Misspelling in 2.29.10 and earlier
+  G_IO_FLAG_IS_SEEKABLE  => 1 +< 4,      # Read only flag
+  G_IO_FLAG_MASK         => (1 +< 5) - 1,
+  G_IO_FLAG_GET_MASK     => (1 +< 5) - 1,
+  G_IO_FLAG_SET_MASK     => 1 +| 2
+);
+
+constant GIOStatus is export := guint;
+our enum GIOStatusEnum is export <
+  G_IO_STATUS_ERROR
+  G_IO_STATUS_NORMAL
+  G_IO_STATUS_EOF
+  G_IO_STATUS_AGAIN
+>;
+
 constant GKeyFileFlags      is export := guint;
 our enum GKeyFileFlagsEnum  is export (
   G_KEY_FILE_NONE              => 0,
@@ -125,6 +170,13 @@ our enum GPollableReturnEnum is export (
   G_POLLABLE_RETURN_OK           => 1,
   G_POLLABLE_RETURN_WOULD_BLOCK  => -27 # -G_IO_ERROR_WOULD_BLOCK
 );
+
+constant GSeekType           is export := guint;
+our enum GSeekTypeEnum       is export <
+  G_SEEK_CUR
+  G_SEEK_SET
+  G_SEEK_END
+>;
 
 constant GSignalFlags     is export := guint32;
 our enum GSignalFlagsEnum is export (

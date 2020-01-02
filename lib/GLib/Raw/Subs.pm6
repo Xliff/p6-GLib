@@ -40,6 +40,22 @@ sub g_destroy_none(Pointer)
   is export
 { * }
 
+sub g_object_new (uint64 $object_type, Str)
+  returns gpointer
+  is native(gobject)
+  is export
+{ * }
+
+sub g_object_ref(GObject $p)
+  is native(gobject)
+  is export
+{ * }
+
+sub g_object_unref(GObject $p)
+  is native(gobject)
+  is export
+{ * }
+
 sub ArrayToCArray(\T, @a) is export {
   my $ca =  CArray[T].new;
   $ca[$_] = @a[$_] for ^@a.elems;

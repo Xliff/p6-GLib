@@ -5,7 +5,7 @@ use NativeCall;
 
 use GLib::Raw::Types;
 
-use GLib::Raw::Subs;
+
 
 use GLib::Raw::Array;
 
