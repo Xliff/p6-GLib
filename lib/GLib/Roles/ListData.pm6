@@ -14,7 +14,7 @@ role GList::Roles::ListData[::T] {
   method !rebuild {
     return unless self.dirty;
 
-    my GLib::Raw::Types::GList $l;
+    my GList $l;
 
     @!nat = ();
     loop ($l = self.first; $l.defined; $l = $l.next) {
@@ -68,14 +68,14 @@ role GList::Roles::ListData[::T] {
 
   #method cur { ... }
 
-  multi method data (GLib::Raw::Types::GList $n) is rw {
+  multi method data (GList $n) is rw {
     self!_data($n);
   }
   multi method data is rw {
     self!_data(self.cur);
   }
 
-  method !_data(GLib::Raw::Types::GList $n) is rw {
+  method !_data(GList $n) is rw {
     Proxy.new:
       FETCH => -> $ {
         given T {

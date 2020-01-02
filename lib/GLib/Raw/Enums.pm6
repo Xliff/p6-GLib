@@ -22,7 +22,7 @@ our enum GChecksumTypeEnum  is export <
 >;
 
 constant GConnectFlags      is export := guint32;
-our enum GConnectFlags      is export (
+our enum GConnectFlagsEnum  is export (
   G_CONNECT_AFTER       => 1,
   G_CONNECT_SWAPPED     => 2
 );
@@ -139,8 +139,8 @@ our enum GSignalFlagsEnum is export (
   G_SIGNAL_DEPRECATED   => 1 +< 8
 );
 
-constant GSignalMatchType is export := guint32;
-our enum GSignalMatchType is export (
+constant GSignalMatchType     is export := guint32;
+our enum GSignalMatchTypeEnum is export (
   G_SIGNAL_MATCH_ID        => 1,
   G_SIGNAL_MATCH_DETAIL    => 1 +< 1,
   G_SIGNAL_MATCH_CLOSURE   => 1 +< 2,

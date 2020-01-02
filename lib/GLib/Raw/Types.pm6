@@ -9,7 +9,7 @@ sub EXPORT {
   %(
     GLib::Raw::Definitions::EXPORT::DEFAULT::,
     GLib::Raw::Enums::EXPORT::DEFAULT::,
-    GLib::Raw::Structs::EXPORT::DEFAULT::
+    GLib::Raw::Structs::EXPORT::DEFAULT::,
     GLib::Raw::Subs::EXPORT::DEFAULT::
   )
 }

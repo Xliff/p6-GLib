@@ -3,7 +3,7 @@ use v6.c;
 use Method::Also;
 
 use GLib::Raw::Types;
-use GTK::Compat::Raw::Main;
+use GLib::Raw::Main;
 
 use GLib::Raw::Subs;
 

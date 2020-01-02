@@ -56,7 +56,7 @@ sub sprintf-DP ( Blob, Str, & (gdouble, Pointer) )
   is symbol('sprintf')
 { * }
 
-sub sprintf-PSfP(
+sub sprintf-PSƒP(
   Blob,
   Str,
   & (
@@ -65,51 +65,6 @@ sub sprintf-PSfP(
     & (gpointer --> guint32),
     gpointer
   ),
-  gpointer
-)
-  returns int64
-  is export
-  is native
-  is symbol('sprintf')
-{ * }
-
-sub sprintf-Ps (
-  Blob,
-  Str,
-  & (GParamSpec),
-  gpointer
-)
-  returns int64
-  is export
-  is native
-  is symbol('sprintf')
-{ * }
-
-sub sprintf-PsV (
-  Blob,
-  Str,
-  & (GParamSpec, GValue),
-  gpointer
- --> int64
-)
-    is native is symbol('sprintf') { * }
-
-sub sprintf-PsV-b (
-  Blob,
-  Str,
-  & (GParamSpec, GValue --> gboolean),
-  gpointer
-)
-  returns int64
-  is export
-  is native
-  is symbol('sprintf')
-{ * }
-
-sub sprintf-PsVV-i (
-  Blob,
-  Str,
-  & (GParamSpec, GValue, GValue --> gint),
   gpointer
 )
   returns int64
@@ -142,11 +97,22 @@ sub sprintf-SCi-b (
   is symbol('sprintf')
 { * }
 
-# XXX - Verify this!!
-sub sprintf-Sfi-b (
+sub sprintf-S-b (
   Blob,
   Str,
-  & (GSource, & (gpointer --> gboolean), gint --> gboolean),
+  & (GSource --> gboolean),
+  gpointer
+)
+  returns int64
+  is export
+  is native
+  is symbol('sprintf')
+{ * }
+
+sub sprintf-SƒP-b (
+  Blob,
+  Str,
+  & (GSource, & (gpointer --> gboolean), gpointer --> gboolean),
   gpointer
 )
   returns int64

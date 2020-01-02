@@ -17,8 +17,8 @@ class GLib::GList {
   #also does Positional;
   #also does Iterator;
 
-  has GLib::Raw::Types::GList $!list;
-  has GLib::Raw::Types::GList $!cur;
+  has GLib::Raw::Structs::GList $!list;
+  has GLib::Raw::Structs::GList $!cur;
 
   # Left active, but see NOTE.
   has $.dirty;
@@ -59,13 +59,13 @@ class GLib::GList {
 
     $list ?? self.bless(:$list) !! Nil;
   }
-  multi method new (GLib::Raw::Types::GList $list) {
+  multi method new (GLib::Raw::Structs::GList $list) {
     return Nil unless $list;
 
     self.bless(:$list);
   }
 
-  method GLib::Raw::Types::GList
+  method GLib::Raw::Structs::GList
     is also<GList>
   { $!list }
 
@@ -109,7 +109,7 @@ class GLib::GList {
   #   «pull-one iterator elems AT-POS EXISTS-POS join :p6sort('sort')»;
   #
   # method !rebuild {
-  #   my GLib::Raw::Types::GList $l;
+  #   my GLib::Raw::Structs::GList $l;
   #
   #   @!nat = ();
   #   loop ($l = self.first; $l != GList; $l = $l.next) {
@@ -127,12 +127,12 @@ class GLib::GList {
 
   multi method concat (
     GLib::GList:U:
-    GLib::Raw::Types::GList $list1,
-    GLib::Raw::Types::GList $list2
+    GLib::Raw::Structs::GList $list1,
+    GLib::Raw::Structs::GList $list2
   ) {
     g_list_concat($list1, $list2);
   }
-  multi method concat (GLib::Raw::Types::GList() $list2) {
+  multi method concat (GLib::Raw::Structs::GList() $list2) {
     my $list = g_list_concat($!list, $list2);
 
     $!dirty = True;
@@ -157,7 +157,7 @@ class GLib::GList {
     );
   }
 
-  method delete_link (GLib::Raw::Types::GList() $link)
+  method delete_link (GLib::Raw::Structs::GList() $link)
     is also<delete-link>
   {
     my $list = g_list_delete_link($!list, $link);
@@ -213,7 +213,7 @@ class GLib::GList {
     $!list = $list;
   }
 
-  method insert_before (GLib::Raw::Types::GList() $sibling, Pointer $data)
+  method insert_before (GLib::Raw::Structs::GList() $sibling, Pointer $data)
     is also<insert-before>
   {
     my $list = g_list_insert_before($!list, $sibling, $data);
@@ -272,7 +272,7 @@ class GLib::GList {
     g_list_nth_prev($!list, $nn);
   }
 
-  method position (GLib::Raw::Types::GList() $llink) {
+  method position (GLib::Raw::Structs::GList() $llink) {
     g_list_position($!list, $llink);
   }
 
@@ -297,7 +297,7 @@ class GLib::GList {
     #!nat = ();
   }
 
-  method remove_link (GLib::Raw::Types::GList() $llink)
+  method remove_link (GLib::Raw::Structs::GList() $llink)
     is also<remove-link>
   {
     my $list = g_list_remove_link($!list, $llink);

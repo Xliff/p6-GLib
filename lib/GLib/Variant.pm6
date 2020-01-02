@@ -1,13 +1,9 @@
 use v6.c;
 
 use Method::Also;
-
 use NativeCall;
 
-use GLib::Raw::Subs;
-
 use GLib::Raw::Types;
-
 use GLib::Raw::Variant;
 
 class GLib::Variant {
@@ -145,7 +141,7 @@ class GLib::Variant {
   )
     is also<new-fixed-array>
   {
-    my uint64 ($ne, $es) = resolve-uint64($n_elements, $element_size);
+    my uint64 ($ne, $es) = ($n_elements, $element_size);
     my $v = g_variant_new_fixed_array(
       $element_type,
       $elements,
@@ -598,7 +594,7 @@ class GLib::Variant {
   method get_fixed_array (Int() $n_elements, Int() $element_size)
     is also<get-fixed-array>
   {
-    my uint64 ($ne, $es) = resolve-uint64($n_elements, $element_size);
+    my uint64 ($ne, $es) = ($n_elements, $element_size);
 
     g_variant_get_fixed_array($!v, $ne, $es);
   }
