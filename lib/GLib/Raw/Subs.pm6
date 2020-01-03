@@ -56,6 +56,103 @@ sub g_object_unref(GObject $p)
   is export
 { * }
 
+sub g_object_set_string(Pointer $o, Str $key, Str $data)
+  is native(gobject)
+  is symbol('g_object_set_data')
+  is export
+{ * }
+
+sub g_object_get_string(Pointer $o, Str $key)
+  returns Str
+  is native(gobject)
+  is symbol('g_object_get_data')
+  is export
+{ * }
+
+# Now in GTK::Roles::Properties!!
+#
+# sub g_object_set_int(Pointer $o, Str $key, int32 $data is rw)
+#   is native(gobject)
+#   is symbol('g_object_set_data')
+#   is export
+#   { * }
+
+sub g_object_get_ptr(Pointer $o, Str $key)
+  returns Pointer
+  is native(gobject)
+  is symbol('g_object_get_data')
+  is export
+{ * }
+
+sub g_object_set_ptr(Pointer $o, Str $key, Pointer $data is rw)
+  is native(gobject)
+  is symbol('g_object_set_data')
+  is export
+{ * }
+
+sub g_object_setv (
+  GObject $object,
+  uint32 $n_properties,
+  CArray[Str] $names,
+  # Note... not an array.
+  #CArray[GValue] $values
+  Pointer $v
+)
+  is native(gobject)
+  is export
+{ * }
+
+sub g_object_getv (
+  GObject $object,
+  uint32 $n_properties,
+  CArray[Str] $names,
+  #CArray[GValue] $values
+  Pointer $v
+)
+  is native(gobject)
+  is export
+{ * }
+
+sub g_object_get_int (
+  Pointer $object,
+  Str $name,
+)
+  returns CArray[gint]
+  is native(gobject)
+  is symbol('g_object_get_data')
+  is export
+{ * }
+
+sub g_object_set_int (
+  Pointer $object,
+  Str $name,
+  gint $value is rw
+)
+  is native(gobject)
+  is symbol('g_object_set_data')
+  is export
+  { * }
+
+sub g_object_get_uint (
+  Pointer $object,
+  Str $name,
+)
+  returns CArray[guint]
+  is native(gobject)
+  is symbol('g_object_get_data')
+  is export
+{ * }
+
+sub g_object_set_uint (
+  Pointer $object,
+  Str $name,
+  guint $value is rw
+)
+  is native(gobject)
+  is symbol('g_object_set_data')
+  is export
+  { * }
+
 sub ArrayToCArray(\T, @a) is export {
   my $ca =  CArray[T].new;
   $ca[$_] = @a[$_] for ^@a.elems;
