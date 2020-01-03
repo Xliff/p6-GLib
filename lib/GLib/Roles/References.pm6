@@ -4,7 +4,6 @@ use Method::Also;
 use NativeCall;
 
 use GLib::Raw::Types;
-use GLib::Raw::Subs;
 
 role GLib::Roles::References {
   has GObject $!ref;
