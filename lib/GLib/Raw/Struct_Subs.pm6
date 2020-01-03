@@ -20,6 +20,18 @@ sub sprintf-P ( Blob, Str, & (Pointer) )
   is symbol('sprintf')
 { * }
 
+sub sprintf-P-P (
+  Blob,
+  Str,
+  & (gpointer --> gpointer),
+  gpointer
+)
+  returns int64
+  is export
+  is native
+  is symbol('sprintf')
+{ * }
+
 sub sprintf-SP ( Blob, Str, & (Str, Pointer) )
   returns int64
   is export

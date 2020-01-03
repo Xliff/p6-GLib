@@ -1,15 +1,22 @@
 use v6;
 
-use GLib::Raw::Definitions;
-use GLib::Raw::Enums;
-use GLib::Raw::Structs;
-use GLib::Raw::Subs;
+use CompUnit::Util :re-export;
 
-sub EXPORT {
-  %(
-    GLib::Raw::Definitions::EXPORT::DEFAULT::,
-    GLib::Raw::Enums::EXPORT::DEFAULT::,
-    GLib::Raw::Structs::EXPORT::DEFAULT::,
-    GLib::Raw::Subs::EXPORT::DEFAULT::
-  )
+unit package GLib::Raw::Types;
+
+need GLib::Raw::Definitions;
+need GLib::Raw::Enums;
+need GLib::Raw::Structs;
+need GLib::Raw::Subs;
+
+our @glib-exports is export;
+
+BEGIN {
+  @glib-exports = <
+    GLib::Raw::Definitions
+    GLib::Raw::Enums
+    GLib::Raw::Structs
+    GLib::Raw::Subs
+  >;
+  re-export($_) for @glib-exports;
 }

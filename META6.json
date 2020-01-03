@@ -1,7 +1,8 @@
 {
     "depends": [
         "Data::Dump::Tree",
-        "Config::INI"
+        "Config::INI",
+        "CompUnit::Util"
     ],
     "description": "Perl6 library bindings for GNOME's GLib",
     "version": "r0.1",
@@ -111,7 +112,7 @@
       "GLib::Source"                 :  "lib/GLib/Source.pm6"               ,
       "GLib::Timeout"                :  "lib/GLib/Timeout.pm6"              ,
       "GLib::ByteArray"              :  "lib/GLib/ByteArray.pm6"            ,
-      "GLib::IOChannel"              :  "lib/GLib/IOChannel.pm6"            
+      "GLib::IOChannel"              :  "lib/GLib/IOChannel.pm6"
     },
     "name": "Perl6-GtkPlus",
     "perl": "6.c",
