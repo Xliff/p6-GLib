@@ -228,3 +228,7 @@ class GLib::GSList {
   }
 
 }
+
+BEGIN {
+  say "»» Please use GLib::GList if possible, since it is binary compatible! ««"
+}

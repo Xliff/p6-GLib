@@ -4,6 +4,26 @@ use GLib::Raw::Definitions;
 
 unit package GLib::Raw::Enums;
 
+# In the future, this mechanism may need to be used via BEGIN block for all
+# enums that vary by OS -- Kaiepi++!
+#
+# my constant TheseChangeByOS = Metamodel::EnumHOW.new_type: :name<TheseChangeByOS>, :base_type(Int);
+# TheseChangeByOS.^add_role: NumericEnumeration;
+# TheseChangeByOS.^set_package: OUR
+# TheseChangeByOS.^compose;
+# if $*DISTRO.is-win {
+#     TheseChangeByOS.^add_enum_value: 'a' => ...;
+#     TheseChangeByOS.^add_enum_value: 'b' => ...;
+#     TheseChangeByOS.^add_enum_value: 'c' => ...;
+#     TheseChangeByOS.^add_enum_value: 'd' => ...;
+# } else {
+#     TheseChangeByOS.^add_enum_value: 'a' => ...;
+#     TheseChangeByOS.^add_enum_value: 'b' => ...;
+#     TheseChangeByOS.^add_enum_value: 'c' => ...;
+#     TheseChangeByOS.^add_enum_value: 'd' => ...;
+# }
+# TheseChangeByOS.^compose_values;
+
 constant GBindingFlags      is export := guint32;
 our enum GBindingFlagsEnum  is export (
   G_BINDING_DEFAULT        => 0,
