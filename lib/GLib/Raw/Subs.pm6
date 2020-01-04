@@ -221,3 +221,8 @@ sub resolve-gstrv(*@rg) is export {
   $gs[$gs.elems] = Str unless $gs[*-1] =:= Str;
   $gs;
 }
+
+sub g_signal_handler_disconnect(Pointer $app, uint64 $handler)
+  is native(gobject)
+  is export
+{ * }

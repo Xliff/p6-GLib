@@ -83,18 +83,18 @@ constant GType                          is export := uint64;
 
 # Because an enum wasn't good enough due to:
 # "Incompatible MROs in P6opaque rebless for types GLIB_SYSDEF_LINUX and GSocketFamily"
-constant GLIB_SYSDEF_POLLIN        = 1;
-constant GLIB_SYSDEF_POLLOUT       = 4;
-constant GLIB_SYSDEF_POLLPRI       = 2;
-constant GLIB_SYSDEF_POLLHUP       = 16;
-constant GLIB_SYSDEF_POLLERR       = 8;
-constant GLIB_SYSDEF_POLLNVAL      = 32;
-constant GLIB_SYSDEF_AF_UNIX       = 1;
-constant GLIB_SYSDEF_AF_INET       = 2;
-constant GLIB_SYSDEF_AF_INET6      = 10;
-constant GLIB_SYSDEF_MSG_OOB       = 1;
-constant GLIB_SYSDEF_MSG_PEEK      = 2;
-constant GLIB_SYSDEF_MSG_DONTROUTE = 4;
+constant GLIB_SYSDEF_POLLIN        is export = 1;
+constant GLIB_SYSDEF_POLLOUT       is export = 4;
+constant GLIB_SYSDEF_POLLPRI       is export = 2;
+constant GLIB_SYSDEF_POLLHUP       is export = 16;
+constant GLIB_SYSDEF_POLLERR       is export = 8;
+constant GLIB_SYSDEF_POLLNVAL      is export = 32;
+constant GLIB_SYSDEF_AF_UNIX       is export = 1;
+constant GLIB_SYSDEF_AF_INET       is export = 2;
+constant GLIB_SYSDEF_AF_INET6      is export = 10;
+constant GLIB_SYSDEF_MSG_OOB       is export = 1;
+constant GLIB_SYSDEF_MSG_PEEK      is export = 2;
+constant GLIB_SYSDEF_MSG_DONTROUTE is export = 4;
 
 class GAsyncQueue              is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GBinding                 is repr('CPointer') is export does GLib::Roles::Pointers { }
