@@ -26,6 +26,10 @@ sub cast($cast-to, $obj) is export {
   nativecast($cast-to, $obj);
 }
 
+sub real-resolve-uint64($v) is export {
+  $v +& 0xffffffffffffffff;
+}
+
 sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
   return $t if ($n // 0) > 0;
   repeat {
