@@ -11,7 +11,7 @@ use GLib::Raw::Signal;
 
 use GLib::Roles::StaticClass;
 
-class GTK::Compat::Signal {
+class GLib::Signal {
   also does GLib::Roles::StaticClass;
 
   # method new_valist (Str() $signal_name, GType $itype, GSignalFlags $signal_flags, GClosure $class_closure, GSignalAccumulator $accumulator, gpointer $accu_data, GSignalCMarshaller $c_marshaller, GType $return_type, guint $n_params, va_list $args) {

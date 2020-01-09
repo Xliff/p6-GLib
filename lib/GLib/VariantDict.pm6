@@ -68,7 +68,9 @@ class GLib::VariantDict {
       Nil;
   }
 
-  method ref is also<upref> {
+  # Method::Also is not properly handling overrides!
+  #method ref is also<upref> {
+  method ref {
     g_variant_dict_ref($!vd);
     self;
   }
@@ -77,7 +79,9 @@ class GLib::VariantDict {
     g_variant_dict_remove($!vd, $key);
   }
 
-  method unref is also<downref> {
+  # Method::Also is not properly handling overrides!
+  #method unref is also<downref> {
+  method unref {
     g_variant_dict_unref($!vd);
   }
 

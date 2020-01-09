@@ -5,6 +5,7 @@ use NativeCall;
 
 use GLib::Raw::Types;
 use GLib::Raw::ReturnedValue;
+use GLib::Raw::Signal;
 
 role GLib::Roles::Signals::Generic {
   has %!signals;

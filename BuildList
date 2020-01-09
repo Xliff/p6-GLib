@@ -4,6 +4,8 @@ GLib::Raw::Definitions
 GLib::Raw::Enums
 GLib::Raw::Struct_Subs
 GLib::Raw::Subs
+GLib::Raw::Exports
+GLib::Raw::ReturnedValue
 GLib::Raw::Structs
 GLib::Raw::Types
 GLib::Raw::Unicode
@@ -11,6 +13,7 @@ GLib::Raw::Value
 GLib::Raw::Variant
 GLib::Raw::VariantType
 GLib::Roles::ListData
+GLib::Roles::References
 GLib::Roles::StaticClass
 GLib::Roles::TypedBuffer
 GLib::URI
@@ -58,6 +61,8 @@ GLib::Raw::TimeZone
 GLib::Raw::Timer
 GLib::Raw::Tree
 GLib::Roles::Object
+GLib::Roles::Properties
+GLib::Roles::Signals::Generic
 GLib::Scanner
 GLib::Signal
 GLib::Slice
