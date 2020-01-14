@@ -168,8 +168,8 @@ our enum GOnceStatusEnum is export <
   G_ONCE_STATUS_READY
 >;
 
-constant GOptionFlag is export := guint;
-our enum GOptionFlagEnum is export (
+constant GOptionFlags is export := guint;
+our enum GOptionFlagsEnum is export (
   G_OPTION_FLAG_NONE            => 0,
   G_OPTION_FLAG_HIDDEN          => 1,
   G_OPTION_FLAG_IN_MAIN         => 1 +< 1,
