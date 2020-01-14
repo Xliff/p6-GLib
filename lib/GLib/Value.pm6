@@ -28,7 +28,7 @@ class GLib::Value {
     self.bless(:$value);
   }
 
-  method GLib::Raw::Types::GValue
+  method GLib::Raw::Structs::GValue
     is also<
       GValue
       gvalue

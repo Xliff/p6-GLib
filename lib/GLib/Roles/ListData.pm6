@@ -4,7 +4,7 @@ use NativeCall;
 
 use GLib::Raw::Types;
 
-role GList::Roles::ListData[::T] {
+role GLib::Roles::ListData[::T] {
   also does Positional;
   also does Iterable;
 
