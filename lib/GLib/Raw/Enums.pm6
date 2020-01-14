@@ -168,6 +168,38 @@ our enum GOnceStatusEnum is export <
   G_ONCE_STATUS_READY
 >;
 
+constant GOptionFlag is export := guint;
+our enum GOptionFlagEnum is export (
+  G_OPTION_FLAG_NONE            => 0,
+  G_OPTION_FLAG_HIDDEN          => 1,
+  G_OPTION_FLAG_IN_MAIN         => 1 +< 1,
+  G_OPTION_FLAG_REVERSE         => 1 +< 2,
+  G_OPTION_FLAG_NO_ARG          => 1 +< 3,
+  G_OPTION_FLAG_FILENAME        => 1 +< 4,
+  G_OPTION_FLAG_OPTIONAL_ARG    => 1 +< 5,
+  G_OPTION_FLAG_NOALIAS         => 1 +< 6
+);
+
+constant GOptionArg is export := guint32;
+our enum GOptionArgEnum is export <
+  G_OPTION_ARG_NONE
+  G_OPTION_ARG_STRING
+  G_OPTION_ARG_INT
+  G_OPTION_ARG_CALLBACK
+  G_OPTION_ARG_FILENAME
+  G_OPTION_ARG_STRING_ARRAY
+  G_OPTION_ARG_FILENAME_ARRAY
+  G_OPTION_ARG_DOUBLE
+  G_OPTION_ARG_INT64
+>;
+
+constant GOptionError is export := guint32;
+our enum GOptionErrorEnum is export <
+  G_OPTION_ERROR_UNKNOWN_OPTION
+  G_OPTION_ERROR_BAD_VALUE
+  G_OPTION_ERROR_FAILED
+>;
+
 constant GParamFlags     is export := gint32;
 our enum GParamFlagsEnum is export (
   G_PARAM_READABLE         => 1 +< 0,
