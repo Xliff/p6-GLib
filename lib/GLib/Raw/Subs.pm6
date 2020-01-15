@@ -226,6 +226,15 @@ sub resolve-gstrv(*@rg) is export {
   $gs;
 }
 
+sub create-signal-supply (%sigs, $signal, $s) is export {
+  my $supply = $s.Supply;
+  $s.^can('tap')[0].wrap: -> \c {
+    %sigs{$signal} = True;
+    nextsame;
+  };
+  $supply
+}
+
 # Now lives in GLib::Raw::Signal...
 #
 # sub g_signal_handler_disconnect(Pointer $app, uint64 $handler)
