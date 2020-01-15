@@ -228,7 +228,7 @@ sub resolve-gstrv(*@rg) is export {
 
 sub create-signal-supply (%sigs, $signal, $s) is export {
   my $supply = $s.Supply;
-  $s.^can('tap')[0].wrap: -> \c {
+  $supply.^lookup('tap').wrap: my method (|c) {
     %sigs{$signal} = True;
     nextsame;
   };
