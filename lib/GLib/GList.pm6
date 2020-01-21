@@ -46,11 +46,16 @@ class GLib::GList {
     #self.free;
   }
 
+  # Since GSList is binary compatible with GList and is being used as an
+  # alternative until GSList is stable...
+  subset ValidListTypes where
+    GLib::Raw::Structs::GSList | GLib::Raw::Structs::GList;
+
   multi method new (@list) {
     my $l = GLib::GList.new;
     for @list {
       # What about prototype numeric data (ints, nums) and Str?
-      $l.append( nativecast(Pointer, $_) );
+      $l.append( cast(Pointer, $_) );
     }
     $l;
   }
@@ -59,8 +64,11 @@ class GLib::GList {
 
     $list ?? self.bless(:$list) !! Nil;
   }
-  multi method new (GLib::Raw::Structs::GList $list) {
+  multi method new (ValidListTypes $list) {
     return Nil unless $list;
+
+    # While we are using GList as an alternative for GSList;
+    $list = cast(GList, $list) unless $list ~~ GList;
 
     self.bless(:$list);
   }
