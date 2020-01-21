@@ -80,7 +80,9 @@ class GLib::Value {
         so g_value_get_boolean($!v);
       },
       STORE => sub ($, Int() $v_boolean is copy) {
-        g_value_set_boolean($!v, $v_boolean);
+        my gboolean $v = $v_boolean.so.Int;
+
+        g_value_set_boolean($!v, $v);
       }
     );
   }
