@@ -22,13 +22,16 @@ class GLib::PtrArray {
     self.downref;
   }
 
-  method GLib::Raw::Types::GPtrArray
+  method GLib::Raw::Structs::GPtrArray
     is also<GPtrArray>
   { $!pa; }
 
-  multi method new (GPtrArray $array) {
+  multi method new (GPtrArray $array, :$ref = True) {
+    return Nil unless $array;
+
     my $o = self.bless(:$array);
-    $o.upref;
+    $o.ref if $ref;
+    $o;
   }
   multi method new {
     my $pa = g_ptr_array_new();
