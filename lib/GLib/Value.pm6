@@ -377,55 +377,73 @@ class GLib::Value {
 
 # Helper functions
 
-sub gv_str(Str() $s) is export {
+sub gv-str (Str() $s) is export
+  { gv_str($s) }
+sub gv_str (Str() $s) is export {
   my $gv = GLib::Value.new( G_TYPE_STRING );
   $gv.string = $s;
   $gv;
 }
 
-sub gv_bool(Int() $b) is export {
+sub gv-bool (Int() $b) is export
+  { gv_bool($b) }
+sub gv_bool (Int() $b) is export {
   my $gv = GLib::Value.new( G_TYPE_BOOLEAN );
   $gv.boolean = $b;
   $gv;
 }
 
-sub gv_int(Int() $i) is export {
+sub gv-int (Int() $i) is export
+  { gv_int($i) }
+sub gv_int (Int() $i) is export {
   my $gv = GLib::Value.new( G_TYPE_INT );
   $gv.int = $i;
   $gv;
 }
 
-sub gv_uint(Int() $i) is export {
+sub gv-uint (Int() $i) is export
+  { gv_uint($i) }
+sub gv_uint (Int() $i) is export {
   my $gv = GLib::Value.new( G_TYPE_UINT );
   $gv.uint = $i;
   $gv;
 }
 
-sub gv_flt(Num() $f) is export {
+sub gv-flt (Num() $f) is export
+  { gv_flt($f) }
+sub gv_flt (Num() $f) is export {
   my $gv = GLib::Value.new( G_TYPE_FLOAT );
   $gv.float = $f;
   $gv;
 }
 
-sub gv_dbl(Num() $d) is export {
+sub gv-dbl (Num() $d) is export
+  { gv_dbl($d) }
+sub gv_dbl (Num() $d) is export {
   my $gv = GLib::Value.new( G_TYPE_DOUBLE );
   $gv.double = $d;
   $gv;
 }
 
-sub gv_flag(Int() $f) is export {
+sub gv-flag (Int() $f) is export
+  { gv_flag($f) }
+sub gv_flag (Int() $f) is export {
   my $gv = GLib::Value.new( G_TYPE_FLAGS );
   $gv.flags = $f;
   $gv;
 }
 
-sub gv_obj($o, :$type) is export {
+sub gv-obj ($o, :$type) is export
+  { gv_obj($o, :$type) }
+sub gv_obj ($o, :$type) is export {
   my $gv = GLib::Value.new( $type // G_TYPE_OBJECT );
   $gv.object = $o;
   $gv;
 }
 
-sub gv_ptr($p) is export {
+sub gv-ptr ($p) is export 
+  { gv_ptr($p) }
+sub gv_ptr ($p) is export {
   my $gv = GLib::Value.new( G_TYPE_POINTER );
   $gv.pointer = $p;
   $gv;
