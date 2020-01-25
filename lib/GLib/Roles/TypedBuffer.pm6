@@ -40,10 +40,9 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   method NativeCall::Types::Pointer
-    is also<
-      Pointer
-      p
-    >
+  { $!b }
+
+  method p is also<Pointer>
   { $!b }
 
   # Cribbed from MySQL::Native. Thanks, ctilmes!
