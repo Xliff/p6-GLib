@@ -4,8 +4,9 @@ use Method::Also;
 use NativeCall;
 
 use GLib::Raw::Types;
-
 use GLib::Raw::DateTime;
+
+use GLib::TimeZone;
 
 class GLib::DateTime {
   has GDateTime $!dt is implementor;
@@ -19,7 +20,7 @@ class GLib::DateTime {
   { $!dt }
 
   multi method new (GDateTime $datetime) {
-    self.bless( :$datetime );
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
   multi method new (DateTime $pdt) {
     ::?CLASS.new_from_unix($pdt.posix);
@@ -43,8 +44,9 @@ class GLib::DateTime {
   ) {
     my gint ($y, $m, $d, $h, $mn) = ($year, $month, $day, $hour, $minute);
     my gdouble $s = $seconds;
+    my $datetime = g_date_time_new($tz, $y, $m, $d, $h, $mn, $s);
 
-    self.bless( datetime => g_date_time_new($tz, $y, $m, $d, $h, $mn, $s) )
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (
@@ -57,9 +59,9 @@ class GLib::DateTime {
   method new_from_iso8601 (Str() $text, GTimeZone() $default_tz)
     is also<new-from-iso8601>
   {
-    self.bless(
-      datetime => g_date_time_new_from_iso8601($text, $default_tz)
-    );
+    my $datetime = g_date_time_new_from_iso8601($text, $default_tz);
+
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (
@@ -71,7 +73,9 @@ class GLib::DateTime {
   method new_from_timeval_local (GTimeVal() $tv)
     is also<new-from-timeval-local>
   {
-    self.bless( datetime => g_date_time_new_from_timeval_local($tv) );
+    my $datetime = g_date_time_new_from_timeval_local($tv);
+
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (
@@ -81,7 +85,9 @@ class GLib::DateTime {
     ::?CLASS.new_from_timeval_utc($tv);
   }
   method new_from_timeval_utc (GTimeVal() $tv) is also<new-from-timeval-utc> {
-    self.bless( datetime => g_date_time_new_from_timeval_utc($tv) );
+    my $datetime = g_date_time_new_from_timeval_utc($tv);
+
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (
@@ -92,8 +98,9 @@ class GLib::DateTime {
   }
   method new_from_unix_local (Int() $time) is also<new-from-unix-local> {
     my gint64 $t = $time;
+    my $datetime = g_date_time_new_from_unix_local($t);
 
-    self.bless( datetime => g_date_time_new_from_unix_local($t) )
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (
@@ -104,8 +111,9 @@ class GLib::DateTime {
   }
   method new_from_unix_utc (Int() $time) is also<new-from-unix-utc> {
     my gint64 $t = $time;
+    my $datetime = g_date_time_new_from_unix_utc($t);
 
-    self.bless( datetime => g_date_time_new_from_unix_utc($t) )
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (
@@ -131,8 +139,9 @@ class GLib::DateTime {
   {
     my gint ($y, $m, $d, $h, $mn) = ($year, $month, $day, $hour, $minute);
     my gdouble $s = $seconds;
+    my $datetime = g_date_time_new_local($y, $m, $d, $h, $mn, $s);
 
-    self.bless( datetime => g_date_time_new_local($y, $m, $d, $h, $mn, $s) );
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (:$now is required) {
@@ -146,14 +155,18 @@ class GLib::DateTime {
     ::?CLASS.new_local;
   }
   method new_now_local is also<new-now-local> {
-    self.bless( datetime => g_date_time_new_now_local() );
+    my $datetime = g_date_time_new_now_local();
+
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (:now_utc(:$now-utc) is required) {
     ::?CLASS.new_now_utc;
   }
   method new_now_utc is also<new-now-utc> {
-    self.bless( datetime => g_date_time_new_now_utc() );
+    my $datetime = g_date_time_new_now_utc();
+
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (:now_utc(:$now-utc) is required) {
@@ -171,8 +184,9 @@ class GLib::DateTime {
   {
     my gint ($y, $m, $d, $h, $mn) = ($year, $month, $day, $hour, $minute);
     my gdouble $s = $seconds;
+    my $datetime = g_date_time_new_utc($y, $m, $d, $h, $mn, $s);
 
-    self.bless( datetime => g_date_time_new_utc($y, $m, $d, $h, $mn, $s) );
+    $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method add (
@@ -395,7 +409,7 @@ class GLib::DateTime {
     my $tz = g_date_time_get_timezone($!dt);
 
     $tz ??
-      ( $raw ?? $tz !! GTK::Compat::TimeZone.new($tz) )
+      ( $raw ?? $tz !! GLib::TimeZone.new($tz) )
       !!
       Nil;
   }
@@ -485,8 +499,13 @@ class GLib::DateTime {
     self;
   }
 
-  method to_local is also<to-local> {
-    GTK::Compat::DateTime.new( g_date_time_to_local($!dt) );
+  method to_local (:$raw = False) is also<to-local> {
+    my $d = g_date_time_to_local($!dt);
+
+    $d ??
+      ( $raw ?? $d !! GLib::DateTime.new($d) )
+      !!
+      Nil;
   }
 
   # GTimeVal object NYI
@@ -509,16 +528,26 @@ class GLib::DateTime {
       Nil;
   }
 
-  method to_timezone (GTimeZone() $tz) is also<to-timezone> {
-    GTK::Compat::DateTime.new( g_date_time_to_timezone($!dt, $tz) );
+  method to_timezone (GTimeZone() $tz, :$raw = False) is also<to-timezone> {
+    my $d = g_date_time_to_timezone($!dt, $tz);
+
+    $d ??
+      ( $raw ?? $d !! GLib::DateTime.new($d) )
+      !!
+      Nil;
   }
 
   method to_unix is also<to-unix> {
     g_date_time_to_unix($!dt);
   }
 
-  method to_utc is also<to-utc> {
-    GTK::Compat::DateTime.new( g_date_time_to_utc($!dt) );
+  method to_utc (:$raw = False) is also<to-utc> {
+    my $d = g_date_time_to_utc($!dt);
+
+    $d ??
+      ( $raw ?? $d !! GLib::DateTime.new($d) )
+      !!
+      Nil;
   }
 
   method unref {
