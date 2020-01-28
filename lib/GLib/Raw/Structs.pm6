@@ -33,8 +33,6 @@ class GTypeInstance         is repr<CStruct> does GLib::Roles::Pointers is expor
 
 class GValue                is repr<CStruct> does GLib::Roles::Pointers is export { ... }
 
-
-
 # Structs
 class GArray                is repr<CStruct> does GLib::Roles::Pointers is export {
   has Str    $.data;
@@ -459,3 +457,15 @@ sub sprintf-PsVV-i (
 
 # Must be declared LAST.
 constant GPollFD            is export = $*DISTRO.is-win ?? GPollFDWin !! GPollFDNonWin;
+
+class GClosure            is repr<CStruct> does GLib::Roles::Pointers is export {
+  has uint64 $!dummy1;
+  has uint64 $!dummy2;
+  has uint64 $!dummy3;
+  has uint64 $!dummy4;
+}
+
+class GCClosure           is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GClosure $!dummy1;
+  has gpointer $!callback;
+}

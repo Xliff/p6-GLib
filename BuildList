@@ -25,6 +25,7 @@ GLib::VariantIter
 GLib::VariantType
 GLib::Object::IsType
 GLib::Object::Raw::Binding
+GLib::Object::Raw::Closure
 GLib::Object::Raw::ParamSpec
 GLib::Raw::Array
 GLib::Raw::Arrays
@@ -94,6 +95,7 @@ GLib::Memory
 GLib::Module
 GLib::Mutex
 GLib::Object::Binding
+GLib::Object::Closure
 GLib::Object::ParamSpec
 GLib::Pattern
 GLib::PtrArray

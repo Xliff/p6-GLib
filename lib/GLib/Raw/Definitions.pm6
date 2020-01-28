@@ -11,7 +11,7 @@ our $ERROR is export;
 our $DEBUG is export = 0;
 
 # Forced compile count
-constant forced = 33;
+constant forced = 34;
 
 # Libs
 constant glib       is export  = 'glib-2.0',v0;
@@ -61,6 +61,7 @@ constant GCallback                      is export := Pointer;
 constant GCompareDataFunc               is export := Pointer;
 constant GCompareFunc                   is export := Pointer;
 constant GCopyFunc                      is export := Pointer;
+constant GClosureMarshal                is export := Pointer;
 constant GClosureNotify                 is export := Pointer;
 constant GDate                          is export := uint64;
 constant GDestroyNotify                 is export := Pointer;
@@ -103,7 +104,6 @@ class GBytes                   is repr('CPointer') is export does GLib::Roles::P
 class GDateTime                is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GTree                    is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GChecksum                is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GClosure                 is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GHmac                    is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GHashTable               is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GHashTableIter           is repr('CPointer') is export does GLib::Roles::Pointers { }
