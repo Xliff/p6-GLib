@@ -121,7 +121,11 @@ class GLib::Object::Closure::C is GLib::Object::Closure {
 
   # XXX - Define $callback!
   # For now.... it's a void function with no parameters!!
-  method new (&callback, gpointer $user_data, GClosureNotify $destroy_data) {
+  method new (
+    &callback,
+    gpointer $user_data          = gpointer,
+    GClosureNotify $destroy_data = GClosureNotify
+  ) {
     my $closure = g_cclosure_new(&callback, $user_data, $destroy_data);
 
     $closure ?? self.bless(:$closure) !! Nil;
@@ -129,7 +133,11 @@ class GLib::Object::Closure::C is GLib::Object::Closure {
 
   # XXX - Define $callback!
   # For now.... it's a void function with no parameters!!
-  method new_swap (&callback, gpointer $user_data, GClosureNotify $destroy_data)
+  method new_swap (
+    &callback,
+    gpointer $user_data          = gpointer,
+    GClosureNotify $destroy_data = GClosureNotify
+  )
     is also<new-swap>
   {
     my $closure = g_cclosure_new_swap(&callback, $user_data, $destroy_data);

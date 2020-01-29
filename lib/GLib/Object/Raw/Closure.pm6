@@ -2,16 +2,16 @@ use v6.c;
 
 use GLib::Raw::Types;
 
-unit package GLib::Object::Raw::Closure;
+unit package gobject::Object::Raw::Closure;
 
-### /usr/include/glib-2.0/gobject/gclosure.h
+### /usr/include/gobject-2.0/gobject/gclosure.h
 
 sub g_closure_add_finalize_notifier (
   GClosure $closure,
   gpointer $notify_data,
   GClosureNotify $notify_func
 )
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
@@ -20,7 +20,7 @@ sub g_closure_add_invalidate_notifier (
   gpointer $notify_data,
   GClosureNotify $notify_func
 )
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
@@ -31,7 +31,7 @@ sub g_closure_add_marshal_guards (
   gpointer $post_marshal_data,
   GClosureNotify $post_marshal_notify
 )
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
@@ -43,7 +43,7 @@ sub g_cclosure_marshal_generic (
   gpointer $invocation_hint,
   gpointer $marshal_data
 )
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
@@ -56,7 +56,7 @@ sub g_cclosure_marshal_generic (
 #   gint $n_params,
 #   GType $param_types
 # )
-#   is native(glib)
+#   is native(gobject)
 #   is export
 # { * }
 
@@ -66,7 +66,7 @@ sub g_cclosure_new (
   GClosureNotify $destroy_data
 )
   returns GClosure
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
@@ -76,30 +76,30 @@ sub g_cclosure_new_swap (
   GClosureNotify $destroy_data
 )
   returns GClosure
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
 sub g_signal_type_cclosure_new (GType $itype, guint $struct_offset)
   returns GClosure
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
 sub g_closure_invalidate (GClosure $closure)
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
 sub g_closure_new_simple (guint $sizeof_closure, gpointer $data)
   returns GClosure
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
 sub g_closure_ref (GClosure $closure)
   returns GClosure
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
@@ -108,7 +108,7 @@ sub g_closure_remove_finalize_notifier (
   gpointer $notify_data,
   GClosureNotify $notify_func
 )
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
@@ -117,12 +117,12 @@ sub g_closure_remove_invalidate_notifier (
   gpointer $notify_data,
   GClosureNotify $notify_func
 )
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
 sub g_closure_set_marshal (GClosure $closure, GClosureMarshal $marshal)
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
@@ -131,16 +131,16 @@ sub g_closure_set_meta_marshal (
   gpointer $marshal_data,
   GClosureMarshal $meta_marshal
 )
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
 sub g_closure_sink (GClosure $closure)
-  is native(glib)
+  is native(gobject)
   is export
 { * }
 
 sub g_closure_unref (GClosure $closure)
-  is native(glib)
+  is native(gobject)
   is export
 { * }
