@@ -60,13 +60,13 @@ sub g_object_unref(GObject $p)
   is export
 { * }
 
-sub g_object_set_string(Pointer $o, Str $key, Str $data)
+sub g_object_set_string(GObject $o, Str $key, Str $data)
   is native(gobject)
   is symbol('g_object_set_data')
   is export
 { * }
 
-sub g_object_get_string(Pointer $o, Str $key)
+sub g_object_get_string(GObject $o, Str $key)
   returns Str
   is native(gobject)
   is symbol('g_object_get_data')
@@ -75,20 +75,20 @@ sub g_object_get_string(Pointer $o, Str $key)
 
 # Now in GTK::Roles::Properties!!
 #
-# sub g_object_set_int(Pointer $o, Str $key, int32 $data is rw)
+# sub g_object_set_int(GObject $o, Str $key, int32 $data is rw)
 #   is native(gobject)
 #   is symbol('g_object_set_data')
 #   is export
 #   { * }
 
-sub g_object_get_ptr(Pointer $o, Str $key)
+sub g_object_get_ptr(GObject $o, Str $key)
   returns Pointer
   is native(gobject)
   is symbol('g_object_get_data')
   is export
 { * }
 
-sub g_object_set_ptr(Pointer $o, Str $key, Pointer $data is rw)
+sub g_object_set_ptr(GObject $o, Str $key, Pointer $data is rw)
   is native(gobject)
   is symbol('g_object_set_data')
   is export
@@ -118,7 +118,7 @@ sub g_object_getv (
 { * }
 
 sub g_object_get_int (
-  Pointer $object,
+  GObject $object,
   Str $name,
 )
   returns CArray[gint]
@@ -128,7 +128,7 @@ sub g_object_get_int (
 { * }
 
 sub g_object_set_int (
-  Pointer $object,
+  GObject $object,
   Str $name,
   gint $value is rw
 )
@@ -138,7 +138,7 @@ sub g_object_set_int (
   { * }
 
 sub g_object_get_uint (
-  Pointer $object,
+  GObject $object,
   Str $name,
 )
   returns CArray[guint]
@@ -148,7 +148,7 @@ sub g_object_get_uint (
 { * }
 
 sub g_object_set_uint (
-  Pointer $object,
+  GObject $object,
   Str $name,
   guint $value is rw
 )
