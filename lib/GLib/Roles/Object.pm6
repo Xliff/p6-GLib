@@ -6,6 +6,8 @@ use NativeCall;
 use GLib::Object::IsType;
 use GLib::Raw::Types;
 
+use GLib::Value;
+
 constant gObjectTypeKey = 'p6-GObject-Type';
 
 role GLib::Roles::Object {
@@ -181,28 +183,10 @@ role GLib::Roles::Object {
     die 'Mismatched number of names and values when setting GObject properties.'
       unless +@n == +@v;
 
-    my CArray[Str] $n = CArray[Str].new;
-    my $i = 0;
-    $n[$i++] = $_ for @n;
-    # my CArray[GValue] $v = CArray[GValue].new;
-    # $i = 0;
-    # $v[$i++] = $_ for @v;
+    my guint $ne = @n.elems;
 
-    # $i = 0;
-    # for ^$v.elems {
-    #   say "V{$i}: { $v[$i++] }";
-    # }
-
-    # say "P: {$!o}";
-    # say $n.^name;
-    # $i = 0;
-    # say "N{$i}: { $n[$i++] }" for $n;
-
-    # -XXX- NOT a general purpose fix, but will work for now.
-    my guint $ne = $n.elems;
-
-    die "Cannot set properties with #elems == { $ne }" unless $ne > 0;
-    g_object_setv( $!o, $ne, $n, @v[0].p );
+    die 'Cannot set properties with an empty array!' unless $ne > 0;
+    g_object_setv( $!o, $ne, ArrayToCArray(Str, @names), @v[0].p );
   }
 
   method prop_get(Str() $name, GValue() $value) is also<prop-get> {
@@ -213,17 +197,19 @@ role GLib::Roles::Object {
     is also<get-prop>
   { * }
 
-  multi method get_prop(Str() $name, Int() $type) {
-    my @v = ( GLib::Value.new($type).gvalue );
+  multi method get_prop(Str $name, Int $type, :$raw = False) {
+    my @v = ( GLib::Value.new($type).GValue );
 
-    samewith( [$name], @v );
-    @v[0];
+    samewith( [ $name ], @v );
+    $raw ?? @v[0].GValue !! @v[0];
   }
-  multi method get_prop(Str() $name, GValue() $value is rw) {
+  multi method get_prop(Str() $name, GLib::Value $value) {
+    samewith($name, $value.GValue);
+  }
+  multi method get_prop(Str() $name, GValue $value) {
     my @v = ($value);
 
-    samewith( [$name], @v );
-    $value = @v[0];
+    samewith( $name.Array, @v );
   }
   multi method get_prop(@names, @values) {
     my @n = self!checkNames(@names);
@@ -241,7 +227,7 @@ role GLib::Roles::Object {
 
     # -XXX- NOT a general purpose fix, but will work for now.
     my $ne = $n.elems;
-    die "Cannot get properties with #elems == { $ne }" unless $ne > 0;
+    die 'Cannot get properties with an empty array!' unless $ne > 0;
     g_object_getv( $!o, $ne, $n, @v[0].p );
 
     # @values = ();
@@ -264,6 +250,7 @@ role GLib::Roles::Object {
 
   method prop_get_uint(Str() $name) {
     my $a = g_object_get_uint($!o, $name);
+
     $a[0];
   }
 

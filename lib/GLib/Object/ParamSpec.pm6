@@ -4,8 +4,6 @@ use NativeCall;
 
 use GLib::Raw::Types;
 
-
-
 use GLib::Object::Raw::ParamSpec;
 
 use GLib::Value;
