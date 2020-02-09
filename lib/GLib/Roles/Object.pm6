@@ -45,6 +45,7 @@ role GLib::Roles::Object {
 
   method check_gobject_type($compare_type) {
     my $o = nativecast(GTypeInstance, $!o);
+    
     $o.checkType($compare_type);
   }
 
@@ -66,7 +67,7 @@ role GLib::Roles::Object {
   }
 
   multi method getType {
-    self.prop_set_string(gObjectTypeKey);
+    self.prop_get_string(gObjectTypeKey);
   }
   multi method getType (::?CLASS:U: GObject $o) {
     g_object_get_string($o, gObjectTypeKey);
