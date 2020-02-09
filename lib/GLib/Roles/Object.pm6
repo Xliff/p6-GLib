@@ -54,76 +54,9 @@ role GLib::Roles::Object {
     $o.getType;
   }
 
-  method get_data_bool (Str() $key)
-    is also<get-data-bool>
-  {
-    so self.get_data_uint($key);
-  }
-  method set_data_bool(Str() $key, Int() $val)
-    is also<set-data-bool>
-  {
-    my gboolean $v = $val.so.Int;
-
-    self.set_data_uint($v);
-  }
-
-  method get_data_string(Str() $key)
-    is also<get-data-string>
-  {
-    g_object_get_string($!o, $key);
-  }
-  method set_data_string(Str() $key, Str() $val)
-    is also<set-data-string>
-  {
-    g_object_set_string($!o, $key, $val);
-  }
-
-  method get_data_uint(Str() $key)
-    is also<get-data-uint>
-  {
-    my $pi = g_object_get_uint($!o, $key);
-
-    $pi.defined ?? $pi[0] !! Nil;
-  }
-  method set_data_uint(Str() $key, Int() $val)
-    is also<set-data-uint>
-  {
-    my $v = CArray[guint].new;
-
-    $v[0] = $val;
-    g_object_set_uint($!o, $key, $v);
-  }
-
-  method get_data_int(Str() $key)
-    is also<get-data-int>
-  {
-    my $pi = g_object_get_int($!o, $key);
-
-    $pi.defined ?? $pi[0] !! Nil;
-  }
-  method set_data_int(Str() $key, Int() $val)
-    is also<set-data-int>
-  {
-    my $v = CArray[gint].new;
-
-    $v[0] = $val;
-    g_object_set_int($!o, $key, $v);
-  }
-
-  method set_data_ptr(Str() $key, Pointer $val = Pointer)
-    is also<set-data-ptr>
-  {
-    g_object_set_ptr($!o, $key, $val);
-  }
-  method get_data_ptr(Str() $key)
-    is also<get-data-ptr>
-  {
-    g_object_get_ptr($!o, $key);
-  }
-
   method setType($typeName) {
     my $oldType = self.getType;
-    self.set_data_string(gObjectTypeKey, $typeName) unless $oldType.defined;
+    self.prop_set_string(gObjectTypeKey, $typeName) unless $oldType.defined;
     warn "WARNING -- Using a $oldType as a $typeName"
       unless [||](
         %*ENV<P6_GTK_DEBUG>.defined.not,
@@ -133,7 +66,7 @@ role GLib::Roles::Object {
   }
 
   multi method getType {
-    self.get_data_string(gObjectTypeKey);
+    self.prop_set_string(gObjectTypeKey);
   }
   multi method getType (::?CLASS:U: GObject $o) {
     g_object_get_string($o, gObjectTypeKey);
@@ -201,21 +134,21 @@ role GLib::Roles::Object {
     is also<get-prop>
   { * }
 
-  multi method get_prop(Str $name, Int $type, :$raw = False) {
+  multi method get_prop (Str $name, Int $type, :$raw = False) {
     my @v = ( GLib::Value.new($type).GValue );
 
     samewith( [ $name ], @v );
     $raw ?? @v[0].GValue !! @v[0];
   }
-  multi method get_prop(Str() $name, GLib::Value $value) {
+  multi method get_prop (Str() $name, GLib::Value $value) {
     samewith($name, $value.GValue);
   }
-  multi method get_prop(Str() $name, GValue $value) {
+  multi method get_prop (Str() $name, GValue $value) {
     my @v = ($value);
 
     samewith( $name.Array, @v );
   }
-  multi method get_prop(@names, @values) {
+  multi method get_prop (@names, @values) {
     my @n = self!checkNames(@names);
     my @v = self!checkValues(@values);
 
@@ -243,23 +176,56 @@ role GLib::Roles::Object {
     });
   }
 
-  method prop_get_int(Str() $name) is also<prop-get-int> {
-    my $a = g_object_get_int($!o, $name);
-    $a[0];
+  method prop_set_bool(Str() $key, Int() $val)
+    is also<prop-set-bool>
+  {
+    my gboolean $v = $val.so.Int;
+
+    self.prop_set_uint($v);
+  }
+
+  method prop_get_bool (Str() $key) is also<prop-get-bool> {
+    so self.prop_set_uint($key);
+  }
+
+  method prop_set_string(Str() $key, Str() $val)
+    is also<prop-set-string>
+  {
+    g_object_set_string($!o, $key, $val);
+  }
+
+  method prop_get_string(Str() $key) is also<prop-get-string> {
+    g_object_get_string($!o, $key);
+  }
+
+  method prop_set_ptr (Str() $key, Pointer $val = Pointer)
+    is also<prop-set-ptr>
+  {
+    g_object_set_ptr($!o, $key, $val);
+  }
+
+  method prop_get_ptr (Str() $key) is also<prop-get-ptr> {
+    g_object_get_ptr($!o, $key);
   }
 
   method prop_set_int (Str() $name, Int() $value) is also<prop-set-int> {
     g_object_set_int($!o, $name, $value, Str);
   }
 
-  method prop_get_uint(Str() $name) {
-    my $a = g_object_get_uint($!o, $name);
+  method prop_get_int (Str() $name) is also<prop-get-int> {
+    my $a = g_object_get_int($!o, $name);
 
-    $a[0];
+    $a[0].defined ?? $a[0] !! Nil;
   }
 
   method prop_set_uint (Str() $name, Int() $value) is also<prop-set-uint> {
     g_object_set_uint($!o, $name, $value, Str);
+  }
+
+  method prop_get_uint(Str() $name) is also<prop-get-uint> {
+    my $a = g_object_get_uint($!o, $name);
+
+    $a[0].defined ?? $a[0] !! Nil;
   }
 
 }
