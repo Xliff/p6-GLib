@@ -469,3 +469,8 @@ class GCClosure           is repr<CStruct> does GLib::Roles::Pointers is export 
   HAS GClosure $!dummy1;
   has gpointer $!callback;
 }
+
+class GDebugKey           is repr<CStruct> does GLib::Roles::Pointers is export {
+  has Str   $.key;
+  has guint $.value;
+}

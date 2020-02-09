@@ -24,6 +24,26 @@ unit package GLib::Raw::Enums;
 # }
 # TheseChangeByOS.^compose_values;
 
+constant GFormatSizeFlags is export := guint32;
+our enum GFormatSizeFlagsEnum is export (
+  G_FORMAT_SIZE_DEFAULT     => 0,
+  G_FORMAT_SIZE_LONG_FORMAT => 1,
+  G_FORMAT_SIZE_IEC_UNITS   => 1 +< 1,
+  G_FORMAT_SIZE_BITS        => 1 +< 2
+);
+
+constant GUserDirectory is export := guint32;
+our enum GUserDirectoryEnum is export <
+  G_USER_DIRECTORY_DESKTOP
+  G_USER_DIRECTORY_DOCUMENTS
+  G_USER_DIRECTORY_DOWNLOAD
+  G_USER_DIRECTORY_MUSIC
+  G_USER_DIRECTORY_PICTURES
+  G_USER_DIRECTORY_PUBLIC_SHARE
+  G_USER_DIRECTORY_TEMPLATES
+  G_USER_DIRECTORY_VIDEOS
+>;
+
 constant GBindingFlags      is export := guint32;
 our enum GBindingFlagsEnum  is export (
   G_BINDING_DEFAULT        => 0,

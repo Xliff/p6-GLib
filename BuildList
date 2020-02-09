@@ -9,6 +9,7 @@ GLib::Raw::ReturnedValue
 GLib::Raw::Structs
 GLib::Raw::Types
 GLib::Raw::Unicode
+GLib::Raw::Utils
 GLib::Raw::Value
 GLib::Raw::Variant
 GLib::Raw::VariantType
@@ -19,6 +20,7 @@ GLib::Roles::TypedBuffer
 GLib::URI
 GLib::UUID
 GLib::Unicode
+GLib::Utils
 GLib::Value
 GLib::Variant
 GLib::VariantIter
