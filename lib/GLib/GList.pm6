@@ -64,7 +64,7 @@ class GLib::GList {
 
     $list ?? self.bless(:$list) !! Nil;
   }
-  multi method new (ValidListTypes $list) {
+  multi method new (ValidListTypes $list is copy) {
     return Nil unless $list;
 
     # While we are using GList as an alternative for GSList;

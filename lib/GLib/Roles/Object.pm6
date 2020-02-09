@@ -31,6 +31,10 @@ role GLib::Roles::Object {
     $!o = nativecast(GObject, $obj);
   }
 
+  method p { $!o.p }
+
+  multi method Numeric { +self.p }
+
   method GLib::Raw::Types::GObject
     is also<GObject>
   { $!o }
