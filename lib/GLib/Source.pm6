@@ -14,6 +14,11 @@ class GLib::Source {
     self.setSource($source, :$attach) if $source;
   }
 
+  submethod DESTROY {
+    # What about removing it from attached Loops?
+    self.unref;
+  }
+
   method setSource(GSource $source, :$attach = False) {
     $!gs = $source;
   }
@@ -22,6 +27,13 @@ class GLib::Source {
     is also<GSource>
   { $!gs }
 
+  multi method new (GSource $source, :$ref = True) {
+    return Nil unless $source;
+
+    my $o = self.bless(:$source);
+    $o.ref if $ref;
+    $o;
+  }
 
   method new (
     GSourceFuncs $source_funcs,

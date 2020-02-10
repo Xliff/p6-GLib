@@ -39,7 +39,7 @@ class GLib::Markup {
     g_markup_error_quark();
   }
 
-  method markup_escape_text (
+  method escape_text (
     GLib::Markup:U:
     Str() $text,
     Int() $length = $text.chars
