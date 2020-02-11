@@ -34,8 +34,7 @@ class GLib::Source {
     $o.ref if $ref;
     $o;
   }
-
-  method new (
+  multi method new (
     GSourceFuncs $source_funcs,
     Int() $struct_size = GSourceFuncs.size-of
   ) {
