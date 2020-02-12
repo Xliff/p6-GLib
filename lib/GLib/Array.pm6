@@ -22,7 +22,7 @@ class GLib::Array {
   }
 
   # The "garray" alias is legacy and can be removed if not in use.
-  method GLib::Raw::Types::GArray
+  method GLib::Raw::Definitions::GArray
     is also<
       GArray
       garray

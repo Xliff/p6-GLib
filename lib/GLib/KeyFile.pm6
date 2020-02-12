@@ -22,7 +22,7 @@ class GLib::KeyFile  {
     $file ?? self.bless(:$file) !! Nil;
   }
 
-  method GLib::Raw::Types::GKeyFile
+  method GLib::Raw::Definitions::GKeyFile
     is also<GKeyFile>
   { $!kf }
 

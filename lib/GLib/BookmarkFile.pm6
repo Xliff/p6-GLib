@@ -14,7 +14,7 @@ class GLib::BookmarkFile {
     $!bp = $bookmark;
   }
 
-  method GLib::Types::GBookmarkFile
+  method GLib::Raw::Definitions::GBookmarkFile
     is also<GBookmarkFile>
   { $!bp }
 

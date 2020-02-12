@@ -35,7 +35,7 @@ role GLib::Roles::Object {
 
   multi method Numeric { +self.p }
 
-  method GLib::Raw::Types::GObject
+  method GLib::Raw::Definitions::GObject
     is also<GObject>
   { $!o }
 

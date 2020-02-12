@@ -17,7 +17,7 @@ class GLib::Variant {
     self.downref;
   }
 
-  method GLib::Raw::Types::GVariant
+  method GLib::Raw::Definitions::GVariant
     is also<GVariant>
   { $!v }
 

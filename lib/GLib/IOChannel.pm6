@@ -18,7 +18,7 @@ class GLib::IOChannel {
     $!gio = $io-channel;
   }
 
-  method GLib::Raw::Types::GIOChannel
+  method GLib::Raw::Definitions::GIOChannel
     is also<GIOChannel>
   { $!gio }
 

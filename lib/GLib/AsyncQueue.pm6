@@ -12,7 +12,7 @@ class GLib::AsyncQueue {
     $!aq = $queue;
   }
 
-  method GLib::Raw::Types::GAsyncQueue
+  method GLib::Raw::Definitions::GAsyncQueue
     is also<GAsyncQueue>
   { $!aq }
 

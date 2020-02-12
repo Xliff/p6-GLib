@@ -12,7 +12,7 @@ class GLib::Bytes {
     $!b = $bytes;
   }
 
-  method GLib::Raw::Types::GBytes
+  method GLib::Raw::Definitions::GBytes
     is also<GBytes>
   { $!b }
 

@@ -12,7 +12,7 @@ class GLib::MainLoop {
     $!ml = $mainloop;
   }
 
-  method GLib::Raw::Types::GMainLoop
+  method GLib::Raw::Definitions::GMainLoop
     is also<
       GMainLoop
       MainLoop

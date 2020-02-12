@@ -17,7 +17,7 @@ class GLib::ThreadPool {
     $!tp = $threadpool;
   }
 
-  method GLib::Raw::Types::GThreadPool
+  method GLib::Raw::Definitions::GThreadPool
     is also<GThreadPool>
   { $!tp }
 

@@ -28,7 +28,7 @@ class GLib::Tree {
     self.unref;
   }
 
-  method GLib::Raw::Types::GTree
+  method GLib::Raw::Definitions::GTree
     is also<GTree>
   { $!t }
 

@@ -15,7 +15,7 @@ class GLib::Object::ParamSpec {
     $!ps = $spec;
   }
 
-  method GLib::Raw::Types::GParamSpec
+  method GLib::Raw::Definitions::GParamSpec
   { $!ps }
 
   method new (GParamSpec $spec, :$ref = True) {
@@ -495,7 +495,7 @@ class GLib::Object::ParamSpec::Pool {
     $!psp = $pool;
   }
 
-  method GLib::Raw::Types::GParamSpecPool
+  method GLib::Raw::Definitions::GParamSpecPool
   { $!psp }
 
   multi method new (GParamSpecPool $pool, :$ref = True) {

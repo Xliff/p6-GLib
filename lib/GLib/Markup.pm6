@@ -14,7 +14,7 @@ class GLib::Markup {
     $!mp = $markup-parser;
   }
 
-  method GLib::Raw::Types::GMarkupParseContext
+  method GLib::Raw::Definitions::GMarkupParseContext
   { $!mp }
 
   method new (

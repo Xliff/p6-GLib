@@ -43,7 +43,7 @@ class GLib::HashTable {
     self.downref
   }
 
-  method GLib::Raw::Types::GHashTable
+  method GLib::Raw::Definitions::GHashTable
   { $!h }
 
   # Really, the only thing that's needed.
@@ -306,7 +306,7 @@ class GLib::HashTable::Double is GLib::HashTable {
 class GLib::HashTableIter {
     has GHashTableIter $!hi;
 
-    method GLib::Raw::Types::GHashTableIter
+    method GLib::Raw::Definitions::GHashTableIter
     { $!hi }
 
     method get_hash_table {

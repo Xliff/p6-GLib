@@ -14,7 +14,7 @@ class GLib::HMAC {
     $!h = $hmac;
   }
 
-  method GLib::Raw::Types::GHmac
+  method GLib::Raw::Definitions::GHmac
   { $!h }
 
   multi method new (GHmac $hmac) {

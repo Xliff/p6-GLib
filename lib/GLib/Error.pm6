@@ -16,7 +16,7 @@ class GLib::Error {
     $!e = $error;
   }
 
-  method GLib::Raw::Types::GError
+  method GLib::Raw::Structs::GError
     is also<GError>
   { $!e }
 

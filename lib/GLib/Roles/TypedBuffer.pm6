@@ -39,7 +39,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     #free( $!b // nativecast(Pointer, self) );
   }
 
-  method NativeCall::Types::Pointer
+  method NativeCall::Definitions::Pointer
   { $!b }
 
   method p is also<Pointer>

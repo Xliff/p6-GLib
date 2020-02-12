@@ -14,7 +14,7 @@ class GLib::Scanner {
 
   # $gscanner-obj.GScanner is the syntactical equivalent of
   # GScanner($gscanner-obj)
-  method GLib::Raw::Types::GScanner
+  method GLib::Raw::Definitions::GScanner
     is also<GScanner>
   { $!s }
 

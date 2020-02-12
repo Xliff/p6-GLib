@@ -12,7 +12,7 @@ class GLib::VariantIter {
     $!vi = $iter;
   }
 
-  method GLib::Raw::Types::GVariantIter
+  method GLib::Raw::Definitions::GVariantIter
     is also<VariantIter>
     { $!vi }
 

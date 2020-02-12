@@ -12,7 +12,7 @@ use GLib::Value;
 role GLib::Roles::Properties {
   has GObject $!prop;
 
-  method GTK::Compat::Types::GObject
+  method GTK::Compat::Definitions::GObject
     is also<GObject>
   { $!prop }
 

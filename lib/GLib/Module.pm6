@@ -27,7 +27,7 @@ class GLib::Module {
     self.bless( module => g_module_open($filename, $f) );
   }
 
-  method GLib::Raw::Types::GModule
+  method GLib::Raw::Definitions::GModule
     is also<GModule>
   { $!m }
 

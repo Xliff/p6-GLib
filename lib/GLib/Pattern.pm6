@@ -13,7 +13,7 @@ class GLib::Pattern {
     $!p = $pattern;
   }
 
-  method GLib::Raw::Types::GPatternSpec
+  method GLib::Raw::Definitions::GPatternSpec
     is also<GPatternSpec>
   { $!p }
 

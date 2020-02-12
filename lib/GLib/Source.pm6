@@ -23,7 +23,7 @@ class GLib::Source {
     $!gs = $source;
   }
 
-  method GLib::Raw::Types::GSource
+  method GLib::Raw::Definitions::GSource
     is also<GSource>
   { $!gs }
 

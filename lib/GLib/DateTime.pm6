@@ -15,7 +15,7 @@ class GLib::DateTime {
     $!dt = $datetime;
   }
 
-  method GLib::Raw::Types::GDateTime
+  method GLib::Raw::Definitions::GDateTime
     is also<GDateTime>
   { $!dt }
 

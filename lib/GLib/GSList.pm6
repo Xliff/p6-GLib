@@ -56,7 +56,7 @@ class GLib::GSList {
     }
   }
 
-  method GLib::Raw::Types::GSList
+  method GLib::Raw::Structs::GSList
     is also<GSList>
   { $!list }
 

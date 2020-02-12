@@ -13,7 +13,7 @@ class GLib::Rand {
     $!r = $rand;
   }
 
-  method GLib::Raw::Types::GRand
+  method GLib::Raw::Definitions::GRand
   { $!r }
 
   multi method new (GRand $rand) {

@@ -14,7 +14,7 @@ class GLib::ByteArray {
     $!ba = $byte-array;
   }
 
-  method GLib::Raw::Types::GByteArray
+  method GLib::Raw::Structs::GByteArray
     is also<GByteArray>
   { $!ba }
 

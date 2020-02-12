@@ -13,19 +13,19 @@ class GLib::Timer {
     $!t = $timer;
   }
 
-  method GLib::Raw::Types::GTimer
+  method GLib::Raw::Definitions::GTimer
     is also<GTimer>
   { $!t }
 
   multi method new(GTimer $timer) {
     return Nil unless $timer;
 
-    self.bless( :$timer );
+    $timer ?? self.bless( :$timer ) !! Nil;
   }
   multi method new {
-    my $t = g_timer_new();
+    my $timer = g_timer_new();
 
-    $t ?? self.bless( timer => $t ) !! Nil
+    $timer ?? self.bless( :$timer ) !! Nil
   }
 
   method continue {
@@ -44,7 +44,8 @@ class GLib::Timer {
 
   method val_add (
     GLib::Timer:U:
-    GTimeVal $tv, Int() $microseconds
+    GTimeVal $tv,
+    Int() $microseconds
   )
     is also<
       g-time-val-add
@@ -63,7 +64,8 @@ class GLib::Timer {
 
   method val_from_iso8601 (
     GLib::Timer:U:
-    Str() $t, GTimeVal $time
+    Str() $t,
+    GTimeVal $time
   )
     is also<
       g-time-val-from-iso8601

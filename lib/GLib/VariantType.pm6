@@ -16,7 +16,7 @@ class GLib::VariantType {
     $!vt = $type;
   }
 
-  method GLib::Raw::Types::GVariantType
+  method GLib::Raw::Definitions::GVariantType
     is also<GVariantType>
   { $!vt }
 

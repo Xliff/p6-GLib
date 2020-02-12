@@ -15,7 +15,7 @@ class GLib::MainContext {
     $!mc = $maincontext;
   }
 
-  method GLib::Raw::Types::GMainContext
+  method GLib::Raw::Definitions::GMainContext
     is also<
       GMainContext
       MainContext

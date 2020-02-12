@@ -18,7 +18,7 @@ class GLib::VariantDict {
     self!setObject($!vd = $dict);
   }
 
-  method GLib::Raw::Types::GVariantDict
+  method GLib::Raw::Definitions::GVariantDict
     is also<GVariantDict>
   { $!vd }
 

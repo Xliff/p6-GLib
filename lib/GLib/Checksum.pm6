@@ -13,7 +13,7 @@ class GLib::Checksum {
     $!c = $checksum;
   }
 
-  method GLib::Raw::Types::GChecksum
+  method GLib::Raw::Definitions::GChecksum
   { $!c }
 
   multi method new (GChecksum $checksum) {

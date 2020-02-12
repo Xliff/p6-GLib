@@ -13,7 +13,7 @@ class GTK::Compat::TimeZone {
     $!tz = $timezone;
   }
 
-  method GLib::Raw::Types::GTimeZone
+  method GLib::Raw::Definitions::GTimeZone
     is also<GTimeZone>
   { * }
 
