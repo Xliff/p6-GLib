@@ -19,6 +19,9 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
       # https://stackoverflow.com/questions/1281686/determine-size-of-dynamically-allocated-memory-in-c
       # *********************************************
       $!size = malloc_usable_size($!b) div nativesizeof(T);
+      loop (my $i = 0; $i < $!size; $i++) {
+        self.bind($i, T.new);
+      }
     } else {
       die 'Must pass in $size' unless $size.defined;
 
