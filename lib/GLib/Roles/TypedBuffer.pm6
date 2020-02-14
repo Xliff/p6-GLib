@@ -42,22 +42,15 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     #free( $!b // nativecast(Pointer, self) );
   }
 
-  method NativeCall::Definitions::Pointer
+  method NativeCall::Types::Pointer
   { $!b }
 
-  method p is also<Pointer>
+  method p
+    is also<Pointer>
   { $!b }
 
   # Cribbed from MySQL::Native. Thanks, ctilmes!
   method AT-POS(Int $field) {
-    # warn 'Must call .setSize before attempting to use as a positional!'
-    #   unless $!size.defined;
-    # unless $!b.defined {
-    #   $!b = nativecast(
-    #     Pointer,
-    #     Buf.allocate( $!size * nativesizeof(T) )
-    #   );
-    # }
     nativecast(
       T,
       Pointer.new( $!b + $field * nativesizeof(T) )
@@ -65,6 +58,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   method Array {
+    # There may be a temptation to usse CArrayToArray, here. Resist it.
     my @a;
     @a[$_] = self[$_] for $!size;
     @a;
@@ -94,7 +88,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   multi method new (Pointer $buffer) {
-    self.bless(:$buffer);
+    $buffer ?? self.bless(:$buffer) !! Nil;
   }
   multi method new (@entries) {
     return Pointer unless @entries;
@@ -111,12 +105,5 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     }
     $o;
   }
-
-  # Infinite loop, dummy!
-  #method allocate (Int() $n, *@fill) {
-  # method allocate (Int() $n) {
-  #   # Implement fill pattern, later.
-  #   my $p = Pointer.new( calloc($n * nativesizeof(T)) );
-  #   memcpy($p, $n * nativesizeof(T), 0);
 
 }
