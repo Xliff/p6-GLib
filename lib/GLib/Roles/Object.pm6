@@ -18,17 +18,18 @@ role GLib::Roles::Object {
   }
 
   method new-object-obj (GObject $object) {
-    self.bless( :$object );
+    $object ?? self.bless( :$object ) !! Nil;
   }
 
   method roleInit-Object {
     my \i = findProperImplementor(self.^attributes);
+    my $o = i.get_value(self);
 
-    $!o = cast( GObject, i.get_value(self) );
+    self!setObject($o);
   }
 
   method !setObject($obj) {
-    $!o = nativecast(GObject, $obj);
+    $!o = $obj ~~ GObject ?? $obj !! cast(GObject, $obj)
   }
 
   method p { $!o.p }
@@ -45,7 +46,7 @@ role GLib::Roles::Object {
 
   method check_gobject_type($compare_type) {
     my $o = nativecast(GTypeInstance, $!o);
-    
+
     $o.checkType($compare_type);
   }
 

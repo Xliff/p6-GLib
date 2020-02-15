@@ -1,5 +1,6 @@
 use v6.c;
 
+use Method::Also;
 use NativeCall;
 
 use GLib::Raw::Types;
@@ -16,13 +17,14 @@ class GLib::Object::ParamSpec {
   }
 
   method GLib::Raw::Definitions::GParamSpec
+    is also<GParamSpec>
   { $!ps }
 
   method new (GParamSpec $spec, :$ref = True) {
     return Nil unless $spec;
 
     my $o = self.bless( :$spec );
-    $o.ref if $ref;
+    #$o.ref if $ref;
     $o
   }
 
@@ -32,7 +34,9 @@ class GLib::Object::ParamSpec {
     Str() $blurb,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-boolean>
+  {
     my gboolean $d = $default_value;
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_boolean($name, $nick, $blurb, $d, $f);
@@ -46,7 +50,9 @@ class GLib::Object::ParamSpec {
     Str() $blurb,
     Int() $boxed_type,
     Int() $flags
-  ) {
+  )
+    is also<new-boxed>
+  {
     my GType $b = $boxed_type;
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_boxed($name, $nick, $blurb, $b, $f);
@@ -62,7 +68,9 @@ class GLib::Object::ParamSpec {
     Int() $maximum,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-char>
+  {
     my gint8 ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_char($name, $nick, $blurb, $mn, $mx, $d, $f);
@@ -78,7 +86,9 @@ class GLib::Object::ParamSpec {
     Num() $maximum,
     Num() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-double>
+  {
     my GParamFlags $f = $flags;
     my gdouble ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my $spec = g_param_spec_double($name, $nick, $blurb, $mn, $mx, $d, $f);
@@ -93,7 +103,9 @@ class GLib::Object::ParamSpec {
     Int() $enum_type,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-enum>
+  {
     my GType $e = $enum_type;
     my gint $d = $default_value;
     my GParamFlags $f = $flags;
@@ -109,7 +121,9 @@ class GLib::Object::ParamSpec {
     Int() $flags_type,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-flags>
+  {
     my GType $ft = $flags_type;
     my guint $d = $default_value;
     my GParamFlags $f = $flags;
@@ -126,7 +140,9 @@ class GLib::Object::ParamSpec {
     Num() $maximum,
     Num() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-float>
+  {
     my gfloat ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_float($name, $nick, $blurb, $mn, $mx, $d, $f);
@@ -140,7 +156,9 @@ class GLib::Object::ParamSpec {
     Str() $blurb,
     Int() $is_a_type,
     Int() $flags
-  ) {
+  )
+    is also<new-gtype>
+  {
     my GType $i = $is_a_type;
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_gtype($name, $nick, $blurb, $i, $f);
@@ -156,7 +174,9 @@ class GLib::Object::ParamSpec {
     Int() $maximum,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-int>
+  {
     my gint ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_int($name, $nick, $blurb, $mn, $mx, $d, $flags);
@@ -172,7 +192,9 @@ class GLib::Object::ParamSpec {
     Int() $maximum,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-int64>
+  {
     my gint64 ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_int64($name, $nick, $blurb, $mn, $mx, $d, $f);
@@ -188,7 +210,9 @@ class GLib::Object::ParamSpec {
     Int() $maximum,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-long>
+  {
     my glong ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_long($name, $nick, $blurb, $mn, $mx, $d, $f);
@@ -202,7 +226,9 @@ class GLib::Object::ParamSpec {
     Str() $blurb,
     Int() $object_type,
     Int() $flags
-  ) {
+  )
+    is also<new-object>
+  {
     my GType $o = $object_type;
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_object($name, $nick, $blurb, $object_type, $flags);
@@ -210,7 +236,7 @@ class GLib::Object::ParamSpec {
     $spec ?? self.bless( :$spec ) !! Nil;
   }
 
-  method new_override (Str() $name, Int() $overridden) {
+  method new_override (Str() $name, Int() $overridden) is also<new-override> {
     my GParamSpec $o = $overridden;
     my $spec = g_param_spec_override($name, $overridden);
 
@@ -223,7 +249,9 @@ class GLib::Object::ParamSpec {
     Str() $blurb,
     Int() $param_type,
     Int() $flags
-  ) {
+  )
+    is also<new-param>
+  {
     my GParamFlags $f = $flags;
     my GType $p = $param_type,
     my $spec = g_param_spec_param($name, $nick, $blurb, $p, $f);
@@ -236,7 +264,9 @@ class GLib::Object::ParamSpec {
     Str() $nick,
     Str() $blurb,
     Int() $flags
-  ) {
+  )
+    is also<new-pointer>
+  {
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_pointer($name, $nick, $blurb, $f);
 
@@ -249,7 +279,9 @@ class GLib::Object::ParamSpec {
     Str() $blurb,
     Str() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-string>
+  {
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_string($name, $nick, $blurb, $default_value, $f);
 
@@ -264,7 +296,9 @@ class GLib::Object::ParamSpec {
     Int() $maximum,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-uchar>
+  {
     my guint8 ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_uchar($name, $nick, $blurb, $mn, $mx, $d, $flags);
@@ -280,7 +314,9 @@ class GLib::Object::ParamSpec {
     Int() $maximum,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-uint>
+  {
     my guint ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_uint($name, $nick, $blurb, $mn, $mx, $d, $f);
@@ -296,7 +332,9 @@ class GLib::Object::ParamSpec {
     Int() $maximum,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-uint64>
+  {
     my guint64 ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_uint64($name, $nick, $blurb, $mn, $mx, $d, $f);
@@ -312,7 +350,9 @@ class GLib::Object::ParamSpec {
     Int() $maximum,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-ulong>
+  {
     my gulong ($mn, $mx, $d) = ($minimum, $maximum, $default_value);
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_ulong($name, $nick, $blurb, $mn, $mx, $d, $f);
@@ -326,7 +366,9 @@ class GLib::Object::ParamSpec {
     Str() $blurb,
     Int() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-unichar>
+  {
     my gunichar $d = $default_value;
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_unichar($name, $nick, $blurb, $d, $f);
@@ -340,7 +382,9 @@ class GLib::Object::ParamSpec {
     Str() $blurb,
     GParamSpec() $element_spec,
     Int() $flags
-  ) {
+  )
+    is also<new-value-array>
+  {
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_value_array(
       $name,
@@ -360,7 +404,9 @@ class GLib::Object::ParamSpec {
     Int() $type,
     GVariant() $default_value,
     Int() $flags
-  ) {
+  )
+    is also<new-variant>
+  {
     my GVariantType $t = $type;
     my GParamFlags $f = $flags;
     my $spec = g_param_spec_variant(
@@ -375,33 +421,33 @@ class GLib::Object::ParamSpec {
     $spec ?? self.bless( :$spec ) !! Nil;
   }
 
-  method get_blurb {
+  method get_blurb is also<get-blurb> {
     g_param_spec_get_blurb($!ps);
   }
 
-  method get_default_value {
+  method get_default_value is also<get-default-value> {
     my $v = g_param_spec_get_default_value($!ps);
 
     $v ?? GLib::Value.new($v, :!ref) !! Nil
   }
 
-  method get_name {
+  method get_name is also<get-name> {
     g_param_spec_get_name($!ps);
   }
 
-  method get_name_quark {
+  method get_name_quark is also<get-name-quark> {
     g_param_spec_get_name_quark($!ps);
   }
 
-  method get_nick {
+  method get_nick is also<get-nick> {
     g_param_spec_get_nick($!ps);
   }
 
-  method get_qdata (GQuark $quark) {
+  method get_qdata (GQuark $quark) is also<get-qdata> {
     g_param_spec_get_qdata($!ps, $quark);
   }
 
-  method get_redirect_target {
+  method get_redirect_target is also<get-redirect-target> {
     my $p = g_param_spec_get_redirect_target($!ps);
 
     $p ?? GLib::Object::ParamSpec.new($p, :!ref) !! Nil;
@@ -418,12 +464,12 @@ class GLib::Object::ParamSpec {
     self;
   }
 
-  method ref_sink {
+  method ref_sink is also<ref-sink> {
     g_param_spec_ref_sink($!ps);
     self;
   }
 
-  method set_qdata (GQuark $quark, gpointer $data) {
+  method set_qdata (GQuark $quark, gpointer $data) is also<set-qdata> {
     g_param_spec_set_qdata($!ps, $quark, $data);
   }
 
@@ -431,7 +477,9 @@ class GLib::Object::ParamSpec {
     GQuark $quark,
     gpointer $data,
     GDestroyNotify $destroy = gpointer
-  ) {
+  )
+    is also<set-qdata-full>
+  {
     g_param_spec_set_qdata_full($!ps, $quark, $data, $destroy);
   }
 
@@ -439,7 +487,7 @@ class GLib::Object::ParamSpec {
     g_param_spec_sink($!ps);
   }
 
-  method steal_qdata (GQuark $quark) {
+  method steal_qdata (GQuark $quark) is also<steal-qdata> {
     g_param_spec_steal_qdata($!ps, $quark);
   }
 
@@ -451,7 +499,9 @@ class GLib::Object::ParamSpec {
     GLib::Object::ParamSpec:U:
     Str() $name,
     GParamSpecTypeInfo $pspec_info
-  ) {
+  )
+    is also<type-register-static>
+  {
     my $t = g_param_type_register_static($name, $pspec_info);
 
     # INFO -- The PROPER way to handle GTypeEnum as a return value.
@@ -459,7 +509,7 @@ class GLib::Object::ParamSpec {
     $ret.so ?? $ret !! $t
   }
 
-  method values_cmp (GValue() $value1, GValue() $value2) {
+  method values_cmp (GValue() $value1, GValue() $value2) is also<values-cmp> {
     so g_param_values_cmp($!ps, $value1, $value2);
   }
 
@@ -467,21 +517,23 @@ class GLib::Object::ParamSpec {
     GValue() $src_value,
     GValue() $dest_value,
     Int() $strict_validation
-  ) {
+  )
+    is also<value-convert>
+  {
     my gboolean $s = (so $strict_validation).Int;
 
     so g_param_value_convert($!ps, $src_value, $dest_value, $s);
   }
 
-  method value_defaults (GValue() $value) {
+  method value_defaults (GValue() $value) is also<value-defaults> {
     so g_param_value_defaults($!ps, $value);
   }
 
-  method value_set_default (GValue() $value) {
+  method value_set_default (GValue() $value) is also<value-set-default> {
     g_param_value_set_default($!ps, $value);
   }
 
-  method value_validate (GValue() $value) {
+  method value_validate (GValue() $value) is also<value-validate> {
     so g_param_value_validate($!ps, $value);
   }
 
@@ -536,7 +588,9 @@ class GLib::Object::ParamSpec::Pool {
     $all.not ?? $la !! ($la, $n_pspecs_p);
   }
 
-  method list_owned (Int() $owner_type, :$glist = False, :$raw = False) {
+  method list_owned (Int() $owner_type, :$glist = False, :$raw = False)
+    is also<list-owned>
+  {
     my GType $o = $owner_type;
     my $pl = g_param_spec_pool_list_owned($!psp, $owner_type);
 
