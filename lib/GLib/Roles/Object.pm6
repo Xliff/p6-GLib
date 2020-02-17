@@ -14,11 +14,15 @@ role GLib::Roles::Object {
   has GObject $!o;
 
   submethod BUILD (:$object) {
-    $!o = $object;
+    $!o = $object if $object;
   }
 
   method new-object-obj (GObject $object) {
     $object ?? self.bless( :$object ) !! Nil;
+  }
+
+  method getImplementor {
+    findProperImplementor(self.^attributes);
   }
 
   method roleInit-Object {
@@ -37,8 +41,10 @@ role GLib::Roles::Object {
   multi method Numeric { +self.p }
 
   method GLib::Raw::Definitions::GObject
-    is also<GObject>
   { $!o }
+
+  # Remove when Method::Also is fixed!
+  method GObject { $!o }
 
   # We use these for inc/dec ops
   method ref   is also<upref>   {   g_object_ref($!o); self; }

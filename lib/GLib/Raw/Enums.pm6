@@ -663,3 +663,11 @@ our enum GVariantClassEnum is export <
   G_VARIANT_CLASS_TUPLE
   G_VARIANT_CLASS_DICT_ENTRY
 >;
+
+our enum GPriority is export (
+  G_PRIORITY_HIGH         => -100,
+  G_PRIORITY_DEFAULT      => 0,
+  G_PRIORITY_HIGH_IDLE    => 100,
+  G_PRIORITY_DEFAULT_IDLE => 200,
+  G_PRIORITY_LOW          => 300
+);

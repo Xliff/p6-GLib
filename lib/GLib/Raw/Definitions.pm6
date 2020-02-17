@@ -155,3 +155,8 @@ sub findProperImplementor ($attrs) is export {
   # MRO.
   $attrs.grep( * ~~ Implementor ).sort( -*.package.^mro.elems )[0]
 }
+
+INIT {
+  #say 'setting debug';
+  $DEBUG = %*ENV<P6_GTK_DEBUG>;
+}

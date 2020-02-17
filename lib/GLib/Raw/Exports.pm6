@@ -10,6 +10,7 @@ BEGIN {
     GLib::Raw::Enums
     GLib::Raw::Structs
     GLib::Raw::Subs
+    GLib::Raw::Struct_Subs
     GLib::Raw::Exports
   >;
 }
