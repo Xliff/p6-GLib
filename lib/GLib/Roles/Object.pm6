@@ -134,8 +134,17 @@ role GLib::Roles::Object {
     g_object_setv( $!o, $ne, ArrayToCArray(Str, @names), @v[0].p );
   }
 
-  method prop_get(Str() $name, GValue() $value) is also<prop-get> {
-    self.get_prop($name, $value.g_type);
+  method prop_get(Str() $name, $value is copy, :$raw = False)
+    is also<prop-get>
+  {
+    my $compatible = $value ~~ GValue;
+    my $coercible  = $value.^lookup('GValue');
+
+    die '$value must be GValue-compatible!' unless $compatible || $coercible;
+
+    $value .= GValue if $coercible && $value ~~ GLib::Value;
+
+    self.get_prop($name, $value, :$raw);
   }
 
   proto method get_prop (|)
@@ -148,13 +157,17 @@ role GLib::Roles::Object {
     samewith( [ $name ], @v );
     $raw ?? @v[0].GValue !! @v[0];
   }
-  multi method get_prop (Str() $name, GLib::Value $value) {
-    samewith($name, $value.GValue);
+  multi method get_prop (Str() $name, GLib::Value $value, :$raw = False) {
+    my $vp = $value.GValue;
+
+    samewith($name, $vp);
+    $raw ?? $vp !! $value;
   }
-  multi method get_prop (Str() $name, GValue $value) {
+  multi method get_prop (Str() $name, GValue $value, :$raw = False) {
     my @v = ($value);
 
     samewith( $name.Array, @v );
+    $raw ?? $value !! GLib::Value.new($value);
   }
   multi method get_prop (@names, @values) {
     my @n = self!checkNames(@names);
@@ -171,8 +184,9 @@ role GLib::Roles::Object {
     # $v[$i++] = $_ for @v;
 
     # -XXX- NOT a general purpose fix, but will work for now.
-    my $ne = $n.elems;
+    my guint32 $ne = $n.elems;
     die 'Cannot get properties with an empty array!' unless $ne > 0;
+
     g_object_getv( $!o, $ne, $n, @v[0].p );
 
     # @values = ();
