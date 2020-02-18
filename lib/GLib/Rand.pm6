@@ -14,19 +14,23 @@ class GLib::Rand {
   }
 
   method GLib::Raw::Definitions::GRand
+    is also<GRand>
   { $!r }
 
   multi method new (GRand $rand) {
-    self.bless( :$rand );
+    $rand ?? self.bless( :$rand ) !! Nil;
   }
   multi method new {
-    self.bless( rand => g_rand_new() );
+    my $rand = g_rand_new();
+
+    $rand ?? self.bless( :$rand ) !! Nil;
   }
 
   method new_with_seed (Int() $seed) is also<new-with-seed> {
     my guint $s = $seed;
+    my $rand = g_rand_new_with_seed($seed);
 
-    self.bless( rand => g_rand_new_with_seed($seed) );
+    $rand ?? self.bless( :$rand ) !! Nil;
   }
 
   proto method new_with_seed_array (|)
@@ -45,8 +49,9 @@ class GLib::Rand {
     Int() $seed_length
   ) {
     my guint $sl = $seed_length;
+    my $rand = g_rand_new_with_seed_array($seed_array, $sl);
 
-    self.bless( rand => g_rand_new_with_seed_array($seed_array, $sl) );
+    $rand ?? self.bless( :$rand ) !! Nil;
   }
 
   # Class methods,.
@@ -106,11 +111,11 @@ class GLib::Rand {
     GLib::Rand.new( g_rand_copy($!r) );
   }
 
-  multi method double {
+  multi method double (GLib::Rand:D:) {
     g_rand_double($!r);
   }
 
-  multi method double_range (Num() $begin, Num() $end) {
+  multi method double_range (GLib::Rand:D: Num() $begin, Num() $end) {
     my gdouble ($b, $e) = ($begin, $end);
 
     g_rand_double_range($!r, $b, $e);
@@ -120,17 +125,17 @@ class GLib::Rand {
     g_rand_free($!r);
   }
 
-  multi method int {
+  multi method int (GLib::Rand:D:) {
     g_rand_int($!r);
   }
 
-  multi method int_range (Int() $begin, Int() $end) {
+  multi method int_range (GLib::Rand:D: Int() $begin, Int() $end) {
     my gint ($b, $e) = ($begin, $end);
 
     g_rand_int_range($!r, $b, $e);
   }
 
-  multi method set_seed (Int() $seed) {
+  multi method set_seed (GLib::Rand:D: Int() $seed) {
     my guint $s = $seed;
 
     g_rand_set_seed($!r, $seed);
@@ -140,14 +145,18 @@ class GLib::Rand {
       is also<set-seed-array>
   { * }
 
-  multi method set_seed_array (@seeds) {
+  multi method set_seed_array (GLib::Rand:D: @seeds) {
     my $sa = CArray[guint].new;
     my $idx = 0;
 
     $sa[$_] = @seeds[$_] for ^@seeds;
     samewith($sa, @seeds.elems);
   }
-  multi method set_seed_array (CArray[guint] $seed_array, Int() $seed_length) {
+  multi method set_seed_array (
+    GLib::Rand:D:
+    CArray[guint] $seed_array,
+    Int() $seed_length
+  ) {
     my guint $sl = $seed_length;
 
     g_rand_set_seed_array($!r, $seed_array, $seed_length);
