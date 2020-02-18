@@ -7,12 +7,10 @@ use GLib::Raw::Main;
 
 use GLib::Source;
 
-class GLib::Timeout {
+use GLib::Roles::StaticClass;
 
-  method new (|) {
-    warn 'GLib::Timeout is a static class and cannot be instantiated';
-    GLib::Timeout;
-  }
+class GLib::Timeout {
+  also does GLib::Roles::StaticClass;
 
   method add (
     Int() $interval,
