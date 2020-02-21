@@ -222,6 +222,11 @@ class GLib::Value {
         g_value_get_object($!v);
       },
       STORE => sub ($, $obj is copy) {
+        if $obj.^lookup('GObject') -> $gobject {
+          $obj = $gobject($obj);
+        }
+        die '$obj is not a GObject or a Pointer reference!'
+          unless $obj ~~ GObject || $obj.REPR eq 'CPointer';
         g_value_set_object( $!v, nativecast(GObject, $obj) );
       }
     );
@@ -441,7 +446,7 @@ sub gv_obj ($o, :$type) is export {
   $gv;
 }
 
-sub gv-ptr ($p) is export 
+sub gv-ptr ($p) is export
   { gv_ptr($p) }
 sub gv_ptr ($p) is export {
   my $gv = GLib::Value.new( G_TYPE_POINTER );
