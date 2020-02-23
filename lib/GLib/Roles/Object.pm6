@@ -134,7 +134,7 @@ role GLib::Roles::Object {
     g_object_setv( $!o, $ne, ArrayToCArray(Str, @names), @v[0].p );
   }
 
-  method prop_get(Str() $name, $value is copy, :$raw = False)
+  method prop_get(Str() $name, $value is copy, :$raw = True)
     is also<prop-get>
   {
     my $compatible = $value ~~ GValue;
@@ -151,19 +151,19 @@ role GLib::Roles::Object {
     is also<get-prop>
   { * }
 
-  multi method get_prop (Str $name, Int $type, :$raw = False) {
+  multi method get_prop (Str $name, Int $type, :$raw = True) {
     my @v = ( GLib::Value.new($type).GValue );
 
     samewith( [ $name ], @v );
     $raw ?? @v[0].GValue !! @v[0];
   }
-  multi method get_prop (Str() $name, GLib::Value $value, :$raw = False) {
+  multi method get_prop (Str() $name, GLib::Value $value, :$raw = True) {
     my $vp = $value.GValue;
 
     samewith($name, $vp);
     $raw ?? $vp !! $value;
   }
-  multi method get_prop (Str() $name, GValue $value, :$raw = False) {
+  multi method get_prop (Str() $name, GValue $value, :$raw = True) {
     my @v = ($value);
 
     samewith( $name.Array, @v );
