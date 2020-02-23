@@ -11,6 +11,9 @@ class GLib::Value {
 
   submethod BUILD(:$type, GValue :$value) {
     $!v = $value // GValue.new;
+
+    die 'Cannot allocate GValue!' unless $!v;
+    
     g_value_init($!v, $type) if $type;
   }
 
@@ -18,14 +21,22 @@ class GLib::Value {
     #self.unref
   }
 
+  proto method new (|)
+  { * }
+
   multi method new (Int $t = G_TYPE_NONE) {
     die "Invalid type passed to GLib::Value.new - { $t.^name }"
       unless $t ~~ Int || $t.^can('Int').elems;
     my $type = $t.Int;
+
+    # Not elegible for a Nil check!
     self.bless(:$type);
   }
   multi method new (GValue $value) {
-    self.bless(:$value);
+    $value ?? self.bless(:$value) !! GValue
+  }
+  multi method new ($v) {
+    die "Invalid value { $v.^name } passed to GLib::Value!"
   }
 
   method GLib::Raw::Structs::GValue
