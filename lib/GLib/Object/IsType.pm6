@@ -8,9 +8,6 @@ use GLib::Roles::Pointers;
 
 unit package GLib::Object::IsType;
 
-our subset GObjectOrPointer of Mu is export
-  where ::('GLib::Roles::Object') | GObject | GLib::Roles::Pointers;
-
 sub is_type (GObjectOrPointer $t, $object) is export {
   $t .= GObject if $t ~~ ::('GLib::Roles::Object');
   my ($to, $ot) =

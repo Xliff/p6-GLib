@@ -11,7 +11,7 @@ our $ERROR is export;
 our $DEBUG is export = 0;
 
 # Forced compile count
-constant forced = 35;
+constant forced = 36;
 
 # Libs
 constant glib       is export  = 'glib-2.0',v0;
@@ -141,6 +141,9 @@ class GVariantIter             is repr('CPointer') is export does GLib::Roles::P
 class GVariantType             is repr('CPointer') is export does GLib::Roles::Pointers { }
 
 our role Implementor is export {};
+
+our subset GObjectOrPointer of Mu is export
+  where ::('GLib::Roles::Object') | GObject | GLib::Roles::Pointers;
 
 # Mark
 multi sub trait_mod:<is>(Attribute:D \attr, :$implementor) is export {
