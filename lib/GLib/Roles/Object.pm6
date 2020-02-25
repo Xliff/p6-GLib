@@ -12,6 +12,7 @@ constant gObjectTypeKey = 'p6-GObject-Type';
 
 role GLib::Roles::Object {
   has GObject $!o;
+  has %!data;
 
   submethod BUILD (:$object) {
     $!o = $object if $object;
@@ -78,6 +79,18 @@ role GLib::Roles::Object {
   }
   multi method getType (::?CLASS:U: GObject $o) {
     g_object_get_string($o, gObjectTypeKey);
+  }
+
+  # For storing Raku data types.
+  method get-data (GObjectOrPointer $i is copy, $k) {
+    return Nil unless $i;
+    $i .= GObject if $i ~~ GLib::Roles::Object;
+    %!data{+$i.p}{$k};
+  }
+  method set-data (GObjectOrPointer $i is copy, $k, $v) {
+    return Nil unless $i;
+    $i .= GObject if $i ~~ GLib::Roles::Object;
+    %!data{+$i.p}{$k} = $v;
   }
 
   method !checkNames(@names) {
