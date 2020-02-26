@@ -1,0 +1,1985 @@
+Dependency Generation
+=====================
+real 2.94
+user 2.80
+sys 0.13
+ === Method::Also ===
+Stage start      :   0.000
+
+    precomp ../../Other_Projects/Method-Also/lib/Method/Also.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   6.351
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Roles::Pointers ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Pointers.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.592
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Definitions ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Definitions.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.795
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Enums ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Enums.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   4.003
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.003
+Stage mast       :   0.007
+Stage mbc        :   0.003
+Stage moar       :   0.000
+ === GLib::Raw::Struct_Subs ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Struct_Subs.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.165
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Subs ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Subs.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.958
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Exports ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Exports.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   1.385
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::ReturnedValue ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/ReturnedValue.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   1.316
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Structs ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Structs.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.310
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Types ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Types.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.612
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.004
+Stage mast       :   0.008
+Stage mbc        :   0.004
+Stage moar       :   0.000
+ === GLib::Raw::Unicode ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Unicode.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   6.756
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Utils ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Utils.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.879
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Value ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Value.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   6.150
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Variant ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Variant.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   8.973
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::VariantType ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/VariantType.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   4.466
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Roles::ListData ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/ListData.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.675
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Roles::References ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/References.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.595
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Roles::StaticClass ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/StaticClass.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.660
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Roles::TypedBuffer ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/TypedBuffer.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.727
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::URI ===
+Stage start      :   0.000
+
+    precomp lib/GLib/URI.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.836
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::UUID ===
+Stage start      :   0.000
+
+    precomp lib/GLib/UUID.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.785
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Unicode ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Unicode.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.231
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Utils ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Utils.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.574
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Value ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Value.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.044
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Variant ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Variant.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.770
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::VariantIter ===
+Stage start      :   0.000
+
+    precomp lib/GLib/VariantIter.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.583
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::VariantType ===
+Stage start      :   0.000
+
+    precomp lib/GLib/VariantType.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.050
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Object::IsType ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/IsType.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.572
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Object::Raw::Binding ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/Binding.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.236
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Object::Raw::Closure ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/Closure.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.548
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Object::Raw::ParamSpec ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/ParamSpec.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   5.912
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Array ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Array.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   5.890
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Arrays ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Arrays.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   6.051
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::AsyncQueue ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/AsyncQueue.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   4.186
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Base64 ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Base64.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.948
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::BookmarkFile ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/BookmarkFile.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   5.179
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Bytes ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Bytes.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.509
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Checksum ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Checksum.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.296
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::DateTime ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/DateTime.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   5.703
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Error ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Error.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.934
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::GList ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/GList.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   4.514
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::GSList ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/GSList.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   4.457
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::HMAC ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/HMAC.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.233
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::HashTable ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/HashTable.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   5.524
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Hostname ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Hostname.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.831
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::IOChannel ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/IOChannel.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   5.270
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::KeyFile ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/KeyFile.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   5.859
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Log ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Log.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.902
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Main ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Main.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   8.015
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Markup ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Markup.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.526
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Memory ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Memory.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.474
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Module ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Module.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.132
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Pattern ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Pattern.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.949
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Quark ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Quark.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.949
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Quarks ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Quarks.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.717
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Rand ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Rand.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.639
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Scanner ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Scanner.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.779
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Signal ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Signal.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   4.722
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Slice ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Slice.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.146
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::String ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/String.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   4.469
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Thread ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Thread.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   4.940
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::ThreadPool ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/ThreadPool.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.605
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::TimeZone ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/TimeZone.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.314
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Timer ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Timer.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.263
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Tree ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Tree.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   4.310
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Roles::Object ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Object.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.856
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Roles::Properties ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Properties.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.912
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Roles::Signals::Generic ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Signals/Generic.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   5.548
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Scanner ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Scanner.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.649
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Signal ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Signal.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.837
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Slice ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Slice.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.707
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::String ===
+Stage start      :   0.000
+
+    precomp lib/GLib/String.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.772
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::ThreadPool ===
+Stage start      :   0.000
+
+    precomp lib/GLib/ThreadPool.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.645
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::TimeZone ===
+Stage start      :   0.000
+
+    precomp lib/GLib/TimeZone.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.617
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Timer ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Timer.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.706
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Tree ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Tree.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.661
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::VariantDict ===
+Stage start      :   0.000
+
+    precomp lib/GLib/VariantDict.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.635
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Array ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Array.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.696
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::AsyncQueue ===
+Stage start      :   0.000
+
+    precomp lib/GLib/AsyncQueue.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.619
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Base64 ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Base64.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.661
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::BookmarkFile ===
+Stage start      :   0.000
+
+    precomp lib/GLib/BookmarkFile.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.950
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Bytes ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Bytes.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.644
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Checksum ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Checksum.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.686
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::DateTime ===
+Stage start      :   0.000
+
+    precomp lib/GLib/DateTime.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.377
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Error ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Error.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.676
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::GList ===
+Stage start      :   0.000
+
+    precomp lib/GLib/GList.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.736
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::GSList ===
+Stage start      :   0.000
+
+    precomp lib/GLib/GSList.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+»» Please use GLib::GList if possible, since it is binary compatible! ««
+Stage parse      :   2.756
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::HMAC ===
+Stage start      :   0.000
+
+    precomp lib/GLib/HMAC.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.664
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::HashTable ===
+Stage start      :   0.000
+
+    precomp lib/GLib/HashTable.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+»»»»»»
+» Please note that the objects in /home/cbwood/Projects/p6-GLib/lib/GLib/HashTable.pm6 (GLib::HashTable) are classed as use-at-your-own-risk!
+»»»»»»
+
+Stage parse      :   2.763
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Hostname ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Hostname.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.521
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::KeyFile ===
+Stage start      :   0.000
+
+    precomp lib/GLib/KeyFile.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.159
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Log ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Log.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.750
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::MainContext ===
+Stage start      :   0.000
+
+    precomp lib/GLib/MainContext.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.768
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::MainLoop ===
+Stage start      :   0.000
+
+    precomp lib/GLib/MainLoop.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.640
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Markup ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Markup.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.622
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Memory ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Memory.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.665
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Module ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Module.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.556
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Mutex ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Mutex.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.555
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Object::Binding ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Binding.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.625
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Object::Closure ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Closure.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.647
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Object::ParamSpec ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/ParamSpec.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.049
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Pattern ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Pattern.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.586
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::PtrArray ===
+Stage start      :   0.000
+
+    precomp lib/GLib/PtrArray.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.684
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Quark ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Quark.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.585
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Rand ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Rand.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.682
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Source ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Source.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.676
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Timeout ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Timeout.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.672
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::ByteArray ===
+Stage start      :   0.000
+
+    precomp lib/GLib/ByteArray.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   2.686
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::IOChannel ===
+Stage start      :   0.000
+
+    precomp lib/GLib/IOChannel.pm6
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+    --stagestats
+Stage parse      :   3.045
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.006
+Stage moar       :   0.000
+
+real 381.99
+user 461.10
+sys 17.71
