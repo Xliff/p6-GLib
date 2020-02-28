@@ -10,12 +10,17 @@ use GLib::Value;
 
 constant gObjectTypeKey = 'p6-GObject-Type';
 
+my %data;
+
 role GLib::Roles::Object {
   has GObject $!o;
-  has %!data;
 
   submethod BUILD (:$object) {
     $!o = $object if $object;
+  }
+
+  method gist-data {
+    %data.gist;
   }
 
   method new-object-obj (GObject $object) {
@@ -82,15 +87,18 @@ role GLib::Roles::Object {
   }
 
   # For storing Raku data types.
-  method get-data (GObjectOrPointer $i is copy, $k) {
-    return Nil unless $i;
-    $i .= GObject if $i ~~ GLib::Roles::Object;
-    %!data{+$i.p}{$k};
+  method get-data ($k) {
+    %data{+$!o.p}{$k};
   }
-  method set-data (GObjectOrPointer $i is copy, $k, $v) {
-    return Nil unless $i;
-    $i .= GObject if $i ~~ GLib::Roles::Object;
-    %!data{+$i.p}{$k} = $v;
+
+  method set-data ($k, $v) {
+    say "Setting { $k } to { $v } for { +$!o.p }..." if $DEBUG;
+    
+    %data{+$!o.p}{$k} = $v;
+  }
+
+  method unset-data ($k) {
+    %data{+$!o.p}{$k}:delete if %data{+$!o.p}{$k}:exists;
   }
 
   method !checkNames(@names) {
