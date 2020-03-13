@@ -93,7 +93,7 @@ role GLib::Roles::Object {
 
   method set-data ($k, $v) {
     say "Setting { $k } to { $v } for { +$!o.p }..." if $DEBUG;
-    
+
     %data{+$!o.p}{$k} = $v;
   }
 
@@ -143,6 +143,9 @@ role GLib::Roles::Object {
     samewith( [$name], [$value] );
   }
   multi method set_prop(@names, @values) {
+    say "N: { @names.join(', ') }" if $DEBUG;
+    say "V0: { @values[0].^name }" if $DEBUG;
+
     my @n = self!checkNames(@names);
     my @v = self!checkValues(@values);
 
@@ -152,6 +155,9 @@ role GLib::Roles::Object {
     my guint $ne = @n.elems;
 
     die 'Cannot set properties with an empty array!' unless $ne > 0;
+
+    say "V1: { @v[0].p }" if $DEBUG;
+
     g_object_setv( $!o, $ne, ArrayToCArray(Str, @names), @v[0].p );
   }
 
