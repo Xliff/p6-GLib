@@ -100,7 +100,7 @@ class GLib::Value {
 
   method boxed is rw {
     Proxy.new(
-      FETCH => -> $ {
+      FETCH => sub ($) {
         g_value_get_boxed($!v);
       },
       STORE => -> $, $val is copy {

@@ -113,13 +113,13 @@ class GLib::IOChannel {
 
   method flags is rw {
     Proxy.new:
-      FETCH => -> $               { self.get_flags },
+      FETCH => sub ($)               { self.get_flags },
       STORE => -> $, Int() $flags { self.set_flags($flags) };
   }
 
   method line_term is rw is also<line-term> {
     Proxy.new:
-      FETCH => -> $            { self.get_line_term( :!all ) },
+      FETCH => sub ($)            { self.get_line_term( :!all ) },
       STORE => -> $, Str() $lt { self.set_line_term($lt, $lt.chars) };
   }
 

@@ -77,7 +77,7 @@ role GLib::Roles::ListData[::T] {
 
   method !_data(GList $n) is rw {
     Proxy.new:
-      FETCH => -> $ {
+      FETCH => sub ($) {
         given T {
           when  uint64 | uint32 | uint16 | uint8 |
                  int64 |  int32 |  int16 |  int8 |

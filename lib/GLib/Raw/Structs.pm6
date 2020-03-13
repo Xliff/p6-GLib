@@ -69,7 +69,7 @@ class GError                is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method message is rw {
     Proxy.new:
-      FETCH => -> $ { $!message },
+      FETCH => sub ($) { $!message },
       STORE => -> $, Str() $val {
         ::?CLASS.^attributes[* - 1].set_value(self, $val)
       };
@@ -83,7 +83,7 @@ class GList                 is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method data is rw {
     Proxy.new:
-      FETCH => -> $              { $!data },
+      FETCH => sub ($)              { $!data },
       STORE => -> $, GList() $nv {
         # Thank GOD we can now replace this monstrosity:
         # nqp::bindattr(
@@ -123,7 +123,7 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method instance_init is rw {
     Proxy.new:
-      FETCH => -> $ { $!instance_init },
+      FETCH => sub ($) { $!instance_init },
       STORE => -> $, \func {
         $!finalize := set_func_pointer( &(func), &sprintf-Ps);
       };
@@ -131,7 +131,7 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method finalize is rw {
     Proxy.new:
-      FETCH => -> $ { $!finalize },
+      FETCH => sub ($) { $!finalize },
       STORE => -> $, \func {
         $!finalize := set_func_pointer( &(func), &sprintf-Ps);
       };
@@ -139,7 +139,7 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method value_set_default is rw {
     Proxy.new:
-      FETCH => -> $ { $!finalize },
+      FETCH => sub ($) { $!finalize },
       STORE => -> $, \func {
         $!value_set_default := set_func_pointer( &(func), &sprintf-PsV);
       };
@@ -147,7 +147,7 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method value_validate is rw {
     Proxy.new:
-      FETCH => -> $ { $!value_validate },
+      FETCH => sub ($) { $!value_validate },
       STORE => -> $, \func {
         $!value_validate := set_func_pointer( &(func), &sprintf-PsV-b);
       };
@@ -155,7 +155,7 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method value_cmp is rw {
     Proxy.new:
-      FETCH => -> $ { $!values_cmp },
+      FETCH => sub ($) { $!values_cmp },
       STORE => -> $, \func {
         $!values_cmp := set_func_pointer( &(func), &sprintf-PsVV-i);
       };
@@ -189,14 +189,14 @@ class GParameter            is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method name is rw {
     Proxy.new:
-      FETCH => -> $                { $!name },
+      FETCH => sub ($)                { $!name },
       STORE => -> $, Str() $val    { self.^attributes(:local)[0]
                                          .set_value(self, $val)    };
   }
 
   method value is rw {
     Proxy.new:
-      FETCH => -> $                { $!value },
+      FETCH => sub ($)                { $!value },
       STORE => -> $, GValue() $val { self.^attributes(:local)[0]
                                          .set_value(self, $val)    };
   }
@@ -261,7 +261,7 @@ class GSourceCallbackFuncs  is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method ref is rw {
     Proxy.new:
-      FETCH => -> $        { $!ref },
+      FETCH => sub ($)        { $!ref },
       STORE => -> $, \func {
         $!ref := set_func_pointer( &(func), &sprintf-P-L )
       };
@@ -269,7 +269,7 @@ class GSourceCallbackFuncs  is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method unref is rw {
     Proxy.new:
-      FETCH => -> $        { $!unref },
+      FETCH => sub ($)        { $!unref },
       STORE => -> $, \func {
         $!unref := set_func_pointer( &(func), &sprintf-P-L )
       };
@@ -277,7 +277,7 @@ class GSourceCallbackFuncs  is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method get is rw {
     Proxy.new:
-      FETCH => -> $        { $!get },
+      FETCH => sub ($)        { $!get },
       STORE => -> $, \func {
         $!get := set_func_pointer( &(func), &sprintf-PSƒP )
       };
@@ -313,7 +313,7 @@ class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method prepare is rw {
     Proxy.new:
-      FETCH => -> $ { $!prepare },
+      FETCH => sub ($) { $!prepare },
       STORE => -> $, \func {
         $!prepare := set_func_pointer( &(func), &sprintf-SCi-b);
       };
@@ -321,7 +321,7 @@ class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method check is rw {
     Proxy.new:
-      FETCH => -> $ { $!check },
+      FETCH => sub ($) { $!check },
       STORE => -> $, \func {
         $!check := set_func_pointer( &(func), &sprintf-S-b);
       }
@@ -329,7 +329,7 @@ class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method dispatch is rw {
     Proxy.new:
-      FETCH => -> $ { $!dispatch },
+      FETCH => sub ($) { $!dispatch },
       STORE => -> $, \func {
         $!dispatch := set_func_pointer( &(func), &sprintf-SƒP-b);
       }
@@ -337,7 +337,7 @@ class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method finalize is rw {
     Proxy.new:
-      FETCH => -> $ { $!finalize },
+      FETCH => sub ($) { $!finalize },
       STORE => -> $, \func {
         $!finalize := set_func_pointer( &(func), &sprintf-S-b);
       }

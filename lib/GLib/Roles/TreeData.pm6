@@ -52,7 +52,7 @@ role GLib::ListData[::K, ::V] {
 
     %!keyCache{$key} =
       Proxy.new:
-        FETCH => -> $ {
+        FETCH => sub ($) {
           $l( self.lookup($ka) );
         },
         STORE => -> $, V $val {
