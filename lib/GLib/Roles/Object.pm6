@@ -234,7 +234,7 @@ role GLib::Roles::Object {
   }
 
   method prop_get_bool (Str() $key) is also<prop-get-bool> {
-    so self.prop_set_uint($key);
+    so self.prop_get_uint($key);
   }
 
   method prop_set_string(Str() $key, Str() $val)
@@ -258,23 +258,34 @@ role GLib::Roles::Object {
   }
 
   method prop_set_int (Str() $name, Int() $value) is also<prop-set-int> {
-    g_object_set_int($!o, $name, $value, Str);
+    g_object_set_int($!o, $name, $value);
   }
 
   method prop_get_int (Str() $name) is also<prop-get-int> {
     my $a = g_object_get_int($!o, $name);
 
-    $a[0].defined ?? $a[0] !! Nil;
+    ( $a && $a[0] ) ?? $a[0] !! Nil;
   }
 
   method prop_set_uint (Str() $name, Int() $value) is also<prop-set-uint> {
-    g_object_set_uint($!o, $name, $value, Str);
+    my $v = CArray[guint].new;
+    $v[0] = $value;
+
+    g_object_set_uint($!o, $name, $v);
   }
 
   method prop_get_uint(Str() $name) is also<prop-get-uint> {
     my $a = g_object_get_uint($!o, $name);
 
-    $a[0].defined ?? $a[0] !! Nil;
+    ( $a && $a[0] ) ?? $a[0] !! Nil;
+  }
+
+  method delete_data (Str() $key) {
+    %data{+$!o.p}{$key}:delete;
+  }
+
+  method clear_data (Str() $key) is also<clear-data> {
+    g_object_set_ptr($!o, $key, Pointer);
   }
 
 }

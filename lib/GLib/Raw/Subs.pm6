@@ -88,7 +88,7 @@ sub g_object_get_ptr(GObject $o, Str $key)
   is export
 { * }
 
-sub g_object_set_ptr(GObject $o, Str $key, Pointer $data is rw)
+sub g_object_set_ptr(GObject $o, Str $key, Pointer $data)
   is native(gobject)
   is symbol('g_object_set_data')
   is export
@@ -130,7 +130,7 @@ sub g_object_get_int (
 sub g_object_set_int (
   GObject $object,
   Str $name,
-  gint $value is rw
+  CArray[gint] $value
 )
   is native(gobject)
   is symbol('g_object_set_data')
@@ -150,7 +150,7 @@ sub g_object_get_uint (
 sub g_object_set_uint (
   GObject $object,
   Str $name,
-  guint $value is rw
+  CArray[guint] $value
 )
   is native(gobject)
   is symbol('g_object_set_data')
