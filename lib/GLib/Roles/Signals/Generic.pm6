@@ -16,7 +16,7 @@ role GLib::Roles::Signals::Generic {
   # has been created.
   #
   # Must be overridden by all consumers that use another Signal-based role.
-  method is-connected(Str $name) is also<is_connected> {
+  method is-connected (Str $name) is also<is_connected> {
     #$%!signals{$name}:exists;
     %!tapped-sigs{$name}:exists;
   }
@@ -27,13 +27,13 @@ role GLib::Roles::Signals::Generic {
     self.disconnect($_, %sigs) for %sigs.keys;
   }
 
-  method disconnect($signal, %signals) {
+  method disconnect ($signal, %signals) {
     # First parameter is good, but concerned about the second.
     g_signal_handler_disconnect(%signals{$signal}[1], %signals{$signal}[2]);
     %signals{$signal}:delete;
   }
 
-  method connect(
+  method connect (
     $obj,
     $signal,
     &handler?
@@ -101,12 +101,12 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal} //= do {
       my $s = Supplier.new;
       $hid = g_connect_string($obj, $signal,
-        -> $, $s, $ud {
+        -> $, $s1, $ud {
           CATCH {
             default { note($_) }
           }
 
-          $s.emit( [self, $s, $ud] );
+          $s.emit( [self, $s1, $ud] );
         },
         Pointer, 0
       );
@@ -328,12 +328,12 @@ role GLib::Roles::Signals::Generic {
     %!signals //= do {
       my $s = Supplier.new;
       $hid = g-connect-strint($obj, $signal,
-        -> $, $s, $i, $ud {
+        -> $, $s1, $i1, $ud {
           CATCH {
             default { $s.quit($_) }
           }
 
-          $s.emit( [self, $s, $i, $ud] );
+          $s.emit( [self, $s1, $i1, $ud] );
         },
         Pointer, 0
       );
@@ -512,7 +512,7 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal}[0];
   }
 
-  method connect-gparam(
+  method connect-gparam (
     $obj,
     $signal,
     &handler?
@@ -573,7 +573,7 @@ role GLib::Roles::Signals::Generic {
 
 }
 
-sub g_connect(
+sub g_connect (
   Pointer $app,
   Str $name,
   &handler (GObject $h_widget, Pointer $h_data),
@@ -585,7 +585,7 @@ sub g_connect(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_rbool(
+sub g_connect_rbool (
   Pointer $app,
   Str $name,
   &handler (Pointer, Pointer --> gboolean),
@@ -597,7 +597,7 @@ sub g_connect_rbool(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_string(
+sub g_connect_string (
   Pointer $app,
   Str $name,
   &handler (Pointer, Str, Pointer),
@@ -609,7 +609,7 @@ sub g_connect_string(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_strstr(
+sub g_connect_strstr (
   Pointer $app,
   Str $name,
   &handler (Pointer, Str, Str, Pointer),
@@ -621,7 +621,7 @@ sub g_connect_strstr(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g-connect-intint(
+sub g-connect-intint (
   Pointer $app,
   Str $name,
   &handler (Pointer, gint, gint, Pointer),
@@ -633,7 +633,7 @@ sub g-connect-intint(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g-connect-uintuint(
+sub g-connect-uintuint (
   Pointer $app,
   Str $name,
   &handler (Pointer, guint, guint, Pointer),
@@ -645,7 +645,7 @@ sub g-connect-uintuint(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_int(
+sub g_connect_int (
   Pointer $app,
   Str $name,
   &handler (Pointer, gint, Pointer),
@@ -658,7 +658,7 @@ sub g_connect_int(
 { * }
 
 # Define for each signal
-sub g_connect_uint(
+sub g_connect_uint (
   Pointer $app,
   Str $name,
   &handler (Pointer, uint32, Pointer),
@@ -670,7 +670,7 @@ sub g_connect_uint(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_double(
+sub g_connect_double (
   Pointer $app,
   Str $name,
   &handler (Pointer, gdouble, Pointer),
@@ -682,7 +682,7 @@ sub g_connect_double(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_pointer(
+sub g_connect_pointer (
   Pointer $app,
   Str $name,
   &handler (Pointer, Pointer, Pointer),
@@ -718,7 +718,7 @@ sub g_connect_uintintbool (
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_str_rbool(
+sub g_connect_str_rbool (
   Pointer $app,
   Str $name,
   &handler (Pointer, Str, Pointer --> gboolean),
@@ -730,7 +730,7 @@ sub g_connect_str_rbool(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_int_ruint(
+sub g_connect_int_ruint (
   Pointer $app,
   Str $name,
   &handler (Pointer, gint, Pointer --> guint),
@@ -742,7 +742,7 @@ sub g_connect_int_ruint(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_int_rint(
+sub g_connect_int_rint (
   Pointer $app,
   Str $name,
   &handler (Pointer, gint, Pointer --> gint),
@@ -754,7 +754,7 @@ sub g_connect_int_rint(
   is symbol('g_signal_connect_object')
 { * }
 
-sub g_connect_uint_ruint(
+sub g_connect_uint_ruint (
   Pointer $app,
   Str $name,
   &handler (Pointer, guint, Pointer --> guint),
@@ -778,7 +778,7 @@ sub g-connect-uintint (
   is symbol('g_signal_connect_object')
 { * }
 
-sub g-connect-gparam(
+sub g-connect-gparam (
   Pointer $app,
   Str $name,
   &handler (Pointer, GParamSpec, Pointer),
@@ -791,7 +791,7 @@ sub g-connect-gparam(
 { * }
 
 # Pointer, guint64, gpointer
-sub g-connect-long(
+sub g-connect-long (
   Pointer $app,
   Str $name,
   &handler (Pointer, guint64, Pointer),
@@ -804,7 +804,7 @@ sub g-connect-long(
 { * }
 
 # Pointer, Str, gint, gpointer
-sub g-connect-strint(
+sub g-connect-strint (
   Pointer $app,
   Str $name,
   &handler (Pointer, Str, gint, Pointer),
@@ -817,7 +817,7 @@ sub g-connect-strint(
 { * }
 
 # Pointer, GVariant, Pointer
-sub g-connect-variant(
+sub g-connect-variant (
   Pointer $app,
   Str $name,
   &handler (Pointer, GVariant, Pointer),
