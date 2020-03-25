@@ -11,7 +11,7 @@ our $ERROR is export;
 our $DEBUG is export = 0;
 
 # Forced compile count
-constant forced = 36;
+constant forced = 38;
 
 # Libs
 constant glib       is export  = 'glib-2.0',v0;
