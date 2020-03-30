@@ -30,6 +30,11 @@ sub real-resolve-uint64($v) is export {
   $v +& 0xffffffffffffffff;
 }
 
+# Moved from p6-GStreamer
+sub nocr ($s) is export {
+  $s.subst("\n", ' ', :g);
+}
+
 sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
   return $t if ($n // 0) > 0;
   repeat {
