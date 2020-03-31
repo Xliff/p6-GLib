@@ -1,5 +1,7 @@
 use v6.c;
 
+use Method::Also;
+
 use GLib::Raw::Types;
 
 use GLib::Raw::Thread;
@@ -11,12 +13,18 @@ class GLib::Mutex {
     $!m = $mutex;
   }
 
+  method GLib::Raw::Definitions::GMutex
+    is also<GMutex>
+  { $!m }
+
   multi method new (GMutex $mutex) {
-    self.bless( :$mutex );
+    $mutex ?? self.bless( :$mutex ) !! Nil;
   }
   multi method new {
     # No need for Nil check since its a struct.
     my $m = GMutex.new;
+
+    return Nil unless $m;
 
     GTK::Compat::Mutex.init($m);
     self.bless( mutex => $m );
