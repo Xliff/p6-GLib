@@ -24,11 +24,19 @@ class GLib::IOChannel {
 
   multi method new (
     Int() $filedesc,
-    :file-descriptor(:fle_descriptor(:$fd)) is required
+    :file-descriptor(:fle_descriptor(:unix(:$fd))) is required
   ) {
     self.new_fd($filedesc);
   }
-  method new_fd (Int() $filedesc) is also<new-fd> {
+  method new_fd (Int() $filedesc)
+    is also<
+      new-fd
+      new_unix
+      new-unix
+      unix_new
+      unix-new
+    >
+  {
     my gint $fd = $filedesc;
     my $io = $*DISTRO.is-win ??
       g_io_channel_win32_new_fd($filedesc)
@@ -259,26 +267,27 @@ class GLib::IOChannel {
   multi method read_line (
     CArray[Pointer[GError]] $error = gerror
   ) {
-    clear_error;
-    samewith($, $, $, $error);
-    set_error($error);
+    my $rv = samewith($, $, $, $error, :all);
+
+    $rv[0] ?? $rv.skip(1) !! Nil;
   }
   multi method read_line (
     $str_return     is rw,
     $length         is rw,
     $terminator_pos is rw,
     CArray[Pointer[GError]] $error = gerror,
+    :$all = False
   ) {
     my gsize ($l, $tp) = 0 xx 2;
     my $sa = CArray[Str].new;
 
     $sa[0] = Str;
     clear_error;
-    my $rc = GIOStatus( g_io_channel_read_line($!gio, $sa, $l, $tp, $error) );
+    my $rv = GIOStatusEnum( g_io_channel_read_line($!gio, $sa, $l, $tp, $error) );
     set_error($error);
 
     ($str_return, $length, $terminator_pos) = ($sa[0], $l, $tp);
-    ($rc, $str_return, $length, $terminator_pos);
+    $all.not ?? $rv !! ($rv, $str_return, $length, $terminator_pos);
   }
 
   proto method read_line_string (|)
