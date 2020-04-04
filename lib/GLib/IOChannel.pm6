@@ -3,8 +3,6 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
-
-
 use GLib::Raw::Types;
 
 use GLib::Raw::IOChannel;
@@ -215,15 +213,15 @@ class GLib::IOChannel {
       is also<get-line-term>
   { * }
 
-  multi method get_line_term (:$all = True) {
-    samewith($, :$all);
+  multi method get_line_term  {
+    samewith($, :all);
   }
   multi method get_line_term ($length is rw, :$all = False) {
     my gint $l = 0;
-    my $rv = g_io_channel_get_line_term($!gio, $length);
+    my $lt = g_io_channel_get_line_term($!gio, $length);
 
     $length = $l;
-    $all.not ?? $rv !! ($rv, $length);
+    $all.not ?? $lt !! ($lt, $length);
   }
 
   method init (GLib::IOChannel:U: GIOChannel $io) {
@@ -237,10 +235,9 @@ class GLib::IOChannel {
   multi method read_chars (
     Str() $buf,
     Int() $count,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = True
+    CArray[Pointer[GError]] $error = gerror
   ) {
-    samewith($buf, $count, $, $error, :$all);
+    samewith($buf, $count, $, $error, :all);
   }
   multi method read_chars (
     Str() $buf,
@@ -252,12 +249,12 @@ class GLib::IOChannel {
     my gsize ($c, $br) = ($count, 0);
 
     clear_error;
-    my $rv = GIOStatusEnum(
+    my $rs = GIOStatusEnum(
       g_io_channel_read_chars($!gio, $buf, $count, $bytes_read, $error)
     );
     set_error($error);
     $bytes_read = $br;
-    $all.not ?? $rv !! ($rv, $bytes_read);
+    $all.not ?? $rs !! ($rs, $bytes_read);
   }
 
   proto method read_line (|)
@@ -267,9 +264,7 @@ class GLib::IOChannel {
   multi method read_line (
     CArray[Pointer[GError]] $error = gerror
   ) {
-    my $rv = samewith($, $, $, $error, :all);
-
-    $rv[0] ?? $rv.skip(1) !! Nil;
+    samewith($, $, $, $error, :all);
   }
   multi method read_line (
     $str_return     is rw,
@@ -283,11 +278,11 @@ class GLib::IOChannel {
 
     $sa[0] = Str;
     clear_error;
-    my $rv = GIOStatusEnum( g_io_channel_read_line($!gio, $sa, $l, $tp, $error) );
+    my $rs = GIOStatusEnum( g_io_channel_read_line($!gio, $sa, $l, $tp, $error) );
     set_error($error);
 
     ($str_return, $length, $terminator_pos) = ($sa[0], $l, $tp);
-    $all.not ?? $rv !! ($rv, $str_return, $length, $terminator_pos);
+    $all.not ?? $rs !! ($rs, $str_return, $length, $terminator_pos);
   }
 
   proto method read_line_string (|)
@@ -296,10 +291,9 @@ class GLib::IOChannel {
 
   multi method read_line_string (
     GString() $buffer,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = True
+    CArray[Pointer[GError]] $error = gerror
   ) {
-    samewith($buffer, $, $error);
+    samewith($buffer, $, $error, :all);
   }
   multi method read_line_string (
     GString() $buffer,
@@ -310,12 +304,12 @@ class GLib::IOChannel {
     my gsize $t = 0;
 
     clear_error;
-    my $rc = GIOStatusEnum(
+    my $rs = GIOStatusEnum(
       g_io_channel_read_line_string($!gio, $buffer, $t, $error)
     );
     set_error($error);
     $terminator_pos = $t;
-    $all.not ?? $rc !! ($rc, $terminator_pos);
+    $all.not ?? $rs !! ($rs, $terminator_pos);
   }
 
   proto method read_to_end (|)
@@ -323,10 +317,9 @@ class GLib::IOChannel {
   { * }
 
   multi method read_to_end (
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = True
+    CArray[Pointer[GError]] $error = gerror
   ) {
-    samewith($, $, $error, :$all);
+    samewith($, $, $error, :all);
   }
   multi method read_to_end (
     $str_return is rw,
@@ -339,12 +332,12 @@ class GLib::IOChannel {
     $sr[0] = Str;
 
     clear_error;
-    my $rc = GIOStatusEnum(
+    my $rs = GIOStatusEnum(
       g_io_channel_read_to_end($!gio, $sr, $l, $error)
     );
     set_error($error);
     ($str_return, $length) = ($sr[0], $l);
-    $all.not ?? $rc !! ($rc, $str_return, $length);
+    $all.not ?? $rs !! ($rs, $str_return, $length);
   }
 
   proto method read_unichar (|)
@@ -353,9 +346,8 @@ class GLib::IOChannel {
 
   multi method read_unichar (
     CArray[Pointer[GError]] $error = gerror,
-    :$all = True
   ) {
-    samewith($, $error, :$all);
+    samewith($, $error, :all);
   }
   multi method read_unichar (
     $thechar is rw,
@@ -505,9 +497,8 @@ class GLib::IOChannel {
     Str() $buf,
     Int() $count,
     CArray[Pointer[GError]] $error = gerror,
-    :$all = True
   ) {
-    samewith($buf, $count, $, $error, :$all);
+    samewith($buf, $count, $, $error, :all);
   }
   multi method write_chars (
     Str() $buf,
