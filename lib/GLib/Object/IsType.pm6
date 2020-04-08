@@ -14,3 +14,16 @@ sub is_type (GObjectOrPointer $t, $object) is export {
     ( nativecast(GObjectStruct, $t), $object.get_type );
   $to.checkType($ot);
 }
+
+sub get_gtype_name (GObjectOrPointer $t) is export {
+  $t .= GObject if $t ~~ ::('GLib::Roles::Object');
+
+  my $to = nativecast(GObjectStruct, $t);
+
+  g_type_name($to.getType);
+}
+
+sub g_type_name (GType $gtype)
+  returns Str
+  is native(gobject)
+{ * }
