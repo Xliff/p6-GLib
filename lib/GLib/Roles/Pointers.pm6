@@ -5,7 +5,7 @@ use NativeCall;
 role GLib::Roles::Pointers {
 
   method p {
-    nativecast(Pointer, self);
+    self ~~ Pointer ?? self !! nativecast(Pointer, self);
   }
 
 }
