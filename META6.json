@@ -3,7 +3,7 @@
         "Data::Dump::Tree",
         "Config::INI",
         "CompUnit::Util",
-	      "Dependency::Sort",
+        "Dependency::Sort",
         "Method::Also"
     ],
     "description": "Perl6 library bindings for GNOME's GLib",
@@ -125,7 +125,7 @@
       "GLib::ByteArray"               :  "lib/GLib/ByteArray.pm6"             ,
       "GLib::IOChannel"               :  "lib/GLib/IOChannel.pm6"             
     },
-    "name": "Perl6-GtkPlus",
+    "name": "p6-GLib",
     "perl": "6.c",
     "test-depends": ["Test::META"],
     "build-depends": [
