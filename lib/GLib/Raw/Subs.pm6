@@ -55,23 +55,23 @@ sub g_object_new (uint64 $object_type, Str)
   is export
 { * }
 
-sub g_object_ref(GObject $p)
+sub g_object_ref (GObject $p)
   is native(gobject)
   is export
 { * }
 
-sub g_object_unref(GObject $p)
+sub g_object_unref (GObject $p)
   is native(gobject)
   is export
 { * }
 
-sub g_object_set_string(GObject $o, Str $key, Str $data)
+sub g_object_set_string_data (GObject $o, Str $key, Str $data)
   is native(gobject)
   is symbol('g_object_set_data')
   is export
 { * }
 
-sub g_object_get_string(GObject $o, Str $key)
+sub g_object_get_string_data (GObject $o, Str $key)
   returns Str
   is native(gobject)
   is symbol('g_object_get_data')
@@ -86,14 +86,14 @@ sub g_object_get_string(GObject $o, Str $key)
 #   is export
 #   { * }
 
-sub g_object_get_ptr(GObject $o, Str $key)
+sub g_object_get_ptr_data (GObject $o, Str $key)
   returns Pointer
   is native(gobject)
   is symbol('g_object_get_data')
   is export
 { * }
 
-sub g_object_set_ptr(GObject $o, Str $key, Pointer $data)
+sub g_object_set_ptr_data (GObject $o, Str $key, Pointer $data)
   is native(gobject)
   is symbol('g_object_set_data')
   is export
@@ -122,7 +122,7 @@ sub g_object_getv (
   is export
 { * }
 
-sub g_object_get_int (
+sub g_object_get_int_data (
   GObject $object,
   Str $name,
 )
@@ -132,7 +132,7 @@ sub g_object_get_int (
   is export
 { * }
 
-sub g_object_set_int (
+sub g_object_set_int_data (
   GObject $object,
   Str $name,
   CArray[gint] $value
@@ -142,7 +142,7 @@ sub g_object_set_int (
   is export
   { * }
 
-sub g_object_get_uint (
+sub g_object_get_uint_data (
   GObject $object,
   Str $name,
 )
@@ -152,7 +152,7 @@ sub g_object_get_uint (
   is export
 { * }
 
-sub g_object_set_uint (
+sub g_object_set_uint_data (
   GObject $object,
   Str $name,
   CArray[guint] $value
@@ -160,7 +160,65 @@ sub g_object_set_uint (
   is native(gobject)
   is symbol('g_object_set_data')
   is export
-  { * }
+{ * }
+
+sub g_object_get_string (GObject $object, Str $key, Str $val)
+  is native(gobject)
+  is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_get_float (GObject $object, Str $key, CArray[gfloat] $val)
+  is native(gobject)
+  is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_set_float (GObject $object, Str $key, CArray[gfloat] $val, Str)
+  is native(gobject)
+  is symbol('g_object_set')
+  is export
+{ * }
+
+sub g_object_get_double (
+  GObject $object,
+  Str $key,
+  CArray[gdouble] $val,
+  Str
+)
+  is native(gobject)
+  is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_get_int (GObject $object, Str $key, CArray[gint] $val, Str)
+  is native(gobject)
+  is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_get_uint (GObject $object, Str $key, CArray[gint] $val, Str)
+  is native(gobject)
+  is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_get_int64 (GObject $object, Str $key, CArray[gint64] $val, Str)
+  is native(gobject)
+  is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_get_uint64 (
+  GObject $object,
+  Str $key,
+  CArray[guint64] $val,
+  Str
+)
+  is native(gobject)
+  is symbol('g_object_get')
+  is export
+{ * }
 
 sub ArrayToCArray(\T, @a) is export {
   my $ca =  CArray[T].new;

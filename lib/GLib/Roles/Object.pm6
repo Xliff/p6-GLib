@@ -230,39 +230,39 @@ role GLib::Roles::Object {
   {
     my gboolean $v = $val.so.Int;
 
-    self.prop_set_uint($v);
+    self.prop_set_uint_data($v);
   }
 
   method prop_get_bool (Str() $key) is also<prop-get-bool> {
-    so self.prop_get_uint($key);
+    so self.prop_get_uint_data($key);
   }
 
   method prop_set_string(Str() $key, Str() $val)
     is also<prop-set-string>
   {
-    g_object_set_string($!o, $key, $val);
+    g_object_set_string_data($!o, $key, $val);
   }
 
   method prop_get_string(Str() $key) is also<prop-get-string> {
-    g_object_get_string($!o, $key);
+    g_object_get_string_data($!o, $key);
   }
 
   method prop_set_ptr (Str() $key, Pointer $val = Pointer)
     is also<prop-set-ptr>
   {
-    g_object_set_ptr($!o, $key, $val);
+    g_object_set_ptr_data($!o, $key, $val);
   }
 
   method prop_get_ptr (Str() $key) is also<prop-get-ptr> {
-    g_object_get_ptr($!o, $key);
+    g_object_get_ptr_data($!o, $key);
   }
 
   method prop_set_int (Str() $name, Int() $value) is also<prop-set-int> {
-    g_object_set_int($!o, $name, $value);
+    g_object_set_int_data($!o, $name, $value);
   }
 
   method prop_get_int (Str() $name) is also<prop-get-int> {
-    my $a = g_object_get_int($!o, $name);
+    my $a = g_object_get_int_data($!o, $name);
 
     ( $a && $a[0] ) ?? $a[0] !! Nil;
   }
@@ -271,11 +271,11 @@ role GLib::Roles::Object {
     my $v = CArray[guint].new;
     $v[0] = $value;
 
-    g_object_set_uint($!o, $name, $v);
+    g_object_set_uint_data($!o, $name, $v);
   }
 
   method prop_get_uint(Str() $name) is also<prop-get-uint> {
-    my $a = g_object_get_uint($!o, $name);
+    my $a = g_object_get_uint_data($!o, $name);
 
     ( $a && $a[0] ) ?? $a[0] !! Nil;
   }
@@ -286,6 +286,84 @@ role GLib::Roles::Object {
 
   method clear_data (Str() $key) is also<clear-data> {
     g_object_set_ptr($!o, $key, Pointer);
+  }
+
+  method !get_data_abstract(@keys, ::T, &f) {
+    @keys = @keys.map({
+      die 'Elements in @keys must be Str-compatible!'
+        unless $_ ~~ Str || .^lookup('Str');
+      .Str;
+    });
+
+    my @a = do for @keys {
+      my NT $v = 0;
+
+      f($key, $v, Str);
+      $v;
+    };
+
+    @a.elems > 1 ?? @a !! @a[0];
+  }
+
+  method get_data_int64 (*@keys) {
+    self!get-data-abstract(@keys,  gint64, &g_double_get_int64);
+  }
+  method get_data_uint64 (*@keys) {
+    self!get-data-abstract(@keys, guint64, &g_double_get_uint64);
+  }
+  method get_data_int (*@keys) {
+    self!get-data-abstract(@keys,    gint, &g_double_get_int);
+  }
+  method get_data_uint (*@keys) {
+    self!get-data-abstract(@keys,   guint, &g_double_get_uint);
+  }
+  method get_data_string (*@keys) {
+    self!get-data-abstract(@keys,     Str, &g_double_get_string);
+  }
+  method get_data_float (*@keys) {
+    self!get-data-abstract(@keys, gdouble, &g_double_get_float);
+  }
+  method get_data_double (*@keys) {
+    self!get-data-abstract(@keys, gdouble, &g_double_get_double);
+  }
+
+  method !set_data_abstract(@paors, ::T, ::NT, $value, &f) {
+    @pairs = @pairs.rotor(2).map({
+      die 'Elements in @pairs must be Str, { T.^name } groups!'
+        unless .[0] ~~ Str || .^lookup('Str');
+      die 'Elements in @pairs must be Str, { T.^name } groups!'
+        unless .[1] ~~ T || (my $m = .^lookup(T.^name));
+
+      ( .[0].Str, $m(.[1]) );
+    )}
+
+    for @pairs {
+      my NT $v = $value;
+
+      f($key, $v, Str);
+    }
+  }
+
+  method set_data_int64 (*@pairs) {
+    self!set-data-abstract(@pairs,  Int,  gint64, &g_double_set_int64);
+  }
+  method set_data_uint64 (*@pairs) {
+    self!set-data-abstract(@pairs,  Int, guint64, &g_double_set_uint64);
+  }
+  method set_data_int (*@pairs) {
+    self!set-data-abstract(@pairs,  Int,    gint, &g_double_set_int);
+  }
+  method set_data_uint (*@pairs) {
+    self!set-data-abstract(@pairs,  Int,   guint, &g_double_set_uint);
+  }
+  method set_data_string (*@pairs) {
+    self!set-data-abstract(@pairs,  Str,     Str, &g_double_set_string);
+  }
+  method set_data_float (*@pairs) {
+    self!set-data-abstract(@pairs,  Num, gdouble, &g_double_set_float);
+  }
+  method set_data_double (*@pairs) {
+    self!set-data-abstract(@pairs,  Num, gdouble, &g_double_set_double);
   }
 
 }
