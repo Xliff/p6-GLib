@@ -140,7 +140,7 @@ sub g_object_set_int_data (
   is native(gobject)
   is symbol('g_object_set_data')
   is export
-  { * }
+{ * }
 
 sub g_object_get_uint_data (
   GObject $object,
@@ -168,6 +168,24 @@ sub g_object_get_string (GObject $object, Str $key, Str $val)
   is export
 { * }
 
+sub g_object_set_string (GObject $object, Str $key, Str $val)
+  is native(gobject)
+  is symbol('g_object_set')
+  is export
+{ * }
+
+sub g_object_get_ptr (GObject $object, Str $key, Pointer $val)
+  is native(gobject)
+  is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_set_ptr (GObject $object, Str $key, Pointer $val)
+  is native(gobject)
+  is symbol('g_object_set')
+  is export
+{ * }
+
 sub g_object_get_float (GObject $object, Str $key, CArray[gfloat] $val)
   is native(gobject)
   is symbol('g_object_get')
@@ -191,9 +209,26 @@ sub g_object_get_double (
   is export
 { * }
 
+sub g_object_set_double (
+  GObject $object,
+  Str $key,
+  CArray[gdouble] $val,
+  Str
+)
+  is native(gobject)
+  is symbol('g_object_set')
+  is export
+{ * }
+
 sub g_object_get_int (GObject $object, Str $key, CArray[gint] $val, Str)
   is native(gobject)
   is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_set_int (GObject $object, Str $key, CArray[gint] $val, Str)
+  is native(gobject)
+  is symbol('g_object_set')
   is export
 { * }
 
@@ -203,9 +238,21 @@ sub g_object_get_uint (GObject $object, Str $key, CArray[gint] $val, Str)
   is export
 { * }
 
+sub g_object_set_uint (GObject $object, Str $key, CArray[gint] $val, Str)
+  is native(gobject)
+  is symbol('g_object_set')
+  is export
+{ * }
+
 sub g_object_get_int64 (GObject $object, Str $key, CArray[gint64] $val, Str)
   is native(gobject)
   is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_set_int64 (GObject $object, Str $key, CArray[gint64] $val, Str)
+  is native(gobject)
+  is symbol('g_object_set')
   is export
 { * }
 
@@ -217,6 +264,17 @@ sub g_object_get_uint64 (
 )
   is native(gobject)
   is symbol('g_object_get')
+  is export
+{ * }
+
+sub g_object_set_uint64 (
+  GObject $object,
+  Str $key,
+  CArray[guint64] $val,
+  Str
+)
+  is native(gobject)
+  is symbol('g_object_set')
   is export
 { * }
 

@@ -83,7 +83,7 @@ role GLib::Roles::Object {
     self.prop_get_string(gObjectTypeKey);
   }
   multi method getType (::?CLASS:U: GObject $o) {
-    g_object_get_string($o, gObjectTypeKey);
+    g_object_get_string_data($o, gObjectTypeKey);
   }
 
   # For storing Raku data types.
@@ -296,38 +296,41 @@ role GLib::Roles::Object {
     });
 
     my @a = do for @keys {
-      my NT $v = 0;
+      my T $v = 0;
 
-      f($key, $v, Str);
+      f($_, $v, Str);
       $v;
     };
 
     @a.elems > 1 ?? @a !! @a[0];
   }
 
+  method get_data_ptr (*@keys) {
+    self!get-data-abstract(@keys, Pointer, &g_object_get_ptr);
+  }
   method get_data_int64 (*@keys) {
-    self!get-data-abstract(@keys,  gint64, &g_double_get_int64);
+    self!get-data-abstract(@keys,  gint64, &g_object_get_int64);
   }
   method get_data_uint64 (*@keys) {
-    self!get-data-abstract(@keys, guint64, &g_double_get_uint64);
+    self!get-data-abstract(@keys, guint64, &g_object_get_uint64);
   }
   method get_data_int (*@keys) {
-    self!get-data-abstract(@keys,    gint, &g_double_get_int);
+    self!get-data-abstract(@keys,    gint, &g_object_get_int);
   }
   method get_data_uint (*@keys) {
-    self!get-data-abstract(@keys,   guint, &g_double_get_uint);
+    self!get-data-abstract(@keys,   guint, &g_object_get_uint);
   }
   method get_data_string (*@keys) {
-    self!get-data-abstract(@keys,     Str, &g_double_get_string);
+    self!get-data-abstract(@keys,     Str, &g_object_get_string);
   }
   method get_data_float (*@keys) {
-    self!get-data-abstract(@keys, gdouble, &g_double_get_float);
+    self!get-data-abstract(@keys, gdouble, &g_object_get_float);
   }
   method get_data_double (*@keys) {
-    self!get-data-abstract(@keys, gdouble, &g_double_get_double);
+    self!get-data-abstract(@keys, gdouble, &g_object_get_double);
   }
 
-  method !set_data_abstract(@paors, ::T, ::NT, $value, &f) {
+  method !set_data_abstract(@pairs, ::T, ::NT, $value, &f) {
     @pairs = @pairs.rotor(2).map({
       die 'Elements in @pairs must be Str, { T.^name } groups!'
         unless .[0] ~~ Str || .^lookup('Str');
@@ -335,35 +338,38 @@ role GLib::Roles::Object {
         unless .[1] ~~ T || (my $m = .^lookup(T.^name));
 
       ( .[0].Str, $m(.[1]) );
-    )}
+    });
 
     for @pairs {
       my NT $v = $value;
 
-      f($key, $v, Str);
+      f($_, $v, Str);
     }
   }
 
+  method set_data_ptr (*@pairs) {
+    self!set-data-abstract(@pairs,   Mu, Pointer, &g_object_set_ptr);
+  }
   method set_data_int64 (*@pairs) {
-    self!set-data-abstract(@pairs,  Int,  gint64, &g_double_set_int64);
+    self!set-data-abstract(@pairs,  Int,  gint64, &g_object_set_int64);
   }
   method set_data_uint64 (*@pairs) {
-    self!set-data-abstract(@pairs,  Int, guint64, &g_double_set_uint64);
+    self!set-data-abstract(@pairs,  Int, guint64, &g_object_set_uint64);
   }
   method set_data_int (*@pairs) {
-    self!set-data-abstract(@pairs,  Int,    gint, &g_double_set_int);
+    self!set-data-abstract(@pairs,  Int,    gint, &g_object_set_int);
   }
   method set_data_uint (*@pairs) {
-    self!set-data-abstract(@pairs,  Int,   guint, &g_double_set_uint);
+    self!set-data-abstract(@pairs,  Int,   guint, &g_object_set_uint);
   }
   method set_data_string (*@pairs) {
-    self!set-data-abstract(@pairs,  Str,     Str, &g_double_set_string);
+    self!set-data-abstract(@pairs,  Str,     Str, &g_object_set_string);
   }
   method set_data_float (*@pairs) {
-    self!set-data-abstract(@pairs,  Num, gdouble, &g_double_set_float);
+    self!set-data-abstract(@pairs,  Num, gdouble, &g_object_set_float);
   }
   method set_data_double (*@pairs) {
-    self!set-data-abstract(@pairs,  Num, gdouble, &g_double_set_double);
+    self!set-data-abstract(@pairs,  Num, gdouble, &g_object_set_double);
   }
 
 }
