@@ -88,7 +88,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   multi method new (Pointer $buffer) {
-    $buffer ?? self.bless(:$buffer) !! Nil;
+    $buffer ?? self.bless( :$buffer ) !! Nil;
   }
   multi method new (@entries) {
     return Pointer unless @entries;
