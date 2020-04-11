@@ -139,7 +139,7 @@ sub g_main_context_push_thread_default (GMainContext $context)
 sub g_main_context_query (
   GMainContext $context,
   gint $max_priority,
-  gint $timeout,
+  gint $timeout is rw,
   Pointer $fds,
   gint $n_fds
 )

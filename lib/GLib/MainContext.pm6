@@ -9,7 +9,7 @@ use GLib::Raw::Main;
 use GLib::Roles::TypedBuffer;
 
 class GLib::MainContext {
-  has GMainContext $!mc is implementor;
+  has GMainContext $!mc;
 
   submethod BUILD (:$maincontext) {
     $!mc = $maincontext;
@@ -23,10 +23,12 @@ class GLib::MainContext {
   { $!mc }
 
   multi method new (GMainContext $maincontext) {
-    self.bless( :$maincontext );
+    $maincontext ?? self.bless( :$maincontext ) !! Nil;
   }
   multi method new {
-    self.bless( maincontext => g_main_context_new() );
+    my $maincontext = g_main_context_new();
+
+    $maincontext ?? self.bless( :$maincontext ) !! Nil;
   }
 
   method acquire {
@@ -41,18 +43,19 @@ class GLib::MainContext {
 
   multi method check (
     Int() $max_priority,
-    Int() $n_fds
+    @fds,
   ) {
-    my gpointer $fds = calloc(nativesizeof(GPollFD), $n_fds);
+    my $f = GLib::Roles::TypedBuffer[GPollFD].new(@fds);
 
-    samewith($max_priority, $fds, $n_fds);
+    samewith($max_priority, $f.p, @fds.elems);
   }
   multi method check (
    Int() $max_priority,
    gpointer $fds,           # Block of GPollFD
    Int() $n_fds
  ) {
-    my gint ($mp, $nf) = $max_priority, $n_fds;
+    my gint ($mp, $nf) = ($max_priority, $n_fds);
+
     g_main_context_check($!mc, $mp, $fds, $nf);
     my $fdb = $fds but GLib::Roles::TypedBuffer[GPollFD];
     my @pd;
@@ -127,7 +130,7 @@ class GLib::MainContext {
     GMainContext $context = GMainContext,
     Int() $may_block = True
   ) {
-    my gboolean $mb = $may_block;
+    my gboolean $mb = $may_block.so.Int;
 
     g_main_context_iteration($context, $mb);
   }
@@ -152,25 +155,26 @@ class GLib::MainContext {
 
   multi method query (
     Int() $max_priority,
-    Int() $timeout,
     Int() $n_fds
   ) {
     my gpointer $fds = calloc(nativesizeof(GPollFD), $n_fds);
 
-    samewith($max_priority, $timeout, $fds, $n_fds);
+    samewith($max_priority, $, $, $n_fds);
   }
   multi method query (
     Int() $max_priority,
-    Int() $timeout,
-    gpointer $fds,           # Block of GPollFD
+    $timeout is rw,
+    $fds is rw,           # Block of GPollFD
     Int() $n_fds
   ) {
-    my gint ($mp, $to, $nf) = $max_priority, $timeout, $n_fds;
-    g_main_context_query($!mc, $mp, $to, $fds, $nf);
-    my $fdb = $fds but GLib::Roles::TypedBuffer[GPollFD];
+    my gint ($mp, $to, $nf) = ($max_priority, 0, $n_fds);
+    my gpointer $f = GLib::Roles::TypedBuffer[GPollFD].new( size => $nf );
+    my $rv = g_main_context_query($!mc, $mp, $to, $f.p, $nf);
     my @pd;
-    @pd[$_] = $fdb[$_] for ^$n_fds;
-    @pd;
+
+    @pd[$_] = $f[$_] for ^$n_fds;
+    $fds = @pd;
+    ($rv, $to, $fds);
   }
 
   method ref is also<upref> {
