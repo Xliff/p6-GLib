@@ -107,6 +107,7 @@ class GChecksum                is repr('CPointer') is export does GLib::Roles::P
 class GHmac                    is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GHashTable               is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GHashTableIter           is repr('CPointer') is export does GLib::Roles::Pointers { }
+class GIConv                   is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GIOChannel               is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GKeyFile                 is repr('CPointer') is export does GLib::Roles::Pointers { }
 class GMainLoop                is repr('CPointer') is export does GLib::Roles::Pointers { }
