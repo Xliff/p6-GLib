@@ -1,5 +1,7 @@
 use v6.c;
 
+use NativeCall;
+
 use GLib::Raw::Types;
 
 unit package GLib::Raw::Convert;

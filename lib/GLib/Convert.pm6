@@ -1,6 +1,7 @@
-use v6.vc;
+use v6.c;
 
 use Method::Also;
+use NativeCall;
 
 use GLib::Raw::Types;
 use GLib::Raw::Convert;
@@ -25,7 +26,7 @@ class GLib::Convert {
     Str() $from_codeset,
     $bytes_read is rw,
     $bytes_written is rw,
-    CArray[Pointer[GError]] $error = gerror.
+    CArray[Pointer[GError]] $error = gerror,
     :$all = False
   ) {
     my gssize $l = $len;
@@ -46,7 +47,7 @@ class GLib::Convert {
       is also<convert-with-fallback>
   { * }
 
-  method convert_with_fallback (
+  multi method convert_with_fallback (
     Str() $str,
     Int() $len,
     Str() $to_codeset,
@@ -55,7 +56,7 @@ class GLib::Convert {
   ) {
     samewith($str, $len, $to_codeset, $from_codeset, $fallback, $, $, :all);
   }
-  method convert_with_fallback (
+  multi method convert_with_fallback (
     Str() $str,
     Int() $len,
     Str() $to_codeset,
@@ -63,7 +64,8 @@ class GLib::Convert {
     Str() $fallback,
     $bytes_read    is rw,
     $bytes_written is rw,
-    CArray[Pointer[GError]] $error = gerror;
+    CArray[Pointer[GError]] $error = gerror,
+    :$all = False
   ) {
     my gssize $l = $len;
     my gsize ($br, $bw) = 0 xx 2;
@@ -88,20 +90,21 @@ class GLib::Convert {
       is also<convert-with-iconv>
   { * }
 
-  method convert_with_iconv (
+  multi method convert_with_iconv (
     Str() $str,
     Int() $len,
     GIConv() $converter
   ) {
     samewith($str, $len, $converter, $, $, :all)
   }
-  method convert_with_iconv (
+  multi method convert_with_iconv (
     Str() $str,
     Int() $len,
     GIConv() $converter,
     $bytes_read    is rw,
     $bytes_written is rw,
-    CArray[Pointer[GError]] $error = gerror
+    CArray[Pointer[GError]] $error = gerror,
+    :$all = False
   ) {
     my gssize $l = $len;
     my gsize ($br, $bw) = 0 xx 2;
@@ -130,7 +133,7 @@ class GLib::Convert {
   { * }
 
   multi method filename_from_uri (Str() $uri) {
-    samewith($uri, $, :$all);
+    samewith($uri, $, :all);
   }
   multi method filename_from_uri (
     Str() $uri,
@@ -200,7 +203,7 @@ class GLib::Convert {
   ) {
     samewith($opsysstring, $len, $, $, :all);
   }
-  method filename_to_utf8 (
+  multi method filename_to_utf8 (
     Str() $opsysstring,
     Int() $len,
     $bytes_read    is rw,
@@ -229,12 +232,12 @@ class GLib::Convert {
     $filename_charsets is rw,
     :$all = False
   ) {
-    my $fc = CArray[CArray[Str]];
-    $fv[0] = CArray[Str];
+    my $fc = CArray[CArray[Str]].new;
+    $fc[0] = CArray[Str];
 
     my $rv = so g_get_filename_charsets($fc);
     $filename_charsets = $fc[0] ?? CStringArrayToArray($fc[0]) !! Nil;
-    $all.not $rv ?? ($rv, $filename_charsets);
+    $all.not ?? $rv !! ($rv, $filename_charsets);
   }
 
   # Need to add a more raku-ish multi when I understand this, better.
@@ -253,7 +256,7 @@ class GLib::Convert {
     $outbytes_left is rw,
     :$all = False
   ) {
-    my gsize ($ib, $ob) = ($inbytes_left, $outbytes_left)
+    my gsize ($ib, $ob) = ($inbytes_left, $outbytes_left);
     my $rv = g_iconv($converter, $inbuf, $ib, $outbuf, $ob);
 
     ($inbytes_left, $outbytes_left) = ($ib, $ob);
@@ -279,13 +282,13 @@ class GLib::Convert {
       is also<locale-from-utf8>
   { * }
 
-  method locale_from_utf8 (
+  multi method locale_from_utf8 (
     Str() $utf8string,
     Int() $len
   ) {
     samewith($utf8string, $len, $, $, :all);
   }
-  method locale_from_utf8 (
+  multi method locale_from_utf8 (
     Str() $utf8string,
     Int() $len,
     $bytes_read    is rw,
@@ -307,13 +310,13 @@ class GLib::Convert {
       is also<locale-to-utf8>
   { * }
 
-  method locale_to_utf8 (
+  multi method locale_to_utf8 (
     Str() $opsysstring,
     Int() $len
   ) {
     samewith($opsysstring, $len, $, $, :all);
   }
-  method locale_to_utf8 (
+  multi method locale_to_utf8 (
     Str() $opsysstring,
     Int() $len,
     $bytes_read    is rw,
