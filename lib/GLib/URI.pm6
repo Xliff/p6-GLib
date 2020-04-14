@@ -4,14 +4,12 @@ use NativeCall;
 
 use GLib::Raw::Types;
 
+use GLib::Convert;
+
+use GLib::Roles::StaticClass;
+
 class GLib::URI {
-
-  method new (|) {
-    warn 'GLib::URI is a static class and does not need instantiation.'
-      if $DEBUG;
-
-    GLib::URI;
-  }
+  also does GLib::Roles::StaticClass;
 
   method escape_string (
     Str() $unescaped,
@@ -44,6 +42,14 @@ class GLib::URI {
     Str $illegal_characters
   ) {
     g_uri_unescape_string($escaped_string, $illegal_characters);
+  }
+
+  method to_filename (Str() $u) {
+    GLib::Convert.filename_from_uri($u);
+  }
+
+  method from-filename (Str() $f, Str() $h) {
+    GLib::Convert.filename_to_uri($f, $h);
   }
 
 }
