@@ -299,7 +299,7 @@ role GLib::Roles::Signals::Generic {
     is also<connect_long>
   {
     my $hid;
-    %!signals //= do {
+    %!signals{$signal} //= do {
       my $s = Supplier.new;
       $hid = g-connect-long($obj, $signal,
         -> $, $l, $ud {
@@ -325,7 +325,7 @@ role GLib::Roles::Signals::Generic {
     is also<connect_strint>
   {
     my $hid;
-    %!signals //= do {
+    %!signals{$signal} //= do {
       my $s = Supplier.new;
       $hid = g-connect-strint($obj, $signal,
         -> $, $s1, $i1, $ud {
