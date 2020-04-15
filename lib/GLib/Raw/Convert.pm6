@@ -13,8 +13,8 @@ sub g_convert (
   gssize $len,
   Str $to_codeset,
   Str $from_codeset,
-  gsize $bytes_read,
-  gsize $bytes_written,
+  gsize $bytes_read    is rw,
+  gsize $bytes_written is rw,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -34,8 +34,8 @@ sub g_convert_with_fallback (
   Str $to_codeset,
   Str $from_codeset,
   Str $fallback,
-  gsize $bytes_read,
-  gsize $bytes_written,
+  gsize $bytes_read    is rw,
+  gsize $bytes_written is rw,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -47,8 +47,8 @@ sub g_convert_with_iconv (
   Str $str,
   gssize $len,
   GIConv $converter,
-  gsize $bytes_read,
-  gsize $bytes_written,
+  gsize $bytes_read    is rw,
+  gsize $bytes_written is rw,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -70,7 +70,7 @@ sub g_filename_display_name (Str $filename)
 
 sub g_filename_from_uri (
   Str $uri,
-  Str $hostname,
+  CArray[Str] $hostname,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -81,8 +81,8 @@ sub g_filename_from_uri (
 sub g_filename_from_utf8 (
   Str $utf8string,
   gssize $len,
-  gsize $bytes_read,
-  gsize $bytes_written,
+  gsize $bytes_read    is rw,
+  gsize $bytes_written is rw,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -103,8 +103,8 @@ sub g_filename_to_uri (
 sub g_filename_to_utf8 (
   Str $opsysstring,
   gssize $len,
-  gsize $bytes_read,
-  gsize $bytes_written,
+  gsize $bytes_read    is rw,
+  gsize $bytes_written is rw,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -120,10 +120,10 @@ sub g_get_filename_charsets (Str $filename_charsets)
 
 sub g_iconv (
   GIConv $converter,
-  Str $inbuf,
-  gsize $inbytes_left,
-  Str $outbuf,
-  gsize $outbytes_left
+  CArray[Str] $inbuf,
+  gsize $inbytes_left is rw,
+  CArray[Str] $outbuf,
+  gsize $outbytes_left is rw
 )
   returns gsize
   is native(glib)
@@ -145,8 +145,8 @@ sub g_iconv_open (Str $to_codeset, Str $from_codeset)
 sub g_locale_from_utf8 (
   Str $utf8string,
   gssize $len,
-  gsize $bytes_read,
-  gsize $bytes_written,
+  gsize $bytes_read    is rw,
+  gsize $bytes_written is rw,
   CArray[Pointer[GError]] $error
 )
   returns Str

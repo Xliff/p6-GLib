@@ -24,7 +24,7 @@ class GLib::Convert {
     Int() $len,
     Str() $to_codeset,
     Str() $from_codeset,
-    $bytes_read is rw,
+    $bytes_read    is rw,
     $bytes_written is rw,
     CArray[Pointer[GError]] $error = gerror,
     :$all = False
@@ -180,13 +180,21 @@ class GLib::Convert {
     $all.not ?? $rv !! ($rv, $br, $bw);
   }
 
-  method filename_to_uri (
+  proto method filename_to_uri (|)
+    is also<filename-to-uri>
+  { * }
+
+  multi method filename_to_uri (
+    Str() $filename,
+    CArray[Pointer[GError]] $error = gerror
+  ) {
+    samewith($filename, Str, $error);
+  }
+  multi method filename_to_uri (
     Str() $filename,
     Str() $hostname,
     CArray[Pointer[GError]] $error = gerror
-  )
-    is also<filename-to-uri>
-  {
+  ) {
     clear_error;
     my $rv = g_filename_to_uri($filename, $hostname, $error);
     set_error($error);
