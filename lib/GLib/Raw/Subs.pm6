@@ -45,6 +45,12 @@ sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
   $t;
 }
 
+# This should be in CORE!
+sub separate (Str() $s, Int() $p) {
+  die '$p outside of string range!' unless $p ~~ 0 .. $s.chars;
+  ( $s.substr(0, $p), $s.substr($p, *) )
+};
+
 sub g_destroy_none(Pointer)
   is export
 { * }
