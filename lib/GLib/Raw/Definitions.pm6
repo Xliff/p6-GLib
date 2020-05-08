@@ -81,6 +81,8 @@ constant GStrv                          is export := CArray[Str];
 constant GThreadFunc                    is export := Pointer;
 constant GTimeSpan                      is export := int64;
 constant GType                          is export := uint64;
+constant GBoxedCopyFunc                 is export := Pointer;
+constant GBoxedFreeFunc                 is export := Pointer;
 
 # Because an enum wasn't good enough due to:
 # "Incompatible MROs in P6opaque rebless for types GLIB_SYSDEF_LINUX and GSocketFamily"
@@ -97,49 +99,49 @@ constant GLIB_SYSDEF_MSG_OOB       is export = 1;
 constant GLIB_SYSDEF_MSG_PEEK      is export = 2;
 constant GLIB_SYSDEF_MSG_DONTROUTE is export = 4;
 
-class GAsyncQueue              is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GBinding                 is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GBookmarkFile            is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GBytes                   is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GDateTime                is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GTree                    is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GChecksum                is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GHmac                    is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GHashTable               is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GHashTableIter           is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GIConv                   is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GIOChannel               is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GKeyFile                 is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GMainLoop                is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GMainContext             is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GMarkupParser            is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GMarkupParseContext      is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GMutex                   is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GModule                  is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GObject                  is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GPatternSpec             is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GParamSpec               is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GParamSpecPool           is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GPrivate                 is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GRand                    is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GRWLock                  is repr('CPointer') is export does GLib::Roles::Pointers { }
+class GAsyncQueue              is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GBinding                 is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GBookmarkFile            is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GBytes                   is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GDateTime                is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GTree                    is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GChecksum                is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GHmac                    is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GHashTable               is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GHashTableIter           is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GIConv                   is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GIOChannel               is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GKeyFile                 is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GMainLoop                is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GMainContext             is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GMarkupParser            is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GMarkupParseContext      is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GMutex                   is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GModule                  is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GObject                  is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GPatternSpec             is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GParamSpec               is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GParamSpecPool           is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GPrivate                 is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GRand                    is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GRWLock                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 # To be converted into CStruct when I'm not so scurred of it.
 # It has bits.... BITS! -- See https://stackoverflow.com/questions/1490092/c-c-force-bit-field-order-and-alignment
-class GScannerConfig           is repr('CPointer') is export does GLib::Roles::Pointers { }
+class GScannerConfig           is repr<CPointer> is export does GLib::Roles::Pointers { }
 # Also has a CStruct representation, and should be converted.
-class GScanner                 is repr('CPointer') is export does GLib::Roles::Pointers { }
+class GScanner                 is repr<CPointer> is export does GLib::Roles::Pointers { }
 
-class GSource                  is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GThread                  is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GThreadPool              is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GTimer                   is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GTimeZone                is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GTokenValue              is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GVariant                 is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GVariantBuilder          is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GVariantDict             is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GVariantIter             is repr('CPointer') is export does GLib::Roles::Pointers { }
-class GVariantType             is repr('CPointer') is export does GLib::Roles::Pointers { }
+class GSource                  is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GThread                  is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GThreadPool              is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GTimer                   is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GTimeZone                is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GTokenValue              is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GVariant                 is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GVariantBuilder          is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GVariantDict             is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GVariantIter             is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GVariantType             is repr<CPointer> is export does GLib::Roles::Pointers { }
 
 our role Implementor is export {};
 

@@ -22,6 +22,10 @@ sub malloc_usable_size (Pointer --> size_t)        is export is native {}
 
 # Implement memcpy_pattern. Take pattern and write pattern.^elem bytes to successive areas in dest.
 
+sub getEndian is export {
+  ( $*KERNEL.endian == BigEndian, $*KERNEL.endian == LittleEndian );
+}
+
 sub cast($cast-to, $obj) is export {
   nativecast($cast-to, $obj);
 }

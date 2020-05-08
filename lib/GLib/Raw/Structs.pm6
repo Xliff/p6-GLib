@@ -51,7 +51,7 @@ class GByteArray            is repr<CStruct> does GLib::Roles::Pointers is expor
 class GCond                 is repr<CStruct> does GLib::Roles::Pointers is export {
   # Private
   has gpointer $!p;
-  has uint64   $!i    # guint i[2];
+  has guint    @!i[2] is CArray;
 }
 
 class GError                is repr<CStruct> does GLib::Roles::Pointers is export {

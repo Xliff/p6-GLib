@@ -571,6 +571,35 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal}[0];
   }
 
+    # GstAppSrc, guint64, gpointer --> gboolean
+  method connect-long-ruint32 (
+    $obj,
+    $signal,
+    &handler?
+  )
+    is also<connect-long-rbool>
+  {
+    my $hid;
+    %!signals{$signal} //= do {
+      my \𝒮 = Supplier.new;
+      $hid = g-connect-long-ruint32($obj, $signal,
+        -> $, $gt, $gr, $ud --> gboolean {
+          CATCH {
+            default { 𝒮.note($_) }
+          }
+
+          my $r = ReturnedValue.new;
+          𝒮.emit( [self, $gt, $gr, $ud, $r] );
+          $r.r;
+        },
+        Pointer, 0
+      );
+      [ 𝒮.Supply, $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+
 }
 
 sub g_connect (
@@ -826,5 +855,19 @@ sub g-connect-variant (
 )
   returns uint64
   is native('gobject-2.0')
+  is symbol('g_signal_connect_object')
+{ * }
+
+
+# GstAppSrc, guint64, gpointer --> gboolean
+sub g-connect-long-ruint32 (
+  Pointer $app,
+  Str $name,
+  &handler (Pointer, guint64, Pointer --> guint32),
+  Pointer $data,
+  uint32 $flags
+)
+  returns uint64
+  is native(gobject)
   is symbol('g_signal_connect_object')
 { * }
