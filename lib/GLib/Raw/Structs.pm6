@@ -3,6 +3,7 @@ use v6.c;
 use NativeCall;
 
 use GLib::Raw::Definitions;
+use GLib::Raw::Enums;
 use GLib::Raw::Subs;
 use GLib::Raw::Struct_Subs;
 
@@ -474,3 +475,49 @@ class GDebugKey           is repr<CStruct> does GLib::Roles::Pointers is export 
   has Str   $.key;
   has guint $.value;
 }
+
+class GOptionEntry        is repr<CStruct> does GLib::Roles::Pointers is export {
+  has Str         $!long_name;
+  has Str         $!short_name;
+  has gint        $.flags            is rw;
+  has GOptionArg  $.arg              is rw;
+  has gpointer    $!arg_data;
+  has Str         $!description;
+  has Str         $!arg_description;
+
+  method long_name is rw {
+    Proxy.new:
+      FETCH => sub ($)        { self.^attributes(:local)[0].get_value(self) },
+      STORE => -> $, Str() \s { self.^attributes(:local)[0]
+                                    .set_value(self, s)                     };
+  }
+
+  method short_name is rw {
+    Proxy.new:
+      FETCH => sub ($)        { self.^attributes(:local)[1].get_value(self) },
+      STORE => -> $, Str() \s { self.^attributes(:local)[1]
+                                    .set_value(self, s)                     };
+  }
+
+  method arg_data is rw {
+    Proxy.new:
+      FETCH => sub ($)           { self.^attributes(:local)[4].get_value(self) },
+      STORE => -> $, gpointer \p { self.^attributes(:local)[4]
+                                       .set_value(self, p)                     };
+  }
+
+  method description is rw {
+    Proxy.new:
+      FETCH => sub ($)        { self.^attributes(:local)[5].get_value(self) },
+      STORE => -> $, Str() \s { self.^attributes(:local)[5]
+                                    .set_value(self, s)                     };
+  }
+
+  method arg_description is rw {
+    Proxy.new:
+      FETCH => sub ($)           { self.^attributes(:local)[6].get_value(self) },
+      STORE => -> $, gpointer \p { self.^attributes(:local)[6]
+                                       .set_value(self, p)                     };
+  }
+
+};
