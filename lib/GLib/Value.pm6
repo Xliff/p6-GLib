@@ -13,7 +13,7 @@ class GLib::Value {
     $!v = $value // GValue.new;
 
     die 'Cannot allocate GValue!' unless $!v;
-    
+
     g_value_init($!v, $type) if $type;
   }
 
@@ -51,6 +51,28 @@ class GLib::Value {
 
   method unref {
     g_object_unref( nativecast(Pointer, $!v) );
+  }
+
+  method valueFromEnum (\T) is rw {
+    die 'The parameter to valueFromEnum must be a type object!' if T.defined;
+
+    do given T {
+      when uint32   { self.uint   }
+      when int32    { self.int    }
+      when uint64   { self.uint64 }
+      when int64    { self.int64  }
+    }
+  }
+
+  method typeFromEnum (GLib::Value:U: \T) is rw {
+    die 'The parameter to typeFromEnym must be a type object!' if T.defined;
+
+    do given T {
+      when uint32   { G_TYPE_UINT   }
+      when int32    { G_TYPE_INT    }
+      when uint64   { G_TYPE_UINT64 }
+      when int64    { G_TYPE_INT64  }
+    }
   }
 
   method value is rw {
