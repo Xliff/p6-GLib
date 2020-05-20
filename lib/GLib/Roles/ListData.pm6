@@ -78,26 +78,35 @@ role GLib::Roles::ListData[::T] {
   method !_data(GList $n) is rw {
     Proxy.new:
       FETCH => sub ($) {
+        my $deref = False;
         given T {
           when  uint64 | uint32 | uint16 | uint8 |
                  int64 |  int32 |  int16 |  int8 |
                  num64 |  num32
           {
+            $deref = True; proceed
+          }
+
+          when .REPR eq 'CStruct' {
+            $deref = True; proceed
+          }
+
+          when $deref.so {
             # Run time, or will this break then?
             nativecast(
               Pointer.^parameterize(T),
               $n.data
-            ).deref;
+            ).deref
+          }
+
+          when .REPR eq 'CPointer' {
+            nativecast(T, $n.data);
           }
 
           when Str {
             my $o = nativecast(Str, $n.data);
             say "Str: $o" if $DEBUG;
             $o;
-          }
-
-          when .REPR eq <CPointer CStruct>.any {
-            nativecast(T, $n.data);
           }
 
           default {
