@@ -130,7 +130,8 @@ class GRWLock                  is repr<CPointer> is export does GLib::Roles::Poi
 class GScannerConfig           is repr<CPointer> is export does GLib::Roles::Pointers { }
 # Also has a CStruct representation, and should be converted.
 class GScanner                 is repr<CPointer> is export does GLib::Roles::Pointers { }
-
+class GSequence                is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GSequenceIter            is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GSource                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GThread                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GThreadPool              is repr<CPointer> is export does GLib::Roles::Pointers { }
