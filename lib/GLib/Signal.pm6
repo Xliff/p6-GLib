@@ -6,6 +6,8 @@ use NativeCall;
 use GLib::Raw::Types;
 use GLib::Raw::Signal;
 
+use GLib::Value;
+
 # STATIC CLASS
 
 use GLib::Roles::StaticClass;
@@ -220,7 +222,22 @@ class GLib::Signal {
     );
   }
 
-  method emitv (
+  multi method emitv (
+    GValue() $instance_and_params,
+    Int() $signal_id,
+    GQuark $detail,
+    :$raw = False
+  ) {
+    my $v = GValue.new;
+
+    samewith($instance_and_params, $signal_id, $v);
+
+    $v ??
+      ( $raw ?? $v !! GLib::Value.new($v) )
+      !!
+      Nil;
+  }
+  multi method emitv (
     GValue() $instance_and_params,
     Int() $signal_id,
     GQuark $detail,
@@ -461,7 +478,13 @@ class GLib::Signal {
     $all.not ?? $rc !! ($rc, $signal_id_p, $detail_p);
   }
 
-  method query (Int() $signal_id, GSignalQuery $query) {
+  multi method query (Int() $signal_id) {
+    my $q = GSignalQuery.new;
+
+    samewith($signal_id, $q);
+    $q;
+  }
+  multi method query (Int() $signal_id, GSignalQuery $query) {
     my guint $sid = $signal_id;
 
     g_signal_query($sid, $query);
