@@ -316,11 +316,11 @@ multi sub CArrayToArray(CArray $ca, Int(Cool) $len) is export {
   @a;
 }
 
-sub get_flags($t, $s) is export {
+sub get_flags($t, $s, $j = ', ') is export {
   $t.enums
     .map({ $s +& .value ?? .key !! '' })
     .grep(* ne '')
-    .join(', ');
+    .join($j);
 }
 
 # GLib-level
