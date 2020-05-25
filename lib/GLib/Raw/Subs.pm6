@@ -50,10 +50,16 @@ sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
 }
 
 # This should be in CORE!
-sub separate (Str() $s, Int() $p) {
+sub separate (Str() $s, Int() $p) is export {
   die '$p outside of string range!' unless $p ~~ 0 .. $s.chars;
   ( $s.substr(0, $p), $s.substr($p, *) )
-};
+}
+
+sub load-gparam-spec-types is export {
+  # If this is to be used, it must be called at run-time, as the INIT phaser
+  # is NOT late enough!
+  $g_param_spec_types = cglobal(gobject, 'g_param_spec_types', CArray[GType]);
+}
 
 sub g_destroy_none(Pointer)
   is export

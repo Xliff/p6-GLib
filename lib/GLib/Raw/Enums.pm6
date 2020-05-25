@@ -1,5 +1,7 @@
 use v6.c;
 
+use NativeCall;
+
 use GLib::Raw::Definitions;
 
 unit package GLib::Raw::Enums;
@@ -695,3 +697,32 @@ our enum GTypeFlagsEnum is export (
   G_TYPE_FLAG_ABSTRACT          => 1 +< 4,
   G_TYPE_FLAG_VALUE_ABSTRACT    => 1 +< 5
 );
+
+constant GParamType is export := GType;
+our enum GParamTypeEnums is export (
+  G_TYPE_PARAM_CHAR_IDX         => 0,
+  G_TYPE_PARAM_UCHAR_IDX        => 1,
+  G_TYPE_PARAM_BOOLEAN_IDX      => 2,
+  G_TYPE_PARAM_INT_IDX          => 3,
+  G_TYPE_PARAM_UINT_IDX         => 4,
+  G_TYPE_PARAM_LONG_IDX         => 5,
+  G_TYPE_PARAM_ULONG_IDX        => 6,
+  G_TYPE_PARAM_INT64_IDX        => 7,
+  G_TYPE_PARAM_UINT64_IDX       => 8,
+  G_TYPE_PARAM_UNICHAR_IDX      => 9,
+  G_TYPE_PARAM_ENUM_IDX         => 10,
+  G_TYPE_PARAM_FLAGS_IDX        => 11,
+  G_TYPE_PARAM_FLOAT_IDX        => 12,
+  G_TYPE_PARAM_DOUBLE_IDX       => 13,
+  G_TYPE_PARAM_STRING_IDX       => 14,
+  G_TYPE_PARAM_PARAM_IDX        => 15,
+  G_TYPE_PARAM_BOXED_IDX        => 16,
+  G_TYPE_PARAM_POINTER_IDX      => 17,
+  G_TYPE_PARAM_VALUE_ARRAY_IDX  => 18,
+  G_TYPE_PARAM_OBJECT_IDX       => 19,
+  G_TYPE_PARAM_OVERRIDE_IDX     => 20,
+  G_TYPE_PARAM_GTYPE_IDX        => 21,
+  G_TYPE_PARAM_VARIANT_IDX      => 22
+);
+
+our $g_param_spec_types is export;
