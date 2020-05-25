@@ -431,15 +431,31 @@ class GLib::Object::ParamSpec {
     $v ?? GLib::Value.new($v, :!ref) !! Nil
   }
 
-  method get_name is also<get-name> {
+  method get_name
+    is also<
+      get-name
+      name
+    >
+  {
     g_param_spec_get_name($!ps);
   }
 
-  method get_name_quark is also<get-name-quark> {
+  method get_name_quark
+    is also<
+      get-name-quark
+      name_quark
+      name-quark
+    >
+  {
     g_param_spec_get_name_quark($!ps);
   }
 
-  method get_nick is also<get-nick> {
+  method get_nick
+    is also<
+      get-nick
+      nick
+    >
+  {
     g_param_spec_get_nick($!ps);
   }
 
@@ -447,7 +463,13 @@ class GLib::Object::ParamSpec {
     g_param_spec_get_qdata($!ps, $quark);
   }
 
-  method get_redirect_target is also<get-redirect-target> {
+  method get_redirect_target
+    is also<
+      get-redirect-target
+      redirect_target
+      redirect-target
+    >
+  {
     my $p = g_param_spec_get_redirect_target($!ps);
 
     $p ?? GLib::Object::ParamSpec.new($p, :!ref) !! Nil;
