@@ -10,7 +10,7 @@ use GLib::Object::Raw::ParamSpec;
 use GLib::Value;
 
 class GLib::Object::ParamSpec {
-  has GParamSpec $!ps;
+  has GParamSpec $!ps handles <name flags value_type owner_type>;
 
   submethod BUILD (:$spec) {
     $!ps = $spec;
@@ -431,12 +431,8 @@ class GLib::Object::ParamSpec {
     $v ?? GLib::Value.new($v, :!ref) !! Nil
   }
 
-  method get_name
-    is also<
-      get-name
-      name
-    >
-  {
+  # No-arg variant is handled by delegation!
+  method get_name is also<get-name> {
     g_param_spec_get_name($!ps);
   }
 
