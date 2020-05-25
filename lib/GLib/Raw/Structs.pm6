@@ -1,6 +1,7 @@
 use v6.c;
 
 use NativeCall;
+use Method::Also;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
@@ -372,9 +373,15 @@ class GTypeValueList        is repr('CUnion')  does GLib::Roles::Pointers is exp
 };
 
 class GValue {
-  has ulong           $.g_type is rw;
+  has ulong           $!g_type;
   HAS GTypeValueList  $.data1  is rw;
   HAS GTypeValueList  $.data2  is rw;
+
+  method g_type is also<g-type type> is rw {
+    Proxy.new:
+      FETCH => -> $           { GTypeEnum($!g_type) },
+      STORE => -> $, Int() $i { $!g_type = $i };
+  }
 }
 
 class GValueArray           is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -402,6 +409,100 @@ class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
       FETCH => -> $           { GParamFlagsEnum($!flags) },
       STORE => -> $, Int() $i { $!flags = $i             };
   }
+}
+
+class GParamSpecChar      is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has gint8         $.minimum;
+  has gint8         $.maximum;
+  has gint8         $.default_value;
+}
+
+class GParamSpecUChar     is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has guint8        $.minimum;
+  has guint8        $.maximum;
+  has guint8        $.default_value;
+}
+
+class GParamSpecBoolean   is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has gboolean      $.default_value;
+}
+
+class GParamSpecInt       is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has gint          $.minimum;
+  has gint          $.maximum;
+  has gint          $.default_value;
+}
+
+class GParamSpecUInt      is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has guint         $.minimum;
+  has guint         $.maximum;
+  has guint         $.default_value;
+}
+
+class GParamSpecLong      is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has glong         $.minimum;
+  has glong         $.maximum;
+  has glong         $.default_value;
+}
+
+class GParamSpecULong     is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has gulong        $.minimum;
+  has gulong        $.maximum;
+  has gulong        $.default_value;
+}
+
+class GParamSpecInt64     is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has gint64        $.minimum;
+  has gint64        $.maximum;
+  has gint64        $.default_value;
+}
+
+class GParamSpecUInt64    is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has guint64       $.minimum;
+  has guint64       $.maximum;
+  has guint64       $.default_value;
+}
+
+class GParamSpecUnichar   is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has gunichar      $.default_value;
+}
+
+class GParamSpecEnum      is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has Pointer       $.enum_class; #= GEnumClass
+  has gint          $.default_value;
+}
+
+class GParamSpecFlags     is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has Pointer       $.flags_class; #= GFlagsClass;
+  has guint         $.default_value;
+}
+
+class GParamSpecFloat     is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has gfloat        $.minimum;
+  has gfloat        $.maximum;
+  has gfloat        $.default_value;
+  has gfloat        $.epsilon;
+}
+
+class GParamSpecDouble    is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has gdouble       $.minimum;
+  has gdouble       $.maximum;
+  has gdouble       $.default_value;
+  has gdouble       $.epsilon;
 }
 
 # Global subs requiring above structs
