@@ -137,6 +137,7 @@ class GThread                  is repr<CPointer> is export does GLib::Roles::Poi
 class GThreadPool              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTimer                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTimeZone                is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GTypePlugin              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTokenValue              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariant                 is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantBuilder          is repr<CPointer> is export does GLib::Roles::Pointers { }

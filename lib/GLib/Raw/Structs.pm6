@@ -521,3 +521,51 @@ class GOptionEntry        is repr<CStruct> does GLib::Roles::Pointers is export 
   }
 
 };
+
+# TO BE EXPANDED UPON, LATER!
+
+class GInterfaceInfo      is repr<CStruct> does GLib::Roles::Pointers is export {
+  has Pointer $!interface_init;     #= GInterfaceInitFunc
+  has Pointer $!interface_finalize; #= GInterfaceFinalizeFunc
+  has Pointer $!interface_data;
+}
+
+class GTypeValueTable     is repr<CStruct> does GLib::Roles::Pointers is export {
+  has Pointer $!value_init;         #= (GValue       *value);
+  has Pointer $!value_free;         #= (GValue       *value);
+  has Pointer $!value_copy;         #= (const GValue *src_value, GValue *dest_value);
+  # varargs functionality (optional)
+  has Pointer $!value_peek_pointer; #= (const GValue *value --> Pointer);
+  has Str     $!collect_format;
+  has Pointer $!collect_value;      #= (GValue *value, guint n_collect_values, GTypeCValue *collect_values, guint collect_flags --> Str);
+  has Str     $!lcopy_format;
+  has Pointer $!lcopy_value;        #= (const GValue *value, guint n_collect_values, GTypeCValue *collect_values, guint collect_flags --> Str);
+}
+
+class GTypeQuery          is repr<CStruct> does GLib::Roles::Pointers is export {
+  has GType $!type;
+  has Str   $!type_name;
+  has guint $!class_size;
+  has guint $!instance_size;
+}
+
+class GTypeInfo           is repr<CStruct> does GLib::Roles::Pointers is export {
+  # interface types, classed types, instantiated types
+  has guint16         $!class_size;
+  has Pointer         $!base_init;      #= GBaseInitFunc
+  has Pointer         $!base_finalize;  #= GBaseFinalizeFunc
+  # interface types, classed types, instantiated types
+  has Pointer         $!class_init;     #= GClassInitFunc
+  has Pointer         $!class_finalize; #= GClassFinalizeFunc
+  has Pointer         $!class_data;     #= gconstpointer
+  # instantiated types
+  has guint16         $!instance_size;
+  has guint16         $!n_preallocs;
+  has Pointer         $!instance_init;  #= GInstanceInitFunc
+  # value handling
+  has GTypeValueTable $!value_table;
+}
+
+class GTypeFundamentalInfo is repr<CStruct> does GLib::Roles::Pointers is export {
+  has GTypeFundamentalFlags $!type_flags;
+}

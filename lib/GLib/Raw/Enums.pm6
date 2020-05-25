@@ -664,10 +664,34 @@ our enum GVariantClassEnum is export <
   G_VARIANT_CLASS_DICT_ENTRY
 >;
 
-our enum GPriority is export (
+constant GPriority is export := guint32;
+our enum GPriorityEnum is export (
   G_PRIORITY_HIGH         => -100,
   G_PRIORITY_DEFAULT      => 0,
   G_PRIORITY_HIGH_IDLE    => 100,
   G_PRIORITY_DEFAULT_IDLE => 200,
   G_PRIORITY_LOW          => 300
+);
+
+constant GTypeDebugFlags is export := guint32;
+our enum GTypeDebugFlagsEnum is export (
+  G_TYPE_DEBUG_NONE           => 0,
+  G_TYPE_DEBUG_OBJECTS        => 1 +< 0,
+  G_TYPE_DEBUG_SIGNALS        => 1 +< 1,
+  G_TYPE_DEBUG_INSTANCE_COUNT => 1 +< 2,
+  G_TYPE_DEBUG_MASK           => 0x07
+);
+
+constant GTypeFundamentalFlags is export := guint32;
+our enum GTypeFundamentalFlagsEnum is export (
+  G_TYPE_FLAG_CLASSED           => 1 +< 0,
+  G_TYPE_FLAG_INSTANTIATABLE    => 1 +< 1,
+  G_TYPE_FLAG_DERIVABLE         => 1 +< 2,
+  G_TYPE_FLAG_DEEP_DERIVABLE    => 1 +< 3
+);
+
+constant GTypeFlags is export := guint32;
+our enum GTypeFlagsEnum is export (
+  G_TYPE_FLAG_ABSTRACT          => 1 +< 4,
+  G_TYPE_FLAG_VALUE_ABSTRACT    => 1 +< 5
 );
