@@ -104,6 +104,7 @@ class GBinding                 is repr<CPointer> is export does GLib::Roles::Poi
 class GBookmarkFile            is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GBytes                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GDateTime                is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GData                    is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTree                    is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GChecksum                is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GHmac                    is repr<CPointer> is export does GLib::Roles::Pointers { }
@@ -120,7 +121,7 @@ class GMutex                   is repr<CPointer> is export does GLib::Roles::Poi
 class GModule                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GObject                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GPatternSpec             is repr<CPointer> is export does GLib::Roles::Pointers { }
-class GParamSpec               is repr<CPointer> is export does GLib::Roles::Pointers { }
+#class GParamSpec               is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GParamSpecPool           is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GPrivate                 is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GRand                    is repr<CPointer> is export does GLib::Roles::Pointers { }

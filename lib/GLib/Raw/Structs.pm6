@@ -380,7 +380,23 @@ class GValue {
 class GValueArray           is repr<CStruct> does GLib::Roles::Pointers is export {
   has guint    $.n_values;
   has gpointer $.values; # GValue *
-};
+}
+
+class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GTypeInstance $.g_type_instance;
+
+  has Str           $!name;          #= interned string
+  has GParamFlags   $!flags;
+  has GType         $!value_type;
+  has GType         $!owner_type;    #= class or interface using this property
+
+  # Private
+  has gchar         $!nick;
+  has gchar         $!blurb;
+  has GData         $!qdata;
+  has guint         $!ref_count;
+  has guint         $!param_id;
+}
 
 # Global subs requiring above structs
 sub gerror is export {
@@ -568,4 +584,39 @@ class GTypeInfo           is repr<CStruct> does GLib::Roles::Pointers is export 
 
 class GTypeFundamentalInfo is repr<CStruct> does GLib::Roles::Pointers is export {
   has GTypeFundamentalFlags $!type_flags;
+}
+
+class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GTypeClass  $.g_type_class;
+  # Private
+  has GSList          $!construct_properties;
+  # Public
+  has Pointer         $.constructor;                 #= GObject*   (*constructor)     (GType                  type,
+                                                     #=                                guint                  n_construct_properties,
+                                                     #=                                GObjectConstructParam *construct_properties);
+  # overridable methods
+  has Pointer         $.set_property;                #= void       (*set_property)            (GObject        *object,
+                                                     #=                                        guint           property_id,
+                                                     #=                                        const GValue   *value,
+                                                     #=                                        GParamSpec     *pspec);
+  has Pointer         $.get_property;                    #= void       (*get_property)            (GObject        *object,
+                                                     #=                                        guint           property_id,
+                                                     #=                                        GValue         *value,
+                                                     #=                                        GParamSpec     *pspec);
+  has Pointer         $.dispose;                     #= void       (*dispose)                 (GObject        *object);
+  has Pointer         $.fiinalize;                   #= void       (*finalize)                (GObject        *object);
+  # seldom overriden
+  has Pointer         $.dispatch_properties_changed; #= void       (*dispatch_properties_changed) (GObject      *object,
+                                                     #=                                            guint         n_pspecs,
+                                                     #=                                            GParamSpec  **pspecs);
+  # signals
+  has Pointer         $.notify;                      #= void       (*notify)                  (GObject        *object,
+                                                     #=                                        GParamSpec     *pspec);
+
+  # called when done constructing
+  has Pointer         $.constructed;                 #= void       (*constructed)             (GObject        *object);
+
+  # Private
+  has gsize     $!flags;
+  HAS gpointer  @!pdummy[6] is CArray;
 }
