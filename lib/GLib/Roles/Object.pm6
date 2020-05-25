@@ -131,6 +131,10 @@ role GLib::Roles::Object {
     is_type($t, self);
   }
 
+  method get_property (Str() $name, GValue() $value) is also<get-property> {
+    g_object_get_property($!o, $name, $value);
+  }
+
   method prop_set(Str() $name, GValue() $value) is also<prop-set> {
     self.set_prop($name, $value);
   }
@@ -220,9 +224,15 @@ role GLib::Roles::Object {
     # @values.push( GLib::Value.new($v[$_]) ) for (^$v.elems);
 
     # Be perlish with the return. -- Maybe do @values[$_].value
-    %(do for (^@names.elems) {
-      @names[$_] => @values[$_];
-    });
+    if @names.elems > 1 {
+      # Return value
+      %(do for (^@names.elems) {
+        @names[$_] => @values[$_];
+      });
+    } else {
+      # Return value
+      @values[0];
+    }
   }
 
   method prop_set_bool(Str() $key, Int() $val)
@@ -373,3 +383,8 @@ role GLib::Roles::Object {
   }
 
 }
+
+sub g_object_get_property (GObject $o, Str $key, GValue $value)
+  is native(gobject)
+  is export
+{ * }
