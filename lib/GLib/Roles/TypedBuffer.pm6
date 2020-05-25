@@ -45,9 +45,11 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   method NativeCall::Types::Pointer
   { $!b }
 
-  method p
+  method p (:$typed = True)
     is also<Pointer>
-  { $!b }
+  {
+    $typed ?? nativecast(Pointer.^parameterize(T), $!b) !! $!b;
+  }
 
   # Cribbed from MySQL::Native. Thanks, ctilmes!
   method AT-POS(Int $field) {
@@ -96,7 +98,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     die 'TypedBuffer type must be a CStruct!' unless T.REPR eq 'CStruct';
 
     die qq:to/D/.chomp unless @entries.all ~~ T;
-    { ::?CLASS.^name } can only be initialized if all entries are an { T.^name }
+    { ::?CLASS.^name } can only be initialized if all entries are a { T.^name }
     D
 
     my $o = self.bless( size => @entries.elems );
