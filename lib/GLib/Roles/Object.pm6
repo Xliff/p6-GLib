@@ -79,12 +79,12 @@ role GLib::Roles::Object {
 
   method is_a (Int() $type) {
     my GType $t = $type;
-    my $gc = $o.g_type_instance.g_class;
+    my $gc = $!o.g_type_instance.g_class;
 
     return False unless $!o;
     return True  if     $gc && $gc.g_type == $t;
 
-    return g_type_check_instance_is_a($o.g_type_instance, $t);
+    return g_type_check_instance_is_a($!o.g_type_instance, $t);
   }
   method is-a (Int() $type) {
     self.is_a($type);

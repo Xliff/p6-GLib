@@ -4,9 +4,10 @@ use NativeCall;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
+use GLib::Raw::Object;
 use GLib::Raw::Structs;
 
-unit package GLib::Raw::Types;
+unit package GLib::Raw::Type;
 
 ### /usr/include/glib-2.0/gobject/gtype.h
 
@@ -61,12 +62,6 @@ sub g_type_check_class_cast (GTypeClass $g_class, GType $is_a_type)
   is export
 { * }
 
-sub g_type_check_class_is_a (GTypeClass $g_class, GType $is_a_type)
-  returns uint32
-  is native(gobject)
-  is export
-{ * }
-
 sub g_type_check_instance (GTypeInstance $instance)
   returns uint32
   is native(gobject)
@@ -75,12 +70,6 @@ sub g_type_check_instance (GTypeInstance $instance)
 
 sub g_type_check_instance_cast (GTypeInstance $instance, GType $iface_type)
   returns GTypeInstance
-  is native(gobject)
-  is export
-{ * }
-
-sub g_type_check_instance_is_a (GTypeInstance $instance, GType $iface_type)
-  returns uint32
   is native(gobject)
   is export
 { * }
