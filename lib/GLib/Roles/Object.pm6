@@ -7,6 +7,7 @@ use GLib::Object::IsType;
 use GLib::Raw::Types;
 
 use GLib::Value;
+use GLib::Object::Class;
 
 constant gObjectTypeKey = 'p6-GObject-Type';
 
@@ -36,6 +37,18 @@ role GLib::Roles::Object {
     my $o = i.get_value(self);
 
     self!setObject($o);
+  }
+
+  method getClass ($OC? is raw, $C? is raw, :$raw = True) {
+    $OC = GObjectClass unless $OC;
+    $C  = GLib::Object::Class unless $C;
+
+    my $c := cast(Pointer.^parameterize($OC), $!o.g_class).deref;
+
+    $c ??
+      ( $raw ?? $c !! $C.new($c) )
+      !!
+      Nil;
   }
 
   method !setObject($obj) {
