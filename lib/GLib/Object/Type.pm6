@@ -185,8 +185,10 @@ class GLib::Object::Type {
     $raw ?? $il.Array !! $il.Array.map({ GLib::Type.new($_) });
   }
 
-  method is_a (GType $is_a_type) {
-    g_type_is_a($!t, $is_a_type);
+  method is_a (Int() $is_a_type) {
+    my GType $isa = $is_a_type;
+
+    g_type_is_a($!t, $isa);
   }
 
   method name {

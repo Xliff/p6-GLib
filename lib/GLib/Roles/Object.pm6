@@ -8,6 +8,7 @@ use GLib::Raw::Types;
 
 use GLib::Value;
 use GLib::Object::Class;
+use GLib::Object::Type;
 
 constant gObjectTypeKey = 'p6-GObject-Type';
 
@@ -69,16 +70,31 @@ role GLib::Roles::Object {
   method ref   is also<upref>   {   g_object_ref($!o); self; }
   method unref is also<downref> { g_object_unref($!o); }
 
+  method object-type (:$raw = False) {
+    my $t = $!o.g_type_instance.g_class.g_type;
+    return $t if $raw;
+
+    GLib::Object::Type.new($t);
+  }
+
+  method is_a (Int() $type) {
+    my GType $t = $type;
+    my $gc = $o.g_type_instance.g_class;
+
+    return False unless $!o;
+    return True  if     $gc && $gc.g_type == $t;
+
+    return g_type_check_instance_is_a($o.g_type_instance, $t);
+  }
+  method is-a (Int() $type) {
+    self.is_a($type);
+  }
+
+  # cw: -YYY- Do we need this now that we have the .is_a method?
   method check_gobject_type($compare_type) {
     my $o = nativecast(GTypeInstance, $!o);
 
     $o.checkType($compare_type);
-  }
-
-  method get_gobject_type {
-    my $o = nativecast(GTypeInstance, $!o);
-
-    $o.getType;
   }
 
   method setType($typeName) {
