@@ -119,7 +119,7 @@ class GMarkupParser            is repr<CPointer> is export does GLib::Roles::Poi
 class GMarkupParseContext      is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMutex                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GModule                  is repr<CPointer> is export does GLib::Roles::Pointers { }
-class GObject                  is repr<CPointer> is export does GLib::Roles::Pointers { }
+#class GObject                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GPatternSpec             is repr<CPointer> is export does GLib::Roles::Pointers { }
 #class GParamSpec               is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GParamSpecPool           is repr<CPointer> is export does GLib::Roles::Pointers { }
@@ -147,9 +147,6 @@ class GVariantIter             is repr<CPointer> is export does GLib::Roles::Poi
 class GVariantType             is repr<CPointer> is export does GLib::Roles::Pointers { }
 
 our role Implementor is export {};
-
-our subset GObjectOrPointer of Mu is export
-  where ::('GLib::Roles::Object') | GObject | GLib::Roles::Pointers;
 
 # Mark
 multi sub trait_mod:<is>(Attribute:D \attr, :$implementor) is export {

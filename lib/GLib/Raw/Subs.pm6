@@ -4,6 +4,7 @@ use NativeCall;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
+use GLib::Raw::Object;
 
 unit package GLib::Raw::Subs;
 
@@ -58,7 +59,7 @@ sub separate (Str() $s, Int() $p) is export {
 sub load-gparam-spec-types is export {
   # If this is to be used, it must be called at run-time, as the INIT phaser
   # is NOT late enough!
-  $g_param_spec_types = cglobal(gobject, 'g_param_spec_types', CArray[GType]);
+  $g-param-spec-types = cglobal(gobject, 'g_param_spec_types', CArray[GType]);
 }
 
 sub g_destroy_none(Pointer)

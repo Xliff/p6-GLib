@@ -11,14 +11,14 @@ unit package GLib::Object::IsType;
 sub is_type (GObjectOrPointer $t, $object) is export {
   $t .= GObject if $t ~~ ::('GLib::Roles::Object');
   my ($to, $ot) =
-    ( nativecast(GObjectStruct, $t), $object.get_type );
+    ( nativecast(GObject, $t), $object.get_type );
   $to.checkType($ot);
 }
 
 sub get_gtype_name (GObjectOrPointer $t) is export {
   $t .= GObject if $t ~~ ::('GLib::Roles::Object');
 
-  my $to = nativecast(GObjectStruct, $t);
+  my $to = nativecast(GObject, $t);
 
   g_type_name($to.getType);
 }

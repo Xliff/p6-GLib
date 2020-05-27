@@ -725,4 +725,4 @@ our enum GParamTypeEnums is export (
   G_TYPE_PARAM_VARIANT_IDX      => 22
 );
 
-our $g_param_spec_types is export;
+our $g-param-spec-types is export;

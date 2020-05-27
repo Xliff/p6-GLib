@@ -5,33 +5,13 @@ use Method::Also;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
+use GLib::Raw::Object;
 use GLib::Raw::Subs;
 use GLib::Raw::Struct_Subs;
 
 use GLib::Roles::Pointers;
 
 unit package GLib::Raw::Structs;
-
-# Predeclarations
-class GTypeClass            is repr<CStruct> does GLib::Roles::Pointers is export {
-  has GType      $.g_type;
-}
-
-class GTypeInstance         is repr<CStruct> does GLib::Roles::Pointers is export {
-  has GTypeClass $.g_class;
-
-  method checkType($compare_type) {
-    my GType $ct = $compare_type;
-
-    self.g_class.defined ??
-       $ct == self.g_class.g_type            !!
-       g_type_check_instance_is_a(self, $ct);
-  }
-
-  method getType {
-    self.g_class.g_type;
-  }
-}
 
 class GValue                is repr<CStruct> does GLib::Roles::Pointers is export { ... }
 
@@ -163,27 +143,12 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
       };
   }
 
-};
-
-# Used ONLY in those situations where cheating is just plain REQUIRED.
-class GObjectStruct         is repr<CStruct> does GLib::Roles::Pointers is export {
-  HAS GTypeInstance  $.g_type_instance;
-  has uint32         $.ref_count;
-  has gpointer       $!qdata;
-
-  method checkType ($compare_type) {
-    self.g_type_instance.checkType($compare_type)
-  }
-
-  method getType {
-    self.g_type_instance.getType
-  }
 }
 
 class GOnce                 is repr<CStruct> does GLib::Roles::Pointers is export {
   has guint    $.status;    # GOnceStatus
   has gpointer $.retval;
-};
+}
 
 class GParameter            is repr<CStruct> does GLib::Roles::Pointers is export {
   has Str    $!name;
@@ -505,6 +470,12 @@ class GParamSpecDouble    is repr<CStruct> does GLib::Roles::Pointers is export 
   has gdouble       $.epsilon;
 }
 
+class GParamSpecValueArray  is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec    $.parent_instance;
+  has GParamSpec    $.element_spec;
+  has guint         $.fixed_n_elements;
+}
+
 # Global subs requiring above structs
 sub gerror is export {
   my $cge = CArray[Pointer[GError]].new;
@@ -525,14 +496,6 @@ sub clear_error($error = $ERROR) is export {
 sub set_error(CArray $e) is export {
   $ERROR = $e[0].deref if $e[0].defined;
 }
-
-sub g_type_check_instance_is_a (
-  GTypeInstance  $instance,
-  GType          $iface_type
-)
-  returns uint32
-  is native(gobject)
-{ * }
 
 sub sprintf-Ps (
   Blob,
@@ -694,7 +657,7 @@ class GTypeFundamentalInfo is repr<CStruct> does GLib::Roles::Pointers is export
 }
 
 class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is export {
-  HAS GTypeClass  $.g_type_class;
+  HAS GTypeClass      $.g_type_class;
   # Private
   has GSList          $!construct_properties;
   # Public
@@ -706,7 +669,7 @@ class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is expor
                                                      #=                                        guint           property_id,
                                                      #=                                        const GValue   *value,
                                                      #=                                        GParamSpec     *pspec);
-  has Pointer         $.get_property;                    #= void       (*get_property)            (GObject        *object,
+  has Pointer         $.get_property;                #= void       (*get_property)            (GObject        *object,
                                                      #=                                        guint           property_id,
                                                      #=                                        GValue         *value,
                                                      #=                                        GParamSpec     *pspec);
@@ -724,6 +687,9 @@ class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is expor
   has Pointer         $.constructed;                 #= void       (*constructed)             (GObject        *object);
 
   # Private
-  has gsize     $!flags;
-  HAS gpointer  @!pdummy[6] is CArray;
+  has gsize           $!flags;
+  HAS gpointer        @!pdummy[6] is CArray;
 }
+
+our subset GObjectOrPointer of Mu is export
+  where ::('GLib::Roles::Object') | GObject | GLib::Roles::Pointers;
