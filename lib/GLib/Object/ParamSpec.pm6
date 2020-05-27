@@ -555,6 +555,37 @@ class GLib::Object::ParamSpec {
     so g_param_value_validate($!ps, $value);
   }
 
+  method value_spec is also<value-spec> {
+    my \T := do given self.type {
+      when G_TYPE_CHAR     { GParamSpecChar    }
+      when G_TYPE_UCHAR    { GParamSpecUChar   }
+      when G_TYPE_BOOLEAN  { GParamSpecBoolean }
+      when G_TYPE_INT      { GParamSpecInt     }
+      when G_TYPE_UINT     { GParamSpecUInt    }
+      when G_TYPE_LONG     { GParamSpecLong    }
+      when G_TYPE_ULONG    { GParamSpecULong   }
+      when G_TYPE_INT64    { GParamSpecInt64   }
+      when G_TYPE_UINT64   { GParamSpecUInt64  }
+      when G_TYPE_ENUM     { GParamSpecEnum    }
+      when G_TYPE_FLAGS    { GParamSpecFlags   }
+      when G_TYPE_FLOAT    { GParamSpecFloat   }
+      when G_TYPE_DOUBLE   { GParamSpecDouble  }
+
+      # when G_TYPE_STRING   { self.string;     }
+      # when G_TYPE_POINTER  { self.pointer;    }
+      # when G_TYPE_BOXED    { self.boxed;      }
+      # when G_TYPE_PARAM   { }
+      # when G_TYPE_OBJECT   { self.object;     }
+      #when G_TYPE_VARIANT { }
+      default {
+        warn "{ .Str } type NYI.";
+      }
+    }
+
+    cast(T, $!ps);
+  }
+
+
 }
 
 
