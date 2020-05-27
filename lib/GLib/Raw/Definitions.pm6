@@ -99,6 +99,8 @@ constant GLIB_SYSDEF_MSG_OOB       is export = 1;
 constant GLIB_SYSDEF_MSG_PEEK      is export = 2;
 constant GLIB_SYSDEF_MSG_DONTROUTE is export = 4;
 
+constant G_PARAM_USER_SHIFT        is export = 8;
+
 class GAsyncQueue              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GBinding                 is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GBookmarkFile            is repr<CPointer> is export does GLib::Roles::Pointers { }
