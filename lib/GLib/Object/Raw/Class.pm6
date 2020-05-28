@@ -5,6 +5,8 @@ use NativeCall;
 use GLib::Raw::Definitions;
 use GLib::Raw::Structs;
 
+use GLib::Object::Class::Object;
+
 unit package GLib::Object::Raw::Class;
 
 sub g_initially_unowned_get_type ()
