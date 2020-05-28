@@ -1,5 +1,7 @@
 use v6.c;
 
+use Method::Also;
+
 use GLib::Raw::Types;
 use GLib::Raw::Type;
 
@@ -16,7 +18,7 @@ class GLib::Object::Type {
   }
 
   method Int
-    #is also<GType>
+    is also<GType>
   { $!t }
 
   method new (Int() $type) {
@@ -27,7 +29,9 @@ class GLib::Object::Type {
     GLib::Object::Type:U:
     gpointer $cache_data,
     &cache_func
-  ) {
+  )
+    is also<add-class-cache-func>
+  {
     g_type_add_class_cache_func($cache_data, &cache_func);
     &cache_func;
   }
@@ -46,18 +50,24 @@ class GLib::Object::Type {
     GLib::Object::Type:U:
     gpointer $check_data,
     &check_func
-  ) {
+  )
+    is also<add-interface-check>
+  {
     g_type_add_interface_check($check_data, &check_func);
     &check_func
   }
 
-  method add_interface_dynamic (Int() $interface_type, GTypePlugin $plugin) {
+  method add_interface_dynamic (Int() $interface_type, GTypePlugin $plugin)
+    is also<add-interface-dynamic>
+  {
     my GType $it = $interface_type;
 
     g_type_add_interface_dynamic($!t, $it, $plugin);
   }
 
-  method add_interface_static (Int() $interface_type, GInterfaceInfo $info) {
+  method add_interface_static (Int() $interface_type, GInterfaceInfo $info)
+    is also<add-interface-static>
+  {
     my GType $it = $interface_type;
 
     g_type_add_interface_static($!t, $it, $info);
@@ -79,19 +89,19 @@ class GLib::Object::Type {
     $vl.Array.map({ GLib::Object::Type.new($_) });
   }
 
-  method create_instance {
+  method create_instance is also<create-instance> {
     g_type_create_instance($!t);
   }
 
-  method default_interface_peek {
+  method default_interface_peek is also<default-interface-peek> {
     g_type_default_interface_peek($!t);
   }
 
-  method default_interface_ref {
+  method default_interface_ref is also<default-interface-ref> {
     g_type_default_interface_ref($!t);
   }
 
-  method default_interface_unref {
+  method default_interface_unref is also<default-interface-unref> {
     g_type_default_interface_unref($!t.p);
   }
 
@@ -103,11 +113,13 @@ class GLib::Object::Type {
     g_type_ensure($!t);
   }
 
-  method free_instance (GLib::Object::Type:U: GTypeInstance $instance) {
+  method free_instance (GLib::Object::Type:U: GTypeInstance $instance)
+    is also<free-instance>
+  {
     g_type_free_instance($instance);
   }
 
-  method from_name (Str() $name, :$raw = False) {
+  method from_name (Str() $name, :$raw = False) is also<from-name> {
     my $t = g_type_from_name($name);
     return $t unless $raw;
 
@@ -121,28 +133,28 @@ class GLib::Object::Type {
     GLib::Object::Type.new($t);
   }
 
-  method fundamental_next (:$raw = False) {
+  method fundamental_next (:$raw = False) is also<fundamental-next> {
     my $t = g_type_fundamental_next();
     return $t unless $raw;
 
     GLib::Object::Type.new($t);
   }
 
-  method get_instance_count {
+  method get_instance_count is also<get-instance-count> {
     g_type_get_instance_count($!t);
   }
 
-  method get_plugin {
+  method get_plugin is also<get-plugin> {
     g_type_get_plugin($!t);
   }
 
-  method get_qdata (Int() $quark) {
+  method get_qdata (Int() $quark) is also<get-qdata> {
     my GQuark $q = $quark;
 
     g_type_get_qdata($!t, $q);
   }
 
-  method get_type_registration_serial {
+  method get_type_registration_serial is also<get-type-registration-serial> {
     g_type_get_type_registration_serial();
   }
 
@@ -185,25 +197,39 @@ class GLib::Object::Type {
     $raw ?? $il.Array !! $il.Array.map({ GLib::Type.new($_) });
   }
 
-  method is_a (Int() $is_a_type) {
+  method is_a (Int() $is_a_type) is also<is-a> {
     my GType $isa = $is_a_type;
 
     g_type_is_a($!t, $isa);
   }
 
+  method is_fundamentally (Int() $type) is also<is-fundamentally> {
+    my GType $t = $type;
+    my $t0 = g_type_fundamental($!t);
+
+    $t == $t0;
+  }
+
+  method is_boxed  is also<is-boxed>  { self.is_a(G_TYPE_BOXED)  }
+  method is_object is also<is-object> { self.is_a(G_TYPE_OBJECT) }
+
   method name {
     g_type_name($!t);
   }
 
-  method name_from_class (GLib::Object::Type:U: GTypeClass $class) {
+  method name_from_class (GLib::Object::Type:U: GTypeClass $class)
+    is also<name-from-class>
+  {
     g_type_name_from_class($class);
   }
 
-  method name_from_instance (GLib::Object::Type:U: GTypeInstance $instance) {
+  method name_from_instance (GLib::Object::Type:U: GTypeInstance $instance)
+    is also<name-from-instance>
+  {
     g_type_name_from_instance($instance);
   }
 
-  method next_base (Int() $root_type) {
+  method next_base (Int() $root_type) is also<next-base> {
     my GType $rt = $root_type;
 
     g_type_next_base($!t, $rt);
@@ -230,7 +256,9 @@ class GLib::Object::Type {
     GLib::Object::Type:U:
     gpointer $cache_data,
     &cache_func
-  ) {
+  )
+    is also<remove-class-cache-func>
+  {
     g_type_remove_class_cache_func($cache_data, &cache_func);
   }
 
@@ -238,23 +266,25 @@ class GLib::Object::Type {
     GLib::Object::Type:U:
     gpointer $check_data,
     &check_func
-  ) {
+  )
+    is also<remove-interface-check>
+  {
     g_type_remove_interface_check($!t, &check_func);
   }
 
-  method set_qdata (Int() $quark, gpointer $data) {
+  method set_qdata (Int() $quark, gpointer $data) is also<set-qdata> {
     my GQuark $q = $quark;
 
     g_type_set_qdata($!t, $q, $data);
   }
 
-  method test_flags (Int() $flags) {
+  method test_flags (Int() $flags) is also<test-flags> {
     my guint $f = $flags;
 
     so g_type_test_flags($!t, $f);
   }
 
-  method value_table_peek {
+  method value_table_peek is also<value-table-peek> {
     g_type_value_table_peek($!t);
   }
 
@@ -266,13 +296,15 @@ class GObject::Type::Interface {
   method add_prerequisite (
     Int() $type,
     Int() $prerequisite_type
-  ) {
+  )
+    is also<add-prerequisite>
+  {
     my GType ($t, $pt) = ($type, $prerequisite_type);
 
     g_type_interface_add_prerequisite($t, $pt);
   }
 
-  method get_plugin (Int() $type, Int() $interface_type) {
+  method get_plugin (Int() $type, Int() $interface_type) is also<get-plugin> {
     my GType ($t, $it) = ($type, $interface_type);
 
     g_type_interface_get_plugin($t, $it);
@@ -284,7 +316,7 @@ class GObject::Type::Interface {
     g_type_interface_peek($instance_class, $it);
   }
 
-  method peek_parent (GTypeInstance $iface) {
+  method peek_parent (GTypeInstance $iface) is also<peek-parent> {
     g_type_interface_peek_parent($iface);
   }
 
@@ -441,7 +473,9 @@ class GLib::Object::Type::Register {
     guint $instance_size,
     gpointer $instance_init, #= GInstanceInitFunc
     GTypeFlags $flags
-  ) {
+  )
+    is also<static-simple>
+  {
     my GType $pt = $parent_type;
 
     g_type_register_static_simple(
