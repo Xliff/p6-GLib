@@ -6,11 +6,10 @@ use NativeCall;
 use GLib::Object::IsType;
 use GLib::Raw::Types;
 
-use GLib::Object::Class::Object;
-
-use GLib::Value;
-use GLib::Object::Class;
+use GLib::Value;;
 use GLib::Object::Type;
+
+use GLib::Class::Object;
 
 constant gObjectTypeKey = 'p6-GObject-Type';
 
@@ -48,11 +47,12 @@ role GLib::Roles::Object {
     self!setObject($o);
   }
 
-  method getClass ($OC? is raw, $C? is raw, :$raw = True) {
-    $OC = GObjectClass unless $OC;
+  method getClass ($CS? is raw, $C? is raw, :$raw = True) {
+    $CS = GObjectClass        unless $CS;
     $C  = GLib::Object::Class unless $C;
 
-    my $c := cast(Pointer.^parameterize($OC), $!o.g_class).deref;
+    my $p := cast(Pointer.^parameterize($CS), $!o.g_class);
+    my $c := $CS.REPR eq 'CStruct' ?? $p.deref !! $p;
 
     $c ??
       ( $raw ?? $c !! $C.new($c) )
