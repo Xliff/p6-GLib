@@ -112,7 +112,7 @@ class GChecksum                is repr<CPointer> is export does GLib::Roles::Poi
 class GHashTable               is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GHashTableIter           is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GHmac                    is repr<CPointer> is export does GLib::Roles::Pointers { }
-class GHook                    is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GHook                    is repr<CPointer> is export does GLib::Roles::Pointers { }  #= size = 64
 class GIConv                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GIOChannel               is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GKeyFile                 is repr<CPointer> is export does GLib::Roles::Pointers { }
