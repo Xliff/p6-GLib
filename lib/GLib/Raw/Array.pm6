@@ -360,3 +360,28 @@ sub g_array_unref (GArray $array)
   is native(glib)
   is export
 { * }
+
+sub g_array_get_type ()
+  returns GType
+  is native(gobject)
+  is export
+{ * }
+
+sub g_byte_array_get_type ()
+  returns GType
+  is native(gobject)
+  is export
+{ * }
+
+sub g_ptr_array_get_type ()
+  returns GType
+  is native(gobject)
+  is export
+{ * }
+
+# Deprecated in 2.32 for GArray
+sub g_value_array_get_type ()
+  returns GType
+  is native(gobject)
+  is export
+{ * }

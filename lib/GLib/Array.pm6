@@ -6,8 +6,6 @@ use GLib::Raw::Types;
 
 use GLib::Raw::Array;
 
-
-
 class GLib::Array {
   also does Positional;
 
@@ -29,9 +27,10 @@ class GLib::Array {
     >
   { $!a }
 
-  multi method new (GArray :$array) {
+  multi method new (GArray :$array, :$ref = True) {
     my $o = self.bless( :$array );
-    $o.upref;
+    $o.upref if $ref;
+    $o;
   }
   multi method new (
     Int() $zero_terminated,
@@ -105,6 +104,12 @@ class GLib::Array {
     g_array_get_element_size($!a);
   }
 
+  method get_type is also<get-type> {
+    state ($n, $t);
+
+    unstable_get_type( self.^name, &g_array_get_type, $n, $t );
+  }
+
   method insert_vals (Int() $index, gpointer $data, Int() $len)
     is also<insert-vals>
   {
@@ -170,4 +175,31 @@ class GLib::Array {
 
   # ↑↑↑↑ METHODS ↑↑↑↑
 
+}
+
+sub value_array_get_type is export {
+  state ($n, $t);
+
+  unstable_get_type( 'ValueArray', &g_value_array_get_type, $n, $t );
+}
+sub value-array-get-type is export {
+  value_array_get_type;
+}
+
+sub byte_array_get_type is export {
+  state ($n, $t);
+
+  unstable_get_type( 'ByteArray', &g_value_array_get_type, $n, $t );
+}
+sub byte-array-get-type is export {
+  byte_array_get_type;
+}
+
+sub ptr_array_get_type is export {
+  state ($n, $t);
+
+  unstable_get_type( 'PtrArray', &g_ptr_array_get_type, $n, $t );
+}
+sub ptr-array-get-type is export {
+  ptr_array_get_type;
 }
