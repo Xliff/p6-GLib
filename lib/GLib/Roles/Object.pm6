@@ -47,11 +47,11 @@ role GLib::Roles::Object {
     self!setObject($o);
   }
 
-  method getClass ($CS? is raw, $C? is raw, :$raw = True) {
-    $CS = GObjectClass        unless $CS;
-    $C  = GLib::Object::Class unless $C;
-
-    my $p := cast(Pointer.^parameterize($CS), $!o.g_class);
+  method getClass (:$raw = False) {
+    self.getClass(GObjectClass, GLib::Object::Class, :$raw);
+  }
+  method _getClass ($CS is raw, $C is raw, :$raw = True) {
+    my $p := cast(Pointer.^parameterize($CS), $!o.g_type_instance.g_class);
     my $c := $CS.REPR eq 'CStruct' ?? $p.deref !! $p;
 
     $c ??
