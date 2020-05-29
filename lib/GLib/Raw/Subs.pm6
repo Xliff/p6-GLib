@@ -9,17 +9,19 @@ use GLib::Raw::Object;
 unit package GLib::Raw::Subs;
 
 # Cribbed from https://github.com/CurtTilmes/perl6-dbmysql/blob/master/lib/DB/MySQL/Native.pm6
-sub malloc  (size_t --> Pointer)                   is export is native {}
-sub realloc (Pointer, size_t --> Pointer)          is export is native {}
-sub calloc  (size_t, size_t --> Pointer)           is export is native {}
-sub memcpy  (Pointer, Pointer ,size_t --> Pointer) is export is native {}
-sub memset  (Pointer, int32, size_t)               is export is native {}
+sub malloc  (size_t --> Pointer)                   is export is native { * }
+sub realloc (Pointer, size_t --> Pointer)          is export is native { * }
+sub calloc  (size_t, size_t --> Pointer)           is export is native { * }
+sub memcpy  (Pointer, Pointer ,size_t --> Pointer) is export is native { * }
+sub memset  (Pointer, int32, size_t)               is export is native { * }
+sub dup2    (int32, int32 --> int32)               is export is native { * }
+
 
 our proto sub free (|) is export { * }
-multi sub free (Pointer)                           is export is native {}
+multi sub free (Pointer)                           is export is native { * }
 
 # Cribbed from https://stackoverflow.com/questions/1281686/determine-size-of-dynamically-allocated-memory-in-c
-sub malloc_usable_size (Pointer --> size_t)        is export is native {}
+sub malloc_usable_size (Pointer --> size_t)        is export is native { * }
 
 # Implement memcpy_pattern. Take pattern and write pattern.^elem bytes to successive areas in dest.
 
