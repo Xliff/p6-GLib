@@ -63,4 +63,31 @@ class GLib::MainLoop {
     g_poll($fds, $nf, $t);
   }
 
+  method child_watch_add (
+    GPid $pid,
+    &func (GPid, gint, gpointer),
+    gpointer $data = gpointer
+  )
+    is also<child-watch-add>
+  {
+    my GPid $p = $pid;
+
+    g_child_watch_add ($pid, &func, $data);
+  }
+
+  method child_watch_add_full (
+    Int() $priority,
+    Int() $pid,
+    &func,
+    gpointer       $data   = gpointer,
+    GDestroyNotify $notify = gpointer
+  )
+    is also<child-watch-add-full>
+  {
+    my gint $p = $priority;
+    my GPid $pp = $pid;
+
+    g_child_watch_add_full ($p, $pp, &func, $data, $notify);
+  }
+
 }
