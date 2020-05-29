@@ -78,15 +78,10 @@ class GLib::Object::Type {
   }
   multi method children ($n_children is rw, :$raw = False) {
     my guint $n = 0;
+    my $ca = g_type_children($!t, $n);
 
-    my $vl = g_type_children($!t, $n);
-    return Nil unless $vl;
-
-    $vl = GLib::Roles::TypedBuffer[GType].new($vl);
-    $vl.setSize($n_children = $n);
-    return $vl if $raw;
-
-    $vl.Array.map({ GLib::Object::Type.new($_) });
+    $n_children = $n;
+    CArrayToArray($ca);
   }
 
   method create_instance is also<create-instance> {
@@ -180,21 +175,11 @@ class GLib::Object::Type {
     :$list = False,
     :$raw = False
   ) {
-    my guint $n = $n_interfaces;
-    my $il = g_type_interfaces($!t, $n);
+    my guint $n = 0;
+    my $ia = g_type_interfaces($!t, $n);
 
-    return Nil unless $il;
-
-    $il = GLib::Roles::TypedBuffer[GType].new($il);
-    $il.setSize($n_interfaces = $n);
-    return $il if $list && $raw;
-
-    # cw: - YYY -
-    #     Topic for new initiative - Anywhere we return .Array, we should also
-    #     have the option to return a List (which basically returns an
-    #     iterator). The advantage is that List has only one iteration while
-    #     AT MINIMUM, the array has 2. Plus... List would be lazy.
-    $raw ?? $il.Array !! $il.Array.map({ GLib::Type.new($_) });
+    $n_interfaces = $n;
+    CArrayToArray($ia)
   }
 
   method is_a (Int() $is_a_type) is also<is-a> {
@@ -346,13 +331,10 @@ class GObject::Type::Interface {
   ) {
     my GType $it = $interface_type;
     my guint $n = 0;
-    my $b = g_type_interface_prerequisites($it, $n);
+    my $pa = g_type_interface_prerequisites($it, $n);
 
-    $b = GLib::Roles::TypedBuffer[GType].new($b);
-    $b.setSize($n_prerequisites = $n);
-    return $b if $raw;
-
-    $b.Array;
+    $n_prerequisites = $n;
+    CArrayToArray($pa);
   }
 }
 

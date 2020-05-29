@@ -102,7 +102,7 @@ sub g_type_check_value_holds (GValue $value, GType $type)
 { * }
 
 sub g_type_children (GType $type, guint $n_children)
-  returns GType
+  returns CArray[GType]
   is native(gobject)
   is export
 { * }
@@ -293,13 +293,13 @@ sub g_type_interface_prerequisites (
   GType $interface_type,
   guint $n_prerequisites
 )
-  returns Pointer # Array of GType
+  returns CArray[GType]
   is native(gobject)
   is export
 { * }
 
 sub g_type_interfaces (GType $type, guint $n_interfaces)
-  returns Pointer # Array of GType
+  returns CArray[GType]
   is native(gobject)
   is export
 { * }
