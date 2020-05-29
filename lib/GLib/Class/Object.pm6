@@ -45,11 +45,17 @@ class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is expor
 
 constant GInitiallyUnownedClass is export := GObjectClass;
 
+use GLib::Roles::TypedBuffer;
+
 class GLib::Class::Object is export {
   has GObjectClass $!c;
 
   submethod BUILD (:$object-class) {
-    $!c = $object-class;
+    self.setObjectClass($object-class) if $object-class;
+  }
+
+  method setObjectClass(GObjectClass $_) {
+    $!c = $_;
   }
 
   method new (GObjectClass $object-class) {
@@ -98,10 +104,10 @@ class GLib::Class::Object is export {
     return $pl[0] if $list && $raw;
 
     $pl = GLib::Roles::TypedBuffer[GParamSpec].new($pl[0]);
-    $pl.setSize($n_properties = $n);
+    $n_properties = $n;
     return $pl if $list;
 
-    $raw ?? $pl.Array !! $pl.Array.map({ GLib::Object.ParamSpec.new($_) });
+    $raw ?? $pl.Array !! $pl.Array.map({ GLib::Object::ParamSpec.new($_) });
   }
 
   method override_property (Int() $property_id, Str() $property_name)
