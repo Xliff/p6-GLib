@@ -16,9 +16,14 @@ sub memcpy         (Pointer, Pointer ,size_t --> Pointer) is export is native { 
 sub memset         (Pointer, int32, size_t)               is export is native { * }
 sub dup2           (int32, int32 --> int32)               is export is native { * }
 sub isatty         (int32 --> int32)                      is export is native { * }
-# So as not to collide with the CORE sub.
-sub native-close   (int32 --> int32)                      is export is native { * }
 
+# So as not to collide with the CORE sub.
+sub native-close   (int32 --> int32)
+  is export
+  is symbol('close')
+  is native
+{ * }
+              
 our proto sub free (|) is export { * }
 multi sub free (Pointer)                           is export is native { * }
 
