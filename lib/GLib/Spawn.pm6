@@ -1,5 +1,7 @@
 use v6.c;
 
+use Method::Also;
+
 use NativeCall;
 
 use GLib::Raw::Types;
@@ -10,7 +12,7 @@ use GLib::Roles::StaticClass;
 class GLib::Spawn {
   also does GLib::Roles::StaticClass;
 
-  method !resolve-args($argv is rw, $envp is rw) {
+  method !resolve-args($argv is raw, $envp is raw) {
     $argv = resolve-gstrv($argv) if $argv ~~ Array;
     $envp = resolve-gstrv($envp) if $envp ~~ Array;
     die '$argv must be an @array or a CArray[Str]!' unless $argv ~~ CArray[Str];
@@ -72,6 +74,7 @@ class GLib::Spawn {
   }
 
   proto method async_with_fds (|)
+      is also<async-with-fds>
   { * }
 
   multi method async_with_fds (
@@ -166,6 +169,7 @@ class GLib::Spawn {
   }
 
   proto method async_with_pipes (|)
+      is also<async-with-pipes>
   { * }
 
   multi method async_with_pipes (
@@ -199,7 +203,7 @@ class GLib::Spawn {
     $argv,
     $envp,
     Int() $flags,
-    gpointer $child_setup,
+    &child_setup,
     gpointer $user_data,
     $child_pid       is rw, #= GPid
     $standard_input  is rw, #= gint
@@ -219,7 +223,7 @@ class GLib::Spawn {
       $argv,
       $envp,
       $f,
-      $child_setup,
+      &child_setup,
       $user_data,
       $c,
       $si,
@@ -236,7 +240,9 @@ class GLib::Spawn {
   method check_exit_status (
     Int() $exit_status,
     CArray[Pointer[GError]] $error = gerror
-  ) {
+  )
+    is also<check-exit-status>
+  {
     my gint $e = $exit_status;
 
     clear_error;
@@ -245,7 +251,7 @@ class GLib::Spawn {
     $rv;
   }
 
-  method close_pid (Int() $pid) {
+  method close_pid (Int() $pid) is also<close-pid> {
     my GPid $p = $pid;
 
     so g_spawn_close_pid($p);
@@ -254,7 +260,9 @@ class GLib::Spawn {
   method command_line_async (
     Str() $command_line,
     CArray[Pointer[GError]] $error = gerror
-  ) {
+  )
+    is also<command-line-async>
+  {
     clear_error;
     my $rv = g_spawn_command_line_async($command_line, $error);
     set_error($error);
@@ -262,6 +270,7 @@ class GLib::Spawn {
   }
 
   proto method command_line_sync (|)
+      is also<command-line-sync>
   { * }
 
   multi method command_line_sync (
@@ -295,11 +304,11 @@ class GLib::Spawn {
     $all.not ?? $rv !! ($rv, $standard_output, $standard_error, $exit_status);
   }
 
-  method error_quark (GLib::Spawn:U: ) {
+  method error_quark (GLib::Spawn:U: ) is also<error-quark> {
     g_spawn_error_quark();
   }
 
-  method exit_error_quark (GLib::Spawn:U: ) {
+  method exit_error_quark (GLib::Spawn:U: ) is also<exit-error-quark> {
     g_spawn_exit_error_quark();
   }
 
