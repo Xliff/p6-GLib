@@ -288,6 +288,19 @@ class GLib::Object::Type {
     g_type_value_table_peek($!t);
   }
 
+  # cw: Find a better interface for this. I am very wary of having anything
+  #     starting with "class_" in an object. However, this being GType
+  #     I'm willing to make an exception for the following:
+  method class_ref is also<class-ref> {
+    g_type_class_ref($!t);
+  }
+
+  method class_unref (GLib::Object::Type:U: gpointer $c)
+    is also<class-unref>
+  {
+    g_type_class_unref($c);
+  }
+
 }
 
 class GObject::Type::Interface {
@@ -344,9 +357,11 @@ class GObject::Type::Interface {
 }
 
 # class GLib::Object::Type::Class {
-#   method class_add_private (gsize $private_size) {
-#     g_type_class_add_private($!t, $private_size);
-#   }
+#   also does GLib::Roles::StaticClass;
+#
+#   # method class_add_private (gsize $private_size) {
+#   #   g_type_class_add_private($!t, $private_size);
+#   # }
 #
 #   method class_adjust_private_offset (gint $private_size_or_offset) {
 #     g_type_class_adjust_private_offset($!t, $private_size_or_offset);
@@ -372,13 +387,7 @@ class GObject::Type::Interface {
 #     g_type_class_peek_static($!t);
 #   }
 #
-#   method class_ref () {
-#     g_type_class_ref($!t);
-#   }
 #
-#   method class_unref () {
-#     g_type_class_unref($!t);
-#   }
 #
 #   method class_unref_uncached () {
 #     g_type_class_unref_uncached($!t);
