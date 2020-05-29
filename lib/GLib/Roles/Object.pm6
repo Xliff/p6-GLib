@@ -60,6 +60,25 @@ role GLib::Roles::Object {
       Nil;
   }
 
+  # Move to camelCase for routines I've added to distinguish them from
+  # GLib-linked methods.
+  method objectType (:$raw = False) {
+    my $t = $!o.g_type_instance.g_class.g_type;
+    return $t if $raw;
+
+    GLib::Object::Type.new($t);
+  }
+
+  method isType (Int() $type) {
+    my GType $t = $type;
+    my $gc = $!o.g_type_instance.g_class;
+
+    return False unless $!o;
+    return True  if     $gc && $gc.g_type == $t;
+
+    return g_type_check_instance_is_a($!o.g_type_instance, $t);
+  }
+
   method !setObject($obj) {
     $!o = $obj ~~ GObject ?? $obj !! cast(GObject, $obj)
   }
@@ -77,29 +96,6 @@ role GLib::Roles::Object {
   # We use these for inc/dec ops
   method ref   is also<upref>   {   g_object_ref($!o); self; }
   method unref is also<downref> { g_object_unref($!o); }
-
-  method object_type (:$raw = False) {
-    my $t = $!o.g_type_instance.g_class.g_type;
-    return $t if $raw;
-
-    GLib::Object::Type.new($t);
-  }
-  method object-type (:$raw = False) {
-    self.object_type(:$raw);
-  }
-
-  method is_a (Int() $type) {
-    my GType $t = $type;
-    my $gc = $!o.g_type_instance.g_class;
-
-    return False unless $!o;
-    return True  if     $gc && $gc.g_type == $t;
-
-    return g_type_check_instance_is_a($!o.g_type_instance, $t);
-  }
-  method is-a (Int() $type) {
-    self.is_a($type);
-  }
 
   # cw: -YYY- Do we need this now that we have the .is_a method?
   method check_gobject_type($compare_type) {
