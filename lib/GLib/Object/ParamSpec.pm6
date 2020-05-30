@@ -421,6 +421,12 @@ class GLib::Object::ParamSpec {
     $spec ?? self.bless( :$spec ) !! Nil;
   }
 
+  method flag_set (*@flags) is also<flag-set> {
+    return False unless (my $f = self.flags);
+
+    [+&]($f, |@flags);
+  }
+
   method get_blurb is also<get-blurb> {
     g_param_spec_get_blurb($!ps);
   }
