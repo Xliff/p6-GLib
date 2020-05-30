@@ -180,7 +180,7 @@ class GLib::Value {
   #   );
   # }
   method type {
-    GTypeEnum( $!v.g_type );
+    GTypeEnum( $!v.g_type // 0 );
   }
 
   method enum is rw {
