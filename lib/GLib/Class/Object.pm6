@@ -89,25 +89,23 @@ class GLib::Class::Object is export {
     is also<list-properties>
   { * }
 
-  multi method list_properties (:$list = False, :$raw = False) {
-    samewith($, :$list, :$raw)
+  multi method list_properties (:$raw = False) {
+    samewith($, :$raw)
   }
   multi method list_properties (
     $n_properties is rw,
-    :$list = False,
     :$raw = False
   ) {
     my guint $n = 0;
     my $pl = g_object_class_list_properties($!c, $n);
 
-    return Nil unless $pl && $pl[0];
-    return $pl[0] if $list && $raw;
-
-    $pl = GLib::Roles::TypedBuffer[GParamSpec].new($pl[0]);
     $n_properties = $n;
-    return $pl if $list;
-
-    $raw ?? $pl.Array !! $pl.Array.map({ GLib::Object::ParamSpec.new($_) });
+    my @properties;
+    for ^$n {
+      my $e = $pl[$_].deref;
+      @properties.push: $raw ?? $e !! GLib::Object::ParamSpec.new($e)
+    }
+    @properties;
   }
 
   method override_property (Int() $property_id, Str() $property_name)
@@ -179,7 +177,7 @@ sub g_object_class_find_property (
 
 sub g_object_class_list_properties (
   GObjectClass $oclass,
-  guint        $n_properties
+  guint        $n_properties is rw
 )
   returns CArray[Pointer[GParamSpec]]
   is native(gobject)
@@ -223,7 +221,7 @@ sub g_object_interface_find_property (
 
 sub g_object_interface_list_properties (
   gpointer $g_iface,
-  guint    $n_properties_p
+  guint    $n_properties_p is rw
 )
   returns CArray[Pointer[GParamSpec]]
   is native(gobject)
