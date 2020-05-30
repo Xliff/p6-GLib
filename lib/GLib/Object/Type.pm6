@@ -172,14 +172,19 @@ class GLib::Object::Type {
   }
   multi method interfaces (
     $n_interfaces is rw,
-    :$list = False,
+    :$c-array = False,
     :$raw = False
   ) {
     my guint $n = 0;
     my $ia = g_type_interfaces($!t, $n);
 
+    return Nil unless $ia;
+    return $ia if     $c-array;
+
     $n_interfaces = $n;
-    CArrayToArray($ia)
+    my $a = CArrayToArray($ia);
+    $a = $a.map({ GLib::Object::Type.new($_) }) unless $raw;
+    $a;
   }
 
   method is_a (Int() $is_a_type) is also<is-a> {
