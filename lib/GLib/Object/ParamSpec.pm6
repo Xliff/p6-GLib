@@ -562,7 +562,7 @@ class GLib::Object::ParamSpec {
   }
 
   method value_spec is also<value-spec> {
-    my \T := do given self.type {
+    my \T := do given self.value_type {
       when G_TYPE_CHAR     { GParamSpecChar    }
       when G_TYPE_UCHAR    { GParamSpecUChar   }
       when G_TYPE_BOOLEAN  { GParamSpecBoolean }
@@ -584,7 +584,7 @@ class GLib::Object::ParamSpec {
       # when G_TYPE_OBJECT   { self.object;     }
       #when G_TYPE_VARIANT { }
       default {
-        warn "{ .Str } type NYI.";
+        die "{ .Str } type NYI!";
       }
     }
 
