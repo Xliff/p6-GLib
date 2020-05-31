@@ -150,36 +150,19 @@ class GOnce                 is repr<CStruct> does GLib::Roles::Pointers is expor
   has gpointer $.retval;
 }
 
-class GParameter            is repr<CStruct> does GLib::Roles::Pointers is export {
-  has Str    $!name;
-  has GValue $!value;
-
-  method name is rw {
-    Proxy.new:
-      FETCH => sub ($)                { $!name },
-      STORE => -> $, Str() $val    { self.^attributes(:local)[0]
-                                         .set_value(self, $val)    };
-  }
-
-  method value is rw {
-    Proxy.new:
-      FETCH => sub ($)                { $!value },
-      STORE => -> $, GValue() $val { self.^attributes(:local)[0]
-                                         .set_value(self, $val)    };
-  }
-}
-
 class GPtrArray             is repr<CStruct> does GLib::Roles::Pointers is export {
   has CArray[Pointer] $.pdata;
   has guint           $.len;
 }
 
+#| Skip Struct
 class GPollFDNonWin         is repr<CStruct> does GLib::Roles::Pointers is export {
   has gint	    $.fd;
   has gushort 	$.events;
   has gushort 	$.revents;
 }
 
+#| Skip Struct
 class GPollFDWin            is repr<CStruct> does GLib::Roles::Pointers is export {
   has gushort 	$.events;
   has gushort 	$.revents;
@@ -252,13 +235,15 @@ class GSourceCallbackFuncs  is repr<CStruct> does GLib::Roles::Pointers is expor
 };
 
 class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is export {
-  has Pointer $!prepare;     # (GSource    *source,
-                             #  gint       *timeout);
-  has Pointer $!check;       # (GSource    *source);
-  has Pointer $!dispatch;    # (GSource    *source,
-                             #  GSourceFunc callback,
-                             #  gpointer    user_data);
-  has Pointer $!finalize;    # (GSource    *source); /* Can be NULL */
+  has Pointer $!prepare;          # (GSource    *source,
+                                  #  gint       *timeout);
+  has Pointer $!check;            # (GSource    *source);
+  has Pointer $!dispatch;         # (GSource    *source,
+                                  #  GSourceFunc callback,
+                                  #  gpointer    user_data);
+  has Pointer $!finalize;         # (GSource    *source); /* Can be NULL */
+  has Pointer $!closure_callback;
+  has Pointer $!closure_marshall;
 
   sub p-default  (GSource, CArray[gint] $t is rw --> gboolean) {
     $t[0] = 0;
@@ -351,7 +336,8 @@ class GValue {
 
 class GValueArray           is repr<CStruct> does GLib::Roles::Pointers is export {
   has guint    $.n_values;
-  has gpointer $.values; # GValue *
+  has gpointer $.values;          # GValue *
+  has guint    $.n_preallocated;
 }
 
 class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -656,6 +642,7 @@ class GTypeFundamentalInfo is repr<CStruct> does GLib::Roles::Pointers is export
   has GTypeFundamentalFlags $!type_flags;
 }
 
+
 our subset GObjectOrPointer of Mu is export
   where ::('GLib::Roles::Object') | GObject | GLib::Roles::Pointers;
 
@@ -666,5 +653,24 @@ class GHookList                  is repr<CStruct> does GLib::Roles::Pointers is 
   has GHook   $.hooks;
   has Pointer $!dummy3;
   has Pointer $.finalize_hook; # GHookFinalizeFunc
-  has Pointer @!dummy[2] is CArray;
+  HAS Pointer @!dummy[2] is CArray;
+}
+
+class GParameter            is repr<CStruct> does GLib::Roles::Pointers is export {
+  has Str    $!name;
+  HAS GValue $!value;
+
+  method name is rw {
+    Proxy.new:
+      FETCH => sub ($)                { $!name },
+      STORE => -> $, Str() $val    { self.^attributes(:local)[0]
+                                         .set_value(self, $val)    };
+  }
+
+  method value is rw {
+    Proxy.new:
+      FETCH => sub ($)                { $!value },
+      STORE => -> $, GValue() $val { self.^attributes(:local)[0]
+                                         .set_value(self, $val)    };
+  }
 }
