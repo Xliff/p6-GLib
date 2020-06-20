@@ -74,6 +74,15 @@ sub g_type_check_instance_cast (GTypeInstance $instance, GType $iface_type)
   is export
 { * }
 
+sub g_type_instance_is_a (
+  GTypeInstance $instance,
+  GType $fundamental_type
+)
+  returns uint32
+  is native(gobject)
+  is export
+{ * }
+
 sub g_type_check_instance_is_fundamentally_a (
   GTypeInstance $instance,
   GType $fundamental_type

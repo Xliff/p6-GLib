@@ -10,6 +10,7 @@ use GLib::Raw::Subs;
 use GLib::Raw::Struct_Subs;
 
 use GLib::Roles::Pointers;
+use GLib::Roles::TypeInstance;
 
 unit package GLib::Raw::Structs;
 
@@ -341,10 +342,11 @@ class GValueArray           is repr<CStruct> does GLib::Roles::Pointers is expor
 }
 
 class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
-  HAS GTypeInstance $.g_type_instance;
+  also does GLib::Roles::TypeInstance;
 
+  HAS GTypeInstance $.g_type_instance;
   has Str           $.name;          #= interned string
-  has GParamFlags   $!flags;
+  has GParamFlags   $.flags;
   has GType         $.value_type;
   has GType         $.owner_type;    #= class or interface using this property
 
@@ -354,12 +356,6 @@ class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
   has GData         $!qdata;
   has guint         $!ref_count;
   has guint         $!param_id;
-
-  method flags is rw {
-    Proxy.new:
-      FETCH => -> $           { GParamFlagsEnum($!flags) },
-      STORE => -> $, Int() $i { $!flags = $i             };
-  }
 }
 
 class GParamSpecChar      is repr<CStruct> does GLib::Roles::Pointers is export {

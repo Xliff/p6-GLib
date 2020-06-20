@@ -4,7 +4,9 @@ use NativeCall;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
+
 use GLib::Roles::Pointers;
+use GLib::Roles::TypeInstance;
 
 unit package GLib::Raw::Object;
 
@@ -30,22 +32,16 @@ class GTypeInstance         is repr<CStruct> does GLib::Roles::Pointers is expor
 }
 
 class GObject         is repr<CStruct> does GLib::Roles::Pointers is export {
+  also does GLib::Roles::TypeInstance;
+
   HAS GTypeInstance  $.g_type_instance;
   has uint32         $.ref_count;
   has Pointer        $!qdata;
-
-  method checkType ($compare_type) {
-    self.g_type_instance.checkType($compare_type)
-  }
-
-  method getType {
-    self.g_type_instance.getType
-  }
 }
 
 sub g_type_check_instance_is_a (
-  GTypeInstance  $instance,
-  GType          $iface_type
+  GTypeInstance $instance,
+  GType         $iface_type
 )
   returns uint32
   is native(gobject)

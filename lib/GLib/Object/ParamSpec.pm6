@@ -10,7 +10,14 @@ use GLib::Object::Raw::ParamSpec;
 use GLib::Value;
 
 class GLib::Object::ParamSpec {
-  has GParamSpec $!ps handles <name flags value_type owner_type>;
+  has GParamSpec $!ps handles <
+    name
+    flags
+    value_type
+    owner_type
+    checkType
+    getType
+  >;
 
   submethod BUILD (:$spec) {
     $!ps = $spec;
