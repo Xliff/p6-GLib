@@ -23,7 +23,7 @@ sub native-close   (int32 --> int32)
   is symbol('close')
   is native
 { * }
-              
+
 our proto sub free (|) is export { * }
 multi sub free (Pointer)                           is export is native { * }
 
@@ -63,12 +63,6 @@ sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
 sub separate (Str() $s, Int() $p) is export {
   die '$p outside of string range!' unless $p ~~ 0 .. $s.chars;
   ( $s.substr(0, $p), $s.substr($p, *) )
-}
-
-sub load-gparam-spec-types is export {
-  # If this is to be used, it must be called at run-time, as the INIT phaser
-  # is NOT late enough!
-  $g-param-spec-types = cglobal(gobject, 'g_param_spec_types', CArray[GType]);
 }
 
 sub g_destroy_none(Pointer)

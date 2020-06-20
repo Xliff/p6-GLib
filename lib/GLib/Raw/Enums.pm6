@@ -765,3 +765,13 @@ our enum GSpawnFlagsEnum is export (
 );
 
 our $g-param-spec-types is export;
+
+sub get_paramspec_types ()
+  returns CArray[GType]
+  is native(&glib-support)
+  is export
+{ * }
+
+INIT {
+  $g-param-spec-types = get_paramspec_types;
+}

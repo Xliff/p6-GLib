@@ -11,11 +11,28 @@ our $ERROR is export;
 our $DEBUG is export = 0;
 
 # Forced compile count
-constant forced = 41;
+constant forced = 42;
 
 # Libs
-constant glib       is export  = 'glib-2.0',v0;
-constant gobject    is export  = 'gobject-2.0',v0;
+constant glib         is export  = 'glib-2.0',v0;
+constant gobject      is export  = 'gobject-2.0',v0;
+
+sub glib-support is export {
+  state $libname = '';
+
+  unless $libname {
+    my $ext = 'dll';
+    my $os = $*DISTRO.is-win ?? 'windows' !! 'unix';
+    if $os eq 'unix' {
+      # Which one?
+      $os = 'linux'; # Default, for now!
+      $ext = 'so';
+    }
+    $libname = %?RESOURCES{"lib/{$os}/glib-support.{$ext}"}.absolute;
+  }
+
+  $libname;
+}
 
 constant realUInt is export = $*KERNEL.bits == 32 ?? uint32 !! uint64;
 
