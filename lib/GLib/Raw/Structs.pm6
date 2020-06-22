@@ -426,14 +426,26 @@ class GParamSpecUnichar   is repr<CStruct> does GLib::Roles::Pointers is export 
 
 class GParamSpecEnum      is repr<CStruct> does GLib::Roles::Pointers is export {
   HAS GParamSpec    $.parent_instance;
-  has Pointer       $.enum_class; #= GEnumClass
+  has Pointer       $!enum_class;        #= GEnumClass
   has gint          $.default_value;
+
+  method enum_class {
+    # Not defined here, so late binding!
+    cast( ::('GEnumClass'), $!enum_class );
+  }
+  method enum-class { self.enum_class }
 }
 
 class GParamSpecFlags     is repr<CStruct> does GLib::Roles::Pointers is export {
   HAS GParamSpec    $.parent_instance;
-  has Pointer       $.flags_class; #= GFlagsClass;
+  has Pointer       $!flags_class;       #= GFlagsClass;
   has guint         $.default_value;
+
+  method flags_class {
+    # Not defined here, so late binding!
+    cast( ::('GFlagsClass'), $!flags_class );
+  }
+  method flags-class { self.flags_class }
 }
 
 class GParamSpecFloat     is repr<CStruct> does GLib::Roles::Pointers is export {
