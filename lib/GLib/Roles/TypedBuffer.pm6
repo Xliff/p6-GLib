@@ -62,7 +62,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   method Array {
     # There may be a temptation to usse CArrayToArray, here. Resist it.
     my @a;
-    @a[$_] = self[$_] for $!size;
+    @a[$_] = self[$_] for ^$!size;
     @a;
   }
 
