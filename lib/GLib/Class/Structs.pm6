@@ -4,16 +4,13 @@ use NativeCall;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Structs;
+use GLib::Raw::Object;
 
 use GLib::Roles::Pointers;
 
 use GLib::Roles::TypedBuffer;
 
 unit package GLib::Class::Structs;
-
-class GTypeClass is repr<CStruct> does GLib::Roles::Pointers is export {
-  has GType $.g_type;
-}
 
 class GEnumValue is repr<CStruct> does GLib::Roles::Pointers is export {
   has gint $.value;
@@ -35,7 +32,10 @@ class GFlagsValue is repr<CStruct> does GLib::Roles::Pointers is export {
 
 role ValueArray {
   method valueArray {
-    GLib::Roles::TypedBuffer[GFlagsValue].new(self.values).Array
+    my $vb = GLib::Roles::TypedBuffer[GFlagsValue].new(self.values);
+
+    $vb.setSize(self.n_values, :force);
+    $vb.Array
   }
 }
 
