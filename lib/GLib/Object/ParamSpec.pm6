@@ -4,17 +4,15 @@ use Method::Also;
 use NativeCall;
 
 use GLib::Raw::Types;
-
 use GLib::Object::Raw::ParamSpec;
 
 use GLib::Value;
+use GLib::Object::Type;
 
 class GLib::Object::ParamSpec {
   has GParamSpec $!ps handles <
     name
     flags
-    value_type
-    owner_type
     checkType
     getType
   >;
@@ -598,6 +596,13 @@ class GLib::Object::ParamSpec {
     cast(T, $!ps);
   }
 
+  method value_type (:$obj = False) {
+    $obj ?? GLib::Object::Type.new( $!ps.value_type ) !! $!ps.value_type;
+  }
+
+  method owner_type (:$obj = False) {
+    $obj ?? GLib::Object::Type.new( $!ps.owner_type ) !! $!ps.owner_type;
+  }
 
 }
 
