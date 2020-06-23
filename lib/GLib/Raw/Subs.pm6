@@ -382,3 +382,23 @@ sub create-signal-supply (%sigs, $signal, $s) is export {
 #   is native(gobject)
 #   is export
 # { * }
+
+# From p6-GStreamer
+sub ppr (*@a) is export {
+  @a .= map({
+    if $_ ~~ CArray {
+      if .[0].defined {
+        if .[0].REPR ne 'CPointer' {
+          .[0]
+        } else {
+          +.[0] != 0 ?? ( .[0].of.REPR eq 'CStruct' ?? .[0].deref !! .[0] )
+                     !! Nil;
+        }
+      } else {
+        Nil;
+      }
+    }
+    else { $_ }
+  });
+  @a.elems == 1 ?? @a[0] !! @a;
+}
