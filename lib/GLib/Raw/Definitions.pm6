@@ -140,6 +140,7 @@ class GMarkupParseContext      is repr<CPointer> is export does GLib::Roles::Poi
 class GMutex                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GModule                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 #class GObject                  is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GOptionGroup             is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GPatternSpec             is repr<CPointer> is export does GLib::Roles::Pointers { }
 #class GParamSpec               is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GParamSpecPool           is repr<CPointer> is export does GLib::Roles::Pointers { }
