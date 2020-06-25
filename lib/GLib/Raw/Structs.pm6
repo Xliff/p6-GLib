@@ -488,7 +488,10 @@ sub clear_error($error = $ERROR) is export {
 }
 
 sub set_error(CArray $e) is export {
-  $ERROR = $e[0].deref if $e[0].defined;
+  if $e[0].defined {
+    $ERROR = $e[0].deref;
+    die $ERROR.message if $ERROR-IS-FATAL;
+  }
 }
 
 sub sprintf-Ps (

@@ -7,8 +7,9 @@ use GLib::Roles::Pointers;
 
 unit package GLib::Raw::Definitions;
 
-our $ERROR is export;
-our $DEBUG is export = 0;
+our $ERROR          is export;
+our $ERROR-IS-FATAL is export;
+our $DEBUG          is export = 0;
 
 # Forced compile count
 constant forced = 42;
@@ -135,6 +136,7 @@ class GIOChannel               is repr<CPointer> is export does GLib::Roles::Poi
 class GKeyFile                 is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMainLoop                is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMainContext             is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GMappedFile              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMarkupParser            is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMarkupParseContext      is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMutex                   is repr<CPointer> is export does GLib::Roles::Pointers { }
