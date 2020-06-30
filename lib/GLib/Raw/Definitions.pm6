@@ -12,7 +12,7 @@ our $ERROR-IS-FATAL is export;
 our $DEBUG          is export = 0;
 
 # Forced compile count
-constant forced = 42;
+my constant forced = 46;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
