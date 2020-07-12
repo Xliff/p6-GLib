@@ -7,12 +7,22 @@ use GLib::Roles::Pointers;
 
 unit package GLib::Raw::Definitions;
 
-our $ERROR          is export;
-our $ERROR-IS-FATAL is export;
-our $DEBUG          is export = 0;
+our $ERROR        is export;
+our $ERROR-THROWS is export;
+our $DEBUG        is export = 0;
+
+class X::GLib::GError is Exception {
+  has $!gerror handles <domain code>;
+
+  submethod BUILD (:$!gerror) { }
+
+  method new ($gerror) {
+    self.bless( :$gerror, message => $gerror.message );
+  }
+}
 
 # Forced compile count
-my constant forced = 46;
+my constant forced = 47;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -139,6 +149,7 @@ class GMainContext             is repr<CPointer> is export does GLib::Roles::Poi
 class GMappedFile              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMarkupParser            is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMarkupParseContext      is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GMatchInfo               is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMutex                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GModule                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 #class GObject                  is repr<CPointer> is export does GLib::Roles::Pointers { }
@@ -148,6 +159,7 @@ class GPatternSpec             is repr<CPointer> is export does GLib::Roles::Poi
 class GParamSpecPool           is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GPrivate                 is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GRand                    is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GRegex                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GRWLock                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 # To be converted into CStruct when I'm not so scurred of it.
 # It has bits.... BITS! -- See https://stackoverflow.com/questions/1490092/c-c-force-bit-field-order-and-alignment
