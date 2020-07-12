@@ -11,11 +11,15 @@ use GLib::Object::Type;
 
 use GLib::Class::Object;
 
+use GLib::Roles::Bindable;
+
 constant gObjectTypeKey = 'p6-GObject-Type';
 
 my %data;
 
 role GLib::Roles::Object {
+  also does GLib::Roles::Bindable;
+
   has GObject $!o;
 
   submethod BUILD (:$object) {
@@ -96,6 +100,63 @@ role GLib::Roles::Object {
   # We use these for inc/dec ops
   method ref   is also<upref>   {   g_object_ref($!o); self; }
   method unref is also<downref> { g_object_unref($!o); }
+
+  method bind (
+    Str() $source_property,
+    GObject() $target,
+    Str() $target_property,
+    Int() $flags = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
+  ) {
+    GLib::Object::Binding.bind(
+      self,
+      $source_property,
+      $target,
+      $target_property,
+      $flags
+    )
+  }
+
+  method bind_full (
+    Str() $source_property,
+    GObject() $target,
+    Str() $target_property,
+    Int() $flags,
+    GBindingTransformFunc $transform_to   = Pointer,
+    GBindingTransformFunc $transform_from = Pointer,
+    gpointer $user_data                   = Pointer,
+    GDestroyNotify $notify                = Pointer
+  ) {
+    GLib::Object::Binding.bind_full(
+      self,
+      $source_property,
+      $target,
+      $target_property,
+      $flags,
+      $transform_to,
+      $transform_from,
+      $user_data,
+      $notify
+    );
+  }
+
+  method bind_with_closures (
+    Str() $source_property,
+    GObject() $target,
+    Str() $target_property,
+    Int() $flags,
+    GClosure() $transform_to   = GClosure,
+    GClosure() $transform_from = GClosure
+  ) {
+    GLib::Object::Binding.bind_with_closures(
+      self,
+      $source_property,
+      $target,
+      $target_property,
+      $flags,
+      $transform_to,
+      $transform_from
+    );
+  }
 
   # cw: -YYY- Do we need this now that we have the .is_a method?
   method check_gobject_type($compare_type) {

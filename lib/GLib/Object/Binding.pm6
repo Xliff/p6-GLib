@@ -10,7 +10,7 @@ use GLib::Object::Raw::Binding;
 use GLib::Roles::Object;
 
 class GLib::Object::Binding {
-  also does GLib::Roles::Object;
+  also does GLib::Roles::Object;  
 
   has GBinding $!b is implementor;
 
@@ -18,81 +18,9 @@ class GLib::Object::Binding {
     self!setObject($!b = $binding);
   }
 
-  method bind (
-    GLib::Object::Binding:U:
-    GObject() $source,
-    Str() $source_property,
-    GObject() $target,
-    Str() $target_property,
-    Int() $flags = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
-  ) {
-    my $f = $flags;
-    my $binding = g_object_bind_property(
-      $source,
-      $source_property,
-      $target,
-      $target_property,
-      $f
-    );
-
-    $binding ?? self.bless( :$binding ) !! Nil;
-  }
-
-  method bind_full (
-    GLib::Object::Binding:U:
-    GObject() $source,
-    Str() $source_property,
-    GObject() $target,
-    Str() $target_property,
-    Int() $flags,
-    GBindingTransformFunc $transform_to,
-    GBindingTransformFunc $transform_from,
-    gpointer $user_data                   = Pointer,
-    GDestroyNotify $notify                = Pointer
-  )
-    is also<bind-full>
-  {
-    my $f = $flags;
-    my $binding = g_object_bind_property_full(
-      $source,
-      $source_property,
-      $target,
-      $target_property,
-      $f,
-      $transform_to,
-      $transform_from,
-      $user_data,
-      $notify
-    );
-
-    $binding ?? self.bless( :$binding ) !! Nil;
-  }
-
-  method bind_with_closures (
-    GLib::Object::Binding:U:
-    GObject() $source,
-    Str() $source_property,
-    GObject() $target,
-    Str() $target_property,
-    Int() $flags,
-    GClosure $transform_to,
-    GClosure $transform_from
-  )
-    is also<bind-with-closures>
-  {
-    my $f = $flags;
-    my $binding =  g_object_bind_property_with_closures(
-      $source,
-      $source_property,
-      $target,
-      $target_property,
-      $f,
-      $transform_to,
-      $transform_from
-    );
-
-    $binding ?? self.bless( :$binding ) !! Nil;
-  }
+  method GLib::Raw::Definitions::GBinding
+    is also<GBinding>
+  { $!b }
 
   method get_flags is also<get-flags> {
     GBindingFlagsEnum( g_binding_get_flags($!b) );
