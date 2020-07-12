@@ -490,7 +490,7 @@ sub clear_error($error = $ERROR) is export {
 sub set_error(CArray $e) is export {
   if $e[0].defined {
     $ERROR = $e[0].deref;
-    die $ERROR.message if $ERROR-IS-FATAL;
+    X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
   }
 }
 
