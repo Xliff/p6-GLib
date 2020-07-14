@@ -21,10 +21,10 @@ class GLib::Regex {
   { $!r }
 
   method new (
-    Str $pattern,
-    Int() $compile_options,
-    Int() $match_options,
-    CArray[Pointer[GError]] $error
+    Str() $pattern,
+    Int() $compile_options         = 0,
+    Int() $match_options           = 0,
+    CArray[Pointer[GError]] $error = gerror
   ) {
     my GRegexCompileFlags $c = $compile_options;
     my GRegexMatchFlags   $m = $match_options;
