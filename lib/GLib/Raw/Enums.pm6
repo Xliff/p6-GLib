@@ -874,6 +874,23 @@ sub get_paramspec_types ()
   is export
 { * }
 
+sub getEnumValueByNick(\T, Str() $nick) is export {
+  state %cache;
+
+  my \n := T.^name;
+  unless %cache{n}:exists {
+    my $remove = max :all, :by{.chars},
+      keys [∩] T.enums.keys».match(/.+/, :ex)».Str;
+    #@tokens.map({ $_ .=  subst($remove[0], ''); s/_/-/; .lc });
+    %cache{n} = (gather for T.enums.pairs {
+      my @a = .key.subst($remove[0], '').subst('_', '-');
+      take Pair.new(@a[* - 1], .value);
+      take Pair.new(@a[* - 1].lc, .value);
+    }).Hash
+  }
+  ::(T)( %cache{n}{$nick} )
+}
+
 INIT {
   $g-param-spec-types = get_paramspec_types;
 }
