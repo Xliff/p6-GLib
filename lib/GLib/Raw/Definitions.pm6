@@ -22,7 +22,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 47;
+my constant forced = 48;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -195,6 +195,15 @@ sub findProperImplementor ($attrs) is export {
   # proper main variable. Then sort for the one with the largest
   # MRO.
   $attrs.grep( * ~~ Implementor ).sort( -*.package.^mro.elems )[0]
+}
+
+# "Exhaustive" maximal...
+multi max (:&by = {$_}, :$all!, *@list) is export {
+  # Find the maximal value...
+  my $max = max my @values = @list.map: &by;
+
+  # Extract and return all values matching the maximal...
+  @list[ @values.kv.map: {$^index unless $^value cmp $max} ];
 }
 
 INIT {
