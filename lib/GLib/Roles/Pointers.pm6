@@ -3,7 +3,7 @@ use v6.c;
 use NativeCall;
 
 # Number of times full project has needed to be compiled
-my constant forced = 4;
+my constant forced = 5;
 
 role GLib::Roles::Pointers {
 
