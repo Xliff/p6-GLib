@@ -17,6 +17,37 @@ constant gObjectTypeKey = 'p6-GObject-Type';
 
 my %data;
 
+# To be rolled into GLib::Roles::Object at some point!
+role GLib::Roles::Signals::GObject {
+  has %!signals-object;
+
+  # GObject, GParamSpec, gpointer
+  method connect-notify (
+    $obj,
+    $signal,
+    &handler?
+  ) {
+    my $hid;
+    %!signals-object{$signal} //= do {
+      my $s = Supplier.new;
+      $hid = g_connect_notify($obj, $signal,
+        -> $, $ps, $ud --> gboolean {
+          CATCH {
+            default { $s.note($_) }
+          }
+
+          $s.emit( [self, $ps, $ud] );
+        },
+        Pointer, 0
+      );
+      [ $s.Supply, $obj, $hid ];
+    };
+    %!signals-object{$signal}[0].tap(&handler) with &handler;
+    %!signals-object{$signal}[0];
+  }
+
+}
+
 role GLib::Roles::Object {
   also does GLib::Roles::Bindable;
 
@@ -52,9 +83,9 @@ role GLib::Roles::Object {
   }
 
   method getClass (:$raw = False) {
-    self.getClass(GObjectClass, GLib::Object::Class, :$raw);
+    self.ρ-getClass(GObjectClass, GLib::Object::Class, :$raw);
   }
-  method _getClass ($CS is raw, $C is raw, :$raw = True) {
+  method ρ-getClass ($CS is raw, $C is raw, :$raw = True) {
     my $p := cast(Pointer.^parameterize($CS), $!o.g_type_instance.g_class);
     my $c := $CS.REPR eq 'CStruct' ?? $p.deref !! $p;
 
@@ -96,6 +127,13 @@ role GLib::Roles::Object {
 
   # Remove when Method::Also is fixed!
   method GObject { $!o }
+
+  method notify ($detail?) {
+    my $sig-name = 'notify';
+    $sig-name ~= "::{$detail}" if $detail;
+
+    self.connect-notify($sig-name);
+  }
 
   # We use these for inc/dec ops
   method ref   is also<upref>   {   g_object_ref($!o); self; }
@@ -480,6 +518,18 @@ role GLib::Roles::Object {
   }
 
 }
+
+sub g_connect_notify (
+  GObject $app,
+  Str $name,
+  &handler (GObject $h_widget, GParamSpec $pspec, Pointer $h_data),
+  Pointer $data,
+  uint32 $connect_flags
+)
+  returns uint64
+  is native('gobject-2.0')
+  is symbol('g_signal_connect_object')
+{ * }
 
 sub g_object_get_property (GObject $o, Str $key, GValue $value)
   is native(gobject)

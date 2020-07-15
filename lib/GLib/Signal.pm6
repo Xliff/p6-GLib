@@ -12,6 +12,7 @@ use GLib::Value;
 
 use GLib::Roles::StaticClass;
 
+# Should be roles into GLib::Roles:: Object, at some point!
 class GLib::Signal {
   also does GLib::Roles::StaticClass;
 
@@ -137,7 +138,6 @@ class GLib::Signal {
     g_signal_connect_closure_by_id($instance, $sid, $detail, $closure, $a);
   }
 
-  # Should be aliased to "connect"
   method connect_data (
     GObject() $instance,
     Str() $detailed_signal,
