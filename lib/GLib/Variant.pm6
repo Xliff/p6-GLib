@@ -490,34 +490,37 @@ class GLib::Variant {
     g_variant_compare($!v, $two);
   }
 
-  method dup_bytestring (Int() $length) is also<dup-bytestring> {
-    my uint64 $l = $length;
+  method dup_bytestring is also<dup-bytestring> {
+    my uint64 $l = 0;
 
     g_variant_dup_bytestring($!v, $l);
   }
 
-  method dup_bytestring_array (Int() $length) is also<dup-bytestring-array> {
-    my uint64 $l = $length;
+  method dup_bytestring_array (:$raw = False) is also<dup-bytestring-array> {
+    my uint64 $l = 0;
 
-    g_variant_dup_bytestring_array($!v, $l);
+    my $sa = g_variant_dup_bytestring_array($!v, $l);
+    $raw ?? $sa !! CStringArrayToArray($sa);
   }
 
-  method dup_objv (Int() $length) is also<dup-objv> {
-    my uint64 $l = $length;
+  method dup_objv (:$raw = False) is also<dup-objv> {
+    my uint64 $l = 0;
+    my $sa = g_variant_dup_objv($!v, $l);
 
-    g_variant_dup_objv($!v, $l);
+    $raw ?? $sa !! CStringArrayToArray($sa);
   }
 
-  method dup_string (Int() $length) is also<dup-string> {
-    my uint64 $l = $length;
+  method dup_string is also<dup-string> {
+    my uint64 $l = 0;
 
     g_variant_dup_string($!v, $l);
   }
 
-  method dup_strv (Int() $length) is also<dup-strv> {
-    my uint64 $l = $length;
+  method dup_strv (:$raw = False) is also<dup-strv>  {
+    my uint64 $l = 0;
 
-    g_variant_dup_strv($!v, $l);
+    my $sa = g_variant_dup_strv($!v, $l);
+    $raw ?? $sa !! CStringArrayToArray($sa);
   }
 
   method equal (GVariant() $two) {
@@ -551,10 +554,17 @@ class GLib::Variant {
     g_variant_get_bytestring($!v);
   }
 
-  method get_bytestring_array (Int() $length) is also<get-bytestring-array> {
-    my gsize $l = $length;
+  method get_bytestring_array (:$raw = False)
+    is also<
+      get-bytestring-array
+      bytestring_array
+      bytestring-array
+    >
+  {
+    my gsize $l = 0;
+    my $sa = g_variant_get_bytestring_array($!v, $l);
 
-    g_variant_get_bytestring_array($!v, $length);
+    $raw ?? $sa !! CStringArrayToArray($sa)
   }
 
   method get_child_value (Int() $index) is also<get-child-value> {
@@ -654,10 +664,16 @@ class GLib::Variant {
     g_variant_get_normal_form($!v);
   }
 
-  method get_objv (Int() $length) is also<get-objv> {
-    my gsize $l = $length;
+  method get_objv (:$raw = False)
+    is also<
+      get-objv
+      objv
+    >
+  {
+    my gsize $l = 0;
+    my $sa = g_variant_get_objv($!v, $l);
 
-    g_variant_get_objv($!v, $length);
+    $raw ?? $sa !! CStringArrayToArray($sa, $l);
   }
 
   method get_size
@@ -669,21 +685,28 @@ class GLib::Variant {
     g_variant_get_size($!v);
   }
 
-  method get_string (Int() $length)
+  method get_string (:$all = False)
     is also<
       get-string
       string
     >
   {
-    my uint64 $l = $length;
+    my uint64 $l = 0;
 
-    g_variant_get_string($!v, $l);
+    my $str = g_variant_get_string($!v, $l);
+    $all.not ?? $str !! ($str, $l);
   }
 
-  method get_strv (Int() $length) is also<get-strv> {
-    my uint64 $l = $length;
+  method get_strv (:$raw = False)
+    is also<
+      get-strv
+      strv
+    >
+  {
+    my uint64 $l = 0;
+    my $sa = g_variant_get_strv($!v, $l);
 
-    CStringArrayToArray( g_variant_get_strv($!v, $l) );
+    $raw ?? $sa !! CStringArrayToArray($sa, $l);
   }
 
   # This is GLib, not a GLib descendant, so it means what you'd think it means!

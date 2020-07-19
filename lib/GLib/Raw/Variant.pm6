@@ -146,31 +146,31 @@ sub g_variant_dict_unref (GVariantDict $dict)
   is export
   { * }
 
-sub g_variant_dup_bytestring (GVariant $value, gsize $length)
+sub g_variant_dup_bytestring (GVariant $value, gsize $length is rw)
   returns Str
   is native(glib)
   is export
   { * }
 
-sub g_variant_dup_bytestring_array (GVariant $value, gsize $length)
+sub g_variant_dup_bytestring_array (GVariant $value, gsize $length is rw)
   returns CArray[Str]
   is native(glib)
   is export
   { * }
 
-sub g_variant_dup_objv (GVariant $value, gsize $length)
+sub g_variant_dup_objv (GVariant $value, gsize $length is rw)
   returns CArray[Str]
   is native(glib)
   is export
   { * }
 
-sub g_variant_dup_string (GVariant $value, gsize $length)
+sub g_variant_dup_string (GVariant $value, gsize $length is rw)
   returns Str
   is native(glib)
   is export
   { * }
 
-sub g_variant_dup_strv (GVariant $value, gsize $length)
+sub g_variant_dup_strv (GVariant $value, gsize $length is rw)
   returns CArray[Str]
   is native(glib)
   is export
@@ -200,13 +200,13 @@ sub g_variant_get_bytestring (GVariant $value)
   is export
   { * }
 
-sub g_variant_get_bytestring_array (GVariant $value, gsize $length)
+sub g_variant_get_bytestring_array (GVariant $value, gsize $length is rw)
   returns CArray[Str]
   is native(glib)
   is export
   { * }
 
-sub g_variant_get_child_value (GVariant $value, gsize $index_)
+sub g_variant_get_child_value (GVariant $value, gsize $index)
   returns GVariant
   is native(glib)
   is export
@@ -276,7 +276,7 @@ sub g_variant_get_normal_form (GVariant $value)
   is export
   { * }
 
-sub g_variant_get_objv (GVariant $value, gsize $length)
+sub g_variant_get_objv (GVariant $value, gsize $length is rw)
   returns CArray[Str]
   is native(glib)
   is export
@@ -288,13 +288,13 @@ sub g_variant_get_size (GVariant $value)
   is export
   { * }
 
-sub g_variant_get_string (GVariant $value, gsize $length)
+sub g_variant_get_string (GVariant $value, gsize $length is rw)
   returns Str
   is native(glib)
   is export
   { * }
 
-sub g_variant_get_strv (GVariant $value, gsize $length)
+sub g_variant_get_strv (GVariant $value, gsize $length is rw)
   returns CArray[Str]
   is native(glib)
   is export
