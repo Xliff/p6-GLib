@@ -36,10 +36,12 @@ sub glib-support is export {
     my $os = $*DISTRO.is-win ?? 'windows' !! 'unix';
     if $os eq 'unix' {
       # Which one?
-      $os = 'linux'; # Default, for now!
+      $os = $*KERNEL.name;
       $ext = 'so';
     }
-    $libname = %?RESOURCES{"lib/{$os}/glib-support.{$ext}"}.absolute;
+    $libname = %?RESOURCES{
+      "lib/{ $*KERNEL.arch }/{ $os }/glib-support.{ $ext }"
+    }.absolute;
   }
 
   $libname;
