@@ -51,6 +51,9 @@ class GLib::GList {
   subset ValidListTypes where
     GLib::Raw::Structs::GSList | GLib::Raw::Structs::GList;
 
+  multi method new (GList $list) {
+    $list ?? self.bless(:$list) !! Nil;
+  }
   multi method new (@list) {
     my $l = GLib::GList.new;
     for @list {
