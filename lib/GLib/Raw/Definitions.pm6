@@ -22,7 +22,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 53;
+my constant forced = 55;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -186,7 +186,7 @@ class GVariantType             is repr<CPointer> is export does GLib::Roles::Poi
 our role Implementor is export {};
 
 # Mark
-multi sub trait_mod:<is>(Attribute:D \attr, :$implementor) is export {
+multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) is export {
   # YYY - Warning if a second attribute is marked?
   attr does Implementor;
 }
