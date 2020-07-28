@@ -13,7 +13,11 @@ sub string_compare (Pointer, Pointer --> gint)
 { * }
 
 sub int_compare (Pointer, Pointer --> gint)
-  is native( %?RESOURCES<lib/linux/libtree-helper.so>.absolute )
+  is native(
+    %?RESOURCES{
+      "lib/{ $*KERNEL.arch }/{ $*KERNEL.name }/libtree-helper.so"
+    }.absolute
+  )
   is export
 { * }
 
