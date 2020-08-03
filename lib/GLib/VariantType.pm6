@@ -93,7 +93,9 @@ class GLib::VariantType {
     $t ?? self.bless( type => $t ) !! Nil;
   }
 
-  method checked (Str() $to-check, :$raw = False) {
+  method checked (GLib::VariantType:U: Str() $to-check, :$raw = False)
+    is also<check>
+  {
     my $vt = g_variant_type_checked_($to-check);
 
     $vt ??
