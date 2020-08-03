@@ -457,14 +457,16 @@ class GLib::Variant {
 
   method parse (
     GLib::Variant:U:
-    GVariantType $type,
+    Int() $type,
     Str() $text,
     Str() $limit,
     Str() $endptr,
     CArray[Pointer[GError]] $error = gerror
   ) {
+    my GVariantType $t = $type;
+
     clear_error;
-    my $rc = g_variant_parse($type, $text, $limit, $endptr, $error);
+    my $rc = g_variant_parse($type, $t, $limit, $endptr, $error);
     set_error($error);
     $rc ?? self.bless( variant => $rc ) !! Nil;
   }
@@ -889,6 +891,86 @@ class GLib::Variant {
 
   method unref is also<downref> {
     g_variant_unref($!v);
+  }
+
+}
+
+class GLib::Variant::Builder {
+  has GVariantBuilder $!vb;
+
+  submethod BUILD ( :builder(:$!vb) ) { }
+
+  method GLib::Raw::Definitions::GVariantBuilder
+    is also<GVariantBuilder>
+  { $!vb }
+
+  multi method new ($builder) {
+    $builder ?? self.bless( :$builder ) !! Nil;
+  }
+  multi method new (Int() $type) {
+    my GVariantType $t = $type;
+    my $builder = g_variant_builder_new($t);
+
+    $builder ?? self.bless( :$builder ) !! Nil;
+  }
+
+  method unref {
+    g_variant_builder_unref($!vb)
+  }
+
+  method ref {
+    g_variant_builder_ref($!vb);
+    self;
+  }
+
+  method init (GLib::Variant::Builder:U:
+    GVariantBuilder $new-builder,
+    Int() $type
+  ) {
+    my GVariantType $t = $type;
+
+    g_variant_builder_init($new-builder, $t);
+  }
+
+  method end (:$raw = False) {
+    my $v = g_variant_builder_end($!vb);
+
+    $v ??
+      ( $raw ?? $v !! GLib::Variant.new($v) )
+      !!
+      Nil;
+  }
+
+  method clear {
+    g_variant_builder_clear($!vb);
+    self;
+  }
+
+  method open (Int() $type) {
+    my GVariantType $t = $type;
+
+    g_variant_builder_open($!vb, $t);
+    self;
+  }
+
+  method close {
+    g_variant_builder_close($!vb);
+    self;
+  }
+
+  method add_value (GVariant() $value) {
+    g_variant_builder_add_value ($!vb, $value);
+    self;
+  }
+
+  method add (Str() $spec) {
+    g_variant_builder_add ($!vb, $spec, Str);
+    self;
+  }
+
+  method add_parsed (Str() $spec) {
+    g_variant_builder_add_parsed($!vb, $spec, Str);
+    self;
   }
 
 }
