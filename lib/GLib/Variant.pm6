@@ -6,6 +6,8 @@ use NativeCall;
 use GLib::Raw::Types;
 use GLib::Raw::Variant;
 
+use GLib::VariantType;
+
 class GLib::Variant {
   has GVariant $!v is implementor;
 
@@ -455,18 +457,44 @@ class GLib::Variant {
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
-  method parse (
+  multi method parse (GLib::Variant:U: Str() $text, :$all = False) {
+    samewith($, $text, $, $, :$all);
+  }
+  multi method parse (
+    GLib::Variant:U:
+    Str() $type,
+    Str() $text,
+    Str() $limit                   = Str,
+    CArray[Pointer[GError]] $error = gerror,
+    :$all = True
+  ) {
+    samewith(
+      GLib::VariantType.check($type),
+      $text,
+      $limit,
+      $,
+      $error,
+      :$all
+    );
+  }
+  multi method parse (
     GLib::Variant:U:
     GVariantType() $type,
     Str() $text,
     Str() $limit,
-    Str() $endptr,
-    CArray[Pointer[GError]] $error = gerror
+    $endptr is rw,
+    CArray[Pointer[GError]] $error = gerror,
+    :$all = False
   ) {
+    my $ep = CArray[Str].new;
+    $ep[0] = Str;
+
     clear_error;
     my $rc = g_variant_parse($type, $type, $limit, $endptr, $error);
     set_error($error);
-    $rc ?? self.bless( variant => $rc ) !! Nil;
+    $endptr = ppr($ep);
+    my $retVal = $rc ?? self.bless( variant => $rc ) !! Nil;
+    $all.not ?? $retVal !! ($retVal, $endptr);
   }
 
   method byteswap {
