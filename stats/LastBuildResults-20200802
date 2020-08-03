@@ -1,0 +1,3298 @@
+Dependency Generation
+=====================
+real 0.91
+user 1.47
+sys 0.03
+ === Method::Also ===
+Stage start      :   0.000
+Stage parse      :   1.084
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === NativeCall ===
+Stage start      :   0.000
+Stage parse      :   1.152
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === nqp ===
+Stage start      :   0.000
+Stage parse      :   0.065
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Roles::Pointers ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Pointers.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.199
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.001
+    Stage mast       :   0.031
+    Stage mbc        :   0.001
+Stage parse      :   2.387
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Definitions ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Definitions.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.491
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.011
+    Stage mast       :   0.084
+    Stage mbc        :   0.004
+Stage parse      :   2.755
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Enums ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Enums.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.800
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.045
+    Stage mast       :   0.381
+    Stage mbc        :   0.025
+Stage parse      :   4.545
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.003
+Stage mast       :   0.006
+Stage mbc        :   0.002
+Stage moar       :   0.000
+ === GLib::Raw::Sequence ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Sequence.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.867
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.120
+    Stage mbc        :   0.038
+Stage parse      :   4.310
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Struct_Subs ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Struct_Subs.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.820
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.009
+    Stage mast       :   0.083
+    Stage mbc        :   0.012
+Stage parse      :   3.194
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Exports ===
+Stage start      :   0.000
+Stage parse      :   1.078
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::ReturnedValue ===
+Stage start      :   0.000
+Stage parse      :   1.074
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Roles::TypeInstance ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/TypeInstance.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.238
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.004
+    Stage mast       :   0.021
+    Stage mbc        :   0.005
+Stage parse      :   2.544
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Object ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Object.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.366
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.006
+    Stage mast       :   0.043
+    Stage mbc        :   0.007
+Stage parse      :   2.742
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Subs ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Subs.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.198
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.047
+    Stage mast       :   0.229
+    Stage mbc        :   0.068
+Stage parse      :   5.835
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Structs ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Structs.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.223
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.050
+    Stage mast       :   0.257
+    Stage mbc        :   0.015
+Adding alias in GLib::Raw::Structs::GValue for g-type...
+Stage parse      :   3.880
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Raw::Structs::GValue for type...
+Roles: ((Pointers))
+R: GLib::Roles::Pointers
+ === GLib::Raw::Type ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Type.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.220
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.038
+    Stage mast       :   0.194
+    Stage mbc        :   0.101
+Stage parse      :   6.937
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Types ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Types.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.257
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.001
+    Stage mast       :   0.045
+    Stage mbc        :   0.001
+Stage parse      :   2.623
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.003
+Stage mast       :   0.007
+Stage mbc        :   0.003
+Stage moar       :   0.000
+ === GLib::Raw::Unicode ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Unicode.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.375
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.045
+    Stage mast       :   0.179
+    Stage mbc        :   0.107
+Stage parse      :   7.097
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Utils ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Utils.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.650
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.010
+    Stage mast       :   0.076
+    Stage mbc        :   0.033
+Stage parse      :   4.095
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Value ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Value.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.671
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.031
+    Stage mast       :   0.180
+    Stage mbc        :   0.086
+Stage parse      :   6.330
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Variant ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Variant.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.590
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.054
+    Stage mast       :   0.311
+    Stage mbc        :   0.171
+Stage parse      :   9.554
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::VariantType ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/VariantType.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.143
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.022
+    Stage mast       :   0.103
+    Stage mbc        :   0.047
+Stage parse      :   4.664
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Roles::ListData ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/ListData.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.420
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.012
+    Stage mast       :   0.059
+    Stage mbc        :   0.005
+Stage parse      :   2.822
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Roles::References ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/References.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.370
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.024
+    Stage mast       :   0.041
+    Stage mbc        :   0.004
+Adding alias in GLib::Roles::References for upref...
+Stage parse      :   2.796
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::Roles::References for downref...
+ === GLib::Roles::StaticClass ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/StaticClass.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.243
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.005
+    Stage mast       :   0.024
+    Stage mbc        :   0.010
+Stage parse      :   2.591
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Roles::TypedBuffer ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/TypedBuffer.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.425
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.012
+    Stage mast       :   0.054
+    Stage mbc        :   0.005
+Adding alias in GLib::Roles::TypedBuffer for Pointer...
+Stage parse      :   2.816
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Sequence ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Sequence.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.438
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.031
+    Stage mast       :   0.068
+    Stage mbc        :   0.006
+Adding alias in GLib::Sequence for GSequence...
+Stage parse      :   2.896
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::Sequence for foreach-range...
+Adding alias in GLib::Sequence for get-begin-iter...
+Adding alias in GLib::Sequence for get-end-iter...
+Adding alias in GLib::Sequence for get-iter-at-pos...
+Adding alias in GLib::Sequence for get-length...
+Adding alias in GLib::Sequence for insert-sorted...
+Adding alias in GLib::Sequence for insert-sorted-iter...
+Adding alias in GLib::Sequence for is-empty...
+Adding alias in GLib::Sequence for lookup-iter...
+Adding alias in GLib::Sequence for range-get-midpoint...
+Adding alias in GLib::Sequence for get_midpoint...
+Adding alias in GLib::Sequence for get-midpoint...
+Adding alias in GLib::Sequence for remove-range...
+Adding alias in GLib::Sequence for search-iter...
+Adding alias in GLib::Sequence for sort-changed...
+Adding alias in GLib::Sequence for sort-changed-iter...
+Adding alias in GLib::Sequence for sort-iter...
+Roles: ()
+Adding alias in GLib::Sequence::Iter for GSequenceIter...
+Adding alias in GLib::Sequence::Iter for get-position...
+Adding alias in GLib::Sequence::Iter for get-sequence...
+Adding alias in GLib::Sequence::Iter for insert-before...
+Adding alias in GLib::Sequence::Iter for is-begin...
+Adding alias in GLib::Sequence::Iter for is-end...
+Adding alias in GLib::Sequence::Iter for move-delta...
+Adding alias in GLib::Sequence::Iter for move-range...
+ === GLib::UUID ===
+Stage start      :   0.000
+
+    precomp lib/GLib/UUID.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.443
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.005
+    Stage mast       :   0.042
+    Stage mbc        :   0.005
+Stage parse      :   2.815
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Unicode ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Unicode.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.713
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.061
+    Stage mast       :   0.203
+    Stage mbc        :   0.006
+Adding alias in GLib::Unicode for break-type...
+Stage parse      :   3.353
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::Unicode for combining-class...
+Adding alias in GLib::Unicode for digit-value...
+Adding alias in GLib::Unicode for fully-decompose...
+Adding alias in GLib::Unicode for unicode-canonical-ordering...
+Adding alias in GLib::Unicode for unicode-script-from-iso15924...
+Adding alias in GLib::Unicode for unicode-script-to-iso15924...
+Adding alias in GLib::Unicode for get-mirror-char...
+Adding alias in GLib::Unicode for get-script...
+Adding alias in GLib::Unicode for iswide-cjk...
+Adding alias in GLib::Unicode for to-utf8...
+Adding alias in GLib::Unicode for xdigit-value...
+Roles: ((StaticClass))
+R: GLib::Roles::StaticClass
+Adding alias in GLib::UTF8 for collate-key...
+Adding alias in GLib::UTF8 for collate-key-for-filename...
+Adding alias in GLib::UTF8 for find-next-char...
+Adding alias in GLib::UTF8 for find-prev-char...
+Adding alias in GLib::UTF8 for get-char...
+Adding alias in GLib::UTF8 for get-char-validated...
+Adding alias in GLib::UTF8 for make-valid...
+Adding alias in GLib::UTF8 for offset-to-pointer...
+Adding alias in GLib::UTF8 for pointer-to-offset...
+Adding alias in GLib::UTF8 for prev-char...
+Adding alias in GLib::UTF8 for to-ucs4...
+Adding alias in GLib::UTF8 for to-ucs4-fast...
+Adding alias in GLib::UTF8 for to-utf16...
+Adding alias in GLib::UTF8 for validate-len...
+Adding alias in GLib::UTF16 for to-ucs4...
+Adding alias in GLib::UTF16 for to-utf8...
+Adding alias in GLib::UTF4 for to-utf16...
+Adding alias in GLib::UTF4 for to-utf8...
+ === GLib::Utils ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Utils.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.290
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.012
+    Stage mast       :   0.049
+    Stage mbc        :   0.003
+Stage parse      :   2.675
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Value ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Value.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.623
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.063
+    Stage mast       :   0.150
+    Stage mbc        :   0.006
+Adding alias in GLib::Value for GValue...
+Stage parse      :   3.183
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Value for gvalue...
+Roles: ()
+ === GLib::Variant ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Variant.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.518
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.058
+    Stage mast       :   0.131
+    Stage mbc        :   0.025
+Adding alias in GLib::Variant for GVariant...
+Stage parse      :   4.108
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Variant for new-boolean...
+Adding alias in GLib::Variant for new-byte...
+Adding alias in GLib::Variant for new-bytestring...
+Adding alias in GLib::Variant for new-dict-entry...
+Adding alias in GLib::Variant for new-double...
+Adding alias in GLib::Variant for new-fixed-array...
+Adding alias in GLib::Variant for new-from-bytes...
+Adding alias in GLib::Variant for new-from-data...
+Adding alias in GLib::Variant for new-handle...
+Adding alias in GLib::Variant for new-int16...
+Adding alias in GLib::Variant for new-int32...
+Adding alias in GLib::Variant for new-int64...
+Adding alias in GLib::Variant for new-maybe...
+Adding alias in GLib::Variant for new-object-path...
+Adding alias in GLib::Variant for new-signature...
+Adding alias in GLib::Variant for new-string...
+Adding alias in GLib::Variant for new-uint16...
+Adding alias in GLib::Variant for new-uint32...
+Adding alias in GLib::Variant for new-uint64...
+Adding alias in GLib::Variant for new-variant...
+Adding alias in GLib::Variant for check-format-string...
+Adding alias in GLib::Variant for dup-bytestring...
+Adding alias in GLib::Variant for dup-bytestring-array...
+Adding alias in GLib::Variant for dup-objv...
+Adding alias in GLib::Variant for dup-string...
+Adding alias in GLib::Variant for dup-strv...
+Adding alias in GLib::Variant for get-boolean...
+Adding alias in GLib::Variant for boolean...
+Adding alias in GLib::Variant for get-byte...
+Adding alias in GLib::Variant for byte...
+Adding alias in GLib::Variant for get-bytestring...
+Adding alias in GLib::Variant for bytestring...
+Adding alias in GLib::Variant for get-bytestring-array...
+Adding alias in GLib::Variant for bytestring_array...
+Adding alias in GLib::Variant for bytestring-array...
+Adding alias in GLib::Variant for get-child-value...
+Adding alias in GLib::Variant for get-data...
+Adding alias in GLib::Variant for data...
+Adding alias in GLib::Variant for get-data-as-bytes...
+Adding alias in GLib::Variant for data_as_bytes...
+Adding alias in GLib::Variant for data-as-bytes...
+Adding alias in GLib::Variant for get-double...
+Adding alias in GLib::Variant for double...
+Adding alias in GLib::Variant for get-fixed-array...
+Adding alias in GLib::Variant for get-handle...
+Adding alias in GLib::Variant for handle...
+Adding alias in GLib::Variant for get-int16...
+Adding alias in GLib::Variant for int16...
+Adding alias in GLib::Variant for get-int32...
+Adding alias in GLib::Variant for int32...
+Adding alias in GLib::Variant for get-int64...
+Adding alias in GLib::Variant for int64...
+Adding alias in GLib::Variant for get-maybe...
+Adding alias in GLib::Variant for maybe...
+Adding alias in GLib::Variant for get-normal-form...
+Adding alias in GLib::Variant for normal_form...
+Adding alias in GLib::Variant for normal-form...
+Adding alias in GLib::Variant for get-objv...
+Adding alias in GLib::Variant for objv...
+Adding alias in GLib::Variant for get-size...
+Adding alias in GLib::Variant for size...
+Adding alias in GLib::Variant for get-string...
+Adding alias in GLib::Variant for string...
+Adding alias in GLib::Variant for get-strv...
+Adding alias in GLib::Variant for strv...
+Adding alias in GLib::Variant for get-type...
+Adding alias in GLib::Variant for type...
+Adding alias in GLib::Variant for get-type-string...
+Adding alias in GLib::Variant for type_string...
+Adding alias in GLib::Variant for type-string...
+Adding alias in GLib::Variant for get-uint16...
+Adding alias in GLib::Variant for uint16...
+Adding alias in GLib::Variant for get-uint32...
+Adding alias in GLib::Variant for uint32...
+Adding alias in GLib::Variant for get-uint64...
+Adding alias in GLib::Variant for uint64...
+Adding alias in GLib::Variant for get-variant...
+Adding alias in GLib::Variant for variant...
+Adding alias in GLib::Variant for is-container...
+Adding alias in GLib::Variant for container...
+Adding alias in GLib::Variant for is-floating...
+Adding alias in GLib::Variant for floating...
+Adding alias in GLib::Variant for is-normal-form...
+Adding alias in GLib::Variant for is-object-path...
+Adding alias in GLib::Variant for is-of-type...
+Adding alias in GLib::Variant for is-signature...
+Adding alias in GLib::Variant for lookup-value...
+Adding alias in GLib::Variant for n-children...
+Adding alias in GLib::Variant for elems...
+Adding alias in GLib::Variant for parse-error-print-context...
+Adding alias in GLib::Variant for parse-error-quark...
+Adding alias in GLib::Variant for print-string...
+Adding alias in GLib::Variant for upref...
+Adding alias in GLib::Variant for ref-sink...
+Adding alias in GLib::Variant for take-ref...
+Adding alias in GLib::Variant for downref...
+Roles: ()
+ === GLib::VariantIter ===
+Stage start      :   0.000
+
+    precomp lib/GLib/VariantIter.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.271
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.013
+    Stage mast       :   0.040
+    Stage mbc        :   0.003
+Adding alias in GLib::VariantIter for VariantIter...
+Stage parse      :   2.650
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::VariantIter for n-children...
+Adding alias in GLib::VariantIter for next-value...
+Roles: ()
+ === GLib::VariantType ===
+Stage start      :   0.000
+
+    precomp lib/GLib/VariantType.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.703
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.067
+    Stage mbc        :   0.021
+Adding alias in GLib::VariantType for GVariantType...
+Stage parse      :   3.183
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::VariantType for new-array...
+Adding alias in GLib::VariantType for new-dict-entry...
+Adding alias in GLib::VariantType for new-tuple...
+Adding alias in GLib::VariantType for new-maybe...
+Adding alias in GLib::VariantType for dup-string...
+Adding alias in GLib::VariantType for get-string-length...
+Adding alias in GLib::VariantType for is-array...
+Adding alias in GLib::VariantType for array...
+Adding alias in GLib::VariantType for is-basic...
+Adding alias in GLib::VariantType for basic...
+Adding alias in GLib::VariantType for is-container...
+Adding alias in GLib::VariantType for container...
+Adding alias in GLib::VariantType for is-definite...
+Adding alias in GLib::VariantType for definite...
+Adding alias in GLib::VariantType for is-dict-entry...
+Adding alias in GLib::VariantType for dict_entry...
+Adding alias in GLib::VariantType for dict-entry...
+Adding alias in GLib::VariantType for is-maybe...
+Adding alias in GLib::VariantType for maybe...
+Adding alias in GLib::VariantType for is-subtype-of...
+Adding alias in GLib::VariantType for is-tuple...
+Adding alias in GLib::VariantType for tuple...
+Adding alias in GLib::VariantType for is-variant...
+Adding alias in GLib::VariantType for variant...
+Adding alias in GLib::VariantType for n-items...
+Adding alias in GLib::VariantType for elems...
+Adding alias in GLib::VariantType for peek-string...
+Adding alias in GLib::VariantType for string-is-valid...
+Adding alias in GLib::VariantType for string-scan...
+Roles: ()
+ === GLib::Class::Structs ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Class/Structs.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.986
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.022
+    Stage mast       :   0.092
+    Stage mbc        :   0.012
+Stage parse      :   3.464
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Object::IsType ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/IsType.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.407
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.005
+    Stage mast       :   0.042
+    Stage mbc        :   0.004
+Stage parse      :   2.768
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Object::Raw::Binding ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/Binding.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.971
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.010
+    Stage mast       :   0.064
+    Stage mbc        :   0.022
+Stage parse      :   3.401
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Object::Raw::Closure ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/Closure.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.182
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.009
+    Stage mast       :   0.053
+    Stage mbc        :   0.045
+Stage parse      :   3.651
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Object::Raw::ParamSpec ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/ParamSpec.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.438
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.040
+    Stage mast       :   0.221
+    Stage mbc        :   0.083
+Stage parse      :   6.142
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Object::Type ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Type.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.464
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.030
+    Stage mast       :   0.085
+    Stage mbc        :   0.005
+Adding alias in GLib::Object::Type for GType...
+Stage parse      :   2.947
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Object::Type for add-class-cache-func...
+Adding alias in GLib::Object::Type for add-interface-check...
+Adding alias in GLib::Object::Type for add-interface-dynamic...
+Adding alias in GLib::Object::Type for add-interface-static...
+Adding alias in GLib::Object::Type for create-instance...
+Adding alias in GLib::Object::Type for default-interface-peek...
+Adding alias in GLib::Object::Type for default-interface-ref...
+Adding alias in GLib::Object::Type for default-interface-unref...
+Adding alias in GLib::Object::Type for free-instance...
+Adding alias in GLib::Object::Type for from-name...
+Adding alias in GLib::Object::Type for fundamental-next...
+Adding alias in GLib::Object::Type for get-instance-count...
+Adding alias in GLib::Object::Type for get-plugin...
+Adding alias in GLib::Object::Type for get-qdata...
+Adding alias in GLib::Object::Type for get-type-registration-serial...
+Adding alias in GLib::Object::Type for is-a...
+Adding alias in GLib::Object::Type for is-fundamentally...
+Adding alias in GLib::Object::Type for is-boxed...
+Adding alias in GLib::Object::Type for is-object...
+Adding alias in GLib::Object::Type for name-from-class...
+Adding alias in GLib::Object::Type for name-from-instance...
+Adding alias in GLib::Object::Type for next-base...
+Adding alias in GLib::Object::Type for remove-class-cache-func...
+Adding alias in GLib::Object::Type for remove-interface-check...
+Adding alias in GLib::Object::Type for set-qdata...
+Adding alias in GLib::Object::Type for test-flags...
+Adding alias in GLib::Object::Type for value-table-peek...
+Adding alias in GLib::Object::Type for class-ref...
+Adding alias in GLib::Object::Type for class-unref...
+Roles: ()
+Adding alias in GObject::Type::Interface for add-prerequisite...
+Adding alias in GObject::Type::Interface for get-plugin...
+Adding alias in GObject::Type::Interface for peek-parent...
+Roles: ((StaticClass))
+R: GLib::Roles::StaticClass
+Adding alias in GLib::Object::Type::Register for static-simple...
+ === GLib::Raw::Array ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Array.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.870
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.035
+    Stage mast       :   0.186
+    Stage mbc        :   0.089
+Stage parse      :   6.563
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Arrays ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Arrays.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.673
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.034
+    Stage mast       :   0.161
+    Stage mbc        :   0.088
+Stage parse      :   6.369
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::AsyncQueue ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/AsyncQueue.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.832
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.019
+    Stage mast       :   0.097
+    Stage mbc        :   0.037
+Stage parse      :   4.333
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Base64 ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Base64.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.695
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.044
+    Stage mast       :   0.055
+    Stage mbc        :   0.011
+Stage parse      :   3.161
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::BookmarkFile ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/BookmarkFile.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.854
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.035
+    Stage mast       :   0.176
+    Stage mbc        :   0.063
+Stage parse      :   5.496
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Bytes ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Bytes.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.243
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.010
+    Stage mast       :   0.072
+    Stage mbc        :   0.022
+Stage parse      :   3.709
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Checksum ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Checksum.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.004
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.009
+    Stage mast       :   0.065
+    Stage mbc        :   0.018
+Stage parse      :   3.466
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Convert ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Convert.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.460
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.016
+    Stage mast       :   0.090
+    Stage mbc        :   0.027
+Stage parse      :   3.926
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::DateTime ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/DateTime.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.307
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.031
+    Stage mast       :   0.164
+    Stage mbc        :   0.082
+Stage parse      :   5.954
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Error ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Error.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.662
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.007
+    Stage mast       :   0.058
+    Stage mbc        :   0.011
+Stage parse      :   3.118
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::GList ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/GList.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.267
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.024
+    Stage mast       :   0.107
+    Stage mbc        :   0.058
+Stage parse      :   4.838
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::GSList ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/GSList.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.177
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.022
+    Stage mast       :   0.109
+    Stage mbc        :   0.047
+Stage parse      :   4.694
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::HMAC ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/HMAC.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.956
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.013
+    Stage mast       :   0.062
+    Stage mbc        :   0.017
+Stage parse      :   3.383
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::HashTable ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/HashTable.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.199
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.031
+    Stage mast       :   0.172
+    Stage mbc        :   0.071
+Stage parse      :   5.823
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Hostname ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Hostname.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.549
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.006
+    Stage mast       :   0.029
+    Stage mbc        :   0.016
+Stage parse      :   2.942
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::IOChannel ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/IOChannel.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.921
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.030
+    Stage mast       :   0.137
+    Stage mbc        :   0.068
+Stage parse      :   5.516
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::KeyFile ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/KeyFile.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.518
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.043
+    Stage mast       :   0.217
+    Stage mbc        :   0.090
+Stage parse      :   6.267
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Log ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Log.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.645
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.091
+    Stage mbc        :   0.033
+Stage parse      :   4.138
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Main ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Main.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.800
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.047
+    Stage mast       :   0.252
+    Stage mbc        :   0.142
+Stage parse      :   8.652
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Markup ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Markup.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.300
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.011
+    Stage mast       :   0.076
+    Stage mbc        :   0.023
+Stage parse      :   3.745
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Memory ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Memory.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.224
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.014
+    Stage mast       :   0.066
+    Stage mbc        :   0.022
+Stage parse      :   3.688
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Module ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Module.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.777
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.007
+    Stage mast       :   0.062
+    Stage mbc        :   0.014
+Stage parse      :   3.198
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Pattern ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Pattern.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.683
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.011
+    Stage mast       :   0.052
+    Stage mbc        :   0.011
+Stage parse      :   3.099
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Quark ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Quark.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.646
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.006
+    Stage mast       :   0.053
+    Stage mbc        :   0.010
+Stage parse      :   3.046
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Quarks ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Quarks.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.396
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.014
+    Stage mast       :   0.046
+    Stage mbc        :   0.004
+Stage parse      :   2.771
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Rand ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Rand.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.354
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.014
+    Stage mast       :   0.070
+    Stage mbc        :   0.026
+Stage parse      :   3.839
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Regex ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Regex.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.877
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.031
+    Stage mast       :   0.143
+    Stage mbc        :   0.069
+Stage parse      :   5.466
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Scanner ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Scanner.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.542
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.014
+    Stage mast       :   0.086
+    Stage mbc        :   0.031
+Stage parse      :   4.019
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Signal ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Signal.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.410
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.030
+    Stage mast       :   0.127
+    Stage mbc        :   0.050
+Stage parse      :   4.976
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Slice ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Slice.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.842
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.008
+    Stage mast       :   0.056
+    Stage mbc        :   0.062
+Stage parse      :   3.341
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Spawn ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Spawn.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.914
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.066
+    Stage mbc        :   0.016
+Stage parse      :   3.378
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::String ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/String.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.219
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.024
+    Stage mast       :   0.109
+    Stage mbc        :   0.052
+Stage parse      :   4.743
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::Thread ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Thread.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.631
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.026
+    Stage mast       :   0.133
+    Stage mbc        :   0.062
+Stage parse      :   5.210
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+ === GLib::Raw::ThreadPool ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/ThreadPool.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.348
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.010
+    Stage mast       :   0.072
+    Stage mbc        :   0.024
+Stage parse      :   3.789
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::TimeZone ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/TimeZone.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.093
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.009
+    Stage mast       :   0.069
+    Stage mbc        :   0.019
+Stage parse      :   3.577
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Timer ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Timer.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.021
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.008
+    Stage mast       :   0.065
+    Stage mbc        :   0.018
+Stage parse      :   3.427
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Raw::Tree ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Tree.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.160
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.103
+    Stage mbc        :   0.048
+Stage parse      :   4.693
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Roles::Bindable ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Bindable.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.330
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.008
+    Stage mast       :   0.036
+    Stage mbc        :   0.006
+Adding alias in GLib::Roles::Bindable for bind-full...
+Stage parse      :   2.738
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Roles::Bindable for bind-with-closures...
+ === GLib::Roles::Properties ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Properties.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.545
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.042
+    Stage mast       :   0.097
+    Stage mbc        :   0.005
+Adding alias in GLib::Roles::Properties for GObject...
+Stage parse      :   3.023
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::Roles::Properties for roleInit_Object...
+Adding alias in GLib::Roles::Properties for roleInit_Properties...
+Adding alias in GLib::Roles::Properties for roleInit-Properties...
+Adding alias in GLib::Roles::Properties for prop-set...
+Adding alias in GLib::Roles::Properties for set-prop...
+Adding alias in GLib::Roles::Properties for prop-get...
+Adding alias in GLib::Roles::Properties for get-prop...
+Adding alias in GLib::Roles::Properties for prop-get-int...
+Adding alias in GLib::Roles::Properties for prop-set-int...
+Adding alias in GLib::Roles::Properties for prop-set-uint...
+Adding alias in GLib::Roles::Properties for upref...
+Adding alias in GLib::Roles::Properties for downref...
+ === GLib::Roles::Signals::Generic ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Signals/Generic.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.270
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.067
+    Stage mast       :   0.247
+    Stage mbc        :   0.085
+Adding alias in GLib::Roles::Signals::Generic for is_connected...
+Stage parse      :   6.073
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Roles::Signals::Generic for disconnect_all...
+Adding alias in GLib::Roles::Signals::Generic for connect_ruint...
+Adding alias in GLib::Roles::Signals::Generic for connect_rbool...
+Adding alias in GLib::Roles::Signals::Generic for connect-rbool...
+Adding alias in GLib::Roles::Signals::Generic for connect_string...
+Adding alias in GLib::Roles::Signals::Generic for connect_strstr...
+Adding alias in GLib::Roles::Signals::Generic for connect_2str...
+Adding alias in GLib::Roles::Signals::Generic for connect-2str...
+Adding alias in GLib::Roles::Signals::Generic for connect_int...
+Adding alias in GLib::Roles::Signals::Generic for connect_uintuint...
+Adding alias in GLib::Roles::Signals::Generic for connect_2uint...
+Adding alias in GLib::Roles::Signals::Generic for connect-2uint...
+Adding alias in GLib::Roles::Signals::Generic for connect_intint...
+Adding alias in GLib::Roles::Signals::Generic for connect-2int...
+Adding alias in GLib::Roles::Signals::Generic for connect_2int...
+Adding alias in GLib::Roles::Signals::Generic for connect_uint...
+Adding alias in GLib::Roles::Signals::Generic for connect-bool...
+Adding alias in GLib::Roles::Signals::Generic for connect_bool...
+Adding alias in GLib::Roles::Signals::Generic for connect_double...
+Adding alias in GLib::Roles::Signals::Generic for connect_long...
+Adding alias in GLib::Roles::Signals::Generic for connect_strint...
+Adding alias in GLib::Roles::Signals::Generic for connect_uintint...
+Adding alias in GLib::Roles::Signals::Generic for connect_uintintbool...
+Adding alias in GLib::Roles::Signals::Generic for connect_str_rbool...
+Adding alias in GLib::Roles::Signals::Generic for connect_int_rint...
+Adding alias in GLib::Roles::Signals::Generic for connect_int_ruint...
+Adding alias in GLib::Roles::Signals::Generic for connect_uint_ruint...
+Adding alias in GLib::Roles::Signals::Generic for connect_gparam...
+Adding alias in GLib::Roles::Signals::Generic for connect-param...
+Adding alias in GLib::Roles::Signals::Generic for connect_param...
+Adding alias in GLib::Roles::Signals::Generic for connect_gvariant...
+Adding alias in GLib::Roles::Signals::Generic for connect_variant...
+Adding alias in GLib::Roles::Signals::Generic for connect-variant...
+Adding alias in GLib::Roles::Signals::Generic for connect-long-rbool...
+ === GLib::Scanner ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Scanner.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.314
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.020
+    Stage mast       :   0.051
+    Stage mbc        :   0.003
+Adding alias in GLib::Scanner for GScanner...
+Stage parse      :   2.747
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Scanner for cur-line...
+Adding alias in GLib::Scanner for cur-position...
+Adding alias in GLib::Scanner for cur-token...
+Adding alias in GLib::Scanner for cur-value...
+Adding alias in GLib::Scanner for get-next-token...
+Adding alias in GLib::Scanner for input-file...
+Adding alias in GLib::Scanner for input-text...
+Adding alias in GLib::Scanner for lookup-symbol...
+Adding alias in GLib::Scanner for peek-next-token...
+Adding alias in GLib::Scanner for scope-add-symbol...
+Adding alias in GLib::Scanner for scope-foreach-symbol...
+Adding alias in GLib::Scanner for scope-lookup-symbol...
+Adding alias in GLib::Scanner for scope-remove-symbol...
+Adding alias in GLib::Scanner for set-scope...
+Adding alias in GLib::Scanner for sync-file-offset...
+Adding alias in GLib::Scanner for unexp-token...
+Roles: ()
+ === GLib::Signal ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Signal.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.603
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.057
+    Stage mast       :   0.094
+    Stage mbc        :   0.004
+Adding alias in GLib::Signal for accumulator-first-wins...
+Stage parse      :   3.125
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::Signal for accumulator-true-handled...
+Adding alias in GLib::Signal for add-emission-hook...
+Adding alias in GLib::Signal for chain-from-overridden...
+Adding alias in GLib::Signal for connect-closure...
+Adding alias in GLib::Signal for connect-closure-by-id...
+Adding alias in GLib::Signal for connect-data...
+Adding alias in GLib::Signal for connect...
+Adding alias in GLib::Signal for connect-after...
+Adding alias in GLib::Signal for connect-swapped...
+Adding alias in GLib::Signal for get-invocation-hint...
+Adding alias in GLib::Signal for handler-block...
+Adding alias in GLib::Signal for handler-disconnect...
+Adding alias in GLib::Signal for handler-find...
+Adding alias in GLib::Signal for handler-is-connected...
+Adding alias in GLib::Signal for handler-unblock...
+Adding alias in GLib::Signal for handlers-block-matched...
+Adding alias in GLib::Signal for handlers-destroy...
+Adding alias in GLib::Signal for handlers-disconnect-matched...
+Adding alias in GLib::Signal for handlers-unblock-matched...
+Adding alias in GLib::Signal for has-handler-pending...
+Adding alias in GLib::Signal for list-ids...
+Adding alias in GLib::Signal for override-class-closure...
+Adding alias in GLib::Signal for override-class-handler...
+Adding alias in GLib::Signal for parse-name...
+Adding alias in GLib::Signal for remove-emission-hook...
+Adding alias in GLib::Signal for set-va-marshaller...
+Adding alias in GLib::Signal for stop-emission...
+Adding alias in GLib::Signal for stop-emission-by-name...
+Roles: ((StaticClass))
+R: GLib::Roles::StaticClass
+ === GLib::Slice ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Slice.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.375
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.009
+    Stage mast       :   0.056
+    Stage mbc        :   0.003
+Adding alias in GLib::Slice for debug-tree-statistics...
+Stage parse      :   2.764
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Slice for free-chain-with-offset...
+Roles: ((StaticClass))
+R: GLib::Roles::StaticClass
+ === GLib::Spawn ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Spawn.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.546
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.027
+    Stage mast       :   0.124
+    Stage mbc        :   0.003
+Adding alias in GLib::Spawn for async-with-fds...
+Stage parse      :   3.080
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Spawn for async-with-pipes...
+Adding alias in GLib::Spawn for check-exit-status...
+Adding alias in GLib::Spawn for close-pid...
+Adding alias in GLib::Spawn for command-line-async...
+Adding alias in GLib::Spawn for command-line-sync...
+Adding alias in GLib::Spawn for error-quark...
+Adding alias in GLib::Spawn for exit-error-quark...
+Roles: ((StaticClass))
+R: GLib::Roles::StaticClass
+ === GLib::String ===
+Stage start      :   0.000
+
+    precomp lib/GLib/String.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.406
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.025
+    Stage mast       :   0.067
+    Stage mbc        :   0.004
+Adding alias in GLib::String for GString...
+Stage parse      :   2.862
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::String for new-len...
+Adding alias in GLib::String for new-sized...
+Adding alias in GLib::String for append-c...
+Adding alias in GLib::String for append-len...
+Adding alias in GLib::String for append-unichar...
+Adding alias in GLib::String for append-uri-escaped...
+Adding alias in GLib::String for ascii-down...
+Adding alias in GLib::String for ascii-up...
+Adding alias in GLib::String for free-to-bytes...
+Adding alias in GLib::String for insert-c...
+Adding alias in GLib::String for insert-len...
+Adding alias in GLib::String for insert-unichar...
+Adding alias in GLib::String for overwrite-len...
+Adding alias in GLib::String for prepend-c...
+Adding alias in GLib::String for prepend-len...
+Adding alias in GLib::String for prepend-unichar...
+Adding alias in GLib::String for set-size...
+Roles: ()
+ === GLib::ThreadPool ===
+Stage start      :   0.000
+
+    precomp lib/GLib/ThreadPool.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.401
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.012
+    Stage mast       :   0.063
+    Stage mbc        :   0.003
+Adding alias in GLib::ThreadPool for GThreadPool...
+Stage parse      :   2.842
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::ThreadPool for get-max-idle-time...
+Adding alias in GLib::ThreadPool for get-max-threads...
+Adding alias in GLib::ThreadPool for get-max-unused-threads...
+Adding alias in GLib::ThreadPool for get-num-threads...
+Adding alias in GLib::ThreadPool for get-num-unused-threads...
+Adding alias in GLib::ThreadPool for move-to-front...
+Adding alias in GLib::ThreadPool for set-max-idle-time...
+Adding alias in GLib::ThreadPool for set-max-threads...
+Adding alias in GLib::ThreadPool for set-max-unused-threads...
+Adding alias in GLib::ThreadPool for set-sort-function...
+Adding alias in GLib::ThreadPool for stop-unused-threads...
+Roles: ()
+ === GLib::TimeZone ===
+Stage start      :   0.000
+
+    precomp lib/GLib/TimeZone.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.279
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.012
+    Stage mast       :   0.046
+    Stage mbc        :   0.003
+Adding alias in GTK::Compat::TimeZone for GTimeZone...
+Stage parse      :   2.708
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GTK::Compat::TimeZone for new-local...
+Adding alias in GTK::Compat::TimeZone for new-offset...
+Adding alias in GTK::Compat::TimeZone for new-utc...
+Adding alias in GTK::Compat::TimeZone for adjust-time...
+Adding alias in GTK::Compat::TimeZone for find-interval...
+Adding alias in GTK::Compat::TimeZone for get-abbreviation...
+Adding alias in GTK::Compat::TimeZone for get-identifier...
+Adding alias in GTK::Compat::TimeZone for get-offset...
+Adding alias in GTK::Compat::TimeZone for is-dst...
+Roles: ()
+ === GLib::Timer ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Timer.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.414
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.010
+    Stage mast       :   0.034
+    Stage mbc        :   0.009
+Adding alias in GLib::Timer for GTimer...
+Stage parse      :   2.822
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Timer for g-time-val-add...
+Adding alias in GLib::Timer for timeval_add_microsec...
+Adding alias in GLib::Timer for timeval-add-microsec...
+Adding alias in GLib::Timer for timeval_add-microseconds...
+Adding alias in GLib::Timer for timeval-add-microseconds...
+Adding alias in GLib::Timer for timeval_add_μs...
+Adding alias in GLib::Timer for timeval-add-μs...
+Adding alias in GLib::Timer for g-time-val-from-iso8601...
+Adding alias in GLib::Timer for str_to_timeval...
+Adding alias in GLib::Timer for str-to-timeval...
+Adding alias in GLib::Timer for g-time-val-to-iso8601...
+Adding alias in GLib::Timer for timeval_to-str...
+Adding alias in GLib::Timer for timeval-to-str...
+Adding alias in GLib::Timer for g-usleep...
+Adding alias in GLib::Timer for usleep...
+Adding alias in GLib::Timer for μsleep...
+Roles: ()
+ === GLib::Tree ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Tree.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.417
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.016
+    Stage mast       :   0.089
+    Stage mbc        :   0.003
+Adding alias in GLib::Tree for GTree...
+Stage parse      :   2.886
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Tree for new-full...
+Adding alias in GLib::Tree for new-with-data...
+Adding alias in GLib::Tree for lookup-extended...
+Adding alias in GLib::Tree for elems...
+Roles: ()
+ === GLib::Array ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Array.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.457
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.024
+    Stage mast       :   0.046
+    Stage mbc        :   0.007
+Adding alias in GLib::Array for GArray...
+Stage parse      :   2.882
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Array for garray...
+Adding alias in GLib::Array for sized-new...
+Adding alias in GLib::Array for new_sized...
+Adding alias in GLib::Array for new-sized...
+Adding alias in GLib::Array for append-vals...
+Adding alias in GLib::Array for get-element-size...
+Adding alias in GLib::Array for element_size...
+Adding alias in GLib::Array for element-size...
+Adding alias in GLib::Array for get-type...
+Adding alias in GLib::Array for insert-vals...
+Adding alias in GLib::Array for prepend-vals...
+Adding alias in GLib::Array for upref...
+Adding alias in GLib::Array for remove-index...
+Adding alias in GLib::Array for remove-index-fast...
+Adding alias in GLib::Array for remove-range...
+Adding alias in GLib::Array for set-clear-func...
+Adding alias in GLib::Array for sort-with-data...
+Adding alias in GLib::Array for downref...
+Roles: ((Positional))
+R: Positional
+ === GLib::AsyncQueue ===
+Stage start      :   0.000
+
+    precomp lib/GLib/AsyncQueue.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.302
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.014
+    Stage mast       :   0.051
+    Stage mbc        :   0.003
+Adding alias in GLib::AsyncQueue for GAsyncQueue...
+Stage parse      :   2.703
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::AsyncQueue for new-full...
+Adding alias in GLib::AsyncQueue for length-unlocked...
+Adding alias in GLib::AsyncQueue for pop-unlocked...
+Adding alias in GLib::AsyncQueue for push-front...
+Adding alias in GLib::AsyncQueue for push-front-unlocked...
+Adding alias in GLib::AsyncQueue for push-sorted...
+Adding alias in GLib::AsyncQueue for push-sorted-unlocked...
+Adding alias in GLib::AsyncQueue for push-unlocked...
+Adding alias in GLib::AsyncQueue for remove-unlocked...
+Adding alias in GLib::AsyncQueue for sort-unlocked...
+Adding alias in GLib::AsyncQueue for timeout-pop...
+Adding alias in GLib::AsyncQueue for timeout-pop-unlocked...
+Adding alias in GLib::AsyncQueue for try-pop...
+Adding alias in GLib::AsyncQueue for try-pop-unlocked...
+Roles: ()
+ === GLib::Base64 ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Base64.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.313
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.017
+    Stage mast       :   0.071
+    Stage mbc        :   0.003
+Adding alias in GLib::Base64 for decode-inplace...
+Stage parse      :   2.729
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Base64 for decode-step...
+Adding alias in GLib::Base64 for encode-close...
+Adding alias in GLib::Base64 for encode-step...
+Roles: ()
+ === GLib::BookmarkFile ===
+Stage start      :   0.000
+
+    precomp lib/GLib/BookmarkFile.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.632
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.037
+    Stage mast       :   0.131
+    Stage mbc        :   0.005
+Adding alias in GLib::BookmarkFile for GBookmarkFile...
+Stage parse      :   3.173
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::BookmarkFile for add-application...
+Adding alias in GLib::BookmarkFile for add-group...
+Adding alias in GLib::BookmarkFile for error-quark...
+Adding alias in GLib::BookmarkFile for get-added...
+Adding alias in GLib::BookmarkFile for get-app-info...
+Adding alias in GLib::BookmarkFile for get-applications...
+Adding alias in GLib::BookmarkFile for get-description...
+Adding alias in GLib::BookmarkFile for get-groups...
+Adding alias in GLib::BookmarkFile for get-icon...
+Adding alias in GLib::BookmarkFile for get-is-private...
+Adding alias in GLib::BookmarkFile for get-mime-type...
+Adding alias in GLib::BookmarkFile for get-modified...
+Adding alias in GLib::BookmarkFile for get-size...
+Adding alias in GLib::BookmarkFile for elems...
+Adding alias in GLib::BookmarkFile for get-title...
+Adding alias in GLib::BookmarkFile for get-uris...
+Adding alias in GLib::BookmarkFile for get-visited...
+Adding alias in GLib::BookmarkFile for has-application...
+Adding alias in GLib::BookmarkFile for has-group...
+Adding alias in GLib::BookmarkFile for has-item...
+Adding alias in GLib::BookmarkFile for load-from-data...
+Adding alias in GLib::BookmarkFile for load-from-data-dirs...
+Adding alias in GLib::BookmarkFile for load-from-file...
+Adding alias in GLib::BookmarkFile for move-item...
+Adding alias in GLib::BookmarkFile for remove-application...
+Adding alias in GLib::BookmarkFile for remove-group...
+Adding alias in GLib::BookmarkFile for remove-item...
+Adding alias in GLib::BookmarkFile for set-added...
+Adding alias in GLib::BookmarkFile for set-app-info...
+Adding alias in GLib::BookmarkFile for set-description...
+Adding alias in GLib::BookmarkFile for set-groups...
+Adding alias in GLib::BookmarkFile for set-icon...
+Adding alias in GLib::BookmarkFile for set-is-private...
+Adding alias in GLib::BookmarkFile for set-mime-type...
+Adding alias in GLib::BookmarkFile for set-modified...
+Adding alias in GLib::BookmarkFile for set-title...
+Adding alias in GLib::BookmarkFile for set-visited...
+Adding alias in GLib::BookmarkFile for to-data...
+Adding alias in GLib::BookmarkFile for to-file...
+Roles: ()
+ === GLib::Bytes ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Bytes.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.300
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.012
+    Stage mast       :   0.051
+    Stage mbc        :   0.003
+Adding alias in GLib::Bytes for GBytes...
+Stage parse      :   2.712
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Bytes for new-from-bytes...
+Adding alias in GLib::Bytes for new-static...
+Adding alias in GLib::Bytes for new-take...
+Adding alias in GLib::Bytes for new-with-free-func...
+Adding alias in GLib::Bytes for get-data...
+Adding alias in GLib::Bytes for get-size...
+Adding alias in GLib::Bytes for upref...
+Adding alias in GLib::Bytes for downref...
+Adding alias in GLib::Bytes for unref-to-array...
+Adding alias in GLib::Bytes for unref-to-data...
+Roles: ()
+ === GLib::Checksum ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Checksum.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.412
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.016
+    Stage mast       :   0.062
+    Stage mbc        :   0.003
+Adding alias in GLib::Checksum for compute-checksum-for-bytes...
+Stage parse      :   2.843
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Checksum for compute-checksum-for-data...
+Adding alias in GLib::Checksum for compute-checksum-for-string...
+Adding alias in GLib::Checksum for type-get-length...
+Adding alias in GLib::Checksum for get-digest...
+Adding alias in GLib::Checksum for get-string...
+Roles: ()
+ === GLib::Convert ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Convert.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.558
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.032
+    Stage mast       :   0.108
+    Stage mbc        :   0.004
+Adding alias in GLib::Convert for convert-error-quark...
+Stage parse      :   3.044
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::Convert for convert-with-fallback...
+Adding alias in GLib::Convert for convert-with-iconv...
+Adding alias in GLib::Convert for filename-display-basename...
+Adding alias in GLib::Convert for filename-display-name...
+Adding alias in GLib::Convert for filename-from-uri...
+Adding alias in GLib::Convert for filename-from-utf8...
+Adding alias in GLib::Convert for filename-to-uri...
+Adding alias in GLib::Convert for filename-to-utf8...
+Adding alias in GLib::Convert for get-filename-charsets...
+Adding alias in GLib::Convert for iconv-close...
+Adding alias in GLib::Convert for iconv-open...
+Adding alias in GLib::Convert for locale-from-utf8...
+Adding alias in GLib::Convert for locale-to-utf8...
+Adding alias in GLib::Convert for uri-list-extract-uris...
+Roles: ((StaticClass))
+R: GLib::Roles::StaticClass
+ === GLib::DateTime ===
+Stage start      :   0.000
+
+    precomp lib/GLib/DateTime.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.109
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.043
+    Stage mast       :   0.167
+    Stage mbc        :   0.017
+Adding alias in GLib::DateTime for GDateTime...
+Stage parse      :   3.676
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::DateTime for new-from-iso8601...
+Adding alias in GLib::DateTime for new-from-timeval-local...
+Adding alias in GLib::DateTime for new-from-timeval-utc...
+Adding alias in GLib::DateTime for new-from-unix-local...
+Adding alias in GLib::DateTime for new-from-unix-utc...
+Adding alias in GLib::DateTime for new-local...
+Adding alias in GLib::DateTime for new-now...
+Adding alias in GLib::DateTime for new-now-local...
+Adding alias in GLib::DateTime for new-now-utc...
+Adding alias in GLib::DateTime for new-utc...
+Adding alias in GLib::DateTime for add-days...
+Adding alias in GLib::DateTime for add-full...
+Adding alias in GLib::DateTime for add-hours...
+Adding alias in GLib::DateTime for add-minutes...
+Adding alias in GLib::DateTime for add-months...
+Adding alias in GLib::DateTime for add-seconds...
+Adding alias in GLib::DateTime for add-weeks...
+Adding alias in GLib::DateTime for add-years...
+Adding alias in GLib::DateTime for get-day-of-month...
+Adding alias in GLib::DateTime for day_of_month...
+Adding alias in GLib::DateTime for day-of-month...
+Adding alias in GLib::DateTime for dom...
+Adding alias in GLib::DateTime for get-day-of-week...
+Adding alias in GLib::DateTime for day_of_week...
+Adding alias in GLib::DateTime for day-of-week...
+Adding alias in GLib::DateTime for dow...
+Adding alias in GLib::DateTime for get-day-of-year...
+Adding alias in GLib::DateTime for day_of_year...
+Adding alias in GLib::DateTime for day-of-year...
+Adding alias in GLib::DateTime for doy...
+Adding alias in GLib::DateTime for get-hour...
+Adding alias in GLib::DateTime for hour...
+Adding alias in GLib::DateTime for hr...
+Adding alias in GLib::DateTime for get-microsecond...
+Adding alias in GLib::DateTime for microsecond...
+Adding alias in GLib::DateTime for ms...
+Adding alias in GLib::DateTime for μs...
+Adding alias in GLib::DateTime for get-minute...
+Adding alias in GLib::DateTime for minute...
+Adding alias in GLib::DateTime for min...
+Adding alias in GLib::DateTime for get-month...
+Adding alias in GLib::DateTime for month...
+Adding alias in GLib::DateTime for mon...
+Adding alias in GLib::DateTime for get-second...
+Adding alias in GLib::DateTime for second...
+Adding alias in GLib::DateTime for sec...
+Adding alias in GLib::DateTime for s...
+Adding alias in GLib::DateTime for get-seconds...
+Adding alias in GLib::DateTime for seconds...
+Adding alias in GLib::DateTime for secs...
+Adding alias in GLib::DateTime for get-timezone...
+Adding alias in GLib::DateTime for timezone...
+Adding alias in GLib::DateTime for tz...
+Adding alias in GLib::DateTime for get-timezone-abbreviation...
+Adding alias in GLib::DateTime for timezone-abbreviation...
+Adding alias in GLib::DateTime for tz_abbr...
+Adding alias in GLib::DateTime for tz-abb...
+Adding alias in GLib::DateTime for tz_abv...
+Adding alias in GLib::DateTime for tz-abv...
+Adding alias in GLib::DateTime for get-utc-offset...
+Adding alias in GLib::DateTime for utc_offset...
+Adding alias in GLib::DateTime for utc-offset...
+Adding alias in GLib::DateTime for get-week-numbering-year...
+Adding alias in GLib::DateTime for week_numbering_year...
+Adding alias in GLib::DateTime for week-numbering-year...
+Adding alias in GLib::DateTime for wny...
+Adding alias in GLib::DateTime for get-week-of-year...
+Adding alias in GLib::DateTime for week_of_year...
+Adding alias in GLib::DateTime for week-of-year...
+Adding alias in GLib::DateTime for woy...
+Adding alias in GLib::DateTime for get-year...
+Adding alias in GLib::DateTime for year...
+Adding alias in GLib::DateTime for y...
+Adding alias in GLib::DateTime for get-ymd...
+Adding alias in GLib::DateTime for ymd...
+Adding alias in GLib::DateTime for is-daylight-savings...
+Adding alias in GLib::DateTime for to-local...
+Adding alias in GLib::DateTime for to-timeval...
+Adding alias in GLib::DateTime for to-timezone...
+Adding alias in GLib::DateTime for to-unix...
+Adding alias in GLib::DateTime for to-utc...
+Roles: ()
+ === GLib::Error ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Error.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.411
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.009
+    Stage mast       :   0.049
+    Stage mbc        :   0.003
+Adding alias in GLib::Error for GError...
+Stage parse      :   2.795
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::Error for new-literal...
+Adding alias in GLib::Error for set-error-literal...
+Roles: ()
+ === GLib::GList ===
+Stage start      :   0.000
+
+    precomp lib/GLib/GList.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.494
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.020
+    Stage mast       :   0.093
+    Stage mbc        :   0.003
+Adding alias in GLib::GList for GList...
+Stage parse      :   2.958
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::GList for current-node...
+Adding alias in GLib::GList for cur...
+Adding alias in GLib::GList for current...
+Adding alias in GLib::GList for node...
+Adding alias in GLib::GList for copy-deep...
+Adding alias in GLib::GList for delete-link...
+Adding alias in GLib::GList for find-custom...
+Adding alias in GLib::GList for free1...
+Adding alias in GLib::GList for free-full...
+Adding alias in GLib::GList for insert-before...
+Adding alias in GLib::GList for insert-sorted...
+Adding alias in GLib::GList for insert-sorted-with-data...
+Adding alias in GLib::GList for nth-data...
+Adding alias in GLib::GList for nth-prev...
+Adding alias in GLib::GList for remove-all...
+Adding alias in GLib::GList for remove-link...
+Adding alias in GLib::GList for sort-with-data...
+Roles: ()
+ === GLib::GSList ===
+Stage start      :   0.000
+
+    precomp lib/GLib/GSList.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.413
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.026
+    Stage mast       :   0.071
+    Stage mbc        :   0.006
+Adding alias in GLib::GSList for GSList...
+Stage parse      :   2.889
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::GSList for current-node...
+Adding alias in GLib::GSList for cur...
+Adding alias in GLib::GSList for current...
+Adding alias in GLib::GSList for node...
+Adding alias in GLib::GSList for copy-deep...
+Adding alias in GLib::GSList for delete-link...
+Adding alias in GLib::GSList for find-custom...
+Adding alias in GLib::GSList for free1...
+Adding alias in GLib::GSList for free-full...
+Adding alias in GLib::GSList for insert-before...
+Adding alias in GLib::GSList for insert-sorted...
+Adding alias in GLib::GSList for insert-sorted-with-data...
+Adding alias in GLib::GSList for nth-data...
+Adding alias in GLib::GSList for remove-all...
+Adding alias in GLib::GSList for remove-link...
+Adding alias in GLib::GSList for sort-with-data...
+Roles: ()
+»» Please use GLib::GList if possible, since it is binary compatible! ««
+ === GLib::HMAC ===
+Stage start      :   0.000
+
+    precomp lib/GLib/HMAC.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.427
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.017
+    Stage mast       :   0.063
+    Stage mbc        :   0.003
+Adding alias in GLib::HMAC for compute-hmac-for-bytes...
+Stage parse      :   2.911
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::HMAC for compute-hmac-for-data...
+Adding alias in GLib::HMAC for compute-hmac-for-string...
+Adding alias in GLib::HMAC for get-digest...
+Adding alias in GLib::HMAC for get-string...
+Roles: ()
+ === GLib::HashTable ===
+Stage start      :   0.000
+
+    precomp lib/GLib/HashTable.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.465
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.032
+    Stage mast       :   0.099
+    Stage mbc        :   0.004
+»»»»»»
+» Please note that the objects in /home/cbwood/Projects/p6-GLib/lib/GLib/HashTable.pm6 (GLib::HashTable) are classed as use-at-your-own-risk!
+»»»»»»
+
+Stage parse      :   2.924
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::Hostname ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Hostname.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.242
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.007
+    Stage mast       :   0.035
+    Stage mbc        :   0.003
+Stage parse      :   2.635
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::KeyFile ===
+Stage start      :   0.000
+
+    precomp lib/GLib/KeyFile.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.799
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.061
+    Stage mast       :   0.178
+    Stage mbc        :   0.006
+Adding alias in GLib::KeyFile for GKeyFile...
+Stage parse      :   3.357
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::KeyFile for set-string-list...
+Adding alias in GLib::KeyFile for set-locale-string-list...
+Adding alias in GLib::KeyFile for set-boolean-list...
+Adding alias in GLib::KeyFile for set-double-list...
+Adding alias in GLib::KeyFile for set-integer-list...
+Adding alias in GLib::KeyFile for error-quark...
+Adding alias in GLib::KeyFile for get-boolean...
+Adding alias in GLib::KeyFile for get-boolean-list...
+Adding alias in GLib::KeyFile for get-comment...
+Adding alias in GLib::KeyFile for get-double...
+Adding alias in GLib::KeyFile for get-double-list...
+Adding alias in GLib::KeyFile for get-groups...
+Adding alias in GLib::KeyFile for get-int64...
+Adding alias in GLib::KeyFile for get-integer...
+Adding alias in GLib::KeyFile for get-integer-list...
+Adding alias in GLib::KeyFile for get-keys...
+Adding alias in GLib::KeyFile for get-locale-for-key...
+Adding alias in GLib::KeyFile for get-locale-string...
+Adding alias in GLib::KeyFile for get-locale-string-list...
+Adding alias in GLib::KeyFile for get-start-group...
+Adding alias in GLib::KeyFile for start_group...
+Adding alias in GLib::KeyFile for start-group...
+Adding alias in GLib::KeyFile for get-string...
+Adding alias in GLib::KeyFile for get-string-list...
+Adding alias in GLib::KeyFile for get-uint64...
+Adding alias in GLib::KeyFile for get-value...
+Adding alias in GLib::KeyFile for has-group...
+Adding alias in GLib::KeyFile for has-key...
+Adding alias in GLib::KeyFile for load-from-bytes...
+Adding alias in GLib::KeyFile for load-from-data...
+Adding alias in GLib::KeyFile for load-from-data-dirs...
+Adding alias in GLib::KeyFile for load-from-dirs...
+Adding alias in GLib::KeyFile for load-from-file...
+Adding alias in GLib::KeyFile for upref...
+Adding alias in GLib::KeyFile for remove-comment...
+Adding alias in GLib::KeyFile for remove-group...
+Adding alias in GLib::KeyFile for remove-key...
+Adding alias in GLib::KeyFile for save-to-file...
+Adding alias in GLib::KeyFile for set-boolean...
+Adding alias in GLib::KeyFile for set-comment...
+Adding alias in GLib::KeyFile for set-double...
+Adding alias in GLib::KeyFile for set-int64...
+Adding alias in GLib::KeyFile for set-integer...
+Adding alias in GLib::KeyFile for set-list-separator...
+Adding alias in GLib::KeyFile for set-locale-string...
+Adding alias in GLib::KeyFile for set-string...
+Adding alias in GLib::KeyFile for set-uint64...
+Adding alias in GLib::KeyFile for set-value...
+Adding alias in GLib::KeyFile for to-data...
+Adding alias in GLib::KeyFile for downref...
+Roles: ()
+ === GLib::Log ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Log.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.427
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.067
+    Stage mbc        :   0.003
+Stage parse      :   2.898
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::MainContext ===
+Stage start      :   0.000
+
+    precomp lib/GLib/MainContext.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.499
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.022
+    Stage mast       :   0.064
+    Stage mbc        :   0.004
+Adding alias in GLib::MainContext for GMainContext...
+Stage parse      :   2.964
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::MainContext for MainContext...
+Adding alias in GLib::MainContext for add-poll...
+Adding alias in GLib::MainContext for find-source-by-funcs-user-data...
+Adding alias in GLib::MainContext for find-source-by-id...
+Adding alias in GLib::MainContext for find-source-by-user-data...
+Adding alias in GLib::MainContext for get-thread-default...
+Adding alias in GLib::MainContext for invoke-full...
+Adding alias in GLib::MainContext for is-owner...
+Adding alias in GLib::MainContext for pop-thread-default...
+Adding alias in GLib::MainContext for push-thread-default...
+Adding alias in GLib::MainContext for upref...
+Adding alias in GLib::MainContext for ref-thread-default...
+Adding alias in GLib::MainContext for remove-poll...
+Adding alias in GLib::MainContext for downref...
+Roles: ()
+ === GLib::MainLoop ===
+Stage start      :   0.000
+
+    precomp lib/GLib/MainLoop.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.339
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.010
+    Stage mast       :   0.057
+    Stage mbc        :   0.005
+Adding alias in GLib::MainLoop for GMainLoop...
+Stage parse      :   2.753
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::MainLoop for MainLoop...
+Adding alias in GLib::MainLoop for get-context...
+Adding alias in GLib::MainLoop for is-running...
+Adding alias in GLib::MainLoop for child-watch-add...
+Adding alias in GLib::MainLoop for child-watch-add-full...
+Roles: ()
+ === GLib::Markup ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Markup.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.389
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.021
+    Stage mast       :   0.058
+    Stage mbc        :   0.003
+Adding alias in GLib::Markup for error-quark...
+Stage parse      :   2.803
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Markup for markup-escape-text...
+Adding alias in GLib::Markup for end-parse...
+Adding alias in GLib::Markup for get-element...
+Adding alias in GLib::Markup for get-element-stack...
+Adding alias in GLib::Markup for get-position...
+Adding alias in GLib::Markup for get-user-data...
+Roles: ()
+ === GLib::MatchInfo ===
+Stage start      :   0.000
+
+    precomp lib/GLib/MatchInfo.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.536
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.014
+    Stage mast       :   0.061
+    Stage mbc        :   0.005
+Adding alias in GLib::MatchInfo for MatchInfo...
+Stage parse      :   2.963
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::MatchInfo for expand-references...
+Adding alias in GLib::MatchInfo for fetch-all...
+Adding alias in GLib::MatchInfo for fetch-named...
+Adding alias in GLib::MatchInfo for fetch-named-pos...
+Adding alias in GLib::MatchInfo for fetch-pos...
+Adding alias in GLib::MatchInfo for get-match-count...
+Adding alias in GLib::MatchInfo for match_count...
+Adding alias in GLib::MatchInfo for match-count...
+Adding alias in GLib::MatchInfo for elems...
+Adding alias in GLib::MatchInfo for get-regex...
+Adding alias in GLib::MatchInfo for regex...
+Adding alias in GLib::MatchInfo for get-string...
+Adding alias in GLib::MatchInfo for string...
+Adding alias in GLib::MatchInfo for is-partial-match...
+Roles: ()
+ === GLib::Memory ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Memory.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.403
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.015
+    Stage mast       :   0.056
+    Stage mbc        :   0.003
+Adding alias in GLib::Memory for clear-pointer...
+Stage parse      :   2.823
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Memory for malloc0-n...
+Adding alias in GLib::Memory for malloc-n...
+Adding alias in GLib::Memory for realloc-n...
+Adding alias in GLib::Memory for try-malloc...
+Adding alias in GLib::Memory for try-malloc0...
+Adding alias in GLib::Memory for try-malloc0-n...
+Adding alias in GLib::Memory for try-malloc-n...
+Adding alias in GLib::Memory for try-realloc...
+Adding alias in GLib::Memory for try-realloc-n...
+Roles: ((StaticClass))
+R: GLib::Roles::StaticClass
+ === GLib::Module ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Module.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.263
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.021
+    Stage mast       :   0.040
+    Stage mbc        :   0.003
+Adding alias in GLib::Module for GModule...
+Stage parse      :   2.656
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Module for build-path...
+Adding alias in GLib::Module for make-resident...
+Roles: ()
+ === GLib::Mutex ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Mutex.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.250
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.008
+    Stage mast       :   0.048
+    Stage mbc        :   0.003
+Adding alias in GLib::Mutex for GMutex...
+Stage parse      :   2.668
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Roles: ()
+ === GLib::Object::Closure ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Closure.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.310
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.018
+    Stage mast       :   0.048
+    Stage mbc        :   0.003
+Adding alias in GLib::Object::Closure for GClosure...
+Stage parse      :   2.701
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Object::Closure for new-simple...
+Adding alias in GLib::Object::Closure for add-finalize-notifier...
+Adding alias in GLib::Object::Closure for add-invalidate-notifier...
+Adding alias in GLib::Object::Closure for add-marshal-guards...
+Adding alias in GLib::Object::Closure for remove-finalize-notifier...
+Adding alias in GLib::Object::Closure for remove-invalidate-notifier...
+Adding alias in GLib::Object::Closure for set-marshal...
+Adding alias in GLib::Object::Closure for set-meta-marshal...
+Roles: ()
+Adding alias in GLib::Object::Closure::C for new-swap...
+Adding alias in GLib::Object::Closure::C for new-signal-type...
+Adding alias in GLib::Object::Closure::C for marshal-generic...
+ === GLib::Object::ParamSpec ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/ParamSpec.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.876
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.063
+    Stage mast       :   0.145
+    Stage mbc        :   0.009
+Adding alias in GLib::Object::ParamSpec for GParamSpec...
+Stage parse      :   3.481
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Object::ParamSpec for new-boolean...
+Adding alias in GLib::Object::ParamSpec for new-boxed...
+Adding alias in GLib::Object::ParamSpec for new-char...
+Adding alias in GLib::Object::ParamSpec for new-double...
+Adding alias in GLib::Object::ParamSpec for new-enum...
+Adding alias in GLib::Object::ParamSpec for new-flags...
+Adding alias in GLib::Object::ParamSpec for new-float...
+Adding alias in GLib::Object::ParamSpec for new-gtype...
+Adding alias in GLib::Object::ParamSpec for new-int...
+Adding alias in GLib::Object::ParamSpec for new-int64...
+Adding alias in GLib::Object::ParamSpec for new-long...
+Adding alias in GLib::Object::ParamSpec for new-object...
+Adding alias in GLib::Object::ParamSpec for new-override...
+Adding alias in GLib::Object::ParamSpec for new-param...
+Adding alias in GLib::Object::ParamSpec for new-pointer...
+Adding alias in GLib::Object::ParamSpec for new-string...
+Adding alias in GLib::Object::ParamSpec for new-uchar...
+Adding alias in GLib::Object::ParamSpec for new-uint...
+Adding alias in GLib::Object::ParamSpec for new-uint64...
+Adding alias in GLib::Object::ParamSpec for new-ulong...
+Adding alias in GLib::Object::ParamSpec for new-unichar...
+Adding alias in GLib::Object::ParamSpec for new-value-array...
+Adding alias in GLib::Object::ParamSpec for new-variant...
+Adding alias in GLib::Object::ParamSpec for flag-set...
+Adding alias in GLib::Object::ParamSpec for get-blurb...
+Adding alias in GLib::Object::ParamSpec for get-default-value...
+Adding alias in GLib::Object::ParamSpec for get-name...
+Adding alias in GLib::Object::ParamSpec for get-name-quark...
+Adding alias in GLib::Object::ParamSpec for name_quark...
+Adding alias in GLib::Object::ParamSpec for name-quark...
+Adding alias in GLib::Object::ParamSpec for get-nick...
+Adding alias in GLib::Object::ParamSpec for nick...
+Adding alias in GLib::Object::ParamSpec for get-qdata...
+Adding alias in GLib::Object::ParamSpec for get-redirect-target...
+Adding alias in GLib::Object::ParamSpec for redirect_target...
+Adding alias in GLib::Object::ParamSpec for redirect-target...
+Adding alias in GLib::Object::ParamSpec for ref-sink...
+Adding alias in GLib::Object::ParamSpec for set-qdata...
+Adding alias in GLib::Object::ParamSpec for set-qdata-full...
+Adding alias in GLib::Object::ParamSpec for steal-qdata...
+Adding alias in GLib::Object::ParamSpec for type-register-static...
+Adding alias in GLib::Object::ParamSpec for values-cmp...
+Adding alias in GLib::Object::ParamSpec for value-convert...
+Adding alias in GLib::Object::ParamSpec for value-defaults...
+Adding alias in GLib::Object::ParamSpec for value-set-default...
+Adding alias in GLib::Object::ParamSpec for value-validate...
+Adding alias in GLib::Object::ParamSpec for value-spec...
+Roles: ()
+Adding alias in GLib::Object::ParamSpec::Pool for list-owned...
+ === GLib::Pattern ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Pattern.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.258
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.019
+    Stage mast       :   0.039
+    Stage mbc        :   0.003
+Adding alias in GLib::Pattern for GPatternSpec...
+Stage parse      :   2.636
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::Pattern for match-simple...
+Adding alias in GLib::Pattern for match-string...
+Roles: ()
+ === GLib::PtrArray ===
+Stage start      :   0.000
+
+    precomp lib/GLib/PtrArray.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.466
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.022
+    Stage mast       :   0.097
+    Stage mbc        :   0.004
+Adding alias in GLib::PtrArray for GPtrArray...
+Stage parse      :   2.923
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::PtrArray for new-full...
+Adding alias in GLib::PtrArray for new-with-free-func...
+Adding alias in GLib::PtrArray for sized-new...
+Adding alias in GLib::PtrArray for find-with-equal-func...
+Adding alias in GLib::PtrArray for upref...
+Adding alias in GLib::PtrArray for remove-fast...
+Adding alias in GLib::PtrArray for remove-index...
+Adding alias in GLib::PtrArray for remove-index-fast...
+Adding alias in GLib::PtrArray for remove-range...
+Adding alias in GLib::PtrArray for set-free-func...
+Adding alias in GLib::PtrArray for sort-with-data...
+Adding alias in GLib::PtrArray for steal-index...
+Adding alias in GLib::PtrArray for steal-index-fast...
+Adding alias in GLib::PtrArray for downref...
+Adding alias in GLib::PtrArray for AT-POS...
+Roles: ((Positional))
+R: Positional
+ === GLib::Quark ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Quark.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.273
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.008
+    Stage mast       :   0.043
+    Stage mbc        :   0.003
+Adding alias in GLib::Quark for from-static-string...
+Stage parse      :   2.690
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Quark for from-string...
+Adding alias in GLib::Quark for intern-static-string...
+Adding alias in GLib::Quark for intern-string...
+Adding alias in GLib::Quark for to-string...
+Adding alias in GLib::Quark for try-string...
+Roles: ()
+ === GLib::Rand ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Rand.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.427
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.015
+    Stage mast       :   0.074
+    Stage mbc        :   0.003
+Adding alias in GLib::Rand for GRand...
+Stage parse      :   2.852
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Rand for new-with-seed...
+Adding alias in GLib::Rand for new-with-seed-array...
+Adding alias in GLib::Rand for double-range...
+Adding alias in GLib::Rand for int-range...
+Adding alias in GLib::Rand for set-seed...
+Adding alias in GLib::Rand for set-seed-array...
+Roles: ()
+ === GLib::Regex ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Regex.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.857
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.045
+    Stage mast       :   0.120
+    Stage mbc        :   0.009
+Adding alias in GLib::Regex for GRegex...
+Stage parse      :   3.390
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Regex for check-replacement...
+Adding alias in GLib::Regex for error-quark...
+Adding alias in GLib::Regex for escape-nul...
+Adding alias in GLib::Regex for escape-string...
+Adding alias in GLib::Regex for get-capture-count...
+Adding alias in GLib::Regex for capture_count...
+Adding alias in GLib::Regex for capture-count...
+Adding alias in GLib::Regex for elems...
+Adding alias in GLib::Regex for get-compile-flags...
+Adding alias in GLib::Regex for compile_flags...
+Adding alias in GLib::Regex for compile-flags...
+Adding alias in GLib::Regex for get-has-cr-or-lf...
+Adding alias in GLib::Regex for has_cr_or_lf...
+Adding alias in GLib::Regex for has-cr-or-lf...
+Adding alias in GLib::Regex for cr_or_lf...
+Adding alias in GLib::Regex for cr-or-lf...
+Adding alias in GLib::Regex for get-match-flags...
+Adding alias in GLib::Regex for match_flags...
+Adding alias in GLib::Regex for match-flags...
+Adding alias in GLib::Regex for get-max-backref...
+Adding alias in GLib::Regex for max_backref...
+Adding alias in GLib::Regex for max-backref...
+Adding alias in GLib::Regex for get-max-lookbehind...
+Adding alias in GLib::Regex for max_lookbehind...
+Adding alias in GLib::Regex for max-lookbehind...
+Adding alias in GLib::Regex for get-pattern...
+Adding alias in GLib::Regex for pattern...
+Adding alias in GLib::Regex for get-string-number...
+Adding alias in GLib::Regex for match-all...
+Adding alias in GLib::Regex for match-all-full...
+Adding alias in GLib::Regex for match-full...
+Adding alias in GLib::Regex for match-simple...
+Adding alias in GLib::Regex for replace-eval...
+Adding alias in GLib::Regex for replace-literal...
+Adding alias in GLib::Regex for split-full...
+Adding alias in GLib::Regex for split-simple...
+Roles: ()
+ === GLib::Source ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Source.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.361
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.021
+    Stage mast       :   0.078
+    Stage mbc        :   0.004
+Adding alias in GLib::Source for GSource...
+Stage parse      :   2.803
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Source for add-child-source...
+Adding alias in GLib::Source for add-poll...
+Adding alias in GLib::Source for add-unix-fd...
+Adding alias in GLib::Source for get-context...
+Adding alias in GLib::Source for get-id...
+Adding alias in GLib::Source for get-time...
+Adding alias in GLib::Source for is-destroyed...
+Adding alias in GLib::Source for modify-unix-fd...
+Adding alias in GLib::Source for query-unix-fd...
+Adding alias in GLib::Source for remove-child-source...
+Adding alias in GLib::Source for remove-poll...
+Adding alias in GLib::Source for remove-unix-fd...
+Adding alias in GLib::Source for set-callback...
+Adding alias in GLib::Source for set-callback-indirect...
+Adding alias in GLib::Source for set-funcs...
+Adding alias in GLib::Source for set-name-by-id...
+Adding alias in GLib::Source for remove-by-funcs-user-data...
+Adding alias in GLib::Source for remove-by-user-data...
+Adding alias in GLib::Source for idle-add...
+Adding alias in GLib::Source for idle-add-full...
+Adding alias in GLib::Source for idle-remove-by-data...
+Roles: ()
+ === GLib::Timeout ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Timeout.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.346
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.009
+    Stage mast       :   0.053
+    Stage mbc        :   0.003
+Adding alias in GLib::Timeout for add-full...
+Stage parse      :   2.754
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Timeout for add-seconds...
+Adding alias in GLib::Timeout for add-seconds-full...
+Adding alias in GLib::Timeout for simple-timeout...
+Adding alias in GLib::Timeout for simple-timeout-in-seconds...
+Roles: ((StaticClass))
+R: GLib::Roles::StaticClass
+ === GLib::URI ===
+Stage start      :   0.000
+
+    precomp lib/GLib/URI.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.583
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.009
+    Stage mast       :   0.058
+    Stage mbc        :   0.008
+Stage parse      :   3.009
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+ === GLib::ByteArray ===
+Stage start      :   0.000
+
+    precomp lib/GLib/ByteArray.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.394
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.016
+    Stage mast       :   0.042
+    Stage mbc        :   0.006
+Adding alias in GLib::ByteArray for GByteArray...
+Stage parse      :   2.812
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::ByteArray for new-take...
+Adding alias in GLib::ByteArray for sized-new...
+Adding alias in GLib::ByteArray for new_sized...
+Adding alias in GLib::ByteArray for new-sized...
+Adding alias in GLib::ByteArray for free-to-bytes...
+Adding alias in GLib::ByteArray for upref...
+Adding alias in GLib::ByteArray for remove-index...
+Adding alias in GLib::ByteArray for remove-index-fast...
+Adding alias in GLib::ByteArray for remove-range...
+Adding alias in GLib::ByteArray for set-size...
+Adding alias in GLib::ByteArray for sort-with-data...
+Adding alias in GLib::ByteArray for downref...
+Roles: ()
+ === GLib::Class::Object ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Class/Object.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.055
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.019
+    Stage mast       :   0.098
+    Stage mbc        :   0.054
+Adding alias in GLib::Class::Object for GObjectClass...
+Stage parse      :   3.613
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Class::Object for install-property...
+Adding alias in GLib::Class::Object for find-property...
+Adding alias in GLib::Class::Object for list-properties...
+Adding alias in GLib::Class::Object for override-property...
+Adding alias in GLib::Class::Object for install-properties...
+Roles: ()
+ === GLib::IOChannel ===
+Stage start      :   0.000
+
+    precomp lib/GLib/IOChannel.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.707
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.049
+    Stage mast       :   0.116
+    Stage mbc        :   0.005
+Adding alias in GLib::IOChannel for GIOChannel...
+Stage parse      :   3.224
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::IOChannel for new-fd...
+Adding alias in GLib::IOChannel for new_unix...
+Adding alias in GLib::IOChannel for new-unix...
+Adding alias in GLib::IOChannel for unix_new...
+Adding alias in GLib::IOChannel for unix-new...
+Adding alias in GLib::IOChannel for new-file...
+Adding alias in GLib::IOChannel for win32-new-messages...
+Adding alias in GLib::IOChannel for win32-new-socket...
+Adding alias in GLib::IOChannel for buffer-size...
+Adding alias in GLib::IOChannel for close-on-unref...
+Adding alias in GLib::IOChannel for line-term...
+Adding alias in GLib::IOChannel for error-from-errno...
+Adding alias in GLib::IOChannel for error-quark...
+Adding alias in GLib::IOChannel for add-watch...
+Adding alias in GLib::IOChannel for add-watch-full...
+Adding alias in GLib::IOChannel for create-watch...
+Adding alias in GLib::IOChannel for get-buffer-condition...
+Adding alias in GLib::IOChannel for get-encoding...
+Adding alias in GLib::IOChannel for get-fd...
+Adding alias in GLib::IOChannel for get-flags...
+Adding alias in GLib::IOChannel for get-line-term...
+Adding alias in GLib::IOChannel for read-chars...
+Adding alias in GLib::IOChannel for read-line...
+Adding alias in GLib::IOChannel for read-line-string...
+Adding alias in GLib::IOChannel for read-to-end...
+Adding alias in GLib::IOChannel for read-unichar...
+Adding alias in GLib::IOChannel for seek-position...
+Adding alias in GLib::IOChannel for set-encoding...
+Adding alias in GLib::IOChannel for set-flags...
+Adding alias in GLib::IOChannel for set-line-term...
+Adding alias in GLib::IOChannel for win32-make-pollfd...
+Adding alias in GLib::IOChannel for win32-poll...
+Adding alias in GLib::IOChannel for win32-set-debug...
+Adding alias in GLib::IOChannel for write-chars...
+Adding alias in GLib::IOChannel for write-unichar...
+Roles: ()
+ === GLib::Roles::Object ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Object.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.126
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.052
+    Stage mast       :   0.141
+    Stage mbc        :   0.014
+Adding alias in GLib::Roles::Object for upref...
+Stage parse      :   3.724
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.000
+Stage moar       :   0.000
+Adding alias in GLib::Roles::Object for downref...
+Adding alias in GLib::Roles::Object for get-property...
+Adding alias in GLib::Roles::Object for prop-set...
+Adding alias in GLib::Roles::Object for set-prop...
+Adding alias in GLib::Roles::Object for prop-get...
+Adding alias in GLib::Roles::Object for get-prop...
+Adding alias in GLib::Roles::Object for prop-set-bool...
+Adding alias in GLib::Roles::Object for prop-get-bool...
+Adding alias in GLib::Roles::Object for prop-set-string...
+Adding alias in GLib::Roles::Object for prop-get-string...
+Adding alias in GLib::Roles::Object for prop-set-ptr...
+Adding alias in GLib::Roles::Object for prop-get-ptr...
+Adding alias in GLib::Roles::Object for prop-set-int...
+Adding alias in GLib::Roles::Object for prop-get-int...
+Adding alias in GLib::Roles::Object for prop-set-uint...
+Adding alias in GLib::Roles::Object for prop-get-uint...
+Adding alias in GLib::Roles::Object for clear-data...
+ === GLib::VariantDict ===
+Stage start      :   0.000
+
+    precomp lib/GLib/VariantDict.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.357
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.010
+    Stage mast       :   0.064
+    Stage mbc        :   0.003
+Adding alias in GLib::VariantDict for GVariantDict...
+Stage parse      :   2.872
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::VariantDict for insert-value...
+Adding alias in GLib::VariantDict for lookup-value...
+Roles: ((Object))
+R: GLib::Roles::Object
+ === GLib::Object::Binding ===
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Binding.pm6
+    Stage start      :   0.000
+    Stage parse      :   1.428
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.015
+    Stage mast       :   0.058
+    Stage mbc        :   0.003
+Adding alias in GLib::Object::Binding for GBinding...
+Stage parse      :   2.910
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+Adding alias in GLib::Object::Binding for get-flags...
+Adding alias in GLib::Object::Binding for get-source...
+Adding alias in GLib::Object::Binding for get-source-property...
+Adding alias in GLib::Object::Binding for get-target...
+Adding alias in GLib::Object::Binding for get-target-property...
+Adding alias in GLib::Object::Binding for get-type...
+Roles: ((Object))
+R: GLib::Roles::Object
+
+real 473.01
+user 577.61
+sys 33.40
