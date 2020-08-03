@@ -69,7 +69,7 @@ class GLib::VariantType {
     is also<new-tuple>
   {
     my gint $l = $length;
-    
+
     my $t = g_variant_type_new_tuple($items, $l);
 
     $t ?? self.bless( type => $t ) !! Nil;
@@ -91,6 +91,15 @@ class GLib::VariantType {
     my $t = g_variant_type_copy($!vt);
 
     $t ?? self.bless( type => $t ) !! Nil;
+  }
+
+  method checked (Str() $to-check, :$raw = False) {
+    my $vt = g_variant_type_checked_($to-check);
+
+    $vt ??
+      ( $raw ?? $vt !! GLib::VariantType.new($vt) )
+      !!
+      Nil;
   }
 
   method dup_string is also<dup-string> {
