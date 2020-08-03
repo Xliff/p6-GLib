@@ -124,7 +124,7 @@ class GLib::Variant {
 
   multi method new (
     GLib::Variant:U:
-    GVariantType $element_type,
+    GVariantType() $element_type,
     Pointer $elements,
     Int() $n_elements,
     Int() $element_size,
@@ -134,7 +134,7 @@ class GLib::Variant {
   }
   method new_fixed_array (
     GLib::Variant:U:
-    GVariantType $element_type,
+    GVariantType() $element_type,
     Pointer $elements,
     Int() $n_elements,
     Int() $element_size
@@ -154,7 +154,7 @@ class GLib::Variant {
 
   multi method new (
     GLib::Variant:U:
-    GVariantType $type,
+    GVariantType() $type,
     GBytes $bytes_val,
     Int() $trusted,
     :$bytes is required
@@ -163,7 +163,7 @@ class GLib::Variant {
   }
   method new_from_bytes (
     GLib::Variant:U:
-    GVariantType $type,
+    GVariantType() $type,
     GBytes $bytes,
     Int() $trusted
   )
@@ -177,7 +177,7 @@ class GLib::Variant {
 
   multi method new (
     GLib::Variant:U:
-    GVariantType $type,
+    GVariantType() $type,
     gconstpointer $data_val,
     Int() $size,
     Int() $trusted,
@@ -189,7 +189,7 @@ class GLib::Variant {
   }
   method new_from_data (
     GLib::Variant:U:
-    GVariantType $type,
+    GVariantType() $type,
     gconstpointer $data,
     Int() $size,
     Int() $trusted,
@@ -298,7 +298,7 @@ class GLib::Variant {
   }
   method new_maybe (
     GLib::Variant:U:
-    GVariantType $type,
+    GVariantType() $type,
     GVariant() $child
   )
     is also<new-maybe>
@@ -457,16 +457,14 @@ class GLib::Variant {
 
   method parse (
     GLib::Variant:U:
-    Int() $type,
+    GVariantType() $type,
     Str() $text,
     Str() $limit,
     Str() $endptr,
     CArray[Pointer[GError]] $error = gerror
   ) {
-    my GVariantType $t = $type;
-
     clear_error;
-    my $rc = g_variant_parse($type, $t, $limit, $endptr, $error);
+    my $rc = g_variant_parse($type, $type, $limit, $endptr, $error);
     set_error($error);
     $rc ?? self.bless( variant => $rc ) !! Nil;
   }
@@ -814,7 +812,7 @@ class GLib::Variant {
     so g_variant_is_object_path($path);
   }
 
-  method is_of_type (GVariantType $type) is also<is-of-type> {
+  method is_of_type (GVariantType() $type) is also<is-of-type> {
     so g_variant_is_of_type($!v, $type);
   }
 
@@ -827,7 +825,7 @@ class GLib::Variant {
     so g_variant_is_signature($signature);
   }
 
-  method lookup_value (Str() $key, GVariantType $expected_type)
+  method lookup_value (Str() $key, GVariantType() $expected_type)
     is also<lookup-value>
   {
     g_variant_lookup_value($!v, $key, $expected_type);
@@ -907,9 +905,8 @@ class GLib::Variant::Builder {
   multi method new ($builder) {
     $builder ?? self.bless( :$builder ) !! Nil;
   }
-  multi method new (Int() $type) {
-    my GVariantType $t = $type;
-    my $builder = g_variant_builder_new($t);
+  multi method new (GVariantType() $type) {
+    my $builder = g_variant_builder_new($type);
 
     $builder ?? self.bless( :$builder ) !! Nil;
   }
@@ -925,11 +922,9 @@ class GLib::Variant::Builder {
 
   method init (GLib::Variant::Builder:U:
     GVariantBuilder $new-builder,
-    Int() $type
+    GVariantType() $type
   ) {
-    my GVariantType $t = $type;
-
-    g_variant_builder_init($new-builder, $t);
+    g_variant_builder_init($new-builder, $type);
   }
 
   method end (:$raw = False) {
@@ -946,10 +941,8 @@ class GLib::Variant::Builder {
     self;
   }
 
-  method open (Int() $type) {
-    my GVariantType $t = $type;
-
-    g_variant_builder_open($!vb, $t);
+  method open (GVariantType() $type) {
+    g_variant_builder_open($!vb, $type);
     self;
   }
 
