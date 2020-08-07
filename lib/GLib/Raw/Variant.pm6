@@ -614,8 +614,8 @@ sub g_variant_new_variant (GVariant $value)
 sub g_variant_parse (
   GVariantType $type,
   Str $text,
-  Str $limit,
-  Str $endptr,
+  CArray[uint8] $limit,
+  CArray[Str] $endptr,
   CArray[Pointer[GError]] $error
 )
   returns GVariant

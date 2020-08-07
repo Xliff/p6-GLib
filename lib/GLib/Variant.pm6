@@ -457,7 +457,12 @@ class GLib::Variant {
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
-  multi method parse (GLib::Variant:U: Str() $text, :$all = False) {
+  multi method parse (
+    GLib::Variant:U:
+    Str() $text,
+    :$all = False,
+    :$raw = False
+  ) {
     samewith($, $text, $, $, :$all);
   }
   multi method parse (
@@ -466,7 +471,8 @@ class GLib::Variant {
     Str() $text,
     Str() $limit                   = Str,
     CArray[Pointer[GError]] $error = gerror,
-    :$all = True
+    :$all = False,
+    :$raw = False;
   ) {
     samewith(
       GLib::VariantType.check($type),
@@ -474,7 +480,8 @@ class GLib::Variant {
       $limit,
       $,
       $error,
-      :$all
+      :$all,
+      :$raw
     );
   }
   multi method parse (
@@ -484,16 +491,36 @@ class GLib::Variant {
     Str() $limit,
     $endptr is rw,
     CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+    :$all = False,
+    :$raw = False
   ) {
     my $ep = CArray[Str].new;
     $ep[0] = Str;
 
+    # my $pt = CArray[uint8].new( $text.encode );
+    # $pt[$text.chars] = 0;
+
+    my $pl = $limit ?? CArray[uint8].new( $limit.encode )
+                    !! CArray[uint8].new;;
+    $pl[ ($limit // '').chars ] = 0;
+
     clear_error;
-    my $rc = g_variant_parse($type, $type, $limit, $endptr, $error);
+    # try using explicitly-manage on $text?
+    my $v = g_variant_parse(
+      $type // GVariantType,
+      explicitly-manage($text),
+      $limit // CArray[uint8],
+      $ep,
+      $error
+    );
     set_error($error);
     $endptr = ppr($ep);
-    my $retVal = $rc ?? self.bless( variant => $rc ) !! Nil;
+
+    my $retVal = $v ??
+      ( $raw ?? $v !! GLib::Variant.new($v) )
+      !!
+      Nil;
+
     $all.not ?? $retVal !! ($retVal, $endptr);
   }
 
@@ -883,7 +910,10 @@ class GLib::Variant {
     g_variant_parse_error_quark();
   }
 
-  method print (Int() $type_annotate) {
+  multi method print (Bool :$annotate is required) {
+    samewith($annotate)
+  }
+  multi method print (Int() $type_annotate = True) {
     my gboolean $t = $type_annotate;
 
     g_variant_print($!v, $t);
