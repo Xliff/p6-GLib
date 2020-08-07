@@ -14,7 +14,7 @@ class GLib::Value {
 
     die 'Cannot allocate GValue!' unless $!v;
 
-    g_value_init($!v, $type) if $type;
+    self.init($!v, $type) if $type;
   }
 
   submethod DESTROY {
@@ -48,6 +48,10 @@ class GLib::Value {
 
   # ↓↓↓↓ SIGNALS ↓↓↓↓
   # ↑↑↑↑ SIGNALS ↑↑↑↑
+
+  method init (GValue $value, Int() $type) {
+    g_value_init($value, $type);
+  }
 
   method unref {
     g_object_unref( nativecast(Pointer, $!v) );
