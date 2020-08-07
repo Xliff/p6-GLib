@@ -520,9 +520,9 @@ class GLib::UTF8 {
     my $ea = CArray[Str].new;
     $ea[0] = '';
 
-    my $rc = g_utf8_validate($str, $ml, $ea);
+    my $rv = g_utf8_validate($str, $ml, $ea);
     $end = $ea[0];
-    $all.not ?? $rc !! ($rc, $end);
+    $all.not ?? $rv !! ($rv, $end);
   }
 
   proto method validate_len (|)
