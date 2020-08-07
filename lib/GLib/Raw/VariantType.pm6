@@ -188,7 +188,7 @@ sub g_variant_type_value (GVariantType $type)
   is export
 { * }
 
-sub g_variant_type_checked_ (Str $to-check)
+sub g_variant_type_checked_ (CArray[uint8] $to-check)
   returns GVariantType
   is native(glib)
   is export

@@ -96,7 +96,10 @@ class GLib::VariantType {
   method checked (GLib::VariantType:U: Str() $to-check, :$raw = False)
     is also<check>
   {
-    my $vt = g_variant_type_checked_($to-check);
+    my $ca = CArray[uint8].new( $to-check.encode.list );
+    $ca[$to-check.chars] = 0;
+
+    my $vt = g_variant_type_checked_($ca);
 
     $vt ??
       ( $raw ?? $vt !! GLib::VariantType.new($vt) )
