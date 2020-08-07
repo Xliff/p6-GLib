@@ -391,8 +391,14 @@ sub ppr (*@a) is export {
         if .[0].REPR ne 'CPointer' {
           .[0]
         } else {
-          +.[0] != 0 ?? ( .[0].of.REPR eq 'CStruct' ?? .[0].deref !! .[0] )
-                     !! Nil;
+          +.[0].p != 0 ?? ( .[0] !~~ Pointer ?? .[0]
+                                             !! (
+                                                .[0].of.REPR eq 'CStruct'
+                                                  ?? .[0].deref
+                                                  !! .[0]
+                                             )
+                          )
+                       !! Nil;
         }
       } else {
         Nil;
