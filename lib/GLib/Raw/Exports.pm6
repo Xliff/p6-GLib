@@ -2,7 +2,18 @@ use v6.c;
 
 unit package GLib::Raw::Exports;
 
+use CompUnit::Util :re-export;
+
 our @glib-exports is export;
+
+our %exported;
+
+sub glib-re-export ($compunit) is export {
+  return if %exported{$compunit}:exists;
+
+  re-export($compunit);
+  %exported{$compunit} = True;
+}
 
 BEGIN {
   @glib-exports = <
