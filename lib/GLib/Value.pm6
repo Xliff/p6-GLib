@@ -57,7 +57,7 @@ class GLib::Value {
     g_object_unref( nativecast(Pointer, $!v) );
   }
 
-  method valueFromEnum (\T) is rw {
+  method valueFromType (\T) is also<valueFromEnum> is rw {
     die 'The parameter to valueFromEnum must be a type object!' if T.defined;
 
     do given T {
@@ -68,7 +68,7 @@ class GLib::Value {
     }
   }
 
-  method typeFromEnum (GLib::Value:U: \T) is rw {
+  method gtypeFromType (GLib::Value:U: \T) is also<typeFromEnum> is rw {
     die 'The parameter to typeFromEnym must be a type object!' if T.defined;
 
     do given T {

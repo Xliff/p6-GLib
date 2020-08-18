@@ -383,7 +383,9 @@ sub create-signal-supply (%sigs, $signal, $s) is export {
 #   is export
 # { * }
 
-# From p6-GStreamer
+#| ppr(*@a) - Potential Pointer Return. Handles values, potentially pointers,
+#|            that are wrapped in a CArray. If value is a Pointer type AND
+#|            a CStruct, then that value will be dereferenced.
 sub ppr (*@a) is export {
   @a .= map({
     if $_ ~~ CArray {
@@ -391,6 +393,7 @@ sub ppr (*@a) is export {
         if .[0].REPR ne 'CPointer' {
           .[0]
         } else {
+          # cw: XXX - Consider when the invocant does NOT do GLib::Roles::Pointers
           +.[0].p != 0 ?? ( .[0] !~~ Pointer ?? .[0]
                                              !! (
                                                 .[0].of.REPR eq 'CStruct'
