@@ -600,6 +600,31 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal}[0];
   }
 
+  # SoupWebsocketConnection, GError, gpointer
+  method connect-error (
+    $obj,
+    $signal,
+    &handler?
+  ) {
+    my $hid;
+    %!signals{$signal} //= do {
+      my \𝒮 = Supplier.new;
+      $hid = g-connect-error($obj, $signal,
+        -> $, $, $ud {
+          CATCH {
+            default { 𝒮.note($_) }
+          }
+
+          𝒮.emit( [self, $, $ud ] );
+        },
+        Pointer, 0
+      );
+      [ 𝒮.Supply, $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+
 }
 
 sub g_connect (
@@ -864,6 +889,19 @@ sub g-connect-long-ruint32 (
   Pointer $app,
   Str $name,
   &handler (Pointer, guint64, Pointer --> guint32),
+  Pointer $data,
+  uint32 $flags
+)
+  returns uint64
+  is native(gobject)
+  is symbol('g_signal_connect_object')
+{ * }
+
+# SoupWebsocketConnection, GError, gpointer
+sub g-connect-error(
+  Pointer $app,
+  Str $name,
+  &handler (Pointer, GError, Pointer),
   Pointer $data,
   uint32 $flags
 )
