@@ -24,8 +24,8 @@ class GLib::MappedFile {
   }
   multi method new (
     Str() $filename,
-    Int() $writable,
-    CArray[Pointer[GError]] $error
+    Int() $writable                = False,
+    CArray[Pointer[GError]] $error = gerror
   ) {
     my gboolean $w = $writable.so.Int;
 
@@ -38,7 +38,7 @@ class GLib::MappedFile {
 
   method new_from_fd (
     Int() $fd,
-    Int() $writable,
+    Int() $writable                = False,
     CArray[Pointer[GError]] $error = gerror
   )
     is also<new-from-fd>
