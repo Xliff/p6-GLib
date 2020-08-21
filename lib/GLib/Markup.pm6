@@ -15,6 +15,7 @@ class GLib::Markup {
   }
 
   method GLib::Raw::Definitions::GMarkupParseContext
+    is also<GMarkupParserContext>
   { $!mp }
 
   method new (
@@ -44,7 +45,7 @@ class GLib::Markup {
     Str() $text,
     Int() $length = $text.chars
   )
-    is also<markup-escape-text>
+    is also<escape-text>
   {
     my gssize $l = $length;
 
