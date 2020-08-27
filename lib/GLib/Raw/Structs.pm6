@@ -685,3 +685,20 @@ class GParameter            is repr<CStruct> does GLib::Roles::Pointers is expor
                                          .set_value(self, $val)    };
   }
 }
+
+# class GDataElt              is repr<CStruct> does GLib::Roles::Pointers is export {
+#   has GQuark         $!key;
+#   has Pointer        $!data;
+#   has GDestroyNotify $!destroy;
+# }
+#
+# class GData                 is repr<CStruct> does GLib::Roles::Pointers is export {
+#   has guint32  $!len;
+#   has guint32  $!alloc;
+#   HAS GDataElt @.data[1] is CArray;
+# }
+#
+# class GDataset              is repr<CStruct> does GLib::Roles::Pointers is export {
+#   has Pointer $!location;
+#   has Pointer $!datalist;
+# }
