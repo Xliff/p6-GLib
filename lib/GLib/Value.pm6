@@ -262,7 +262,7 @@ class GLib::Value {
         if $obj.^lookup('GObject') -> $gobject {
           $obj = $gobject($obj);
         }
-        die '$obj is not a GObject or a Pointer reference!'
+        die "\$obj is a { $obj.^name }, not a GObject or a Pointer reference!"
           unless $obj ~~ GObject || $obj.REPR eq 'CPointer';
         g_value_set_object( $!v, nativecast(GObject, $obj) );
       }
