@@ -866,6 +866,16 @@ our enum GRegexCompileFlagsEnum is export (
   G_REGEX_JAVASCRIPT_COMPAT => 1 +< 25
 );
 
+constant GFileTest is export := guint32;
+our enum GFileTestEnum is export (
+  G_FILE_TEST_IS_REGULAR    => 1,
+  G_FILE_TEST_IS_SYMLINK    => 1 +< 1,
+  G_FILE_TEST_IS_DIR        => 1 +< 2,
+  G_FILE_TEST_IS_EXECUTABLE => 1 +< 3,
+  G_FILE_TEST_EXISTS        => 1 +< 4
+);
+
+
 our $g-param-spec-types is export;
 
 sub get_paramspec_types ()
