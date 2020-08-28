@@ -3,6 +3,7 @@ use v6.c;
 use nqp;
 use NativeCall;
 
+use GLib::Compat::Definitions;
 use GLib::Roles::Pointers;
 
 unit package GLib::Raw::Definitions;
@@ -22,7 +23,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 76;
+my constant forced = 77;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -107,6 +108,7 @@ constant GSignalAccumulator             is export := Pointer;
 constant GSignalEmissionHook            is export := Pointer;
 constant GSignalCMarshaller             is export := Pointer;
 constant GSignalCVaMarshaller           is export := Pointer;
+constant GStatBuf                       is export := stat;
 constant GStrv                          is export := CArray[Str];
 constant GThreadFunc                    is export := Pointer;
 constant GTimeSpan                      is export := int64;
