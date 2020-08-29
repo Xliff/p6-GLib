@@ -57,10 +57,8 @@ class GLib::MainContext {
     my gint ($mp, $nf) = ($max_priority, $n_fds);
 
     g_main_context_check($!mc, $mp, $fds, $nf);
-    my $fdb = $fds but GLib::Roles::TypedBuffer[GPollFD];
-    my @pd;
-    @pd[$_] = $fdb[$_] for ^$n_fds;
-    @pd;
+    my $fdb = GLib::Roles::TypedBuffer[GPollFD].new-typedbuffer-obj($fds);
+    $fdb.Array;
   }
 
   method default {
@@ -170,11 +168,8 @@ class GLib::MainContext {
     my gint ($mp, $to, $nf) = ($max_priority, 0, $n_fds);
     my gpointer $f = GLib::Roles::TypedBuffer[GPollFD].new( size => $nf );
     my $rv = g_main_context_query($!mc, $mp, $to, $f.p, $nf);
-    my @pd;
 
-    @pd[$_] = $f[$_] for ^$n_fds;
-    $fds = @pd;
-    ($rv, $to, $fds);
+    ($rv, $to, $f.Array);
   }
 
   method ref is also<upref> {
