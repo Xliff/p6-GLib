@@ -10,7 +10,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   has Pointer $!b;
 
   # What if not all malloc'd at once?
-  submethod BUILD (:$buffer, :$size) {
+  submethod BUILD (:$buffer, :$size, :$clear) {
     if $buffer.defined {
       $!b = $buffer;
 
@@ -19,8 +19,10 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
       # https://stackoverflow.com/questions/1281686/determine-size-of-dynamically-allocated-memory-in-c
       # *********************************************
       $!size = malloc_usable_size($!b) div nativesizeof(T);
-      loop (my $i = 0; $i < $!size; $i++) {
-        self.bind($i, T.new);
+      if $clear {
+        loop (my $i = 0; $i < $!size; $i++) {
+          self.bind($i, T.new);
+        }
       }
     } else {
       die 'Must pass in $size' unless $size.defined;
@@ -75,6 +77,12 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     }
   }
 
+  # cw: XXX - Yes, but what happens with the return value?
+  #           Ideally what should happen is that we allocate a whole block
+  #           of memory to cover the entire buffer and then bind to
+  #           individual structs inside. Is that happening here?
+  #
+  #           In many cases when passed a buffer, this should do NOTHING!
   method bind (Int() $pos, T $elem) {
     my uint64 $p = $pos;
 
@@ -89,10 +97,18 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     $!size;
   }
 
-  multi method new (Pointer $buffer) {
-    $buffer ?? self.bless( :$buffer ) !! Nil;
+  # cw: These to be dropped for .new-typedbuffer-obj
+  multi method new (Pointer $buffer, $clear = False) {
+    GLib::Roles::TypedBuffer.new-typedbuffer-obj($buffer, $clear);
   }
   multi method new (@entries) {
+    GLib::Roles::TypedBuffer.new-typedbuffer-obj(@entries);
+  }
+
+  multi method new-typedbuffer-obj (Pointer $buffer, $clear = False) {
+    $buffer ?? self.bless( :$buffer, :$clear ) !! Nil;
+  }
+  multi method new-typedbuffer-obj (@entries) {
     return Pointer unless @entries;
 
     die 'TypedBuffer type must be a CStruct!' unless T.REPR eq 'CStruct';
