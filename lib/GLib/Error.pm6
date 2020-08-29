@@ -44,11 +44,8 @@ class GLib::Error {
   }
 
   method clear {
-    my $eb = GLib::Roles::TypedBuffer[GError].new( size => 1 );
-    $eb.bind(0, $!e);
-
     my $ea = CArray[Pointer[GError]].new;
-    $ea[0] = $eb.p;
+    $ea[0] = $!e.p;
 
     g_clear_error($ea);
   }
