@@ -132,6 +132,7 @@ constant GLIB_SYSDEF_MSG_PEEK      is export = 2;
 constant GLIB_SYSDEF_MSG_DONTROUTE is export = 4;
 
 constant G_PARAM_USER_SHIFT        is export = 8;
+constant G_LOG_DOMAIN              is export = "\0";
 
 class GAsyncQueue              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GBinding                 is repr<CPointer> is export does GLib::Roles::Pointers { }
@@ -173,6 +174,8 @@ class GScanner                 is repr<CPointer> is export does GLib::Roles::Poi
 class GSequence                is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GSequenceIter            is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GSource                  is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GTestCase                is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GTestSuite               is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GThread                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GThreadPool              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTimer                   is repr<CPointer> is export does GLib::Roles::Pointers { }
