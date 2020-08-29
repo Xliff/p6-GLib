@@ -36,14 +36,14 @@ sub g_return_if_fail_warning (
   is export
 { * }
 
-sub g_set_print_handler (GPrintFunc $func)
-  returns GPrintFunc
+sub g_set_print_handler ( &func (Str) )
+  returns Pointer
   is native(glib)
   is export
 { * }
 
-sub g_set_printerr_handler (GPrintFunc $func)
-  returns GPrintFunc
+sub g_set_printerr_handler ( &func (Str) )
+  returns Pointer
   is native(glib)
   is export
 { * }
@@ -70,8 +70,11 @@ sub g_log_set_always_fatal (guint $fatal_mask)
   is export
 { * }
 
-sub g_log_set_default_handler (GLogFunc $log_func, gpointer $user_data)
-  returns GLogFunc
+sub g_log_set_default_handler (
+  &log_func (Str, GLogLevelFlags, Str, gpointer),
+  gpointer $user_data
+)
+  returns Pointer
   is native(glib)
   is export
 { * }
@@ -85,7 +88,7 @@ sub g_log_set_fatal_mask (Str $log_domain, guint $fatal_mask)
 sub g_log_set_handler (
   Str $log_domain,
   guint $log_levels,
-  GLogFunc $log_func,
+  &log_func (Str, GLogLevelFlags, Str, gpointer),
   gpointer $user_data
 )
   returns guint
@@ -96,7 +99,7 @@ sub g_log_set_handler (
 sub g_log_set_handler_full (
   Str $log_domain,
   guint $log_levels,
-  GLogFunc $log_func,
+  &log_func (Str, GLogLevelFlags, Str, gpointer),
   gpointer $user_data,
   GDestroyNotify $destroy
 )
@@ -106,7 +109,7 @@ sub g_log_set_handler_full (
 { * }
 
 sub g_log_set_writer_func (
-  GLogWriterFunc $func,
+  &func (GLogLevelFlags, Pointer, gsize, Pointer --> GLogWriterOutput),
   gpointer $user_data,
   GDestroyNotify $user_data_free
 )
@@ -116,7 +119,7 @@ sub g_log_set_writer_func (
 
 sub g_log_structured_array (
   guint $log_level,
-  GLogField $fields,
+  gpointer $fields,      #= Array of GLogField
   gsize $n_fields
 )
   is native(glib)
@@ -134,7 +137,7 @@ sub g_log_variant (
 
 sub g_log_writer_default (
   guint $log_level,
-  GLogField $fields,
+  gpointer $fields,   #= Array of GLogField
   gsize $n_fields,
   gpointer $user_data
 )
@@ -145,7 +148,7 @@ sub g_log_writer_default (
 
 sub g_log_writer_format_fields (
   guint $log_level,
-  GLogField $fields,
+  Pointer $fields,    #= Array of GLogField
   gsize $n_fields,
   gboolean $use_color
 )
@@ -162,7 +165,7 @@ sub g_log_writer_is_journald (gint $output_fd)
 
 sub g_log_writer_journald (
   guint $log_level,
-  GLogField $fields,
+  Pointer $fields,      #= Array of GLogField
   gsize $n_fields,
   gpointer $user_data
 )
@@ -173,7 +176,7 @@ sub g_log_writer_journald (
 
 sub g_log_writer_standard_streams (
   guint $log_level,
-  GLogField $fields,
+  Pointer $fields,     #= Array of GLogField
   gsize $n_fields,
   gpointer $user_data
 )
