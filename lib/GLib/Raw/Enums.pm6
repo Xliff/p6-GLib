@@ -162,23 +162,6 @@ our enum GKeyFileFlagsEnum  is export (
   G_KEY_FILE_KEEP_TRANSLATIONS => 2
 );
 
-constant GLogLevelFlags     is export := guint32;
-our enum GLogLevelFlagsEnum is export (
-  # log flags
-  G_LOG_FLAG_RECURSION          => 1,
-  G_LOG_FLAG_FATAL              => 1 +< 1,
-
-  # GLib log levels */>
-  G_LOG_LEVEL_ERROR             => 1 +< 2,       # always fatal
-  G_LOG_LEVEL_CRITICAL          => 1 +< 3,
-  G_LOG_LEVEL_WARNING           => 1 +< 4,
-  G_LOG_LEVEL_MESSAGE           => 1 +< 5,
-  G_LOG_LEVEL_INFO              => 1 +< 6,
-  G_LOG_LEVEL_DEBUG             => 1 +< 7,
-
-  G_LOG_LEVEL_MASK              => 0xfffffffc   # ~(G_LOG_FLAG_RECURSION | G_LOG_FLAG_FATAL)
-);
-
 constant GLogWriterOutput      is export := guint32;
 our enum GLogWriterOutputEnum  is export (
   G_LOG_WRITER_UNHANDLED => 0,
@@ -904,6 +887,66 @@ our enum GFileTestEnum is export (
   G_FILE_TEST_EXISTS        => 1 +< 4
 );
 
+constant GLogLevelFlags is export := guint32;
+enum GLogLevelFlagsEnums is export (
+  # log flags
+  G_LOG_FLAG_RECURSION          => 1,
+  G_LOG_FLAG_FATAL              => 1 +< 1,
+
+  # GLib log level+>
+  G_LOG_LEVEL_ERROR             => 1 +< 2,       #= always fatal
+  G_LOG_LEVEL_CRITICAL          => 1 +< 3,
+  G_LOG_LEVEL_WARNING           => 1 +< 4,
+  G_LOG_LEVEL_MESSAGE           => 1 +< 5,
+  G_LOG_LEVEL_INFO              => 1 +< 6,
+  G_LOG_LEVEL_DEBUG             => 1 +< 7,
+
+  G_LOG_LEVEL_MASK              => 0b11111100    #= ~(G_LOG_FLAG_RECURSION | G_LOG_FLAG_FATAL)
+);
+
+constant GTestLogType is export := guint32;
+enum GTestLogTypeEnum is export (
+  'G_TEST_LOG_NONE',
+  'G_TEST_LOG_ERROR',             #= s:msg
+  'G_TEST_LOG_START_BINARY',      #= s:binaryname s:seed
+  'G_TEST_LOG_LIST_CASE',         #= s:testpath
+  'G_TEST_LOG_SKIP_CASE',         #= s:testpath
+  'G_TEST_LOG_START_CASE',        #= s:testpath
+  'G_TEST_LOG_STOP_CASE',         #= d:status d:nforks d:elapsed
+  'G_TEST_LOG_MIN_RESULT',        #= s:blurb d:result
+  'G_TEST_LOG_MAX_RESULT',        #= s:blurb d:result
+  'G_TEST_LOG_MESSAGE',           #= s:blurb
+  'G_TEST_LOG_START_SUITE',
+  'G_TEST_LOG_STOP_SUITE'
+);
+
+constant GTestResult is export := guint32;
+enum GTestResultEnum is export <
+  G_TEST_RUN_SUCCESS
+  G_TEST_RUN_SKIPPED
+  G_TEST_RUN_FAILURE
+  G_TEST_RUN_INCOMPLETE
+>;
+
+constant GTestFileType is export := guint32;
+our enum GTestFileTypeEnum is export <
+  G_TEST_DIST
+  G_TEST_BUILT
+>;
+
+constant GTestTrapFlags is export := guint32;
+our enum GTestTrapFlagsEnum is export (
+  G_TEST_TRAP_SILENCE_STDOUT    => 1 +< 7,
+  G_TEST_TRAP_SILENCE_STDERR    => 1 +< 8,
+  G_TEST_TRAP_INHERIT_STDIN     => 1 +< 9
+);
+
+constant GTestSubprocessFlags is export := guint32;
+our enum GTestSubprocessFlagsEnum is export (
+  G_TEST_SUBPROCESS_INHERIT_STDIN  => 1,
+  G_TEST_SUBPROCESS_INHERIT_STDOUT => 1 +< 1,
+  G_TEST_SUBPROCESS_INHERIT_STDERR => 1 +< 2
+);
 
 our $g-param-spec-types is export;
 
