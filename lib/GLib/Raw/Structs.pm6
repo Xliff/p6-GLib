@@ -81,10 +81,32 @@ class GList                 is repr<CStruct> does GLib::Roles::Pointers is expor
   }
 }
 
+#| Skip Struct
+class GLogField-Str         is repr<CStruct> does GLib::Roles::Pointers is export {
+  has Str     $.key;
+  has Str     $.value;
+  has gssize  $.length is rw;
+
+  method setValue (Str $v) {
+    $!value := $v;
+    $!length = $v.chars;
+  }
+}
+
 class GLogField             is repr<CStruct> does GLib::Roles::Pointers is export {
   has Str     $.key;
   has Pointer $.value;
-  has gssize  $.length;
+  has gssize  $.length is rw;
+
+  method getValueStr {
+    my $s = nativecast(GLogField-Str, self);
+    $s.value;
+  }
+
+  method setValueStr (Str $v) {
+    my $s = nativecast(GLogField-Str, self);
+    $s.setValue($v);
+  }
 }
 
 class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -702,3 +724,25 @@ class GParameter            is repr<CStruct> does GLib::Roles::Pointers is expor
 #   has Pointer $!location;
 #   has Pointer $!datalist;
 # }
+
+class GTestConfig            is repr<CStruct> does GLib::Roles::Pointers is export {
+  has gboolean      $.test_initialized is rw;
+  has gboolean      $.test_quick       is rw; #= disable thorough tests
+  has gboolean      $.test_perf        is rw; #= run performance tests
+  has gboolean      $.test_verbose     is rw; #= extra info
+  has gboolean      $.test_quiet       is rw; #= reduce output
+  has gboolean      $.test_undefined   is rw; #= run tests that are meant to assert
+}
+
+class GTestLogMsg            is repr<CStruct> does GLib::Roles::Pointers is export {
+  has GTestLogType  $.log_type         is rw;
+  has guint         $.n_strings        is rw;
+  has CArray[Str]   $.strings               ; #= NULL terminated
+  has guint         $.n_nums           is rw;
+  has CArray[num64] $.nums                  ;
+}
+
+class GTestLogBuffer         is repr<CStruct> does GLib::Roles::Pointers is export {
+  has GString       $!data;
+  has GSList        $!msgs;
+}
