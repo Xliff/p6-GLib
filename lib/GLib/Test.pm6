@@ -6,6 +6,9 @@ use NativeCall;
 
 use GLib::Raw::Types;
 use GLib::Raw::Test;
+use GLib::Raw::Log;
+
+use GLib::Log;
 
 use GLib::Roles::StaticClass;
 
@@ -462,8 +465,13 @@ class GLib::Test::Log {
   submethod BUILD (:$log-levels) {
     $!using-handler = False;
     unless GLib::Log.is-handler-set('writer') {
-      GLib::Log.set-writer-func( sub ($ll, $f, $n, $ud --> GLogWriterOutput) {
-        my $fields = GLib::Roles::TypedBuffer[GLogField].new($f);
+      GLib::Log.set_writer_func( sub ($ll, $f, $n, $ud --> GLogWriterOutput) {
+        CATCH { default { .message.say; } }
+
+        my $fields = GLib::Roles::TypedBuffer[GLogField].new-typedbuffer-obj(
+          $f,
+          :!autosize
+        );
         $fields.setSize($n, :forced);
 
         for $fields.Array -> \𝑓 {
@@ -471,8 +479,9 @@ class GLib::Test::Log {
           # copy string data if $f.length > 0
           # NUL-terminated if $f.length = -1 (default)
           for %!expected-messages.kv -> $k, $v {
-            next if $v;
-            self.encountered($v) if 𝑓.getValueStr eq $v
+            next if %!expected-messages{$k};
+            next unless 𝑓.key eq 'MESSAGE';
+            self.encountered($k) if 𝑓.getValueStr.contains($k);
           }
         }
 
@@ -492,7 +501,7 @@ class GLib::Test::Log {
   }
 
   method done {
-    GLib::Log.set-writer-func(Callable) if $!using-handler;
+    GLib::Log.set_writer_func(&g_log_writer_default) if $!using-handler;
   }
 
   method expect ($message) {
