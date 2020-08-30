@@ -7,7 +7,6 @@ use GLib::Raw::Type;
 
 use GLib::Value;
 
-use GLib::Roles::TypedBuffer;
 use GLib::Roles::StaticClass;
 
 class GLib::Object::Type {
