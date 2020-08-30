@@ -10,15 +10,15 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   has Pointer $!b;
 
   # What if not all malloc'd at once?
-  submethod BUILD (:$buffer, :$size, :$clear) {
+  submethod BUILD (:$buffer, :$size, :$autosize = True, :$clear) {
     if $buffer.defined {
-      $!b = $buffer;
-
       # *********************************************
       # Please note this is NOT portable! Please see:
       # https://stackoverflow.com/questions/1281686/determine-size-of-dynamically-allocated-memory-in-c
       # *********************************************
-      $!size = malloc_usable_size($!b) div nativesizeof(T);
+      #$!size = malloc_usable_size($!b = $buffer) div nativesizeof(T);
+      $!b = $buffer;
+      $!size = $autosize ?? malloc_usable_size($!b) div nativesizeof(T) !! 0;
       if $clear {
         loop (my $i = 0; $i < $!size; $i++) {
           self.bind($i, T.new);
@@ -62,6 +62,8 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   method Array {
+    die 'Must set size of buffer via .setSize!' unless $!size;
+
     # There may be a temptation to usse CArrayToArray, here. Resist it.
     my @a;
     @a[$_] = self[$_] for ^$!size;
@@ -98,15 +100,19 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   # cw: These to be dropped for .new-typedbuffer-obj
-  multi method new (Pointer $buffer, $clear = False) {
-    GLib::Roles::TypedBuffer.new-typedbuffer-obj($buffer, $clear);
+  multi method new (Pointer $buffer, :$autosize = True, :$clear = False) {
+    GLib::Roles::TypedBuffer.new-typedbuffer-obj($buffer, :$autosize, :$clear);
   }
   multi method new (@entries) {
     GLib::Roles::TypedBuffer.new-typedbuffer-obj(@entries);
   }
 
-  multi method new-typedbuffer-obj (Pointer $buffer, $clear = False) {
-    $buffer ?? self.bless( :$buffer, :$clear ) !! Nil;
+  multi method new-typedbuffer-obj (
+    Pointer $buffer,
+    :$autosize = True,
+    :$clear    = False
+  ) {
+    $buffer ?? self.bless( :$buffer, :$autosize, :$clear ) !! Nil;
   }
   multi method new-typedbuffer-obj (@entries) {
     return Pointer unless @entries;
