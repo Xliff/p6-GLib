@@ -98,14 +98,17 @@ class GLogField             is repr<CStruct> does GLib::Roles::Pointers is expor
   has Pointer $.value;
   has gssize  $.length is rw;
 
+  method GLib::Raw::Structs::GLogField-Str
+    is also<GLogField-Str>
+  { cast(GLogField-Str, self) }
+
+
   method getValueStr {
-    my $s = nativecast(GLogField-Str, self);
-    $s.value;
+    self.GLogField-Str.value;
   }
 
   method setValueStr (Str $v) {
-    my $s = nativecast(GLogField-Str, self);
-    $s.setValue($v);
+    self.GLogField-Str.setValue($v);
   }
 }
 
