@@ -173,6 +173,11 @@ class GLib::Log {
     %handlers{$hid} = &log_func;
   }
 
+  method reset_writer_func {
+    self.set_writer_func(&g_log_writer_default);
+    &writer-func = Nil;
+  }
+
   method set_writer_func (
     &func,
     gpointer $user_data            = gpointer,
