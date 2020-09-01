@@ -461,6 +461,7 @@ class GLib::Test::Suite {
 class GLib::Test::Log {
   has %!expected-messages;
   has $!using-handler;
+  has $.count;
 
   submethod BUILD (:$log-levels) {
     $!using-handler = False;
@@ -468,22 +469,27 @@ class GLib::Test::Log {
       GLib::Log.set_writer_func( sub ($ll, $f, $n, $ud --> GLogWriterOutput) {
         CATCH { default { .message.say; } }
 
+        return unless $ll +& $log-levels;
+
         my $fields = GLib::Roles::TypedBuffer[GLogField].new-typedbuffer-obj(
           $f,
           :!autosize
         );
         $fields.setSize($n, :forced);
 
-        for $fields.Array -> \𝑓 {
-          next unless 𝑓.length; # Pointer
-          # copy string data if $f.length > 0
-          # NUL-terminated if $f.length = -1 (default)
-          for %!expected-messages.kv -> $k, $v {
-            next if %!expected-messages{$k};
-            next unless 𝑓.key eq 'MESSAGE';
-            self.encountered($k) if 𝑓.getValueStr.contains($k);
+        if %!expected-messages {
+          for $fields.Array -> \𝑓 {
+            next unless 𝑓.length; # Pointer
+            # copy string data if $f.length > 0
+            # NUL-terminated if $f.length = -1 (default)
+            for %!expected-messages.kv -> $k, $v {
+              next if %!expected-messages{$k};
+              next unless 𝑓.key eq 'MESSAGE';
+              self.encountered($k) if 𝑓.getValueStr.contains($k);
+            }
           }
         }
+        $!count++;
 
         # For the purposes of GLib::Test::Log, we don't handle ANYTHING!
         return G_LOG_WRITER_UNHANDLED
@@ -500,8 +506,15 @@ class GLib::Test::Log {
     self.bless( :$log-levels );
   }
 
+  method reset {
+    $!count = 0;
+    %!expected-messages = ();
+  }
+
   method done {
-    GLib::Log.set_writer_func(&g_log_writer_default) if $!using-handler;
+    self.reset;
+    GLib::Log.reset_writer_func if $!using-handler;
+    $!using-handler = False
   }
 
   method expect ($message) {
@@ -514,5 +527,9 @@ class GLib::Test::Log {
 
   method got-expected {
     [&&]( |%!expected-messages.values )
+  }
+
+  method message-count {
+    $!count;
   }
 }
