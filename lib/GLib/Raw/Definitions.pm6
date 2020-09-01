@@ -9,6 +9,7 @@ use GLib::Roles::Pointers;
 unit package GLib::Raw::Definitions;
 
 our $ERROR        is export;
+our @ERRORS       is export;
 our $ERROR-THROWS is export;
 our $DEBUG        is export = 0;
 
@@ -23,7 +24,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 77;
+my constant forced = 78;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
