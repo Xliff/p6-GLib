@@ -516,6 +516,7 @@ sub set_error(CArray $e) is export {
   if $e[0].defined {
     $ERROR = $e[0].deref;
     X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
+    @ERRORS.push: $ERROR;
   }
 }
 
