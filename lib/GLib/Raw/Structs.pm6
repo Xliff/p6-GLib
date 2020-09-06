@@ -750,3 +750,8 @@ class GTestLogBuffer         is repr<CStruct> does GLib::Roles::Pointers is expo
   has GString       $!data;
   has GSList        $!msgs;
 }
+
+class GMutex                 is repr<CUnion>  does GLib::Roles::Pointers is export {
+  has gpointer      $!p;
+  HAS guint         @!i is CArray;
+}

@@ -24,7 +24,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 78;
+my constant forced = 80;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -156,7 +156,7 @@ class GMappedFile              is repr<CPointer> is export does GLib::Roles::Poi
 class GMarkupParser            is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMarkupParseContext      is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GMatchInfo               is repr<CPointer> is export does GLib::Roles::Pointers { }
-class GMutex                   is repr<CPointer> is export does GLib::Roles::Pointers { }
+#class GMutex                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GModule                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 #class GObject                  is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GOptionGroup             is repr<CPointer> is export does GLib::Roles::Pointers { }
