@@ -2,7 +2,8 @@ use v6.c;
 
 use NativeCall;
 
-use GLib::Raw::Types;
+use GLib::Raw::Definitions;
+use GLib::Raw::Structs;
 
 unit package GLib::Raw::Thread;
 
