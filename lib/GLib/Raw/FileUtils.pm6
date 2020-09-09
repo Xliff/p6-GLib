@@ -73,8 +73,8 @@ sub g_file_error_quark ()
 
 sub g_file_get_contents (
   Str $filename,
-  Str $contents,
-  gsize $length,
+  CArray[Str] $contents,
+  gsize $length is rw,
   CArray[Pointer[GError]] $error
 )
   returns uint32

@@ -11,7 +11,10 @@ use GLib::Roles::StaticClass;
 class GLib::FileUtils {
   also does GLib::Roles::StaticClass;
 
-  method basename (Str() $file_name) {
+  multi method basename (IO::Path $path) {
+    $path.basename;
+  }
+  multi method basename (Str() $file_name) {
     g_basename($file_name);
   }
 
@@ -52,22 +55,42 @@ class GLib::FileUtils {
     g_file_error_from_errno($e);
   }
 
-  method file_error_quark () {
+  method file_error_quark {
     g_file_error_quark();
   }
 
-  method file_get_contents (
+  multi method file_get_contents (IO::Path $path) {
+    my $rv = samewith($path.absolute, $, $, :all);
+
+    $rv[0] ?? $rv.skip(1) !! Nil;
+  }
+  multi method file_get_contents (
     Str() $filename,
-    Str() $contents,
-    Int() $length,
-    CArray[Pointer[GError]] $error = gerror
+    $contents is rw,
+    $length is rw,
+    CArray[Pointer[GError]] $error = gerror,
+    :$all = False
   ) {
-    my gsize $l = $length;
+    my ($c, $l) = (CArray[Str].new, $length);
+    $c[0] = Str;
+
+    samewith($filename, $c, $l // gsize, $error);
+  }
+  multi method file_get_contents (
+    Str() $filename,
+    CArray[Str] $contents,
+    $length is rw,
+    CArray[Pointer[GError]] $error = gerror,
+    :$all = False
+  ) {
+    my gsize $l = 0;
 
     clear_error;
-    my $c = g_file_get_contents($filename, $contents, $l, $error);
+    my $rv = g_file_get_contents($filename, $contents, $l, $error);
     set_error($error);
-    $c;
+
+    $length = $l;
+    $all.not ?? $rv !! ($rv, $length);
   }
 
   method file_open_tmp (
@@ -80,7 +103,13 @@ class GLib::FileUtils {
     set_error($error);
   }
 
-  method file_read_link (
+  multi method file_read_link (
+    IO::Path $path,
+    CArray[Pointer[GError]] $error = gerror
+  ) {
+    samewith($path.absolute, $error);
+  }
+  multi method file_read_link (
     Str() $filename,
     CArray[Pointer[GError]] $error = gerror
   ) {
@@ -90,10 +119,18 @@ class GLib::FileUtils {
     $l
   }
 
-  method file_set_contents (
+  multi method file_set_contents (
+    IO::Path $path,
+    Str() $contents,
+    Int() $length = -1,
+    CArray[Pointer[GError]] $error = gerror
+  ) {
+    samewith($path.absolute, $contents, $length, $error);
+  }
+  multi method file_set_contents (
     Str() $filename,
     Str() $contents,
-    Int() $length,
+    Int() $length = -1,
     CArray[Pointer[GError]] $error = gerror
   ) {
     my gssize $l = $length;
@@ -104,17 +141,23 @@ class GLib::FileUtils {
     $rv;
   }
 
-  method file_test (Str() $filename, Int() $test) {
+  multi method file_test (IO::Path $path, Int() $test) {
+    samewith($path, $test);
+  }
+  multi method file_test (Str() $filename, Int() $test) {
     my GFileTest $t = $test;
 
     so g_file_test($filename, $t);
   }
 
-  method get_current_dir () {
+  method get_current_dir {
     g_get_current_dir();
   }
 
-  method mkdir_with_parents (Str() $pathname, Int() $mode) {
+  multi method mkdir_with_parents (IO::Path $pathname, Int() $mode) {
+    samewith($pathname.absolute, $mode);
+  }
+  multi method mkdir_with_parents (Str() $pathname, Int() $mode) {
     my gint $m = $mode;
 
     g_mkdir_with_parents($pathname, $m);
@@ -156,23 +199,32 @@ class GLib::FileUtils {
     g_path_skip_root($file_name);
   }
 
-  method access (Str() $filename, Int() $mode) {
+  multi method access (IO::Path $path, Int() $mode) {
+    samewith($path.absolute);
+  }
+  multi method access (Str() $filename, Int() $mode) {
     my gint $m = $mode;
 
     g_access($filename, $m);
   }
 
-  method chdir (Str() $path) {
+  multi method chdir (IO::Path $path) {
+    samewith($path.absolute);
+  }
+  multi method chdir (Str() $path) {
     g_chdir($path);
   }
 
-  method chmod (Str() $filename, Int() $mode) {
+  multi method chmod (IO::Path $path, Int() $mode) {
+    samewith($path.absolute, $mode);
+  }
+  multi method chmod (Str() $filename, Int() $mode) {
     my gint $m = $mode;
 
     g_chmod($filename, $m);
   }
 
-  method close (gint $fd, CArray[Pointer[GError]] $error = gerror) {
+  method close (Int() $fd, CArray[Pointer[GError]] $error = gerror) {
     my gint $f = $fd;
 
     clear_error;
@@ -181,19 +233,28 @@ class GLib::FileUtils {
     $rv
   }
 
-  method creat (Str() $filename, Int() $mode) {
+  multi method creat (IO::Path $path, Int() $mode) {
+    samewith($path.absolute, $mode);
+  }
+  multi method creat (Str() $filename, Int() $mode) {
     my gint $m = $mode;
 
     g_creat($filename, $m);
   }
 
-  method fopen (Str() $filename, Str() $mode) {
+  multi method fopen (IO::Path $path, Str() $mode) {
+    samewith($path.absolute, $mode);
+  }
+  multi method fopen (Str() $filename, Str() $mode) {
     my gint $m = $mode;
 
     g_fopen($filename, $m);
   }
 
-  method freopen (Str() $filename, Str() $mode, FILE $stream) {
+  multi method freopen (IO::Path $path, Str() $mode, FILE $stream) {
+    samewith($path.absolute, $mode, $stream);
+  }
+  multi method freopen (Str() $filename, Str() $mode, FILE $stream) {
     # cw: String version of MODE
     g_freopen($filename, $mode, $stream);
   }
@@ -204,39 +265,63 @@ class GLib::FileUtils {
     g_fsync($f);
   }
 
-  method lstat (Str() $filename, GStatBuf $buf) {
+  multi method lstat (IO::Path $path, GStatBuf $buf) {
+    samewith($path.absolute, $buf);
+  }
+  multi method lstat (Str() $filename, GStatBuf $buf) {
     g_lstat($filename, $buf);
   }
 
-  method mkdir (Str() $filename, Int() $mode) {
+  multi method mkdir (IO::Path $path, Int() $mode) {
+    samewith($path.absolute, $mode);
+  }
+  multi method mkdir (Str() $filename, Int() $mode) {
     my gint $m = $mode;
-    
+
     g_mkdir($filename, $m);
   }
 
-  method open (Str() $filename, Int() $flags, Int() $mode) {
+  multi method open (IO::Path $path, Int() $flags, Int() $mode) {
+    samewith($path.absolute, $flags, $mode);
+  }
+  multi method open (Str() $filename, Int() $flags, Int() $mode) {
     my gint ($f, $m) = ($flags, $mode);
 
     g_open($filename, $f, $m);
   }
 
-  method remove (Str() $filename) {
+  multi method remove (IO::Path $path) {
+    samewith($path.absolute);
+  }
+  multi method remove (Str() $filename) {
     g_remove($filename);
   }
 
-  method rename (Str() $oldfilename, Str() $newfilename) {
+  multi method rename (IO::Path $oldfilename, IO::Path $newfilename) {
+    samewith($oldfilename.absolute, $newfilename.absolute);
+  }
+  multi method rename (Str() $oldfilename, Str() $newfilename) {
     g_rename($oldfilename, $newfilename);
   }
 
-  method rmdir (Str() $filename) {
+  multi method rmdir (IO::Path $path) {
+    samewith($path.absolute);
+  }
+  multi method rmdir (Str() $filename) { 
     g_rmdir($filename);
   }
 
-  method stat (Str() $filename, GStatBuf $buf) {
+  multi method stat (IO::Path $path, GStatBuf $buf) {
+    samewith($path.absolute, $buf);
+  }
+  multi method stat (Str() $filename, GStatBuf $buf) {
     g_stat($filename, $buf);
   }
 
-  method unlink (Str() $filename) {
+  multi method unlink (IO::Path $path) {
+    samewith($path.absolute);
+  }
+  multi method unlink (Str() $filename) {
     g_unlink($filename);
   }
 
