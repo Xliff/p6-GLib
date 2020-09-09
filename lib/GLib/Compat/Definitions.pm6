@@ -15,6 +15,58 @@ our constant sa_family_t is export := int16;
 our constant in_port_t   is export := int16;
 # cw: Need definition for sa_family_t
 
+# cw; <kneejerk>It's kinda inexcusable for a parser advanced as Raku's to NOT
+#     be able to handle leading 0's as a decimal number. Nor would it be
+#     confusing to do so!</kneejerk>
+constant FileAccessFlags is export := uint32;
+our enum FileAccessFlagsEnum is export (
+  O_RDONLY     =>         0,
+  O_WRONLY     =>         1,
+  O_RDWR       =>         2,
+  O_ACCMODE    =>         3,
+  O_CREAT      =>       100,       # not fcntl
+  O_EXCL       =>       200,       # not fcntl
+  O_NOCTTY     =>       400,       # not fcntl
+  O_TRUNC      =>      1000,       # not fcntl
+  O_APPEND     =>      2000,
+  O_NONBLOCK   =>      4000,
+  O_DSYNC      =>     10000,       # used to be O_SYNC, see below
+  FASYNC       =>     20000,       # fcntl, for BSD compatibility
+  O_DIRECT     =>     40000,       # direct disk access hint
+  O_LARGEFILE  =>    100000,
+  O_DIRECTORY  =>    200000,       # must be a directory
+  O_NOFOLLOW   =>    400000,       # don't follow links
+  O_NOATIME    =>   1000000,
+  O_CLOEXEC    =>   2000000       # set close_on_exec
+);
+
+constant FileModes is export := uint32;
+our enum FileModesEnum is export (
+  S_IFMT   =>   170000,
+  S_IFSOCK =>   140000,
+  S_IFLNK  =>   120000,
+  S_IFREG  =>   100000,
+  S_IFBLK  =>    60000,
+  S_IFDIR  =>    40000,
+  S_IFCHR  =>    20000,
+  S_IFIFO  =>    10000,
+  S_ISUID  =>     4000,
+  S_ISGID  =>     2000,
+  S_ISVTX  =>     1000,
+  S_IRWXU  =>      700,
+  S_IRUSR  =>      400,
+  S_IWUSR  =>      200,
+  S_IXUSR  =>      100,
+  S_IRWXG  =>       70,
+  S_IRGRP  =>       40,
+  S_IWGRP  =>       20,
+  S_IXGRP  =>       10,
+  S_IRWXO  =>        7,
+  S_IROTH  =>        4,
+  S_IWOTH  =>        2,
+  S_IXOTH  =>        1
+);
+
 constant INADDR_LOOPBACK is export := 0x7f000001; # Inet 127.0.0.1
 
 class sockaddr   is repr<CStruct> is export does GLib::Roles::Pointers {
