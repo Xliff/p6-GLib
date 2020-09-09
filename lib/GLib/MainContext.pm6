@@ -71,26 +71,51 @@ class GLib::MainContext {
 
   method find_source_by_funcs_user_data (
     GSourceFuncs $funcs,
-    gpointer $user_data = gpointer
-  )
-    is also<find-source-by-funcs-user-data>
-  {
-    g_main_context_find_source_by_funcs_user_data($!mc, $funcs, $user_data);
+    gpointer $user_data = gpointer,
+    :$raw = False
+  ) {
+    my $s = g_main_context_find_source_by_funcs_user_data(
+      $!mc,
+      $funcs,
+      $user_data
+    );
+
+    $s ??
+      ( $raw ?? $s !! ::('GLib::Source').new($s) )
+      !!
+      Nil;
   }
 
-   method find_source_by_id (Int() $source_id) is also<find-source-by-id> {
-     my guint $sid = $source_id;
+  method find_source_by_id (
+    Int() $source_id,
+    :$raw = False
+  )
+    is also<find-source-by-id>
+  {
+    my guint $sid = $source_id;
+    my $s = g_main_context_find_source_by_id($!mc, $sid);
 
-     g_main_context_find_source_by_id($!mc, $sid);
-   }
+    $s ??
+      ( $raw ?? $s !! ::('GLib::Source').new($s) )
+      !!
+      Nil;
+  }
 
-   method find_source_by_user_data (gpointer $user_data = gpointer)
-     is also<find-source-by-user-data>
-   {
-     g_main_context_find_source_by_user_data($!mc, $user_data);
-   }
+  method find_source_by_user_data (
+    gpointer $user_data = gpointer,
+    :$raw = False
+  )
+    is also<find-source-by-user-data>
+  {
+    my $s = g_main_context_find_source_by_user_data($!mc, $user_data);
 
-   method get_thread_default is also<get-thread-default> {
+    $s ??
+      ( $raw ?? $s !! ::('GLib::Source').new($s) )
+      !!
+      Nil;
+  }
+
+  method get_thread_default is also<get-thread-default> {
     g_main_context_get_thread_default();
   }
 
@@ -115,12 +140,7 @@ class GLib::MainContext {
     g_main_context_is_owner($!mc);
   }
 
-  multi method iteration (
-    GLib::MainContext:U:
-  ) {
-    GLib::MainContext.iteration(GMainContext);
-  }
-  multi method iteration (Int() $may_block = True) {
+  multi method iteration (GLib::MainContext:D: Int() $may_block = True) {
     GLib::MainContext.iteration($!mc, $may_block);
   }
   multi method iteration (
@@ -130,7 +150,7 @@ class GLib::MainContext {
   ) {
     my gboolean $mb = $may_block.so.Int;
 
-    g_main_context_iteration($context, $mb);
+    so g_main_context_iteration($context, $mb);
   }
 
   method pending {
@@ -191,6 +211,14 @@ class GLib::MainContext {
 
   method unref is also<downref> {
     g_main_context_unref($!mc);
+  }
+
+  method set_poll_func (&func) is also<set-poll-func> {
+    g_main_context_set_poll_func($!mc, &func);
+  }
+
+  method wait (GCond() $cond, GMutex() $mutex) {
+    g_main_context_wait($!mc, $cond, $mutex);
   }
 
   method wakeup {

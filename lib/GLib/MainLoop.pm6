@@ -1,5 +1,6 @@
 use v6.c;
 
+use NativeCall;
 use Method::Also;
 
 use GLib::Raw::Types;
@@ -32,12 +33,17 @@ class GLib::MainLoop {
     samewith(GMainContext, False);
   }
 
-  method get_context is also<get-context> {
+  method get_context
+    is also<
+      get-context
+      context
+    >
+  {
     g_main_loop_get_context($!ml);
   }
 
   method is_running is also<is-running> {
-    g_main_loop_is_running($!ml);
+    so g_main_loop_is_running($!ml);
   }
 
   method quit {
@@ -46,6 +52,7 @@ class GLib::MainLoop {
 
   method ref {
     g_main_loop_ref($!ml);
+    self;
   }
 
   method run {
@@ -56,7 +63,14 @@ class GLib::MainLoop {
     g_main_loop_unref($!ml);
   }
 
-  method poll (gpointer $fds, Int() $nfds, Int() $timeout) {
+  multi method poll (@fds, Int() $timeout) {
+    samewith(
+      GLib::Roles::TypedBuffer[GPollFD].new(@fds).p,
+      @fds.elems,
+      $timeout
+    );
+  }
+  multi method poll (gpointer $fds, Int() $nfds, Int() $timeout) {
     my guint $nf = $nfds;
     my gint $t = $timeout;
 
@@ -65,7 +79,7 @@ class GLib::MainLoop {
 
   method child_watch_add (
     GPid $pid,
-    &func (GPid, gint, gpointer),
+    &func,
     gpointer $data = gpointer
   )
     is also<child-watch-add>
@@ -91,3 +105,11 @@ class GLib::MainLoop {
   }
 
 }
+
+### /usr/include/glib-2.0/glib/gpoll.h
+
+sub g_poll (gpointer $fds, guint $nfds, gint $timeout)
+  returns gint
+  is native(glib)
+  is export
+{ * }
