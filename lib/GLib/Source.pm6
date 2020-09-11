@@ -55,6 +55,7 @@ class GLib::Source {
   method add_unix_fd (Int() $fd, Int() $events) is also<add-unix-fd> {
     my gint $f = $fd;
     my guint $e = $events;
+    
     g_source_add_unix_fd($!gs, $fd, $e);
   }
 
@@ -101,7 +102,7 @@ class GLib::Source {
     g_source_remove_child_source($!gs, &child_source);
   }
 
-  method remove_poll (GPollFD $fd) is also<remove-poll> {
+  method remove_poll (GPollFD() $fd) is also<remove-poll> {
     g_source_remove_poll($!gs, $fd);
   }
 
@@ -128,12 +129,40 @@ class GLib::Source {
     g_source_set_callback_indirect($!gs, $callback_data, $callback_funcs);
   }
 
+  method set_can_recurse (Int() $can_recurse) is also<set-can-recurse> {
+    my gboolean $c = $can_recurse;
+
+    g_source_set_can_recurse($!gs, $c);
+  }
+
+  method set_dispose_function (&dispose)
+    is also<set-dispose-function>
+  {
+    g_source_set_dispose_function($!gs, &dispose);
+  }
+
   method set_funcs (GSourceFuncs $funcs) is also<set-funcs> {
     g_source_set_funcs($!gs, $funcs);
   }
 
+  method set_name (Str() $name) is also<set-name> {
+    g_source_set_name($!gs, $name);
+  }
+
   method set_name_by_id (Str() $name) is also<set-name-by-id> {
     g_source_set_name_by_id($!gs, $name);
+  }
+
+  method set_priority (Int() $priority) {
+    my gint $p = $priority;
+
+    g_source_set_priority($!gs, $p);
+  }
+
+  method set_ready_time (Int() $ready_time) {
+    my gint64 $r = $ready_time;
+
+    g_source_set_ready_time($!gs, $ready_time);
   }
 
   method unref {
@@ -193,6 +222,17 @@ class GLib::Source {
     is also<idle-remove-by-data>
   {
     g_idle_remove_by_data($data);
+  }
+
+}
+
+
+class GLib::Source::Idle is GLib::Source {
+
+  method new {
+    my $source = g_idle_source_new();
+
+    $source ?? self.bless( :$source ) !! Nil;
   }
 
 }
