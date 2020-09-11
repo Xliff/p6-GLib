@@ -24,7 +24,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 85;
+my constant forced = 89;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -215,6 +215,10 @@ multi max (:&by = {$_}, :$all!, *@list) is export {
 }
 
 INIT {
-  #say 'setting debug';
-  $DEBUG = %*ENV<P6_GTK_DEBUG>;
+
+  if %*ENV<P6_GLIB_DEBUG> {
+    say '»————————————> setting debug';
+    $DEBUG = True;
+  }
+
 }
