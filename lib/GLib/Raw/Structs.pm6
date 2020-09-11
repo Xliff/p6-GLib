@@ -349,7 +349,7 @@ class GTypeValueList        is repr('CUnion')  does GLib::Roles::Pointers is exp
 };
 
 class GValue {
-  has ulong           $!g_type;
+  has ulong           $.g_type;
   HAS GTypeValueList  $.data1  is rw;
   HAS GTypeValueList  $.data2  is rw;
 
