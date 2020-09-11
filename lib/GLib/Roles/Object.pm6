@@ -12,6 +12,7 @@ use GLib::Object::Type;
 use GLib::Class::Object;
 
 use GLib::Roles::Bindable;
+use GLib::Roles::TypedBuffer;
 
 constant gObjectTypeKey = 'p6-GObject-Type';
 
@@ -48,8 +49,10 @@ role GLib::Roles::Signals::GObject {
 
 }
 
+# cw: Time to grow up.
 role GLib::Roles::Object {
   also does GLib::Roles::Bindable;
+  also does GLib::Roles::Signals::GObject;
 
   has GObject $!o;
 
@@ -69,6 +72,135 @@ role GLib::Roles::Object {
     my GType $t = $type;
 
     g_object_new($t, Str);
+  }
+
+  proto method new_object_with_properties (|)
+    is also<new-object-with-properties>
+  { * }
+
+  multi method new_object_with_properties (*@args) {
+    die 'Array passed to .new_object_with_properties must have an even number of elements!'
+      unless @args.elems % 2 == 0;
+
+    samewith( |@args.Hash )
+  }
+  multi method new_object_with_properties (:$raw = False, *%props) {
+    my (@names, @values);
+
+    my %v-props = self.resolveCreationOptions( |%props );
+    for %v-props.keys {
+      @names.push:  $_;
+      @values.push: %v-props{$_};
+    }
+
+    samewith(
+      @names.elems,
+      ArrayToCArray(Str, @names),
+      GLib::Roles::TypedBuffer[GValue].new(@values),
+      :$raw
+    );
+  }
+  multi method new_object_with_properties (
+    Int() $num-props,
+    CArray[Str] $names,
+    Pointer $values,
+    :$raw
+  ) {
+    my guint $n = $num-props;
+    my GType $t = ::?CLASS.get-type;
+
+    say "T: $t" if $DEBUG;
+
+    my $object = g_object_new_with_properties(
+      $t,
+      $n,
+      $names,
+      $values
+    );
+
+    $object ?? ( $raw ?? $object !! self.bless( :$object ) )
+            !! Nil;
+  }
+
+  # cw: Only make active when Object's HOW is ClassHOW
+  # method attributes ($key) {
+  #   die "Unknown attributes: $key!"
+  # }
+
+  # Not inherited. Punned directly to the object. So how is that gonna work?
+  method resolveCreationOptions (*%options) {
+    my (%new-opts; %not-found);
+
+    say "A: { self.attributes.gist }" if $DEBUG;
+    say "O: { %options.keys }"        if $DEBUG;
+
+    for %options.pairs -> $a {
+      say "K: { $a.key }" if $DEBUG;
+
+      next if $a.value ~~ (GValue, GLib::Value).any;
+      if self.attributes( $a.key ) -> $attr {
+        say "V: { $attr !~~ Array
+                    ?? $attr
+                    !! ($attr[0], $attr[1].^name, $attr[2]).join(', ') }"
+        if $DEBUG;
+
+        # cw: Will NOT be able to handle ancestor attributes until ::Object
+        #     becomes a class.
+        given $attr {
+          my $v = $a.value;
+
+          when Array {
+
+            quietly {
+              # cw: WTF are UNDEF warnings being emitted on the 'when' lines,
+              #     when there's no case of anything undef being used in
+              #     string context, here! These needed to be muted, hence
+              #     the `quietly` block. 09/10/2020
+
+              when 'enum' {
+                # ['enum', EnumTypeObject, EnumGType:optional ]
+                .value = GLib::Value(
+                  .[2].defined ?? .[2] !! GLib::Value.gtypeFromEnum( .[1] )
+                );
+                .value.valueFromEnum( .[1] ) = $v;
+              }
+
+              when 'boxed' | 'object' {
+                # [ '<boxed | object>', ObjectType, ObjectGType ]
+                my $meth = $_;
+                $meth = 'pointer' if $meth eq 'boxed';
+
+                  .value = GLib::Value.new( .[2] );
+                  # cw: Assign .value the Pointer representation of an object, and
+                  #     if necessary, coerce.s
+                  .value."{ .[0] }"() =
+                    ( $v ~~ .[1] ) ?? $v
+                                   !! $v."{ .[1].^shortname }"()
+              }
+            }
+
+            default {
+              die "Invalid type! Valid attribute types are: 'boxed', 'enum' and 'object'"
+                unless .[0] eq <boxed object>.any;
+            }
+          }
+
+          when G_TYPE_OBJECT  { %new-opts{$a.key} = gv_obj($v)    }
+          when G_TYPE_INT     { %new-opts{$a.key} = gv_int($v)    }
+          when G_TYPE_UINT    { %new-opts{$a.key} = gv_uint($v)   }
+          when G_TYPE_INT64   { %new-opts{$a.key} = gv_int64($v)  }
+          when G_TYPE_UINT64  { %new-opts{$a.key} = gv_uint64($v) }
+          when G_TYPE_STRING  { %new-opts{$a.key} = gv_str($v)    }
+          when G_TYPE_FLOAT   { %new-opts{$a.key} = gv_flt($v)    }
+          when G_TYPE_DOUBLE  { %new-opts{$a.key} = gv_dbl($v)    }
+          when G_TYPE_BOOLEAN { %new-opts{$a.key} = gv_bool($v)   }
+          when G_TYPE_POINTER { %new-opts{$a.key} = gv_ptr($v)    }
+        }
+        #%options{ $a.key }:delete;
+      }
+    }
+
+    %new-opts;
   }
 
   method getImplementor {
@@ -257,7 +389,7 @@ role GLib::Roles::Object {
         unless .^can('GValue').elems {
           die "$_ value cannot be coerced to GValue";
         }
-        .gvalue();
+        .GValue;
       }
     });
   }

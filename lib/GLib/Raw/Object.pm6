@@ -47,3 +47,14 @@ sub g_type_check_instance_is_a (
   is native(gobject)
   is export
 { * }
+
+sub g_object_new_with_properties (
+  GType $object_type, 
+  guint $n_properties, 
+  CArray[Str] $names, 
+  Pointer $values
+)
+  returns GObject
+  is native(gobject)
+  is export
+ { * }
