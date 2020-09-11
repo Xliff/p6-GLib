@@ -14,7 +14,7 @@ class GLib::Value {
 
     die 'Cannot allocate GValue!' unless $!v;
 
-    self.init($!v, $type) if $type;
+    GLib::Value.init($!v, $type) if $type;
   }
 
   submethod DESTROY {
@@ -49,7 +49,7 @@ class GLib::Value {
   # ↓↓↓↓ SIGNALS ↓↓↓↓
   # ↑↑↑↑ SIGNALS ↑↑↑↑
 
-  method init (GValue $value, Int() $type) {
+  method init (GLib::Value:U: GValue $value, Int() $type) {
     g_value_init($value, $type);
   }
 
@@ -262,8 +262,8 @@ class GLib::Value {
         if $obj.^lookup('GObject') -> $gobject {
           $obj = $gobject($obj);
         }
-        die "\$obj is a { $obj.^name }, not a GObject or a Pointer reference!"
-          unless $obj ~~ GObject || $obj.REPR eq 'CPointer';
+        die "\$obj is a { $obj.^name }, not a CPointer or CStruct reference!"
+          unless $obj.REPR eq <CPointer CStruct>.any;
         g_value_set_object( $!v, nativecast(GObject, $obj) );
       }
     );
@@ -448,6 +448,22 @@ sub gv-uint (Int() $i) is export
 sub gv_uint (Int() $i) is export {
   my $gv = GLib::Value.new( G_TYPE_UINT );
   $gv.uint = $i;
+  $gv;
+}
+
+sub gv-int64 (Int() $i) is export
+  { gv_int64($i) }
+sub gv_int64 (Int() $i) is export {
+  my $gv = GLib::Value.new( G_TYPE_INT64 );
+  $gv.int64 = $i;
+  $gv;
+}
+
+sub gv-uint64 (Int() $i) is export
+  { gv_uint64($i) }
+sub gv_uint64 (Int() $i) is export {
+  my $gv = GLib::Value.new( G_TYPE_UINT64 );
+  $gv.uint64 = $i;
   $gv;
 }
 

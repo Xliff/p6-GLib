@@ -233,7 +233,7 @@ sub g_value_set_pointer (GValue $value, gpointer $v_pointer)
   is export
   { * }
 
-sub g_value_set_object (GValue $value, gpointer $v_pointer)
+sub g_value_set_object (GValue $value, GObject $v_pointer)
   is native(gobject)
   is export
   { * }
