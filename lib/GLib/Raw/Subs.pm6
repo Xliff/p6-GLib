@@ -17,6 +17,12 @@ sub memset         (Pointer, int32, size_t)               is export is native { 
 sub dup2           (int32, int32 --> int32)               is export is native { * }
 sub isatty         (int32 --> int32)                      is export is native { * }
 
+sub native-open    (Str, int32, int32 $m = 0)
+  is export
+  is symbol('open')
+  is native
+{ * }
+
 # So as not to collide with the CORE sub.
 sub native-close   (int32 --> int32)
   is export
