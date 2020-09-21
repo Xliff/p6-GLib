@@ -1,11 +1,11 @@
 Dependency Generation
 =====================
-real 0.98
-user 1.48
-sys 0.01
+real 0.99
+user 1.50
+sys 0.04
  === Method::Also ===
 Stage start      :   0.000
-Stage parse      :   1.090
+Stage parse      :   1.111
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
@@ -14,16 +14,16 @@ Stage mbc        :   0.000
 Stage moar       :   0.000
  === NativeCall ===
 Stage start      :   0.000
-Stage parse      :   1.179
+Stage parse      :   1.204
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
 Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === nqp ===
 Stage start      :   0.000
-Stage parse      :   0.063
+Stage parse      :   0.064
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
@@ -35,13 +35,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/Pointers.pm6
     Stage start      :   0.000
-    Stage parse      :   1.218
+    Stage parse      :   1.243
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.001
-    Stage mast       :   0.032
+    Stage mast       :   0.031
     Stage mbc        :   0.001
-Stage parse      :   2.418
+Stage parse      :   2.454
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
@@ -53,16 +53,16 @@ Stage start      :   0.000
 
     precomp lib/GLib/Compat/Definitions.pm6
     Stage start      :   0.000
-    Stage parse      :   1.373
+    Stage parse      :   1.388
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.021
-    Stage mast       :   0.068
-    Stage mbc        :   0.002
-Stage parse      :   2.724
+    Stage optimize   :   0.008
+    Stage mast       :   0.083
+    Stage mbc        :   0.003
+Stage parse      :   2.750
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
+Stage optimize   :   0.001
 Stage mast       :   0.002
 Stage mbc        :   0.001
 Stage moar       :   0.000
@@ -71,17 +71,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Definitions.pm6
     Stage start      :   0.000
-    Stage parse      :   1.529
+    Stage parse      :   1.589
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.011
-    Stage mast       :   0.087
+    Stage optimize   :   0.012
+    Stage mast       :   0.090
     Stage mbc        :   0.004
-Stage parse      :   2.779
+Stage parse      :   2.889
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
-Stage mast       :   0.003
+Stage mast       :   0.004
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Enums ===
@@ -89,53 +89,53 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Enums.pm6
     Stage start      :   0.000
-    Stage parse      :   2.861
+    Stage parse      :   2.967
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.049
-    Stage mast       :   0.404
-    Stage mbc        :   0.043
-Stage parse      :   4.672
+    Stage optimize   :   0.045
+    Stage mast       :   0.424
+    Stage mbc        :   0.033
+Stage parse      :   4.808
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.003
 Stage mast       :   0.006
-Stage mbc        :   0.002
+Stage mbc        :   0.003
 Stage moar       :   0.000
  === GLib::Raw::Env ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/Env.pm6
     Stage start      :   0.000
-    Stage parse      :   1.520
+    Stage parse      :   1.586
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.004
-    Stage mast       :   0.053
+    Stage mast       :   0.057
     Stage mbc        :   0.007
-Stage parse      :   2.823
+Stage parse      :   2.846
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Sequence ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/Sequence.pm6
     Stage start      :   0.000
-    Stage parse      :   2.763
+    Stage parse      :   2.855
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.022
-    Stage mast       :   0.111
-    Stage mbc        :   0.033
-Stage parse      :   4.206
+    Stage optimize   :   0.021
+    Stage mast       :   0.116
+    Stage mbc        :   0.035
+Stage parse      :   4.242
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.002
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Struct_Subs ===
@@ -143,13 +143,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Struct_Subs.pm6
     Stage start      :   0.000
-    Stage parse      :   1.760
+    Stage parse      :   1.789
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.008
-    Stage mast       :   0.081
+    Stage mast       :   0.082
     Stage mbc        :   0.011
-Stage parse      :   3.112
+Stage parse      :   3.202
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -158,7 +158,7 @@ Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Exports ===
 Stage start      :   0.000
-Stage parse      :   1.123
+Stage parse      :   1.157
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -167,7 +167,7 @@ Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::ReturnedValue ===
 Stage start      :   0.000
-Stage parse      :   1.088
+Stage parse      :   1.102
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
@@ -179,35 +179,35 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/TypeInstance.pm6
     Stage start      :   0.000
-    Stage parse      :   1.209
+    Stage parse      :   1.242
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.004
-    Stage mast       :   0.020
+    Stage mast       :   0.021
     Stage mbc        :   0.005
-Stage parse      :   2.525
+Stage parse      :   2.591
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
 Stage mast       :   0.001
-Stage mbc        :   0.000
+Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Dataset ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/Dataset.pm6
     Stage start      :   0.000
-    Stage parse      :   1.968
+    Stage parse      :   2.037
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.009
-    Stage mast       :   0.070
+    Stage optimize   :   0.010
+    Stage mast       :   0.073
     Stage mbc        :   0.014
-Stage parse      :   3.309
+Stage parse      :   3.338
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Object ===
@@ -215,17 +215,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Object.pm6
     Stage start      :   0.000
-    Stage parse      :   1.447
+    Stage parse      :   1.482
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.007
-    Stage mast       :   0.045
+    Stage optimize   :   0.006
+    Stage mast       :   0.050
     Stage mbc        :   0.005
-Stage parse      :   2.786
+Stage parse      :   2.876
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
-Stage mast       :   0.002
+Stage mast       :   0.001
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Subs ===
@@ -233,13 +233,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Subs.pm6
     Stage start      :   0.000
-    Stage parse      :   4.022
+    Stage parse      :   4.182
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.041
-    Stage mast       :   0.239
-    Stage mbc        :   0.069
-Stage parse      :   5.718
+    Stage mast       :   0.250
+    Stage mbc        :   0.073
+Stage parse      :   5.894
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -251,17 +251,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/ExtendedTypes.pm6
     Stage start      :   0.000
-    Stage parse      :   2.505
+    Stage parse      :   2.607
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.010
-    Stage mast       :   0.090
+    Stage optimize   :   0.009
+    Stage mast       :   0.087
     Stage mbc        :   0.026
-Stage parse      :   3.927
+Stage parse      :   3.995
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
-Stage mast       :   0.002
+Stage mast       :   0.004
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Structs ===
@@ -269,14 +269,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Structs.pm6
     Stage start      :   0.000
-    Stage parse      :   2.233
+    Stage parse      :   2.285
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.055
-    Stage mast       :   0.246
-    Stage mbc        :   0.015
+    Stage optimize   :   0.054
+    Stage mast       :   0.260
+    Stage mbc        :   0.016
 Adding alias in GLib::Raw::Structs::GLogField for GLogField-Str...
-Stage parse      :   3.847
+Stage parse      :   3.958
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
@@ -292,17 +292,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Test.pm6
     Stage start      :   0.000
-    Stage parse      :   3.832
+    Stage parse      :   4.011
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.028
-    Stage mast       :   0.150
-    Stage mbc        :   0.070
-Stage parse      :   5.420
+    Stage optimize   :   0.031
+    Stage mast       :   0.161
+    Stage mbc        :   0.073
+Stage parse      :   5.546
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.002
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Thread ===
@@ -310,17 +310,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Thread.pm6
     Stage start      :   0.000
-    Stage parse      :   2.881
+    Stage parse      :   2.977
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.022
-    Stage mast       :   0.128
+    Stage optimize   :   0.017
+    Stage mast       :   0.115
     Stage mbc        :   0.034
-Stage parse      :   4.386
+Stage parse      :   4.397
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Type ===
@@ -328,13 +328,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Type.pm6
     Stage start      :   0.000
-    Stage parse      :   4.875
+    Stage parse      :   5.038
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.032
-    Stage mast       :   0.165
+    Stage optimize   :   0.088
+    Stage mast       :   0.187
     Stage mbc        :   0.101
-Stage parse      :   6.549
+Stage parse      :   6.799
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
@@ -346,17 +346,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Types.pm6
     Stage start      :   0.000
-    Stage parse      :   1.312
+    Stage parse      :   1.353
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.001
-    Stage mast       :   0.035
+    Stage mast       :   0.037
     Stage mbc        :   0.001
-Stage parse      :   2.692
+Stage parse      :   2.745
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.003
-Stage mast       :   0.007
+Stage mast       :   0.008
 Stage mbc        :   0.003
 Stage moar       :   0.000
  === GLib::Raw::Unicode ===
@@ -364,17 +364,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Unicode.pm6
     Stage start      :   0.000
-    Stage parse      :   5.002
+    Stage parse      :   5.214
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.037
-    Stage mast       :   0.177
-    Stage mbc        :   0.105
-Stage parse      :   6.735
+    Stage optimize   :   0.038
+    Stage mast       :   0.199
+    Stage mbc        :   0.103
+Stage parse      :   6.880
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
-Stage mast       :   0.002
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Utils ===
@@ -382,17 +382,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Utils.pm6
     Stage start      :   0.000
-    Stage parse      :   2.484
+    Stage parse      :   2.589
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.010
-    Stage mast       :   0.072
-    Stage mbc        :   0.032
-Stage parse      :   3.910
+    Stage mast       :   0.074
+    Stage mbc        :   0.034
+Stage parse      :   3.954
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Value ===
@@ -400,13 +400,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Value.pm6
     Stage start      :   0.000
-    Stage parse      :   4.328
+    Stage parse      :   4.514
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.033
-    Stage mast       :   0.170
-    Stage mbc        :   0.086
-Stage parse      :   5.983
+    Stage optimize   :   0.030
+    Stage mast       :   0.169
+    Stage mbc        :   0.089
+Stage parse      :   6.204
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -418,13 +418,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Variant.pm6
     Stage start      :   0.000
-    Stage parse      :   6.911
+    Stage parse      :   7.136
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.053
-    Stage mast       :   0.287
-    Stage mbc        :   0.164
-Stage parse      :   8.833
+    Stage optimize   :   0.059
+    Stage mast       :   0.299
+    Stage mbc        :   0.167
+Stage parse      :   9.142
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
@@ -436,13 +436,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/VariantType.pm6
     Stage start      :   0.000
-    Stage parse      :   3.079
+    Stage parse      :   3.192
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.019
-    Stage mast       :   0.098
-    Stage mbc        :   0.047
-Stage parse      :   4.586
+    Stage mast       :   0.110
+    Stage mbc        :   0.048
+Stage parse      :   4.735
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -454,17 +454,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/ListData.pm6
     Stage start      :   0.000
-    Stage parse      :   1.405
+    Stage parse      :   1.434
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.011
-    Stage mast       :   0.051
-    Stage mbc        :   0.025
-Stage parse      :   2.835
+    Stage optimize   :   0.012
+    Stage mast       :   0.055
+    Stage mbc        :   0.004
+Stage parse      :   2.734
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Roles::References ===
@@ -472,19 +472,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/References.pm6
     Stage start      :   0.000
-    Stage parse      :   1.354
+    Stage parse      :   1.385
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.005
-    Stage mast       :   0.038
+    Stage optimize   :   0.006
+    Stage mast       :   0.051
     Stage mbc        :   0.004
 Adding alias in GLib::Roles::References for upref...
-Stage parse      :   2.736
+Stage parse      :   2.685
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Roles::References for downref...
  === GLib::Roles::StaticClass ===
@@ -492,13 +492,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/StaticClass.pm6
     Stage start      :   0.000
-    Stage parse      :   1.254
+    Stage parse      :   1.275
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.005
     Stage mast       :   0.023
     Stage mbc        :   0.006
-Stage parse      :   2.602
+Stage parse      :   2.685
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -510,14 +510,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/TypedBuffer.pm6
     Stage start      :   0.000
-    Stage parse      :   1.421
+    Stage parse      :   1.464
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.020
-    Stage mast       :   0.078
+    Stage optimize   :   0.022
+    Stage mast       :   0.074
     Stage mbc        :   0.005
 Adding alias in GLib::Roles::TypedBuffer for Pointer...
-Stage parse      :   2.853
+Stage parse      :   2.904
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -529,19 +529,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Sequence.pm6
     Stage start      :   0.000
-    Stage parse      :   1.405
+    Stage parse      :   1.484
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.024
-    Stage mast       :   0.094
+    Stage optimize   :   0.027
+    Stage mast       :   0.066
     Stage mbc        :   0.006
 Adding alias in GLib::Sequence for GSequence...
-Stage parse      :   2.866
+Stage parse      :   2.883
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Sequence for foreach-range...
 Adding alias in GLib::Sequence for get-begin-iter...
@@ -574,17 +574,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/UUID.pm6
     Stage start      :   0.000
-    Stage parse      :   1.415
+    Stage parse      :   1.492
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.019
+    Stage optimize   :   0.017
     Stage mast       :   0.041
     Stage mbc        :   0.005
-Stage parse      :   2.784
+Stage parse      :   2.798
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Unicode ===
@@ -592,18 +592,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Unicode.pm6
     Stage start      :   0.000
-    Stage parse      :   1.727
+    Stage parse      :   1.735
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.118
-    Stage mast       :   0.192
+    Stage optimize   :   0.075
+    Stage mast       :   0.226
     Stage mbc        :   0.006
 Adding alias in GLib::Unicode for break-type...
-Stage parse      :   3.373
+Stage parse      :   3.286
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Unicode for combining-class...
@@ -642,17 +642,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Utils.pm6
     Stage start      :   0.000
-    Stage parse      :   1.301
+    Stage parse      :   1.313
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.011
-    Stage mast       :   0.049
+    Stage optimize   :   0.012
+    Stage mast       :   0.046
     Stage mbc        :   0.003
-Stage parse      :   2.699
+Stage parse      :   2.634
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Value ===
@@ -660,14 +660,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Value.pm6
     Stage start      :   0.000
-    Stage parse      :   1.617
+    Stage parse      :   1.660
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.062
-    Stage mast       :   0.144
+    Stage optimize   :   0.063
+    Stage mast       :   0.153
     Stage mbc        :   0.006
 Adding alias in GLib::Value for GValue...
-Stage parse      :   3.167
+Stage parse      :   3.235
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -683,19 +683,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/VariantIter.pm6
     Stage start      :   0.000
-    Stage parse      :   1.258
+    Stage parse      :   1.311
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.008
-    Stage mast       :   0.037
+    Stage mast       :   0.038
     Stage mbc        :   0.003
 Adding alias in GLib::VariantIter for VariantIter...
-Stage parse      :   2.647
+Stage parse      :   2.624
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::VariantIter for n-children...
 Adding alias in GLib::VariantIter for next-value...
@@ -705,19 +705,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/VariantType.pm6
     Stage start      :   0.000
-    Stage parse      :   1.701
+    Stage parse      :   1.724
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.026
-    Stage mast       :   0.068
+    Stage optimize   :   0.023
+    Stage mast       :   0.072
     Stage mbc        :   0.009
 Adding alias in GLib::VariantType for GVariantType...
-Stage parse      :   3.135
+Stage parse      :   3.184
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
 Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::VariantType for new-array...
 Adding alias in GLib::VariantType for new-dict-entry...
@@ -755,37 +755,37 @@ Stage start      :   0.000
 
     precomp lib/GLib/Class/Structs.pm6
     Stage start      :   0.000
-    Stage parse      :   1.977
+    Stage parse      :   1.975
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.016
-    Stage mast       :   0.086
-    Stage mbc        :   0.016
-Stage parse      :   3.414
+    Stage optimize   :   0.017
+    Stage mast       :   0.090
+    Stage mbc        :   0.013
+Stage parse      :   3.353
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Cond ===
 Stage start      :   0.000
 
     precomp lib/GLib/Cond.pm6
     Stage start      :   0.000
-    Stage parse      :   1.240
+    Stage parse      :   1.300
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.013
-    Stage mast       :   0.039
+    Stage optimize   :   0.008
+    Stage mast       :   0.038
     Stage mbc        :   0.003
 Adding alias in GLib::Cond for GCond...
-Stage parse      :   2.601
+Stage parse      :   2.585
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Cond for wait-until...
 Roles: ()
@@ -794,18 +794,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Env.pm6
     Stage start      :   0.000
-    Stage parse      :   1.458
+    Stage parse      :   1.529
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.015
-    Stage mast       :   0.056
-    Stage mbc        :   0.008
+    Stage optimize   :   0.012
+    Stage mast       :   0.063
+    Stage mbc        :   0.005
 Adding alias in GLib::Env for get_environment...
-Stage parse      :   2.860
+Stage parse      :   2.863
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Env for get-environment...
@@ -825,18 +825,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Mutex.pm6
     Stage start      :   0.000
-    Stage parse      :   1.239
+    Stage parse      :   1.264
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.013
-    Stage mast       :   0.036
+    Stage optimize   :   0.008
+    Stage mast       :   0.044
     Stage mbc        :   0.003
 Adding alias in GLib::Mutex for GMutex...
-Stage parse      :   2.624
+Stage parse      :   2.554
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Roles: ()
@@ -845,13 +845,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Object/IsType.pm6
     Stage start      :   0.000
-    Stage parse      :   1.376
+    Stage parse      :   1.386
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.005
-    Stage mast       :   0.040
-    Stage mbc        :   0.004
-Stage parse      :   2.764
+    Stage mast       :   0.041
+    Stage mbc        :   0.006
+Stage parse      :   2.762
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -863,35 +863,35 @@ Stage start      :   0.000
 
     precomp lib/GLib/Object/Raw/Binding.pm6
     Stage start      :   0.000
-    Stage parse      :   1.900
+    Stage parse      :   2.002
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.010
-    Stage mast       :   0.064
+    Stage mast       :   0.063
     Stage mbc        :   0.017
-Stage parse      :   3.340
+Stage parse      :   3.468
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
 Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Object::Raw::Closure ===
 Stage start      :   0.000
 
     precomp lib/GLib/Object/Raw/Closure.pm6
     Stage start      :   0.000
-    Stage parse      :   2.116
+    Stage parse      :   2.170
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.013
-    Stage mast       :   0.046
+    Stage optimize   :   0.009
+    Stage mast       :   0.049
     Stage mbc        :   0.048
-Stage parse      :   3.569
+Stage parse      :   3.548
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Object::Raw::ParamSpec ===
@@ -899,13 +899,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Object/Raw/ParamSpec.pm6
     Stage start      :   0.000
-    Stage parse      :   4.156
+    Stage parse      :   4.270
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.043
-    Stage mast       :   0.162
-    Stage mbc        :   0.080
-Stage parse      :   5.814
+    Stage optimize   :   0.040
+    Stage mast       :   0.214
+    Stage mbc        :   0.082
+Stage parse      :   5.988
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -917,19 +917,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Object/Type.pm6
     Stage start      :   0.000
-    Stage parse      :   1.452
+    Stage parse      :   1.498
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.030
-    Stage mast       :   0.090
+    Stage optimize   :   0.029
+    Stage mast       :   0.110
     Stage mbc        :   0.005
 Adding alias in GLib::Object::Type for GType...
-Stage parse      :   2.924
+Stage parse      :   2.981
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
 Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Object::Type for add-class-cache-func...
 Adding alias in GLib::Object::Type for add-interface-check...
@@ -972,17 +972,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Array.pm6
     Stage start      :   0.000
-    Stage parse      :   4.437
+    Stage parse      :   4.588
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.032
-    Stage mast       :   0.166
-    Stage mbc        :   0.090
-Stage parse      :   6.091
+    Stage optimize   :   0.033
+    Stage mast       :   0.165
+    Stage mbc        :   0.089
+Stage parse      :   6.191
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
-Stage mast       :   0.002
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Arrays ===
@@ -990,17 +990,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Arrays.pm6
     Stage start      :   0.000
-    Stage parse      :   4.345
+    Stage parse      :   4.455
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.035
-    Stage mast       :   0.151
-    Stage mbc        :   0.084
-Stage parse      :   5.979
+    Stage mast       :   0.200
+    Stage mbc        :   0.086
+Stage parse      :   6.077
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::AsyncQueue ===
@@ -1008,35 +1008,35 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/AsyncQueue.pm6
     Stage start      :   0.000
-    Stage parse      :   2.723
+    Stage parse      :   2.780
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.020
-    Stage mast       :   0.087
-    Stage mbc        :   0.038
-Stage parse      :   4.199
+    Stage optimize   :   0.015
+    Stage mast       :   0.089
+    Stage mbc        :   0.041
+Stage parse      :   4.187
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Base64 ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/Base64.pm6
     Stage start      :   0.000
-    Stage parse      :   1.647
+    Stage parse      :   1.666
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.038
-    Stage mast       :   0.052
+    Stage optimize   :   0.008
+    Stage mast       :   0.072
     Stage mbc        :   0.011
-Stage parse      :   3.088
+Stage parse      :   3.022
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::BookmarkFile ===
@@ -1044,17 +1044,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/BookmarkFile.pm6
     Stage start      :   0.000
-    Stage parse      :   3.618
+    Stage parse      :   3.800
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.038
-    Stage mast       :   0.140
-    Stage mbc        :   0.062
-Stage parse      :   5.201
+    Stage optimize   :   0.033
+    Stage mast       :   0.152
+    Stage mbc        :   0.064
+Stage parse      :   5.336
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Bytes ===
@@ -1062,17 +1062,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Bytes.pm6
     Stage start      :   0.000
-    Stage parse      :   2.137
+    Stage parse      :   2.213
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.011
-    Stage mast       :   0.069
-    Stage mbc        :   0.022
-Stage parse      :   3.580
+    Stage optimize   :   0.013
+    Stage mast       :   0.067
+    Stage mbc        :   0.026
+Stage parse      :   3.571
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Checksum ===
@@ -1080,17 +1080,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Checksum.pm6
     Stage start      :   0.000
-    Stage parse      :   2.000
+    Stage parse      :   2.068
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.013
-    Stage mast       :   0.059
-    Stage mbc        :   0.019
-Stage parse      :   3.437
+    Stage optimize   :   0.009
+    Stage mast       :   0.060
+    Stage mbc        :   0.021
+Stage parse      :   3.381
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Convert ===
@@ -1098,17 +1098,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Convert.pm6
     Stage start      :   0.000
-    Stage parse      :   2.336
+    Stage parse      :   2.448
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.022
-    Stage mast       :   0.084
-    Stage mbc        :   0.027
-Stage parse      :   3.801
+    Stage optimize   :   0.023
+    Stage mast       :   0.087
+    Stage mbc        :   0.028
+Stage parse      :   3.836
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::DateTime ===
@@ -1116,17 +1116,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/DateTime.pm6
     Stage start      :   0.000
-    Stage parse      :   4.019
+    Stage parse      :   4.197
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.029
-    Stage mast       :   0.148
-    Stage mbc        :   0.076
-Stage parse      :   5.642
+    Stage optimize   :   0.028
+    Stage mast       :   0.151
+    Stage mbc        :   0.078
+Stage parse      :   5.745
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.002
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Error ===
@@ -1134,17 +1134,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Error.pm6
     Stage start      :   0.000
-    Stage parse      :   1.625
+    Stage parse      :   1.669
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.007
-    Stage mast       :   0.056
+    Stage optimize   :   0.011
+    Stage mast       :   0.051
     Stage mbc        :   0.011
-Stage parse      :   3.015
+Stage parse      :   2.982
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::FileUtils ===
@@ -1152,17 +1152,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/FileUtils.pm6
     Stage start      :   0.000
-    Stage parse      :   3.493
+    Stage parse      :   3.594
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.025
-    Stage mast       :   0.132
-    Stage mbc        :   0.056
-Stage parse      :   5.032
+    Stage optimize   :   0.027
+    Stage mast       :   0.138
+    Stage mbc        :   0.057
+Stage parse      :   5.117
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::GList ===
@@ -1170,53 +1170,53 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/GList.pm6
     Stage start      :   0.000
-    Stage parse      :   3.046
+    Stage parse      :   3.144
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.023
-    Stage mast       :   0.106
-    Stage mbc        :   0.047
-Stage parse      :   4.579
+    Stage optimize   :   0.019
+    Stage mast       :   0.102
+    Stage mbc        :   0.055
+Stage parse      :   4.585
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::GSList ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/GSList.pm6
     Stage start      :   0.000
-    Stage parse      :   2.972
+    Stage parse      :   3.084
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.019
-    Stage mast       :   0.098
-    Stage mbc        :   0.068
-Stage parse      :   4.503
+    Stage optimize   :   0.018
+    Stage mast       :   0.101
+    Stage mbc        :   0.071
+Stage parse      :   4.559
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::HMAC ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/HMAC.pm6
     Stage start      :   0.000
-    Stage parse      :   1.878
+    Stage parse      :   1.987
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.010
-    Stage mast       :   0.062
+    Stage mast       :   0.065
     Stage mbc        :   0.017
-Stage parse      :   3.296
+Stage parse      :   3.316
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::HashTable ===
@@ -1224,17 +1224,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/HashTable.pm6
     Stage start      :   0.000
-    Stage parse      :   3.863
+    Stage parse      :   3.992
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.028
+    Stage optimize   :   0.029
     Stage mast       :   0.135
     Stage mbc        :   0.069
-Stage parse      :   5.448
+Stage parse      :   5.493
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Hostname ===
@@ -1242,17 +1242,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Hostname.pm6
     Stage start      :   0.000
-    Stage parse      :   1.480
+    Stage parse      :   1.534
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.005
+    Stage optimize   :   0.006
     Stage mast       :   0.028
-    Stage mbc        :   0.019
-Stage parse      :   2.851
+    Stage mbc        :   0.018
+Stage parse      :   2.843
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::IOChannel ===
@@ -1260,17 +1260,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/IOChannel.pm6
     Stage start      :   0.000
-    Stage parse      :   3.595
+    Stage parse      :   3.785
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.029
-    Stage mast       :   0.140
-    Stage mbc        :   0.061
-Stage parse      :   5.182
+    Stage optimize   :   0.027
+    Stage mast       :   0.144
+    Stage mbc        :   0.065
+Stage parse      :   5.300
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.010
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::KeyFile ===
@@ -1278,17 +1278,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/KeyFile.pm6
     Stage start      :   0.000
-    Stage parse      :   4.217
+    Stage parse      :   4.368
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.039
-    Stage mast       :   0.183
-    Stage mbc        :   0.079
-Stage parse      :   5.891
+    Stage optimize   :   0.048
+    Stage mast       :   0.181
+    Stage mbc        :   0.082
+Stage parse      :   5.947
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
-Stage mast       :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Log ===
@@ -1296,31 +1296,31 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Log.pm6
     Stage start      :   0.000
-    Stage parse      :   2.560
+    Stage parse      :   2.647
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.015
-    Stage mast       :   0.087
+    Stage mast       :   0.085
     Stage mbc        :   0.033
-Stage parse      :   4.004
+Stage parse      :   4.038
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Main ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/Main.pm6
     Stage start      :   0.000
-    Stage parse      :   6.133
+    Stage parse      :   6.496
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.043
-    Stage mast       :   0.220
-    Stage mbc        :   0.143
-Stage parse      :   7.996
+    Stage optimize   :   0.048
+    Stage mast       :   0.224
+    Stage mbc        :   0.144
+Stage parse      :   8.372
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.001
@@ -1332,17 +1332,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/MappedFile.pm6
     Stage start      :   0.000
-    Stage parse      :   1.628
+    Stage parse      :   1.670
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.005
-    Stage mast       :   0.053
-    Stage mbc        :   0.016
-Stage parse      :   2.992
+    Stage optimize   :   0.014
+    Stage mast       :   0.054
+    Stage mbc        :   0.008
+Stage parse      :   2.987
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Markup ===
@@ -1350,17 +1350,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Markup.pm6
     Stage start      :   0.000
-    Stage parse      :   2.221
+    Stage parse      :   2.289
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.018
-    Stage mast       :   0.068
-    Stage mbc        :   0.025
-Stage parse      :   3.663
+    Stage optimize   :   0.012
+    Stage mast       :   0.075
+    Stage mbc        :   0.024
+Stage parse      :   3.675
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Memory ===
@@ -1368,13 +1368,13 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Memory.pm6
     Stage start      :   0.000
-    Stage parse      :   2.158
+    Stage parse      :   2.199
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.015
-    Stage mast       :   0.062
-    Stage mbc        :   0.022
-Stage parse      :   3.597
+    Stage optimize   :   0.014
+    Stage mast       :   0.064
+    Stage mbc        :   0.023
+Stage parse      :   3.651
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -1386,17 +1386,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Module.pm6
     Stage start      :   0.000
-    Stage parse      :   1.771
+    Stage parse      :   1.788
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.011
-    Stage mast       :   0.052
+    Stage optimize   :   0.007
+    Stage mast       :   0.054
     Stage mbc        :   0.014
-Stage parse      :   3.181
+Stage parse      :   3.088
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Pattern ===
@@ -1404,17 +1404,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Pattern.pm6
     Stage start      :   0.000
-    Stage parse      :   1.628
+    Stage parse      :   1.678
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.007
-    Stage mast       :   0.053
+    Stage mast       :   0.064
     Stage mbc        :   0.011
-Stage parse      :   3.034
+Stage parse      :   3.025
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Quark ===
@@ -1422,17 +1422,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Quark.pm6
     Stage start      :   0.000
-    Stage parse      :   1.625
+    Stage parse      :   1.667
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.006
-    Stage mast       :   0.052
-    Stage mbc        :   0.010
-Stage parse      :   3.032
+    Stage mast       :   0.047
+    Stage mbc        :   0.011
+Stage parse      :   2.957
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Quarks ===
@@ -1440,17 +1440,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Quarks.pm6
     Stage start      :   0.000
-    Stage parse      :   1.367
+    Stage parse      :   1.397
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.005
-    Stage mast       :   0.043
+    Stage mast       :   0.048
     Stage mbc        :   0.004
-Stage parse      :   2.746
+Stage parse      :   2.686
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Rand ===
@@ -1458,17 +1458,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Rand.pm6
     Stage start      :   0.000
-    Stage parse      :   2.213
+    Stage parse      :   2.330
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.010
-    Stage mast       :   0.068
+    Stage mast       :   0.077
     Stage mbc        :   0.025
-Stage parse      :   3.655
+Stage parse      :   3.711
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Regex ===
@@ -1476,71 +1476,71 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Regex.pm6
     Stage start      :   0.000
-    Stage parse      :   3.605
+    Stage parse      :   3.699
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.035
-    Stage mast       :   0.138
-    Stage mbc        :   0.062
-Stage parse      :   5.181
+    Stage optimize   :   0.030
+    Stage mast       :   0.142
+    Stage mbc        :   0.065
+Stage parse      :   5.230
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
 Stage moar       :   0.000
  === GLib::Raw::Scanner ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/Scanner.pm6
     Stage start      :   0.000
-    Stage parse      :   2.391
+    Stage parse      :   2.518
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.018
+    Stage optimize   :   0.014
     Stage mast       :   0.082
-    Stage mbc        :   0.029
-Stage parse      :   3.869
+    Stage mbc        :   0.030
+Stage parse      :   3.884
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Signal ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/Signal.pm6
     Stage start      :   0.000
-    Stage parse      :   3.206
+    Stage parse      :   3.249
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.030
-    Stage mast       :   0.130
-    Stage mbc        :   0.053
-Stage parse      :   4.755
+    Stage optimize   :   0.029
+    Stage mast       :   0.122
+    Stage mbc        :   0.051
+Stage parse      :   4.809
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
 Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Slice ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/Slice.pm6
     Stage start      :   0.000
-    Stage parse      :   1.796
+    Stage parse      :   1.832
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.008
-    Stage mast       :   0.053
+    Stage optimize   :   0.007
+    Stage mast       :   0.057
     Stage mbc        :   0.015
-Stage parse      :   3.208
+Stage parse      :   3.145
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Spawn ===
@@ -1548,17 +1548,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Spawn.pm6
     Stage start      :   0.000
-    Stage parse      :   1.904
+    Stage parse      :   1.959
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.010
-    Stage mast       :   0.065
+    Stage optimize   :   0.011
+    Stage mast       :   0.069
     Stage mbc        :   0.016
-Stage parse      :   3.305
+Stage parse      :   3.323
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::String ===
@@ -1566,35 +1566,35 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/String.pm6
     Stage start      :   0.000
-    Stage parse      :   3.040
+    Stage parse      :   3.126
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.018
-    Stage mast       :   0.100
-    Stage mbc        :   0.074
-Stage parse      :   4.558
+    Stage optimize   :   0.019
+    Stage mast       :   0.103
+    Stage mbc        :   0.064
+Stage parse      :   4.613
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::ThreadPool ===
 Stage start      :   0.000
 
     precomp lib/GLib/Raw/ThreadPool.pm6
     Stage start      :   0.000
-    Stage parse      :   2.200
+    Stage parse      :   2.252
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.010
-    Stage mast       :   0.090
-    Stage mbc        :   0.024
-Stage parse      :   3.637
+    Stage mast       :   0.070
+    Stage mbc        :   0.025
+Stage parse      :   3.612
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::TimeZone ===
@@ -1602,17 +1602,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/TimeZone.pm6
     Stage start      :   0.000
-    Stage parse      :   2.021
+    Stage parse      :   2.120
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.009
-    Stage mast       :   0.064
+    Stage mast       :   0.065
     Stage mbc        :   0.020
-Stage parse      :   3.433
+Stage parse      :   3.489
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Timer ===
@@ -1620,17 +1620,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Timer.pm6
     Stage start      :   0.000
-    Stage parse      :   1.930
+    Stage parse      :   1.957
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.008
-    Stage mast       :   0.060
+    Stage mast       :   0.067
     Stage mbc        :   0.018
-Stage parse      :   3.351
+Stage parse      :   3.285
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Raw::Tree ===
@@ -1638,17 +1638,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Raw/Tree.pm6
     Stage start      :   0.000
-    Stage parse      :   2.973
+    Stage parse      :   3.005
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.023
-    Stage mast       :   0.104
+    Stage optimize   :   0.025
+    Stage mast       :   0.102
     Stage mbc        :   0.044
-Stage parse      :   4.512
+Stage parse      :   4.442
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Roles::Bindable ===
@@ -1656,19 +1656,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/Bindable.pm6
     Stage start      :   0.000
-    Stage parse      :   1.300
+    Stage parse      :   1.339
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.008
     Stage mast       :   0.030
-    Stage mbc        :   0.006
+    Stage mbc        :   0.005
 Adding alias in GLib::Roles::Bindable for bind-full...
-Stage parse      :   2.666
+Stage parse      :   2.763
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
 Stage mast       :   0.001
-Stage mbc        :   0.000
+Stage mbc        :   0.001
 Stage moar       :   0.000
 Adding alias in GLib::Roles::Bindable for bind-with-closures...
  === GLib::Roles::Properties ===
@@ -1676,14 +1676,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/Properties.pm6
     Stage start      :   0.000
-    Stage parse      :   1.547
+    Stage parse      :   1.556
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.039
-    Stage mast       :   0.089
+    Stage optimize   :   0.016
+    Stage mast       :   0.067
     Stage mbc        :   0.005
 Adding alias in GLib::Roles::Properties for GObject...
-Stage parse      :   2.993
+Stage parse      :   3.003
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -1707,14 +1707,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/Signals/Generic.pm6
     Stage start      :   0.000
-    Stage parse      :   4.058
+    Stage parse      :   4.199
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.061
-    Stage mast       :   0.239
-    Stage mbc        :   0.078
+    Stage optimize   :   0.064
+    Stage mast       :   0.212
+    Stage mbc        :   0.081
 Adding alias in GLib::Roles::Signals::Generic for is_connected...
-Stage parse      :   5.781
+Stage parse      :   5.947
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -1760,18 +1760,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Scanner.pm6
     Stage start      :   0.000
-    Stage parse      :   1.285
+    Stage parse      :   1.354
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.014
-    Stage mast       :   0.050
+    Stage optimize   :   0.017
+    Stage mast       :   0.049
     Stage mbc        :   0.003
 Adding alias in GLib::Scanner for GScanner...
-Stage parse      :   2.680
+Stage parse      :   2.666
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Scanner for cur-line...
@@ -1796,18 +1796,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Signal.pm6
     Stage start      :   0.000
-    Stage parse      :   1.594
+    Stage parse      :   1.685
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.036
-    Stage mast       :   0.101
+    Stage optimize   :   0.038
+    Stage mast       :   0.085
     Stage mbc        :   0.004
 Adding alias in GLib::Signal for accumulator-first-wins...
-Stage parse      :   3.101
+Stage parse      :   3.160
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.012
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Signal for accumulator-true-handled...
@@ -1845,19 +1845,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Slice.pm6
     Stage start      :   0.000
-    Stage parse      :   1.369
+    Stage parse      :   1.471
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.009
-    Stage mast       :   0.055
+    Stage mast       :   0.056
     Stage mbc        :   0.003
 Adding alias in GLib::Slice for debug-tree-statistics...
-Stage parse      :   2.724
+Stage parse      :   2.842
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Slice for free-chain-with-offset...
 Roles: ((StaticClass))
@@ -1867,19 +1867,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Spawn.pm6
     Stage start      :   0.000
-    Stage parse      :   1.508
+    Stage parse      :   1.649
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.027
-    Stage mast       :   0.095
+    Stage mast       :   0.089
     Stage mbc        :   0.003
 Adding alias in GLib::Spawn for async-with-fds...
-Stage parse      :   2.969
+Stage parse      :   3.095
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Spawn for async-with-pipes...
 Adding alias in GLib::Spawn for check-exit-status...
@@ -1895,19 +1895,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/String.pm6
     Stage start      :   0.000
-    Stage parse      :   1.366
+    Stage parse      :   1.498
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.026
-    Stage mast       :   0.102
+    Stage optimize   :   0.021
+    Stage mast       :   0.073
     Stage mbc        :   0.004
 Adding alias in GLib::String for GString...
-Stage parse      :   2.798
+Stage parse      :   2.915
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::String for new-len...
 Adding alias in GLib::String for new-sized...
@@ -1932,18 +1932,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/ThreadPool.pm6
     Stage start      :   0.000
-    Stage parse      :   1.387
+    Stage parse      :   1.417
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.011
-    Stage mast       :   0.067
+    Stage mast       :   0.060
     Stage mbc        :   0.003
 Adding alias in GLib::ThreadPool for GThreadPool...
-Stage parse      :   2.830
+Stage parse      :   2.747
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::ThreadPool for get-max-idle-time...
@@ -1963,19 +1963,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/TimeZone.pm6
     Stage start      :   0.000
-    Stage parse      :   1.275
+    Stage parse      :   1.288
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.019
-    Stage mast       :   0.045
+    Stage optimize   :   0.011
+    Stage mast       :   0.047
     Stage mbc        :   0.003
 Adding alias in GTK::Compat::TimeZone for GTimeZone...
-Stage parse      :   2.627
+Stage parse      :   2.570
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.011
+Stage mbc        :   0.001
 Stage moar       :   0.000
 Adding alias in GTK::Compat::TimeZone for new-local...
 Adding alias in GTK::Compat::TimeZone for new-offset...
@@ -1992,18 +1992,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Timer.pm6
     Stage start      :   0.000
-    Stage parse      :   1.396
+    Stage parse      :   1.420
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.010
-    Stage mast       :   0.035
-    Stage mbc        :   0.009
+    Stage mast       :   0.036
+    Stage mbc        :   0.008
 Adding alias in GLib::Timer for GTimer...
-Stage parse      :   2.761
+Stage parse      :   2.703
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Timer for g-time-val-add...
@@ -2028,19 +2028,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Tree.pm6
     Stage start      :   0.000
-    Stage parse      :   1.401
+    Stage parse      :   1.427
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.019
-    Stage mast       :   0.079
+    Stage mast       :   0.062
     Stage mbc        :   0.003
 Adding alias in GLib::Tree for GTree...
-Stage parse      :   2.823
+Stage parse      :   2.736
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Tree for new-full...
 Adding alias in GLib::Tree for new-with-data...
@@ -2052,14 +2052,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Variant.pm6
     Stage start      :   0.000
-    Stage parse      :   2.485
+    Stage parse      :   2.570
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.065
-    Stage mast       :   0.206
+    Stage optimize   :   0.130
+    Stage mast       :   0.170
     Stage mbc        :   0.024
 Adding alias in GLib::Variant for GVariant...
-Stage parse      :   4.141
+Stage parse      :   4.272
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -2169,18 +2169,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Array.pm6
     Stage start      :   0.000
-    Stage parse      :   1.426
+    Stage parse      :   1.453
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.019
-    Stage mast       :   0.068
-    Stage mbc        :   0.008
+    Stage optimize   :   0.022
+    Stage mast       :   0.061
+    Stage mbc        :   0.007
 Adding alias in GLib::Array for GArray...
-Stage parse      :   2.858
+Stage parse      :   2.791
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Array for garray...
@@ -2208,18 +2208,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/AsyncQueue.pm6
     Stage start      :   0.000
-    Stage parse      :   1.267
+    Stage parse      :   1.331
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.018
-    Stage mast       :   0.047
+    Stage optimize   :   0.020
+    Stage mast       :   0.048
     Stage mbc        :   0.003
 Adding alias in GLib::AsyncQueue for GAsyncQueue...
-Stage parse      :   2.664
+Stage parse      :   2.681
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::AsyncQueue for new-full...
@@ -2242,18 +2242,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Base64.pm6
     Stage start      :   0.000
-    Stage parse      :   1.292
+    Stage parse      :   1.327
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.012
-    Stage mast       :   0.079
+    Stage optimize   :   0.013
+    Stage mast       :   0.078
     Stage mbc        :   0.003
 Adding alias in GLib::Base64 for decode-inplace...
-Stage parse      :   2.708
+Stage parse      :   2.686
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Base64 for decode-step...
@@ -2265,19 +2265,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/BookmarkFile.pm6
     Stage start      :   0.000
-    Stage parse      :   1.576
+    Stage parse      :   1.611
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.036
-    Stage mast       :   0.122
-    Stage mbc        :   0.005
+    Stage optimize   :   0.037
+    Stage mast       :   0.096
+    Stage mbc        :   0.004
 Adding alias in GLib::BookmarkFile for GBookmarkFile...
-Stage parse      :   3.061
+Stage parse      :   2.997
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::BookmarkFile for add-application...
 Adding alias in GLib::BookmarkFile for add-group...
@@ -2324,18 +2324,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Bytes.pm6
     Stage start      :   0.000
-    Stage parse      :   1.284
+    Stage parse      :   1.317
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.012
-    Stage mast       :   0.051
+    Stage optimize   :   0.021
+    Stage mast       :   0.046
     Stage mbc        :   0.003
 Adding alias in GLib::Bytes for GBytes...
-Stage parse      :   2.661
+Stage parse      :   2.623
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Bytes for new-from-bytes...
@@ -2354,18 +2354,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Checksum.pm6
     Stage start      :   0.000
-    Stage parse      :   1.392
+    Stage parse      :   1.403
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.012
     Stage mast       :   0.064
     Stage mbc        :   0.003
 Adding alias in GLib::Checksum for compute-checksum-for-bytes...
-Stage parse      :   2.818
+Stage parse      :   2.705
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Checksum for compute-checksum-for-data...
@@ -2379,18 +2379,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Convert.pm6
     Stage start      :   0.000
-    Stage parse      :   1.509
+    Stage parse      :   1.568
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.031
-    Stage mast       :   0.103
+    Stage optimize   :   0.034
+    Stage mast       :   0.097
     Stage mbc        :   0.004
 Adding alias in GLib::Convert for convert-error-quark...
-Stage parse      :   2.986
+Stage parse      :   2.927
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Convert for convert-with-fallback...
@@ -2414,17 +2414,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Dataset.pm6
     Stage start      :   0.000
-    Stage parse      :   1.295
+    Stage parse      :   1.304
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.011
-    Stage mast       :   0.049
+    Stage optimize   :   0.012
+    Stage mast       :   0.048
     Stage mbc        :   0.003
-Stage parse      :   2.671
+Stage parse      :   2.602
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::DateTime ===
@@ -2432,18 +2432,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/DateTime.pm6
     Stage start      :   0.000
-    Stage parse      :   2.006
+    Stage parse      :   2.079
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.121
-    Stage mast       :   0.106
-    Stage mbc        :   0.016
+    Stage optimize   :   0.054
+    Stage mast       :   0.108
+    Stage mbc        :   0.051
 Adding alias in GLib::DateTime for GDateTime...
-Stage parse      :   3.590
+Stage parse      :   3.535
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::DateTime for new-from-iso8601...
@@ -2533,18 +2533,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Error.pm6
     Stage start      :   0.000
-    Stage parse      :   1.410
+    Stage parse      :   1.440
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.008
-    Stage mast       :   0.046
+    Stage mast       :   0.047
     Stage mbc        :   0.003
 Adding alias in GLib::Error for GError...
-Stage parse      :   2.790
+Stage parse      :   2.749
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Error for new-literal...
@@ -2555,36 +2555,36 @@ Stage start      :   0.000
 
     precomp lib/GLib/FileUtils.pm6
     Stage start      :   0.000
-    Stage parse      :   1.511
+    Stage parse      :   1.539
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.041
-    Stage mast       :   0.107
-    Stage mbc        :   0.005
-Stage parse      :   2.989
+    Stage optimize   :   0.038
+    Stage mast       :   0.196
+    Stage mbc        :   0.004
+Stage parse      :   3.007
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::GList ===
 Stage start      :   0.000
 
     precomp lib/GLib/GList.pm6
     Stage start      :   0.000
-    Stage parse      :   1.500
+    Stage parse      :   1.483
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.025
-    Stage mast       :   0.076
+    Stage optimize   :   0.024
+    Stage mast       :   0.095
     Stage mbc        :   0.003
 Adding alias in GLib::GList for GList...
-Stage parse      :   2.898
+Stage parse      :   2.840
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::GList for current-node...
@@ -2610,18 +2610,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/GSList.pm6
     Stage start      :   0.000
-    Stage parse      :   1.445
+    Stage parse      :   1.439
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.022
-    Stage mast       :   0.050
+    Stage optimize   :   0.020
+    Stage mast       :   0.054
     Stage mbc        :   0.006
 Adding alias in GLib::GSList for GSList...
-Stage parse      :   2.886
+Stage parse      :   2.761
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::GSList for current-node...
@@ -2647,18 +2647,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/HMAC.pm6
     Stage start      :   0.000
-    Stage parse      :   1.394
+    Stage parse      :   1.419
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.017
-    Stage mast       :   0.060
+    Stage optimize   :   0.012
+    Stage mast       :   0.062
     Stage mbc        :   0.003
 Adding alias in GLib::HMAC for compute-hmac-for-bytes...
-Stage parse      :   2.795
+Stage parse      :   2.725
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::HMAC for compute-hmac-for-data...
@@ -2671,21 +2671,21 @@ Stage start      :   0.000
 
     precomp lib/GLib/HashTable.pm6
     Stage start      :   0.000
-    Stage parse      :   1.488
+    Stage parse      :   1.470
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.032
-    Stage mast       :   0.117
+    Stage optimize   :   0.035
+    Stage mast       :   0.089
     Stage mbc        :   0.004
 »»»»»»
 » Please note that the objects in /home/cbwood/Projects/p6-GLib/lib/GLib/HashTable.pm6 (GLib::HashTable) are classed as use-at-your-own-risk!
 »»»»»»
 
-Stage parse      :   2.980
+Stage parse      :   2.862
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::Hostname ===
@@ -2693,17 +2693,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Hostname.pm6
     Stage start      :   0.000
-    Stage parse      :   1.244
+    Stage parse      :   1.257
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.012
-    Stage mast       :   0.034
-    Stage mbc        :   0.002
-Stage parse      :   2.596
+    Stage optimize   :   0.007
+    Stage mast       :   0.035
+    Stage mbc        :   0.003
+Stage parse      :   2.533
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::KeyFile ===
@@ -2711,18 +2711,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/KeyFile.pm6
     Stage start      :   0.000
-    Stage parse      :   1.761
+    Stage parse      :   1.847
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.054
-    Stage mast       :   0.224
+    Stage optimize   :   0.059
+    Stage mast       :   0.180
     Stage mbc        :   0.006
 Adding alias in GLib::KeyFile for GKeyFile...
-Stage parse      :   3.387
+Stage parse      :   3.336
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::KeyFile for set-string-list...
@@ -2781,17 +2781,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/Log.pm6
     Stage start      :   0.000
-    Stage parse      :   1.474
+    Stage parse      :   1.473
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.030
-    Stage mast       :   0.107
+    Stage optimize   :   0.024
+    Stage mast       :   0.091
     Stage mbc        :   0.004
-Stage parse      :   2.959
+Stage parse      :   2.851
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::MainContext ===
@@ -2799,19 +2799,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/MainContext.pm6
     Stage start      :   0.000
-    Stage parse      :   1.490
+    Stage parse      :   1.494
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.018
-    Stage mast       :   0.069
+    Stage mast       :   0.066
     Stage mbc        :   0.004
 Adding alias in GLib::MainContext for GMainContext...
-Stage parse      :   2.892
+Stage parse      :   2.916
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
 Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::MainContext for MainContext...
 Adding alias in GLib::MainContext for add-poll...
@@ -2833,18 +2833,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/MainLoop.pm6
     Stage start      :   0.000
-    Stage parse      :   1.486
+    Stage parse      :   1.504
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.010
-    Stage mast       :   0.056
+    Stage optimize   :   0.011
+    Stage mast       :   0.060
     Stage mbc        :   0.005
 Adding alias in GLib::MainLoop for GMainLoop...
-Stage parse      :   2.917
+Stage parse      :   2.815
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::MainLoop for MainLoop...
@@ -2859,18 +2859,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/MappedFile.pm6
     Stage start      :   0.000
-    Stage parse      :   1.459
+    Stage parse      :   1.501
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.009
-    Stage mast       :   0.053
+    Stage optimize   :   0.013
+    Stage mast       :   0.048
     Stage mbc        :   0.005
 Adding alias in GLib::MappedFile for GMappedFile...
-Stage parse      :   2.858
+Stage parse      :   2.808
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::MappedFile for new-from-fd...
@@ -2886,18 +2886,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Markup.pm6
     Stage start      :   0.000
-    Stage parse      :   1.374
+    Stage parse      :   1.399
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.012
+    Stage optimize   :   0.016
     Stage mast       :   0.056
     Stage mbc        :   0.003
 Adding alias in GLib::Markup for GMarkupParserContext...
-Stage parse      :   2.764
+Stage parse      :   2.688
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Markup for error-quark...
@@ -2913,18 +2913,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/MatchInfo.pm6
     Stage start      :   0.000
-    Stage parse      :   1.493
+    Stage parse      :   1.503
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.013
-    Stage mast       :   0.058
-    Stage mbc        :   0.005
+    Stage optimize   :   0.016
+    Stage mast       :   0.056
+    Stage mbc        :   0.019
 Adding alias in GLib::MatchInfo for MatchInfo...
-Stage parse      :   2.907
+Stage parse      :   2.819
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::MatchInfo for expand-references...
@@ -2947,14 +2947,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Memory.pm6
     Stage start      :   0.000
-    Stage parse      :   1.384
+    Stage parse      :   1.406
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.015
-    Stage mast       :   0.054
+    Stage optimize   :   0.016
+    Stage mast       :   0.055
     Stage mbc        :   0.003
 Adding alias in GLib::Memory for clear-pointer...
-Stage parse      :   2.797
+Stage parse      :   2.831
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -2977,18 +2977,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Module.pm6
     Stage start      :   0.000
-    Stage parse      :   1.270
+    Stage parse      :   1.260
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.015
-    Stage mast       :   0.038
+    Stage optimize   :   0.014
+    Stage mast       :   0.042
     Stage mbc        :   0.003
 Adding alias in GLib::Module for GModule...
-Stage parse      :   2.645
+Stage parse      :   2.518
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Module for build-path...
@@ -2999,19 +2999,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Object/Closure.pm6
     Stage start      :   0.000
-    Stage parse      :   1.304
+    Stage parse      :   1.301
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.017
-    Stage mast       :   0.077
-    Stage mbc        :   0.004
+    Stage optimize   :   0.018
+    Stage mast       :   0.049
+    Stage mbc        :   0.003
 Adding alias in GLib::Object::Closure for GClosure...
-Stage parse      :   2.737
+Stage parse      :   2.619
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Object::Closure for new-simple...
 Adding alias in GLib::Object::Closure for add-finalize-notifier...
@@ -3030,14 +3030,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Object/ParamSpec.pm6
     Stage start      :   0.000
-    Stage parse      :   1.852
+    Stage parse      :   1.813
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.110
-    Stage mast       :   0.180
+    Stage optimize   :   0.134
+    Stage mast       :   0.157
     Stage mbc        :   0.008
 Adding alias in GLib::Object::ParamSpec for GParamSpec...
-Stage parse      :   3.518
+Stage parse      :   3.491
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -3098,18 +3098,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Pattern.pm6
     Stage start      :   0.000
-    Stage parse      :   1.243
+    Stage parse      :   1.271
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.014
-    Stage mast       :   0.040
+    Stage optimize   :   0.009
+    Stage mast       :   0.042
     Stage mbc        :   0.003
 Adding alias in GLib::Pattern for GPatternSpec...
-Stage parse      :   2.621
+Stage parse      :   2.559
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Pattern for match-simple...
@@ -3120,18 +3120,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/PtrArray.pm6
     Stage start      :   0.000
-    Stage parse      :   1.403
+    Stage parse      :   1.444
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.020
-    Stage mast       :   0.085
+    Stage optimize   :   0.016
+    Stage mast       :   0.072
     Stage mbc        :   0.003
 Adding alias in GLib::PtrArray for GPtrArray...
-Stage parse      :   2.831
+Stage parse      :   2.767
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::PtrArray for new-full...
@@ -3156,19 +3156,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Quark.pm6
     Stage start      :   0.000
-    Stage parse      :   1.239
+    Stage parse      :   1.285
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.007
-    Stage mast       :   0.042
+    Stage mast       :   0.040
     Stage mbc        :   0.003
 Adding alias in GLib::Quark for from-static-string...
-Stage parse      :   2.602
+Stage parse      :   2.572
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Quark for from-string...
 Adding alias in GLib::Quark for intern-static-string...
@@ -3181,19 +3181,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Rand.pm6
     Stage start      :   0.000
-    Stage parse      :   1.389
+    Stage parse      :   1.441
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.014
-    Stage mast       :   0.065
+    Stage optimize   :   0.019
+    Stage mast       :   0.088
     Stage mbc        :   0.003
 Adding alias in GLib::Rand for GRand...
-Stage parse      :   2.807
+Stage parse      :   2.780
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.012
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Rand for new-with-seed...
 Adding alias in GLib::Rand for new-with-seed-array...
@@ -3207,19 +3207,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Regex.pm6
     Stage start      :   0.000
-    Stage parse      :   1.764
+    Stage parse      :   1.804
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.037
-    Stage mast       :   0.108
+    Stage mast       :   0.122
     Stage mbc        :   0.009
 Adding alias in GLib::Regex for GRegex...
-Stage parse      :   3.226
+Stage parse      :   3.229
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Regex for check-replacement...
 Adding alias in GLib::Regex for error-quark...
@@ -3263,19 +3263,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Source.pm6
     Stage start      :   0.000
-    Stage parse      :   1.367
+    Stage parse      :   1.400
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.022
-    Stage mast       :   0.059
+    Stage optimize   :   0.019
+    Stage mast       :   0.065
     Stage mbc        :   0.004
 Adding alias in GLib::Source for GSource...
-Stage parse      :   2.779
+Stage parse      :   2.872
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
 Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Source for add-child-source...
 Adding alias in GLib::Source for add-poll...
@@ -3307,18 +3307,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Test.pm6
     Stage start      :   0.000
-    Stage parse      :   1.557
+    Stage parse      :   1.565
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.032
-    Stage mast       :   0.121
-    Stage mbc        :   0.006
+    Stage optimize   :   0.034
+    Stage mast       :   0.110
+    Stage mbc        :   0.004
 Adding alias in GLib::Test for add-data-func...
-Stage parse      :   3.035
+Stage parse      :   2.956
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Test for add-data-func-full...
@@ -3353,18 +3353,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/Timeout.pm6
     Stage start      :   0.000
-    Stage parse      :   1.349
+    Stage parse      :   1.348
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.009
-    Stage mast       :   0.047
+    Stage optimize   :   0.016
+    Stage mast       :   0.044
     Stage mbc        :   0.003
 Adding alias in GLib::Timeout for add-full...
-Stage parse      :   2.759
+Stage parse      :   2.668
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Timeout for add-seconds...
@@ -3378,17 +3378,17 @@ Stage start      :   0.000
 
     precomp lib/GLib/URI.pm6
     Stage start      :   0.000
-    Stage parse      :   1.560
+    Stage parse      :   1.581
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.018
+    Stage optimize   :   0.012
     Stage mast       :   0.050
     Stage mbc        :   0.008
-Stage parse      :   2.971
+Stage parse      :   2.902
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
  === GLib::ByteArray ===
@@ -3396,19 +3396,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/ByteArray.pm6
     Stage start      :   0.000
-    Stage parse      :   1.383
+    Stage parse      :   1.408
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.015
+    Stage optimize   :   0.017
     Stage mast       :   0.040
     Stage mbc        :   0.006
 Adding alias in GLib::ByteArray for GByteArray...
-Stage parse      :   2.787
+Stage parse      :   2.712
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::ByteArray for new-take...
 Adding alias in GLib::ByteArray for sized-new...
@@ -3428,14 +3428,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Class/Object.pm6
     Stage start      :   0.000
-    Stage parse      :   2.000
+    Stage parse      :   2.025
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.020
-    Stage mast       :   0.096
-    Stage mbc        :   0.017
+    Stage optimize   :   0.015
+    Stage mast       :   0.098
+    Stage mbc        :   0.016
 Adding alias in GLib::Class::Object for GObjectClass...
-Stage parse      :   3.517
+Stage parse      :   3.570
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -3453,19 +3453,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/IOChannel.pm6
     Stage start      :   0.000
-    Stage parse      :   1.700
+    Stage parse      :   1.679
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.041
-    Stage mast       :   0.135
-    Stage mbc        :   0.005
+    Stage optimize   :   0.039
+    Stage mast       :   0.137
+    Stage mbc        :   0.006
 Adding alias in GLib::IOChannel for GIOChannel...
-Stage parse      :   3.232
+Stage parse      :   3.153
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::IOChannel for new-fd...
 Adding alias in GLib::IOChannel for new_unix...
@@ -3508,14 +3508,14 @@ Stage start      :   0.000
 
     precomp lib/GLib/Roles/Object.pm6
     Stage start      :   0.000
-    Stage parse      :   2.095
+    Stage parse      :   2.151
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.055
-    Stage mast       :   0.174
-    Stage mbc        :   0.017
+    Stage optimize   :   0.164
+    Stage mast       :   0.138
+    Stage mbc        :   0.015
 Adding alias in GLib::Roles::Object for new-object-with-properties...
-Stage parse      :   3.727
+Stage parse      :   3.852
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
 Stage optimize   :   0.000
@@ -3545,18 +3545,18 @@ Stage start      :   0.000
 
     precomp lib/GLib/VariantDict.pm6
     Stage start      :   0.000
-    Stage parse      :   1.327
+    Stage parse      :   1.341
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
     Stage optimize   :   0.015
-    Stage mast       :   0.045
+    Stage mast       :   0.048
     Stage mbc        :   0.003
 Adding alias in GLib::VariantDict for GVariantDict...
-Stage parse      :   2.770
+Stage parse      :   2.680
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
 Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::VariantDict for insert-value...
@@ -3568,19 +3568,19 @@ Stage start      :   0.000
 
     precomp lib/GLib/Object/Binding.pm6
     Stage start      :   0.000
-    Stage parse      :   1.422
+    Stage parse      :   1.426
     Stage syntaxcheck:   0.000
     Stage ast        :   0.000
-    Stage optimize   :   0.013
-    Stage mast       :   0.051
+    Stage optimize   :   0.007
+    Stage mast       :   0.058
     Stage mbc        :   0.003
 Adding alias in GLib::Object::Binding for GBinding...
-Stage parse      :   2.847
+Stage parse      :   2.793
 Stage syntaxcheck:   0.000
 Stage ast        :   0.000
-Stage optimize   :   0.000
-Stage mast       :   0.001
-Stage mbc        :   0.001
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
 Stage moar       :   0.000
 Adding alias in GLib::Object::Binding for get-flags...
 Adding alias in GLib::Object::Binding for get-source...
@@ -3591,6 +3591,6 @@ Adding alias in GLib::Object::Binding for get-type...
 Roles: ((Object))
 R: GLib::Roles::Object
 
-real 505.32
-user 618.09
-sys 36.36
+real 508.04
+user 615.87
+sys 35.53
