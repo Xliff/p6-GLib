@@ -6,6 +6,8 @@ use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
 use GLib::Raw::Object;
 
+use GLib::Roles::Pointers;
+
 unit package GLib::Raw::Subs;
 
 # Cribbed from https://github.com/CurtTilmes/perl6-dbmysql/blob/master/lib/DB/MySQL/Native.pm6
@@ -50,6 +52,10 @@ sub real-resolve-uint64($v) is export {
   $v +& 0xffffffffffffffff;
 }
 
+sub p ($p) is export {
+  cast(Pointer, $p);
+}
+
 # Moved from p6-GStreamer
 sub nocr ($s) is export {
   $s.subst("\n", ' ', :g);
@@ -69,6 +75,118 @@ sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
 sub separate (Str() $s, Int() $p) is export {
   die '$p outside of string range!' unless $p ~~ 0 .. $s.chars;
   ( $s.substr(0, $p), $s.substr($p, *) )
+}
+
+sub ArrayToCArray(\T, @a) is export {
+  my $ca =  CArray[T].new;
+  $ca[$_] = @a[$_] for ^@a.elems;
+  $ca;
+}
+
+multi sub CStringArrayToArray(CArray[Str] $sa, Int(Cool) $len) {
+  CArrayToArray($sa, $len);
+}
+multi sub CStringArrayToArray (CArray[Str] $sa) is export {
+  CArrayToArray($sa)
+}
+
+multi sub CArrayToArray(CArray $ca) is export {
+  return Nil unless $ca;
+  my ($i, @a) = (0);
+  while $ca[$i] {
+    @a.push: $ca[$i++];
+  }
+  @a;
+}
+multi sub CArrayToArray(CArray $ca, Int(Cool) $len) is export {
+  return Nil unless $ca;
+  my @a;
+  @a[$_] = $ca[$_] for ^$len;
+  @a;
+}
+
+sub get_flags($t, $s, $j = ', ') is export {
+  $t.enums
+    .map({ $s +& .value ?? .key !! '' })
+    .grep(* ne '')
+    .join($j);
+}
+
+# GLib-level
+sub typeToGType (\t) is export {
+  do given t {
+    when Str             { G_TYPE_STRING  }
+    when int16  | int32  { G_TYPE_INT     }
+    when uint16 | uint32 { G_TYPE_UINT    }
+    when int64           { G_TYPE_INT64   }
+    when uint64          { G_TYPE_UINT64  }
+    when num32           { G_TYPE_FLOAT   }
+    when num64           { G_TYPE_DOUBLE  }
+    when Pointer         { G_TYPE_POINTER }
+    when Bool            { G_TYPE_BOOLEAN }
+    when GObject         { G_TYPE_OBJECT  }
+  };
+}
+
+sub resolve-gtype($gt) is export {
+  die "{ $gt } is not a valid GType value"
+    unless $gt ∈ GTypeEnum.enums.values;
+  $gt;
+}
+
+sub resolve-gstrv(*@rg) is export {
+  my $gs = CArray[Str].new;
+  my $c = 0;
+  for @rg {
+    die "Cannot coerce element { $_.^name } to string."
+      unless $_ ~~ Str || $_.^can('Str').elems;
+    $gs[$c++] = $_.Str;
+  }
+  $gs[$gs.elems] = Str unless $gs[*-1] =:= Str;
+  $gs;
+}
+
+sub create-signal-supply (%sigs, $signal, $s) is export {
+  my $supply = $s.Supply;
+  $supply.^lookup('tap').wrap: my method (|c) {
+    %sigs{$signal} = True;
+    nextsame;
+  };
+  $supply
+}
+
+#| ppr(*@a) - Potential Pointer Return. Handles values, potentially pointers,
+#|            that are wrapped in a CArray. If value is a Pointer type AND
+#|            a CStruct, then that value will be dereferenced.
+sub ppr (*@a) is export {
+  @a .= map({
+    if $_ ~~ CArray {
+      if .[0].defined {
+        if .[0].REPR.chars.not {
+          .[0]
+        } else {
+          my $p = .[0];
+          $p.defined ?? ( .[0] !~~ Pointer ?? .[0]
+                                           !! (
+                                               .[0].of.REPR eq 'CStruct'
+                                                  ?? .[0].deref
+                                                  !! .[0]
+                                              )
+                        )
+                     !! Nil;
+        }
+      } else {
+        Nil;
+      }
+    }
+    else { $_ }
+  });
+  @a.elems == 1 ?? @a[0] !! @a;
+}
+
+sub return-with-all ($v) is export {
+  $v[0] ?? ( $v.elems == 1 ?? $v !! $v.skip(1) )
+        !! Nil
 }
 
 sub g_destroy_none(Pointer)
@@ -104,8 +222,6 @@ sub g_object_get_string_data (GObject $o, Str $key)
   is export
 { * }
 
-# Now in GTK::Roles::Properties!!
-#
 # sub g_object_set_int(GObject $o, Str $key, int32 $data is rw)
 #   is native(gobject)
 #   is symbol('g_object_set_data')
@@ -225,8 +341,8 @@ sub g_object_set_float (GObject $object, Str $key, CArray[gfloat] $val, Str)
 { * }
 
 sub g_object_get_double (
-  GObject $object,
-  Str $key,
+  GObject         $object,
+  Str             $key,
   CArray[gdouble] $val,
   Str
 )
@@ -236,8 +352,8 @@ sub g_object_get_double (
 { * }
 
 sub g_object_set_double (
-  GObject $object,
-  Str $key,
+  GObject         $object,
+  Str             $key,
   CArray[gdouble] $val,
   Str
 )
@@ -283,8 +399,8 @@ sub g_object_set_int64 (GObject $object, Str $key, CArray[gint64] $val, Str)
 { * }
 
 sub g_object_get_uint64 (
-  GObject $object,
-  Str $key,
+  GObject         $object,
+  Str             $key,
   CArray[guint64] $val,
   Str
 )
@@ -294,8 +410,8 @@ sub g_object_get_uint64 (
 { * }
 
 sub g_object_set_uint64 (
-  GObject $object,
-  Str $key,
+  GObject         $object,
+  Str             $key,
   CArray[guint64] $val,
   Str
 )
@@ -303,117 +419,3 @@ sub g_object_set_uint64 (
   is symbol('g_object_set')
   is export
 { * }
-
-sub ArrayToCArray(\T, @a) is export {
-  my $ca =  CArray[T].new;
-  $ca[$_] = @a[$_] for ^@a.elems;
-  $ca;
-}
-
-multi sub CStringArrayToArray(CArray[Str] $sa, Int(Cool) $len) {
-  CArrayToArray($sa, $len);
-}
-multi sub CStringArrayToArray (CArray[Str] $sa) is export {
-  CArrayToArray($sa)
-}
-
-multi sub CArrayToArray(CArray $ca) is export {
-  return Nil unless $ca;
-  my ($i, @a) = (0);
-  while $ca[$i] {
-    @a.push: $ca[$i++];
-  }
-  @a;
-}
-multi sub CArrayToArray(CArray $ca, Int(Cool) $len) is export {
-  return Nil unless $ca;
-  my @a;
-  @a[$_] = $ca[$_] for ^$len;
-  @a;
-}
-
-sub get_flags($t, $s, $j = ', ') is export {
-  $t.enums
-    .map({ $s +& .value ?? .key !! '' })
-    .grep(* ne '')
-    .join($j);
-}
-
-# GLib-level
-sub typeToGType (\t) is export {
-  do given t {
-    when Str             { G_TYPE_STRING  }
-    when int16  | int32  { G_TYPE_INT     }
-    when uint16 | uint32 { G_TYPE_UINT    }
-    when int64           { G_TYPE_INT64   }
-    when uint64          { G_TYPE_UINT64  }
-    when num32           { G_TYPE_FLOAT   }
-    when num64           { G_TYPE_DOUBLE  }
-    when Pointer         { G_TYPE_POINTER }
-    when Bool            { G_TYPE_BOOLEAN }
-    when GObject         { G_TYPE_OBJECT  }
-  };
-}
-
-sub resolve-gtype($gt) is export {
-  die "{ $gt } is not a valid GType value"
-    unless $gt ∈ GTypeEnum.enums.values;
-  $gt;
-}
-
-sub resolve-gstrv(*@rg) is export {
-  my $gs = CArray[Str].new;
-  my $c = 0;
-  for @rg {
-    die "Cannot coerce element { $_.^name } to string."
-      unless $_ ~~ Str || $_.^can('Str').elems;
-    $gs[$c++] = $_.Str;
-  }
-  $gs[$gs.elems] = Str unless $gs[*-1] =:= Str;
-  $gs;
-}
-
-sub create-signal-supply (%sigs, $signal, $s) is export {
-  my $supply = $s.Supply;
-  $supply.^lookup('tap').wrap: my method (|c) {
-    %sigs{$signal} = True;
-    nextsame;
-  };
-  $supply
-}
-
-# Now lives in GLib::Raw::Signal...
-#
-# sub g_signal_handler_disconnect(Pointer $app, uint64 $handler)
-#   is native(gobject)
-#   is export
-# { * }
-
-#| ppr(*@a) - Potential Pointer Return. Handles values, potentially pointers,
-#|            that are wrapped in a CArray. If value is a Pointer type AND
-#|            a CStruct, then that value will be dereferenced.
-sub ppr (*@a) is export {
-  @a .= map({
-    if $_ ~~ CArray {
-      if .[0].defined {
-        if .[0].REPR ne 'CPointer' {
-          .[0]
-        } else {
-          # cw: XXX - Consider when the invocant does NOT do GLib::Roles::Pointers
-          +.[0].p != 0 ?? ( .[0] !~~ Pointer ?? .[0]
-                                             !! (
-                                                .[0].of.REPR eq 'CStruct'
-                                                  ?? .[0].deref
-                                                  !! .[0]
-                                             )
-                          )
-                       !! Nil;
-        }
-      } else {
-        Nil;
-      }
-    }
-    else { $_ }
-  });
-  @a.elems == 1 ?? @a[0] !! @a;
-}
