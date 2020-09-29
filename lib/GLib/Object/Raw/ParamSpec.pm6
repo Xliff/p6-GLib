@@ -9,10 +9,10 @@ unit package GLib::Object::Raw::ParamSpec;
 ### /usr/include/glib-2.0/gobject/gparamspecs.h
 
 sub g_param_spec_boolean (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  gboolean $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  gboolean    $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -21,10 +21,10 @@ sub g_param_spec_boolean (
 { * }
 
 sub g_param_spec_boxed (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  GType $boxed_type,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  GType       $boxed_type,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -33,12 +33,12 @@ sub g_param_spec_boxed (
 { * }
 
 sub g_param_spec_char (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  gint8 $minimum,
-  gint8 $maximum,
-  gint8 $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  gint8       $minimum,
+  gint8       $maximum,
+  gint8       $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -47,12 +47,12 @@ sub g_param_spec_char (
 { * }
 
 sub g_param_spec_double (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  gdouble $minimum,
-  gdouble $maximum,
-  gdouble $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  gdouble     $minimum,
+  gdouble     $maximum,
+  gdouble     $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -61,11 +61,11 @@ sub g_param_spec_double (
 { * }
 
 sub g_param_spec_enum (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  GType $enum_type,
-  gint $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  GType       $enum_type,
+  gint        $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -74,11 +74,11 @@ sub g_param_spec_enum (
 { * }
 
 sub g_param_spec_flags (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  GType $flags_type,
-  guint $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  GType       $flags_type,
+  guint       $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -87,12 +87,12 @@ sub g_param_spec_flags (
 { * }
 
 sub g_param_spec_float (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  gfloat $minimum,
-  gfloat $maximum,
-  gfloat $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  gfloat      $minimum,
+  gfloat      $maximum,
+  gfloat      $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -101,10 +101,10 @@ sub g_param_spec_float (
 { * }
 
 sub g_param_spec_gtype (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  GType $is_a_type,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  GType       $is_a_type,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -113,12 +113,12 @@ sub g_param_spec_gtype (
 { * }
 
 sub g_param_spec_int (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  gint $minimum,
-  gint $maximum,
-  gint $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  gint        $minimum,
+  gint        $maximum,
+  gint        $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -127,12 +127,12 @@ sub g_param_spec_int (
 { * }
 
 sub g_param_spec_int64 (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  gint64 $minimum,
-  gint64 $maximum,
-  gint64 $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  gint64      $minimum,
+  gint64      $maximum,
+  gint64      $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -141,12 +141,12 @@ sub g_param_spec_int64 (
 { * }
 
 sub g_param_spec_long (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  glong $minimum,
-  glong $maximum,
-  glong $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  glong       $minimum,
+  glong       $maximum,
+  glong       $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -155,10 +155,10 @@ sub g_param_spec_long (
 { * }
 
 sub g_param_spec_object (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  GType $object_type,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  GType       $object_type,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -173,10 +173,10 @@ sub g_param_spec_override (Str $name, GParamSpec $overridden)
 { * }
 
 sub g_param_spec_param (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  GType $param_type,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  GType       $param_type,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -185,9 +185,9 @@ sub g_param_spec_param (
 { * }
 
 sub g_param_spec_pointer (
-  Str $name,
-  Str $nick,
-  Str $blurb,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -196,10 +196,10 @@ sub g_param_spec_pointer (
 { * }
 
 sub g_param_spec_string (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  Str $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  Str         $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -208,12 +208,12 @@ sub g_param_spec_string (
 { * }
 
 sub g_param_spec_uchar (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  guint8 $minimum,
-  guint8 $maximum,
-  guint8 $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  guint8      $minimum,
+  guint8      $maximum,
+  guint8      $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -222,12 +222,12 @@ sub g_param_spec_uchar (
 { * }
 
 sub g_param_spec_uint (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  guint $minimum,
-  guint $maximum,
-  guint $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  guint       $minimum,
+  guint       $maximum,
+  guint       $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -236,12 +236,12 @@ sub g_param_spec_uint (
 { * }
 
 sub g_param_spec_uint64 (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  guint64 $minimum,
-  guint64 $maximum,
-  guint64 $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  guint64     $minimum,
+  guint64     $maximum,
+  guint64     $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -250,12 +250,12 @@ sub g_param_spec_uint64 (
 { * }
 
 sub g_param_spec_ulong (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  gulong $minimum,
-  gulong $maximum,
-  gulong $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  gulong      $minimum,
+  gulong      $maximum,
+  gulong      $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -264,10 +264,10 @@ sub g_param_spec_ulong (
 { * }
 
 sub g_param_spec_unichar (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  gunichar $default_value,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  gunichar    $default_value,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -276,10 +276,10 @@ sub g_param_spec_unichar (
 { * }
 
 sub g_param_spec_value_array (
-  Str $name,
-  Str $nick,
-  Str $blurb,
-  GParamSpec $element_spec,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
+  GParamSpec  $element_spec,
   GParamFlags $flags
 )
   returns GParamSpec
@@ -288,12 +288,12 @@ sub g_param_spec_value_array (
 { * }
 
 sub g_param_spec_variant (
-  Str $name,
-  Str $nick,
-  Str $blurb,
+  Str          $name,
+  Str          $nick,
+  Str          $blurb,
   GVariantType $type,
-  GVariant $default_value,
-  GParamFlags $flags
+  GVariant     $default_value,
+  GParamFlags  $flags
 )
   returns GParamSpec
   is native(gobject)
@@ -345,10 +345,10 @@ sub g_param_spec_get_redirect_target (GParamSpec $pspec)
 { * }
 
 sub g_param_spec_internal (
-  GType $param_type,
-  Str $name,
-  Str $nick,
-  Str $blurb,
+  GType       $param_type,
+  Str         $name,
+  Str         $nick,
+  Str         $blurb,
   GParamFlags $flags
 )
   returns Pointer
@@ -358,8 +358,8 @@ sub g_param_spec_internal (
 
 sub g_param_spec_pool_insert (
   GParamSpecPool $pool,
-  GParamSpec $pspec,
-  GType $owner_type
+  GParamSpec     $pspec,
+  GType          $owner_type
 )
   is native(gobject)
   is export
@@ -367,8 +367,8 @@ sub g_param_spec_pool_insert (
 
 sub g_param_spec_pool_list (
   GParamSpecPool $pool,
-  GType $owner_type,
-  guint $n_pspecs_p
+  GType          $owner_type,
+  guint          $n_pspecs_p
 )
   returns CArray[GParamSpec]
   is native(gobject)
@@ -383,9 +383,9 @@ sub g_param_spec_pool_list_owned (GParamSpecPool $pool, GType $owner_type)
 
 sub g_param_spec_pool_lookup (
   GParamSpecPool $pool,
-  Str $param_name,
-  GType $owner_type,
-  gboolean $walk_ancestors
+  Str            $param_name,
+  GType          $owner_type,
+  gboolean       $walk_ancestors
 )
   returns GParamSpec
   is native(gobject)
@@ -421,10 +421,10 @@ sub g_param_spec_set_qdata (GParamSpec $pspec, GQuark $quark, gpointer $data)
 { * }
 
 sub g_param_spec_set_qdata_full (
-  GParamSpec $pspec,
-  GQuark $quark,
-  gpointer $data,
-  GDestroyNotify $destroy
+  GParamSpec     $pspec,
+  GQuark         $quark,
+  gpointer       $data,
+                 &destroy (gpointer)
 )
   is native(gobject)
   is export
@@ -454,9 +454,9 @@ sub g_param_type_register_static (Str $name, GParamSpecTypeInfo $pspec_info)
 
 sub g_param_value_convert (
   GParamSpec $pspec,
-  GValue $src_value,
-  GValue $dest_value,
-  gboolean $strict_validation
+  GValue     $src_value,
+  GValue     $dest_value,
+  gboolean   $strict_validation
 )
   returns uint32
   is native(gobject)
