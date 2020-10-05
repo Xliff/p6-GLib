@@ -134,7 +134,16 @@ sub resolve-gtype($gt) is export {
   $gt;
 }
 
-sub resolve-gstrv(*@rg) is export {
+multi sub resolve-gstrv(CArray[Str] $p, $length?) is export {
+  my $l = $length // try $p.elems;
+  die "Cannot determine the size of a CArray.{
+       ''} Please use the \$length parameter in call to resolve-gstrv()!"
+    if $l ~~ Failure;
+
+  $p[ $l ] = Str unless $p[$l - 1] =:= Str;
+  $p;
+}
+multi sub resolve-gstrv(*@rg) is export {
   my $gs = CArray[Str].new;
   my $c = 0;
   for @rg {
