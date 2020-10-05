@@ -24,7 +24,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 89;
+my constant forced = 95;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
