@@ -169,21 +169,21 @@ class GLib::Test {
     g_test_failed();
   }
 
-  method g_assertion_message (
+  method assertion_message (
     Str() $domain,
     Str() $file,
     Int() $line,
     Str() $func,
     Str() $message
   )
-    is also<g-assertion-message>
+    is also<assertion-message>
   {
     my gint $l = $line;
 
     g_assertion_message($domain, $file, $l, $func, $message);
   }
 
-  method g_assertion_message_cmpnum (
+  method assertion_message_cmpnum (
     Str() $domain,
     Str() $file,
     Int() $line,
@@ -194,7 +194,7 @@ class GLib::Test {
     Num() $arg2,
     Str() $numtype
   )
-    is also<g-assertion-message-cmpnum>
+    is also<assertion-message-cmpnum>
   {
     my gint $l = $line;
     my gdouble ($a1, $a2) = ($arg1, $arg2);
@@ -212,7 +212,7 @@ class GLib::Test {
     );
   }
 
-  method g_assertion_message_cmpstr (
+  method assertion_message_cmpstr (
     Str() $domain,
     Str() $file,
     Int() $line,
@@ -222,7 +222,7 @@ class GLib::Test {
     Str() $cmp,
     Str() $arg2
   )
-    is also<g-assertion-message-cmpstr>
+    is also<assertion-message-cmpstr>
   {
     my gint $l = $line;
 
@@ -282,6 +282,16 @@ class GLib::Test {
 
   method incomplete (Str() $msg) {
     g_test_incomplete($msg);
+  }
+
+  method init {
+    my $ac       = CArray[guint32].new;
+       $ac[0]    = 1;
+    my $av       = CArray[CArray[Str]].new;
+       $av[0]    = CArray[Str].new;
+       $av[0][0] = $*PROGRAM.absolute;
+
+    g_test_init($ac, $av, Str);
   }
 
   # method log_buffer_free (GTestLogBuffer $tbuffer) {

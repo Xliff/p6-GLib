@@ -10,6 +10,15 @@ unit package GLib::Raw::Test;
 
 ### /usr/include/glib-2.0/glib/gtestutils.h
 
+sub g_test_init (
+  CArray[uint32]      $argc,
+  CArray[CArray[Str]] $argv,
+  Str
+) 
+  is native(glib)
+  is export
+{ * }
+
 sub g_test_add_data_func (
   Str $testpath,
   gconstpointer $test_data,
