@@ -16,7 +16,11 @@ class GLib::Bytes {
     is also<GBytes>
   { $!b }
 
-  method new (Blob() $data, Int() $size) {
+  multi method new (GBytes $bytes, :$ref) {
+    $bytes ?? self.bless( :$bytes ) !! Nil;
+  }
+
+  multi method new (Blob() $data, Int() $size) {
     my gsize $s = $size;
 
     self.bless( bytes => g_bytes_new($data, $s) );
@@ -43,9 +47,9 @@ class GLib::Bytes {
   }
 
   method new_with_free_func (
-    Blob() $data,
-    Int() $size,
-    GDestroyNotify $free_func,
+    Blob()   $data,
+    Int()    $size,
+             &free_func,
     gpointer $user_data = gpointer
   )
     is also<new-with-free-func>
@@ -53,7 +57,7 @@ class GLib::Bytes {
     my gsize $s = $size;
 
     self.bless(
-      bytes => g_bytes_new_with_free_func($data, $s, $free_func, $user_data)
+      bytes => g_bytes_new_with_free_func($data, $s, &free_func, $user_data)
     );
   }
 
@@ -65,10 +69,27 @@ class GLib::Bytes {
     g_bytes_equal($!b, $bytes2);
   }
 
-  method get_data (Int() $size) is also<get-data> {
-    my gsize $s = $size;
+  proto method get_data (|)
+    is also<get-data>
+  { * }
 
-    g_bytes_get_data($!b, $s);
+  multi method get_data {
+    samewith($, :all);
+  }
+  multi method get_data (
+    $size      is rw,
+    :$all      =  False,
+    :$raw      =  False,
+    :$encoding =  'utf8'
+  ) {
+    my gsize $s = 0;
+
+    my $d = g_bytes_get_data($!b, $s);
+    $size = $s;
+    unless $raw {
+      $d = Buf.new( $d[^$size] ).decode($encoding);
+    }
+    $all.not ?? $d !! ($d, $size);
   }
 
   method get_size is also<get-size> {
@@ -92,7 +113,7 @@ class GLib::Bytes {
     my $ba = g_bytes_unref_to_array($!b);
 
     $ba ??
-      ( $raw ?? $ba !! GLib::BytesArray.new($ba) )
+      ( $raw ?? $ba !! GLib::BytesArray.new($ba, :!ref) )
       !!
       Nil;
   }

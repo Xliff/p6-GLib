@@ -18,8 +18,8 @@ sub g_bytes_equal (GBytes $bytes1, GBytes $bytes2)
   is export
 { * }
 
-sub g_bytes_get_data (GBytes $bytes, gsize $size)
-  returns gconstpointer
+sub g_bytes_get_data (GBytes $bytes, gsize $size is rw)
+  returns CArray[uint8]
   is native(glib)
   is export
 { * }
