@@ -68,14 +68,29 @@ class GLib::Value {
     }
   }
 
-  method gtypeFromType (GLib::Value:U: \T) is also<typeFromEnum> is rw {
-    die 'The parameter to typeFromEnym must be a type object!' if T.defined;
+  method gtypeFromType (GLib::Value:U: \T) {
+    die 'The parameter to gtypeFromType must be a type object!' if T.defined;
 
     do given T {
-      when uint32   { G_TYPE_UINT   }
-      when int32    { G_TYPE_INT    }
-      when uint64   { G_TYPE_UINT64 }
-      when int64    { G_TYPE_INT64  }
+      when uint32   { G_TYPE_UINT    }
+      when int32    { G_TYPE_INT     }
+      when uint64   { G_TYPE_UINT64  }
+      when int64    { G_TYPE_INT64   }
+      when Str      { G_TYPE_STRING  }
+      when Pointer  { G_TYPE_POINTER }
+    }
+  }
+
+  method typeFromGType (GLib::Value:U: \T) {
+    die 'The parameter to typeFromGType must be a type object!' if T.defined;
+
+    do given T {
+      when G_TYPE_UINT    { uint32  }
+      when G_TYPE_INT     { int32   }
+      when G_TYPE_UINT64  { uint64  }
+      when G_TYPE_INT64   { int64   }
+      when G_TYPE_STRING  { Str     }
+      when G_TYPE_POINTER { Pointer }
     }
   }
 
