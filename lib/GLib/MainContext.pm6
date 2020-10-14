@@ -145,8 +145,16 @@ class GLib::MainContext {
   }
   multi method iteration (
     GLib::MainContext:U:
-    GMainContext $context = GMainContext,
-    Int() $may_block = True
+    Int() $may_block     = True
+  ) {
+    my gboolean $mb = $may_block.so.Int;
+
+    so g_main_context_iteration(GMainContext, $mb);
+  }
+  multi method iteration (
+    GLib::MainContext:U:
+    GMainContext         $context,
+    Int()                $may_block      = True
   ) {
     my gboolean $mb = $may_block.so.Int;
 
@@ -221,8 +229,12 @@ class GLib::MainContext {
     g_main_context_wait($!mc, $cond, $mutex);
   }
 
-  method wakeup {
+  multi method wakeup ( GLib::MainContext:U: ) {
+    g_main_context_wakeup(GMainContext);
+  }
+  multi method wakeup ( GLib::MainContext:D: ) {
     g_main_context_wakeup($!mc);
   }
+
 
 }
