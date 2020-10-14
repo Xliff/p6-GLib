@@ -14,13 +14,19 @@ use GLib::Class::Object;
 use GLib::Roles::Bindable;
 use GLib::Roles::TypedBuffer;
 
+use GLib::Roles::Signals::Generic;
+
 constant gObjectTypeKey = 'p6-GObject-Type';
 
 my %data;
 
 # To be rolled into GLib::Roles::Object at some point!
-role GLib::Roles::Signals::GObject {
+role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
   has %!signals-object;
+
+  method disconnect-object-signal ($name) {
+    self.disconnect($name, %!signals-object);
+  }
 
   # GObject, GParamSpec, gpointer
   method connect-notify (
