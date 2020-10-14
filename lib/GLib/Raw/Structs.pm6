@@ -496,6 +496,10 @@ class GParamSpecValueArray  is repr<CStruct> does GLib::Roles::Pointers is expor
 }
 
 # Global subs requiring above structs
+sub gerror-blank is export {
+  CArray[Pointer[GError]];
+}
+
 sub gerror is export {
   my $cge = CArray[Pointer[GError]].new;
   $cge[0] = Pointer[GError];
@@ -507,17 +511,33 @@ sub g_error_free(GError $err)
   is export
 { * }
 
-sub clear_error($error = $ERROR) is export {
+sub clear_error ($error = $ERROR) is export {
   g_error_free($error) if $error.defined;
   $ERROR = Nil;
 }
 
+sub get-error ($e) is export {
+  $e.defined ??
+    ( $e[0].defined ?? $e[0].deref !! GError )
+    !!
+    Nil
+}
+
 sub set_error(CArray $e) is export {
   if $e[0].defined {
-    $ERROR = $e[0].deref;
+    $ERROR = get-error($e);
     X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
-    @ERRORS.push: $ERROR;
+    @ERRORS.push: [ $ERROR, Backtrace.new ];
   }
+}
+
+sub no-error ($e?) is export {
+  return True if $e.defined.not && $ERROR.defined.not;
+
+  my $error := $e ?? get-error($e) !! $ERROR;
+  return True unless $error.domain > 0;
+  return True unless $error.code   > 0;
+  return False;
 }
 
 sub sprintf-Ps (
