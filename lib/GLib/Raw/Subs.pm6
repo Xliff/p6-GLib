@@ -198,6 +198,11 @@ sub return-with-all ($v) is export {
         !! Nil
 }
 
+sub subarray ($a, $o) is export {
+  my $b = nativecast(Pointer[$a.of], $a);
+  nativecast(CArray[$a.of], $b.add($o) );
+}
+
 sub g_destroy_none(Pointer)
   is export
 { * }
