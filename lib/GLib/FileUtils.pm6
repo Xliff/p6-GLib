@@ -65,10 +65,10 @@ class GLib::FileUtils {
     $rv[0] ?? $rv.skip(1) !! Nil;
   }
   multi method file_get_contents (
-    Str() $filename,
-    $contents is rw,
-    $length is rw,
-    CArray[Pointer[GError]] $error = gerror,
+    Str()                   $filename,
+                            $contents is rw,
+                            $length   is rw,
+    CArray[Pointer[GError]] $error    =  gerror,
     :$all = False
   ) {
     my ($c, $l) = (CArray[Str].new, $length);
@@ -77,11 +77,11 @@ class GLib::FileUtils {
     samewith($filename, $c, $l // gsize, $error);
   }
   multi method file_get_contents (
-    Str() $filename,
-    CArray[Str] $contents,
-    $length is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+    Str()                   $filename,
+    CArray[Str]             $contents,
+                            $length    is rw,
+    CArray[Pointer[GError]] $error     =  gerror,
+                            :$all      =  False
   ) {
     my gsize $l = 0;
 
@@ -94,9 +94,9 @@ class GLib::FileUtils {
   }
 
   method file_open_tmp (
-    Str() $tmpl,
-    Str() $name_used,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                   $tmpl,
+    Str()                   $name_used,
+    CArray[Pointer[GError]] $error      = gerror
   ) {
     clear_error;
     my $fd = g_file_open_tmp($tmpl, $name_used, $error);
@@ -104,14 +104,14 @@ class GLib::FileUtils {
   }
 
   multi method file_read_link (
-    IO::Path $path,
+    IO::Path                $path,
     CArray[Pointer[GError]] $error = gerror
   ) {
     samewith($path.absolute, $error);
   }
   multi method file_read_link (
-    Str() $filename,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                   $filename,
+    CArray[Pointer[GError]] $error     = gerror
   ) {
     clear_error;
     my $l = g_file_read_link($filename, $error);
@@ -120,18 +120,18 @@ class GLib::FileUtils {
   }
 
   multi method file_set_contents (
-    IO::Path $path,
-    Str() $contents,
-    Int() $length = -1,
-    CArray[Pointer[GError]] $error = gerror
+    IO::Path                $path,
+    Str()                   $contents,
+    Int()                   $length    = -1,
+    CArray[Pointer[GError]] $error     = gerror
   ) {
     samewith($path.absolute, $contents, $length, $error);
   }
   multi method file_set_contents (
-    Str() $filename,
-    Str() $contents,
-    Int() $length = -1,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                   $filename,
+    Str()                   $contents,
+    Int()                   $length    = -1,
+    CArray[Pointer[GError]] $error     = gerror
   ) {
     my gssize $l = $length;
 
@@ -173,8 +173,13 @@ class GLib::FileUtils {
     g_mkdtemp_full($tmpl, $m);
   }
 
-  method mkstemp (Str() $tmpl) {
-    g_mkstemp($tmpl);
+  method mkstemp (Str $tmpl is rw) {
+    my $fn = CArray[uint8].new( $tmpl.comb.map(*.ord) );
+    $fn[$tmpl.chars] = 0;
+
+    my $rv = g_mkstemp($fn);
+    $tmpl = CArrayToArray($fn, $tmpl.chars).map( *.chr ).join('');
+    $rv;
   }
 
   method mkstemp_full (Str() $tmpl, Int() $flags, Int() $mode) {
@@ -307,7 +312,7 @@ class GLib::FileUtils {
   multi method rmdir (IO::Path $path) {
     samewith($path.absolute);
   }
-  multi method rmdir (Str() $filename) { 
+  multi method rmdir (Str() $filename) {
     g_rmdir($filename);
   }
 
@@ -323,6 +328,16 @@ class GLib::FileUtils {
   }
   multi method unlink (Str() $filename) {
     g_unlink($filename);
+  }
+
+  method write (Int() $fd, Str() $text, Int() $length) {
+    my size_t $l = $length;
+
+    # Make the native definition.
+    sub write (guint, Str, size_t) returns guint32 is native { * }
+
+    # Then use it.
+    write($fd, $text, $l);
   }
 
 }

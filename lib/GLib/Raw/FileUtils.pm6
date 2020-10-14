@@ -135,7 +135,7 @@ sub g_mkdtemp_full (Str $tmpl, gint $mode)
   is export
 { * }
 
-sub g_mkstemp (Str $tmpl)
+sub g_mkstemp (CArray[uint8] $tmpl)
   returns gint
   is native(glib)
   is export
