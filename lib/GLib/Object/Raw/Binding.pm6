@@ -8,10 +8,10 @@ unit package GLib::Object::Raw::Binding;
 
 sub g_object_bind_property (
   GObject $source,
-  Str $source_property,
+  Str     $source_property,
   GObject $target,
-  Str $target_property,
-  uint32 $flags                           # GBindingFlags $flags
+  Str     $target_property,
+  uint32  $flags                           # GBindingFlags $flags
 )
   returns GBinding
   is native(gobject)
@@ -20,14 +20,14 @@ sub g_object_bind_property (
 
 sub g_object_bind_property_full (
   GObject $source,
-  Str $source_property,
+  Str     $source_property,
   GObject $target,
-  Str $target_property,
-  uint32 $flags,                          # GBindingFlags $flags,
-  GBindingTransformFunc $transform_to,
-  GBindingTransformFunc $transform_from,
+  Str     $target_property,
+  uint32  $flags,                          # GBindingFlags $flags,
+          &transform_to   (GBinding, GValue, GValue, gpointer --> gboolean),
+          &transform_from (GBinding, GValue, GValue, gpointer --> gboolean),
   Pointer $user_data,
-  GDestroyNotify $notify
+          &notify (gpointer)
 )
   returns GBinding
   is native(gobject)
@@ -35,11 +35,11 @@ sub g_object_bind_property_full (
   { * }
 
 sub g_object_bind_property_with_closures (
-  GObject $source,
-  Str $source_property,
-  GObject $target,
-  Str $target_property,
-  uint32 $flags,                          # GBindingFlags $flags,
+  GObject  $source,
+  Str      $source_property,
+  GObject  $target,
+  Str      $target_property,
+  uint32   $flags,                          # GBindingFlags $flags,
   GClosure $transform_to,
   GClosure $transform_from
 )
