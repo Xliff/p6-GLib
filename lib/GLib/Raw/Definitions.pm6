@@ -24,7 +24,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 95;
+my constant forced = 100;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -134,6 +134,8 @@ constant GLIB_SYSDEF_MSG_DONTROUTE is export = 4;
 
 constant G_PARAM_USER_SHIFT        is export = 8;
 constant G_LOG_DOMAIN              is export = "\0";
+
+constant G_MAXSIZE                 is export = 2 ** 64 - 1;
 
 class GAsyncQueue              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GBinding                 is repr<CPointer> is export does GLib::Roles::Pointers { }
