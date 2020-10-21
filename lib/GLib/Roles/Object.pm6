@@ -252,8 +252,10 @@ role GLib::Roles::Object {
     return g_type_check_instance_is_a($!o.g_type_instance, $t);
   }
 
-  method !setObject($obj) {
-    $!o = $obj ~~ GObject ?? $obj !! cast(GObject, $obj)
+  method !setObject ($obj) {
+    say "SetObject: $obj" if $DEBUG;
+    $!o = ($obj ~~ GObject) ?? $obj !! cast(GObject, $obj);
+    say "ObjectSet: $!o" if $DEBUG; 
   }
 
   method p { $!o.p }
@@ -274,14 +276,14 @@ role GLib::Roles::Object {
   }
 
   # We use these for inc/dec ops
-  method ref   is also<upref>   {   g_object_ref($!o); self; }
+  method ref   is also<upref>   { say "GObject: { $!o }";   g_object_ref($!o); self; }
   method unref is also<downref> { g_object_unref($!o); }
 
   method bind (
-    Str() $source_property,
+    Str()     $source_property,
     GObject() $target,
-    Str() $target_property,
-    Int() $flags = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
+    Str()     $target_property,
+    Int()     $flags            = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
   ) {
     GLib::Object::Binding.bind(
       self,
@@ -293,14 +295,14 @@ role GLib::Roles::Object {
   }
 
   method bind_full (
-    Str() $source_property,
-    GObject() $target,
-    Str() $target_property,
-    Int() $flags,
-    GBindingTransformFunc $transform_to   = Pointer,
-    GBindingTransformFunc $transform_from = Pointer,
-    gpointer $user_data                   = Pointer,
-    GDestroyNotify $notify                = Pointer
+    Str()                 $source_property,
+    GObject()             $target,
+    Str()                 $target_property,
+    Int()                 $flags,
+                          &transform_to   = Callable,
+                          &transform_from = Callable,
+    gpointer              $user_data      = Pointer,
+                          &notify         = Callable
   ) {
     GLib::Object::Binding.bind_full(
       self,
@@ -308,18 +310,18 @@ role GLib::Roles::Object {
       $target,
       $target_property,
       $flags,
-      $transform_to,
-      $transform_from,
+      &transform_to,
+      &transform_from,
       $user_data,
-      $notify
+      &notify
     );
   }
 
   method bind_with_closures (
-    Str() $source_property,
-    GObject() $target,
-    Str() $target_property,
-    Int() $flags,
+    Str()      $source_property,
+    GObject()  $target,
+    Str()      $target_property,
+    Int()      $flags,
     GClosure() $transform_to   = GClosure,
     GClosure() $transform_from = GClosure
   ) {
@@ -659,10 +661,10 @@ role GLib::Roles::Object {
 
 sub g_connect_notify (
   GObject $app,
-  Str $name,
-  &handler (GObject $h_widget, GParamSpec $pspec, Pointer $h_data),
+  Str     $name,
+          &handler (GObject $h_widget, GParamSpec $pspec, Pointer $h_data),
   Pointer $data,
-  uint32 $connect_flags
+  uint32  $connect_flags
 )
   returns uint64
   is native('gobject-2.0')
