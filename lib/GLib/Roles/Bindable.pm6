@@ -11,10 +11,10 @@ role GLib::Roles::Bindable {
   method bind (
     ::?CLASS:U:
     GObject() $source,
-    Str() $source_property,
+    Str()     $source_property,
     GObject() $target,
-    Str() $target_property,
-    Int() $flags = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
+    Str()     $target_property,
+    Int()     $flags            = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
   ) {
     my $f = $flags;
     my $binding = g_object_bind_property(
@@ -30,15 +30,15 @@ role GLib::Roles::Bindable {
 
   method bind_full (
     ::?CLASS:U:
-    GObject() $source,
-    Str() $source_property,
-    GObject() $target,
-    Str() $target_property,
-    Int() $flags,
-    GBindingTransformFunc $transform_to,
-    GBindingTransformFunc $transform_from,
-    gpointer $user_data                   = gpointer,
-    GDestroyNotify $notify                = gpointer
+    GObject()      $source,
+    Str()          $source_property,
+    GObject()      $target,
+    Str()          $target_property,
+    Int()          $flags,
+                   &transform_to,
+                   &transform_from,
+    gpointer       $user_data        = gpointer,
+                   &notify           = gpointer
   )
     is also<bind-full>
   {
@@ -49,10 +49,10 @@ role GLib::Roles::Bindable {
       $target,
       $target_property,
       $f,
-      $transform_to,
-      $transform_from,
+      &transform_to,
+      &transform_from,
       $user_data,
-      $notify
+      &notify
     );
 
     $binding ?? self.bless( :$binding ) !! Nil;
@@ -60,13 +60,13 @@ role GLib::Roles::Bindable {
 
   method bind_with_closures (
     ::?CLASS:U:
-    GObject() $source,
-    Str() $source_property,
-    GObject() $target,
-    Str() $target_property,
-    Int() $flags,
-    GClosure() $transform_to   = GClosure,
-    GClosure() $transform_from = GClosure
+    GObject()  $source,
+    Str()      $source_property,
+    GObject()  $target,
+    Str()      $target_property,
+    Int()      $flags,
+    GClosure() $transform_to     = GClosure,
+    GClosure() $transform_from   = GClosure
   )
     is also<bind-with-closures>
   {
