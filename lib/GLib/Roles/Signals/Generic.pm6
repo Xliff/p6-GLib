@@ -33,7 +33,7 @@ role GLib::Roles::Signals::Generic {
     %signals{$signal}:delete;
   }
 
-  method connect (
+  multi method connect (
     $obj,
     $signal,
     &handler?
