@@ -13,6 +13,22 @@ unit package GLib::Raw::Object;
 # Predeclarations
 class GTypeClass            is repr<CStruct> does GLib::Roles::Pointers is export {
   has GType      $.g_type;
+
+  # Lifted from ::Raw::Object, but that compunit cannot be loaded here due to circularity.
+  sub g_type_name (GType $type)
+    returns Str
+    is native(gobject)
+  { * }
+
+  method raku {
+    ::?CLASS.^name ~ ".new(g_type => { $!g_type } #`[{ g_type_name($!g_type) }] )";
+  }
+  method gist {
+    ::?CLASS.^name ~ ".new(g_type => { $!g_type } #`[{ g_type_name($!g_type) }] )";
+  }
+  method Str {
+    ::?CLASS.^name ~ ".new(g_type => { $!g_type } #`[{ g_type_name($!g_type) }] )";
+  }
 }
 
 class GTypeInstance         is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -49,9 +65,9 @@ sub g_type_check_instance_is_a (
 { * }
 
 sub g_object_new_with_properties (
-  GType $object_type, 
-  guint $n_properties, 
-  CArray[Str] $names, 
+  GType $object_type,
+  guint $n_properties,
+  CArray[Str] $names,
   Pointer $values
 )
   returns GObject
