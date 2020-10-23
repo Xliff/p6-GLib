@@ -63,7 +63,7 @@ role GLib::Roles::Object {
   has GObject $!o;
 
   submethod BUILD (:$object) {
-    $!o = $object if $object;
+    self!setObject($object) if $object;
   }
 
   method gist-data {
@@ -107,10 +107,10 @@ role GLib::Roles::Object {
     );
   }
   multi method new_object_with_properties (
-    Int() $num-props,
+    Int()       $num-props,
     CArray[Str] $names,
-    Pointer $values,
-    :$raw
+    Pointer     $values,
+                :$raw       = False
   ) {
     my guint $n = $num-props;
     my GType $t = ::?CLASS.get-type;
@@ -243,8 +243,8 @@ role GLib::Roles::Object {
   }
 
   method isType (Int() $type) {
-    my GType $t = $type;
-    my $gc = $!o.g_type_instance.g_class;
+    my GType $t  = $type;
+    my       $gc = $!o.g_type_instance.g_class;
 
     return False unless $!o;
     return True  if     $gc && $gc.g_type == $t;
@@ -252,10 +252,19 @@ role GLib::Roles::Object {
     return g_type_check_instance_is_a($!o.g_type_instance, $t);
   }
 
+  # method !onFirstGObject ($value?) {
+  #   # This REALLY should never be necessary.
+  #   for self.^attributes {
+  #     next unless .name eq '$!o';
+  #     .set_value( self, $value ) if $value;
+  #     return .get_value(self);
+  #   }
+  # }
+
   method !setObject ($obj) {
-    say "SetObject: $obj" if $DEBUG;
-    $!o = ($obj ~~ GObject) ?? $obj !! cast(GObject, $obj);
-    say "ObjectSet: $!o" if $DEBUG; 
+    say "SetObject ({ self }): { $obj }";
+    $!o = $obj ~~ GObject ?? $obj !! cast(GObject, $obj);
+    say "ObjectSet ({ self }): { $!o }";
   }
 
   method p { $!o.p }
@@ -263,10 +272,10 @@ role GLib::Roles::Object {
   multi method Numeric { +self.p }
 
   method GLib::Raw::Definitions::GObject
-  { $!o }
+  { self!onFirstObject }
 
   # Remove when Method::Also is fixed!
-  method GObject { $!o }
+  method GObject ( :object(:$obj) ) { say 'GObject---'; $obj ?? self !! $!o }
 
   method notify ($detail?) {
     my $sig-name = 'notify';
@@ -276,7 +285,7 @@ role GLib::Roles::Object {
   }
 
   # We use these for inc/dec ops
-  method ref   is also<upref>   { say "GObject: { $!o }";   g_object_ref($!o); self; }
+  method ref   is also<upref>   {   g_object_ref($!o); self; }
   method unref is also<downref> { g_object_unref($!o); }
 
   method bind (
