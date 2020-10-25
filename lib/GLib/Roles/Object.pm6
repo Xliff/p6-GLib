@@ -262,9 +262,9 @@ role GLib::Roles::Object {
   # }
 
   method !setObject ($obj) {
-    say "SetObject ({ self }): { $obj }";
+    say "SetObject ({ self }): { $obj }" if $DEBUG;
     $!o = $obj ~~ GObject ?? $obj !! cast(GObject, $obj);
-    say "ObjectSet ({ self }): { $!o }";
+    say "ObjectSet ({ self }): { $!o }" if $DEBUG;
   }
 
   method p { $!o.p }
@@ -275,7 +275,7 @@ role GLib::Roles::Object {
   { self!onFirstObject }
 
   # Remove when Method::Also is fixed!
-  method GObject ( :object(:$obj) ) { say 'GObject---'; $obj ?? self !! $!o }
+  method GObject ( :object(:$obj) ) { $obj ?? self !! $!o }
 
   method notify ($detail?) {
     my $sig-name = 'notify';
