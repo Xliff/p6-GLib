@@ -1,4 +1,4 @@
 prefix=GLib
 modules=GLib::Raw::Types,
-backups=backup,bitbucket
+backups=backup,bitbucket,hut,google-backup,azure-backup
 build_exclude=GLib::Roles::TreeData
