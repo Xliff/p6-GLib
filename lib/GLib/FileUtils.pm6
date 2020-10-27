@@ -1,5 +1,7 @@
 use v6.c;
 
+use Method::Also;
+
 use NativeCall;
 
 use GLib::Compat::Definitions;
@@ -18,18 +20,33 @@ class GLib::FileUtils {
     g_basename($file_name);
   }
 
-  method build_filename (@args) {
+  proto method build_filename (|)
+      is also<build-filename>
+  { * }
+
+  multi method build_filename (*@args) {
+    samewith(@args);
+  }
+  multi method build_filename (@args) {
     self.build_filenamev( resolve-gstrv(@args) )
   }
-  method build_filenamev (CArray[Str] $args) {
+  method build_filenamev (CArray[Str] $args) is also<build-filenamev> {
     g_build_filenamev($args);
   }
 
-  method build_path (@args) {
+  proto method build_path (|)
+      is also<build-path>
+  { * }
+
+  multi method build_path (*@args) {
+    samewith(@args);
+  }
+  multi method build_path (@args) {
     self.build_pathv($*SPEC.dir-sep, @args);
   }
 
   proto method build_pathv (|)
+      is also<build-pathv>
   { * }
 
   multi method build_pathv (Str() $separator, @args) {
@@ -39,25 +56,33 @@ class GLib::FileUtils {
     g_build_pathv($separator, $args);
   }
 
-  method canonicalize_filename (Str() $filename, Str() $relative_to) {
+  method canonicalize_filename (Str() $filename, Str() $relative_to)
+    is also<canonicalize-filename>
+  {
     g_canonicalize_filename($filename, $relative_to);
   }
 
-  method dir_make_tmp (Str() $tmpl, CArray[Pointer[GError]] $error = gerror) {
+  method dir_make_tmp (Str() $tmpl, CArray[Pointer[GError]] $error = gerror)
+    is also<dir-make-tmp>
+  {
     clear_error;
     my $td = g_dir_make_tmp($tmpl, $error);
     set_error($error);
     $td;
   }
 
-  method file_error_from_errno (Int() $err_no) {
+  method file_error_from_errno (Int() $err_no) is also<file-error-from-errno> {
     my gint $e = $err_no;
     g_file_error_from_errno($e);
   }
 
-  method file_error_quark {
+  method file_error_quark is also<file-error-quark> {
     g_file_error_quark();
   }
+
+  proto method file_get_contents (|)
+    is also<file-get-contents>
+  { * }
 
   multi method file_get_contents (IO::Path $path) {
     my $rv = samewith($path.absolute, $, $, :all);
@@ -97,11 +122,17 @@ class GLib::FileUtils {
     Str()                   $tmpl,
     Str()                   $name_used,
     CArray[Pointer[GError]] $error      = gerror
-  ) {
+  )
+    is also<file-open-tmp>
+  {
     clear_error;
     my $fd = g_file_open_tmp($tmpl, $name_used, $error);
     set_error($error);
   }
+
+  proto method file_read_link (|)
+    is also<file-read-link>
+  { * }
 
   multi method file_read_link (
     IO::Path                $path,
@@ -118,6 +149,10 @@ class GLib::FileUtils {
     set_error($error);
     $l
   }
+
+  proto method file_set_contents (|)
+    is also<file-set-contents>
+  { * }
 
   multi method file_set_contents (
     IO::Path                $path,
@@ -141,6 +176,10 @@ class GLib::FileUtils {
     $rv;
   }
 
+  proto method file_test (|)
+    is also<file-test>
+  { * }
+
   multi method file_test (IO::Path $path, Int() $test) {
     samewith($path, $test);
   }
@@ -150,9 +189,13 @@ class GLib::FileUtils {
     so g_file_test($filename, $t);
   }
 
-  method get_current_dir {
+  method get_current_dir is also<get-current-dir> {
     g_get_current_dir();
   }
+
+  proto method mkdir_with_parents (|)
+    is also<mkdir-with-parents>
+  { * }
 
   multi method mkdir_with_parents (IO::Path $pathname, Int() $mode) {
     samewith($pathname.absolute, $mode);
@@ -167,7 +210,7 @@ class GLib::FileUtils {
     g_mkdtemp($tmpl);
   }
 
-  method mkdtemp_full (Str() $tmpl, Int() $mode) {
+  method mkdtemp_full (Str() $tmpl, Int() $mode) is also<mkdtemp-full> {
     my gint $m = $mode;
 
     g_mkdtemp_full($tmpl, $m);
@@ -182,25 +225,27 @@ class GLib::FileUtils {
     $rv;
   }
 
-  method mkstemp_full (Str() $tmpl, Int() $flags, Int() $mode) {
+  method mkstemp_full (Str() $tmpl, Int() $flags, Int() $mode)
+    is also<mkstemp-full>
+  {
     my gint ($f, $m) = ($flags, $mode);
 
     g_mkstemp_full($tmpl, $f, $m);
   }
 
-  method path_get_basename (Str() $file_name) {
+  method path_get_basename (Str() $file_name) is also<path-get-basename> {
     g_path_get_basename($file_name);
   }
 
-  method path_get_dirname (Str() $file_name) {
+  method path_get_dirname (Str() $file_name) is also<path-get-dirname> {
     g_path_get_dirname($file_name);
   }
 
-  method path_is_absolute (Str() $file_name) {
+  method path_is_absolute (Str() $file_name) is also<path-is-absolute> {
     so g_path_is_absolute($file_name);
   }
 
-  method path_skip_root (Str() $file_name) {
+  method path_skip_root (Str() $file_name) is also<path-skip-root> {
     g_path_skip_root($file_name);
   }
 
