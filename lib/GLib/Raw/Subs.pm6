@@ -256,23 +256,20 @@ sub g_object_set_ptr_data (GObject $o, Str $key, Pointer $data)
 { * }
 
 sub g_object_setv (
-  GObject $object,
-  uint32 $n_properties,
+  GObject     $object,
+  uint32      $n_properties,
   CArray[Str] $names,
-  # Note... not an array.
-  #CArray[GValue] $values
-  Pointer $v
+  Pointer     $v             #CArray[GValue] $values
 )
   is native(gobject)
   is export
 { * }
 
 sub g_object_getv (
-  GObject $object,
-  uint32 $n_properties,
+  GObject     $object,
+  uint32      $n_properties,
   CArray[Str] $names,
-  #CArray[GValue] $values
-  Pointer $v
+  Pointer     $v             #CArray[GValue] $values
 )
   is native(gobject)
   is export
@@ -280,7 +277,7 @@ sub g_object_getv (
 
 sub g_object_get_int_data (
   GObject $object,
-  Str $name,
+  Str     $name,
 )
   returns CArray[gint]
   is native(gobject)
@@ -289,8 +286,8 @@ sub g_object_get_int_data (
 { * }
 
 sub g_object_set_int_data (
-  GObject $object,
-  Str $name,
+  GObject      $object,
+  Str          $name,
   CArray[gint] $value
 )
   is native(gobject)
@@ -300,7 +297,7 @@ sub g_object_set_int_data (
 
 sub g_object_get_uint_data (
   GObject $object,
-  Str $name,
+  Str     $name,
 )
   returns CArray[guint]
   is native(gobject)
@@ -309,8 +306,8 @@ sub g_object_get_uint_data (
 { * }
 
 sub g_object_set_uint_data (
-  GObject $object,
-  Str $name,
+  GObject       $object,
+  Str           $name,
   CArray[guint] $value
 )
   is native(gobject)
