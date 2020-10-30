@@ -36,7 +36,7 @@ class GLib::Source {
   }
   multi method new (
     GSourceFuncs $source_funcs,
-    Int() $struct_size = GSourceFuncs.size-of
+    Int()        $struct_size   = GSourceFuncs.size-of
   ) {
     my guint $ss = $struct_size;
     self.bless( source => g_source_new($source_funcs, $ss) );
@@ -55,7 +55,7 @@ class GLib::Source {
   method add_unix_fd (Int() $fd, Int() $events) is also<add-unix-fd> {
     my gint $f = $fd;
     my guint $e = $events;
-    
+
     g_source_add_unix_fd($!gs, $fd, $e);
   }
 
@@ -121,7 +121,7 @@ class GLib::Source {
   }
 
   method set_callback_indirect (
-    gpointer $callback_data,
+    gpointer             $callback_data,
     GSourceCallbackFuncs $callback_funcs
   )
     is also<set-callback-indirect>
@@ -177,7 +177,8 @@ class GLib::Source {
 
   method remove_by_funcs_user_data (
     GLib::Source:U:
-    GSourceFuncs $funcs, gpointer $user_data
+    GSourceFuncs    $funcs,
+    gpointer        $user_data
   )
     is also<remove-by-funcs-user-data>
   {
@@ -186,7 +187,7 @@ class GLib::Source {
 
   method remove_by_user_data (
     GLib::Source:U:
-    gpointer $user_data
+    gpointer        $user_data
   )
     is also<remove-by-user-data>
   {
@@ -195,8 +196,8 @@ class GLib::Source {
 
   method idle_add (
     GLib::Source:U:
-    &function,
-    gpointer $data = gpointer
+                    &function,
+    gpointer        $data      = gpointer
   )
     is also<idle-add>
   {
@@ -205,10 +206,10 @@ class GLib::Source {
 
   method idle_add_full (
     GLib::Source:U:
-    Int() $priority,
-    &function,
-    gpointer $data         = gpointer,
-    GDestroyNotify $notify = gpointer
+    Int()          $priority,
+                   &function,
+    gpointer       $data      = gpointer,
+    GDestroyNotify $notify    = gpointer
   )
     is also<idle-add-full>
   {
@@ -217,7 +218,7 @@ class GLib::Source {
 
   method idle_remove_by_data (
     GLib::Source:U:
-    gpointer $data
+    gpointer        $data
   )
     is also<idle-remove-by-data>
   {
