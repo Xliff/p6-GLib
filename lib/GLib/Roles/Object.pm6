@@ -271,8 +271,8 @@ role GLib::Roles::Object {
 
   multi method Numeric { +self.p }
 
-  method GLib::Raw::Definitions::GObject
-  { self!onFirstObject }
+  method GLib::Raw::Object::GObject
+  { $!o }
 
   # Remove when Method::Also is fixed!
   method GObject ( :object(:$obj) ) { $obj ?? self !! $!o }
@@ -281,7 +281,7 @@ role GLib::Roles::Object {
     my $sig-name = 'notify';
     $sig-name ~= "::{$detail}" if $detail;
 
-    self.connect-notify($sig-name);
+    self.connect-notify($!o, $sig-name);
   }
 
   # We use these for inc/dec ops
