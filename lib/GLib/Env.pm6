@@ -43,7 +43,7 @@ class GLib::Env {
   { * }
 
   # cw: Note that $raw CANNOT be named due to *%env!
-  multi method setenv (
+  multi method eviron_setenv (
     CArray[Str] $envp,
     $overwrite = False,
     $raw = True,
@@ -123,7 +123,11 @@ class GLib::Env {
   multi method setenv ($overwrite = False, *%env) {
     self.setenv(.key, .value, $overwrite) for %env.pairs;
   }
-  multi method setenv (Str() $variable, Str() $value, Int() $overwrite) {
+  multi method setenv (
+    Str() $variable,
+    Str() $value,
+    Int() $overwrite = False
+  ) {
     my gboolean $o = $overwrite.so.Int;
 
     g_setenv($variable, $value, $o);
