@@ -274,6 +274,8 @@ role GLib::Roles::Object {
   method GLib::Raw::Object::GObject
   { $!o }
 
+  method equals (GObject() $b) { +self.p == +$b.p }
+
   # Remove when Method::Also is fixed!
   method GObject ( :object(:$obj) ) { $obj ?? self !! $!o }
 
@@ -684,3 +686,12 @@ sub g_object_get_property (GObject $o, Str $key, GValue $value)
   is native(gobject)
   is export
 { * }
+
+multi sub infix:<=:=> (
+  GLib::Roles::Object $a,
+  GLib::Roles::Object $b
+)
+  is export
+{
+  $a.equals($b);
+}
