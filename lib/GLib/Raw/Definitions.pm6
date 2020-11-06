@@ -24,7 +24,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 105;
+my constant forced = 106;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -216,7 +216,7 @@ multi max (:&by = {$_}, :$all!, *@list) is export {
   @list[ @values.kv.map: {$^index unless $^value cmp $max} ];
 }
 
-our $ERRNO is export := cglobal('libc.so.6', 'errno', int32)
+our $ERRNO is export := cglobal('libc.so.6', 'errno', int32);
 
 INIT {
 
