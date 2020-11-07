@@ -50,6 +50,7 @@ sub glib-support is export {
 }
 
 constant realUInt is export = $*KERNEL.bits == 32 ?? uint32 !! uint64;
+constant realInt  is export = $*KERNEL.bits == 32 ?? int32  !! int64;
 
 constant gboolean                       is export := uint32;
 constant gchar                          is export := Str;
