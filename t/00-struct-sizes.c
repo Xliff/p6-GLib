@@ -11,11 +11,15 @@
 #define DLLEXPORT extern
 #endif
 
+#include <time.h>
 #include <glib.h>
 #include <glib-object.h>
 
 #define s(name)     DLLEXPORT int sizeof_ ## name () { return sizeof(name); }
 
+typedef struct tm tm;
+
+s(tm)
 s(GArray)
 s(GByteArray)
 s(GCClosure)
