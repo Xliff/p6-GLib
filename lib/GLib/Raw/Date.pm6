@@ -1,5 +1,7 @@
 use v6.c;
 
+use NativeCall;
+
 use GLib::Compat::Definitions;
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
@@ -215,7 +217,7 @@ sub g_date_set_year (GDate $date, guint16 $year)
   is export
 { * }
 
-sub g_date_strftime (Str $s, gsize $slen, Str $format, GDate $date)
+sub g_date_strftime (Pointer $s, gsize $slen, Str $format, GDate $date)
   returns gsize
   is native(glib)
   is export
