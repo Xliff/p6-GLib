@@ -1,6 +1,7 @@
 use v6.c;
 
 use Method::Also;
+use NativeHelpers::Blob;
 
 use GLib::Compat::Definitions;
 use GLib::Raw::Types;
@@ -239,16 +240,30 @@ class GLib::Date {
     g_date_set_year($!d, $y);
   }
 
-  method strftime (
-    GLib::Date:U:
-    Str()         $s,
+  multi method strftime (
     Int()         $slen,
     Str()         $format,
-    GDate()       $date
+    Str()         :$encoding = 'utf-8'
+  )
+    is also<
+      to-string
+      to_string
+    >
+  {
+    my $buf = Buf.allocate($slen);
+    GLib::Date.strftime($buf, $slen, $format, $!d);
+    $buf.decode($encoding);
+  }
+  multi method strftime (
+    GLib::Date:U:
+    Buf         $s,
+    Int()       $slen,
+    Str()       $format,
+    GDate()     $date
   ) {
     my gsize $sl = $slen;
 
-    g_date_strftime($s, $sl, $format, $date);
+    g_date_strftime( pointer-to($s), $sl, $format, $date );
   }
 
   method subtract_days (Int() $n_days) is also<subtract-days> {
