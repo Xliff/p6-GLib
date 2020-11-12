@@ -24,7 +24,7 @@ class X::GLib::GError is Exception {
 }
 
 # Forced compile count
-my constant forced = 106;
+my constant forced = 110;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -96,7 +96,7 @@ constant GCompareFunc                   is export := Pointer;
 constant GCopyFunc                      is export := Pointer;
 constant GClosureMarshal                is export := Pointer;
 constant GClosureNotify                 is export := Pointer;
-constant GDate                          is export := uint64;
+#constant GDate                          is export := uint64;
 constant GDestroyNotify                 is export := Pointer;
 constant GQuark                         is export := uint32;
 constant GEqualFunc                     is export := Pointer;

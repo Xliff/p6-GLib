@@ -37,6 +37,18 @@ class GCond                 is repr<CStruct> does GLib::Roles::Pointers is expor
   has guint    @!i[2] is CArray;
 }
 
+class GDate                 is repr<CStruct> does GLib::Roles::Pointers is export {
+  has guint32 $.julian-days is rw;
+  has guint32 $!packed-data;
+
+  # cw: Accessor methods for packed fields?
+  # guint julian : 1; 
+  # guint dmy    : 1;
+  # guint day    : 6;
+  # guint month  : 4;
+  # guint year   : 16;
+}
+
 class GError                is repr<CStruct> does GLib::Roles::Pointers is export {
   has uint32        $.domain;
   has int32         $.code;
