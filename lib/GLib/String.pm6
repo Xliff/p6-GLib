@@ -24,18 +24,18 @@ class GLib::String {
     $string ?? self.bless( :$string ) !! Nil;
   }
 
-  method new_len (Str() $init = Str, Int() $len = $init.chars)
+  method new_len (Str() $init = '', Int() $len = $init.chars + 1)
     is also<new-len>
   {
-    my gssize $l = $len;
-    my $string = g_string_new_len($init, $len);
+    my gssize $l      = $len;
+    my        $string = g_string_new_len($init, $len);
 
     $string ?? self.bless( :$string ) !! Nil;
   }
 
   method new_sized (Int() $dfl_size) is also<new-sized> {
-    my gsize $d = $dfl_size;
-    my $string = g_string_sized_new($d);
+    my gsize $d      = $dfl_size;
+    my       $string = g_string_sized_new($d);
 
     $string ?? self.bless( :$string ) !! Nil;
   }
@@ -48,7 +48,9 @@ class GLib::String {
     g_string_append_c($!s, $c);
   }
 
-  method append_len (Str() $val, Int() $len) is also<append-len> {
+  method append_len (Str() $val, Int() $len = $val.chars + 1)
+    is also<append-len>
+  {
     my gssize $l = $len;
 
     g_string_append_len($!s, $val, $len);
@@ -102,8 +104,8 @@ class GLib::String {
     g_string_erase($!s, $p, $l);
   }
 
-  method free (Int() $free_segment) {
-    my gboolean $f = $free_segment;
+  method free (Int() $free_segment = False) {
+    my gboolean $f = $free_segment.so.Int;
 
     g_string_free($!s, $f);
   }
@@ -159,7 +161,7 @@ class GLib::String {
   method overwrite_len (Int() $pos, Str() $val, Int() $len)
     is also<overwrite-len>
   {
-    my gsize $p = $pos;
+    my gsize  $p = $pos;
     my gssize $l = $len;
 
     g_string_overwrite_len($!s, $pos, $val, $len);
