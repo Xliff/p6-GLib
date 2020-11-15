@@ -111,7 +111,7 @@ class GLib::GList {
   }
 
   # NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE
-  # Probably better to finish work on GTK::Compat::ListData role and move
+  # Probably better to finish work on GLib::Roles::ListData role and move
   # the Array backing to it. Until that decision has been made, this code
   # has been deactivated.
   #
