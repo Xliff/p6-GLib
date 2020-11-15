@@ -5,10 +5,14 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Object::Raw::Closure;
 
-our GClosureAncestry is export of Mu
+use GLib::Roles::Object;
+
+our subset GClosureAncestry is export of Mu
   where GClosure | GObject;
 
 class GLib::Object::Closure {
+  also does GLib::Roles::Object;
+  
   has GClosure $!c is implementor;
 
   method BUILD (:$closure) {
@@ -36,7 +40,7 @@ class GLib::Object::Closure {
     is also<GClosure>
   { $!c }
 
-  method new (GClosureAncestry $closure, :!$ref = True) {
+  method new (GClosureAncestry $closure, :$ref = True) {
     $closure ?? self.bless(:$closure) !! Nil;
 
     my $o = self.bless( :$closure );
