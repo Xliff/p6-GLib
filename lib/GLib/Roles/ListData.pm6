@@ -112,7 +112,7 @@ role GLib::Roles::ListData[::T] {
           default {
             die qq:to/DIE/.chomp;
               Unsupported type '{ .^name }' passed to{
-              } GTK::Compat::List.new()
+              } GLib::List.new()
               DIE
           }
         }
