@@ -4,7 +4,7 @@ use NativeCall;
 
 use GLib::Raw::Types;
 
-unit package GTK::Compat::Raw::String;
+unit package GLib::Raw::String;
 
 sub g_string_append (GString $string, Str $val)
   returns GString
