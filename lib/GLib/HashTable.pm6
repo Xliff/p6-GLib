@@ -3,10 +3,9 @@ use v6.c;
 use NativeCall;
 
 use GLib::Raw::Types;
-
-
-
 use GLib::Raw::HashTable;
+
+use GLib::GList;
 
 INIT {
   say qq:to/S/ unless %*ENV<P6_BUILDING_GTK>.so;
@@ -176,9 +175,9 @@ class GLib::HashTable {
   method get_keys_as_array (Int() $length is rw) {
     my guint $l = $length;
 
-    # ??? WTF???
+    # ??? WTF ???
 
-    $length = $l;
+    warn "{ &*ROUTINE.name } NYI";
   }
 
   # Will return a list of POINTERS!
@@ -198,9 +197,10 @@ class GLib::HashTable {
       ||
       $type.REPR eq <CStruct CArray>.any;
 
-    my $l = GTK::Compat::List.new( g_hash_table_get_values($!h) );
-    $type.defined ??
-      $l !! $l but GTK::Compat::ListData[$type];
+    my $l = GLib::GList.new( g_hash_table_get_values($!h) );
+
+    $type.defined ?? $l
+                  !! $l but GLib::Roles::ListData[$type];
   }
 
   # Will have to be multi-typed
