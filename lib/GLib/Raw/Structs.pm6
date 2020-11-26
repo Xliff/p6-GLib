@@ -18,8 +18,8 @@ class GValue                is repr<CStruct> does GLib::Roles::Pointers is expor
 
 # Structs
 class GArray                is repr<CStruct> does GLib::Roles::Pointers is export {
-  has Str    $.data;
-  has uint32 $.len;
+  has Pointer $.data;
+  has uint32  $.len;
 }
 
 class GByteArray            is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -42,7 +42,7 @@ class GDate                 is repr<CStruct> does GLib::Roles::Pointers is expor
   has guint32 $!packed-data;
 
   # cw: Accessor methods for packed fields?
-  # guint julian : 1; 
+  # guint julian : 1;
   # guint dmy    : 1;
   # guint day    : 6;
   # guint month  : 4;
