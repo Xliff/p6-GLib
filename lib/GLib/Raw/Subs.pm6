@@ -208,7 +208,7 @@ sub g_destroy_none(Pointer)
 { * }
 
 sub g_object_new (uint64 $object_type, Str)
-  returns gpointer
+  returns GObject
   is native(gobject)
   is export
 { * }
