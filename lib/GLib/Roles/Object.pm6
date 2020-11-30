@@ -221,7 +221,7 @@ role GLib::Roles::Object {
   }
 
   method getClass (:$raw = False) {
-    self.ρ-getClass(GObjectClass, GLib::Object::Class, :$raw);
+    self.ρ-getClass(GObjectClass, ::('GLib::Class::Object'), :$raw);
   }
   method ρ-getClass ($CS is raw, $C is raw, :$raw = True) {
     my $p := cast(Pointer.^parameterize($CS), $!o.g_type_instance.g_class);
