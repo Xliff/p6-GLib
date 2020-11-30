@@ -393,6 +393,10 @@ class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
   has GData         $!qdata;
   has guint         $!ref_count;
   has guint         $!param_id;
+
+  method getTypeName {
+    self.g_type_instance.getTypeName;
+  }
 }
 
 class GParamSpecChar      is repr<CStruct> does GLib::Roles::Pointers is export {
