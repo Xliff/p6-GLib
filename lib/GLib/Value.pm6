@@ -65,6 +65,8 @@ class GLib::Value {
       when int32    { self.int    }
       when uint64   { self.uint64 }
       when int64    { self.int64  }
+      when num32    { self.float  }
+      when num64    { self.double }
     }
   }
 
@@ -74,6 +76,8 @@ class GLib::Value {
     do given T {
       when uint32   { G_TYPE_UINT    }
       when int32    { G_TYPE_INT     }
+      when num32    { G_TYPE_FLOAT   }
+      when num64    { G_TYPE_DOUBLE  }
       when uint64   { G_TYPE_UINT64  }
       when int64    { G_TYPE_INT64   }
       when Str      { G_TYPE_STRING  }
@@ -89,40 +93,44 @@ class GLib::Value {
       when G_TYPE_INT     { int32   }
       when G_TYPE_UINT64  { uint64  }
       when G_TYPE_INT64   { int64   }
+      when G_TYPE_FLOAT   { num32   }
+      when G_TYPE_DOUBLE  { num64   }
       when G_TYPE_STRING  { Str     }
       when G_TYPE_POINTER { Pointer }
     }
   }
 
-  method value is rw {
-    do given self.type {
-      when G_TYPE_CHAR     { self.char;       }
-      when G_TYPE_UCHAR    { self.uchar;      }
-      when G_TYPE_BOOLEAN  { self.boolean;    }
-      when G_TYPE_INT      { self.int;        }
-      when G_TYPE_UINT     { self.uint;       }
-      when G_TYPE_LONG     { self.long;       }
-      when G_TYPE_ULONG    { self.ulong;      }
-      when G_TYPE_INT64    { self.int64;      }
-      when G_TYPE_UINT64   { self.uint64;     }
+  method valueFromGType (GTypeEnum $_) is rw {
+    when G_TYPE_CHAR     { self.char;       }
+    when G_TYPE_UCHAR    { self.uchar;      }
+    when G_TYPE_BOOLEAN  { self.boolean;    }
+    when G_TYPE_INT      { self.int;        }
+    when G_TYPE_UINT     { self.uint;       }
+    when G_TYPE_LONG     { self.long;       }
+    when G_TYPE_ULONG    { self.ulong;      }
+    when G_TYPE_INT64    { self.int64;      }
+    when G_TYPE_UINT64   { self.uint64;     }
 
-      # Enums and Flags will need to be checked, since they can be either
-      # 32 or 64 bit depending on the definition.
-      when G_TYPE_ENUM     { self.enum;       }
-      when G_TYPE_FLAGS    { self.flags;      }
+    # Enums and Flags will need to be checked, since they can be either
+    # 32 or 64 bit depending on the definition.
+    when G_TYPE_ENUM     { self.enum;       }
+    when G_TYPE_FLAGS    { self.flags;      }
 
-      when G_TYPE_FLOAT    { self.float;      }
-      when G_TYPE_DOUBLE   { self.double      }
-      when G_TYPE_STRING   { self.string;     }
-      when G_TYPE_POINTER  { self.pointer;    }
-      when G_TYPE_BOXED    { self.boxed;      }
-      #when G_TYPE_PARAM   { }
-      when G_TYPE_OBJECT   { self.object;     }
-      #when G_TYPE_VARIANT { }
-      default {
-        warn "{ $_.Str } type NYI.";
-      }
+    when G_TYPE_FLOAT    { self.float;      }
+    when G_TYPE_DOUBLE   { self.double      }
+    when G_TYPE_STRING   { self.string;     }
+    when G_TYPE_POINTER  { self.pointer;    }
+    when G_TYPE_BOXED    { self.boxed;      }
+    #when G_TYPE_PARAM   { }
+    when G_TYPE_OBJECT   { self.object;     }
+    #when G_TYPE_VARIANT { }
+    default {
+      warn "{ $_.Str } type NYI.";
     }
+  }
+
+  method value is rw {
+    self.valueFromGType(self.type);
   }
 
   # ↓↓↓↓ ATTRIBUTES ↓↓↓↓
