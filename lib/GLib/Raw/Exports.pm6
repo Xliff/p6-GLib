@@ -11,7 +11,7 @@ our %exported;
 sub glib-re-export ($compunit) is export {
   return if %exported{$compunit}:exists;
 
-  re-export($compunit);
+  re-export-everything($compunit);
   %exported{$compunit} = True;
 }
 
