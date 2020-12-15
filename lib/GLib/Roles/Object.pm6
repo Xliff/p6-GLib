@@ -70,6 +70,18 @@ role GLib::Roles::Object {
     %data.gist;
   }
 
+  method initAllRoles ($prefix) {
+    self.?"roleInit-{ $prefix.tc }{ .[1] }"()
+      for self.^roles.unique
+                     .map({ [ .^name, .^shortname ] })
+                     .grep({
+                       [&&](
+                         .[0].starts-with($prefix),
+                         .[0].contains('Signals').not
+                       )
+                     });
+  }
+
   method new-object-obj (GObject $object) {
     $object ?? self.bless( :$object ) !! Nil;
   }
