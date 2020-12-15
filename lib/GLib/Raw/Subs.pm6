@@ -159,6 +159,17 @@ sub create-signal-supply (%sigs, $signal, $s) is export {
   my $supply = $s.Supply;
   $supply.^lookup('tap').wrap: my method (|c) {
     %sigs{$signal} = True;
+    # # cw: Wrap on the Callable in |c to add the default
+    # #     exception handler.
+    # if c.list[0] ~~ Callable {
+    #   my $wrapped = sub (|a) {
+    #     CATCH { default { .message.say; .backtrace.concise.say } }
+    #     c.list[0](|a);
+    #   }
+    #   nextwith($supply, $wrapped, |c.hash)
+    # } else {
+    #   nextsame;
+    # }
     nextsame;
   };
   $supply
