@@ -17,6 +17,13 @@ unit package GLib::Raw::Structs;
 class GValue                is repr<CStruct> does GLib::Roles::Pointers is export { ... }
 
 # Structs
+
+# Opaque to code?
+class GTypeInterface        is repr<CStruct> does GLib::Roles::Pointers is export {
+  has GType $.g-type;
+  has GType $.g-instance-type;
+}
+
 class GArray                is repr<CStruct> does GLib::Roles::Pointers is export {
   has Pointer $.data;
   has uint32  $.len;
