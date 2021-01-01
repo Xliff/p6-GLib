@@ -7,6 +7,7 @@ use GLib::Raw::Enums;
 use GLib::Raw::Object;
 
 use GLib::Roles::Pointers;
+use GLib::Object::Supplyish;
 
 unit package GLib::Raw::Subs;
 
@@ -156,10 +157,12 @@ multi sub resolve-gstrv(*@rg) is export {
 }
 
 sub create-signal-supply (%sigs, $signal, $s) is export {
-  my $supply = $s.Supply;
-  $supply.^lookup('tap').wrap: my method (|c) {
-    %sigs{$signal} = True;
-    # # cw: Wrap on the Callable in |c to add the default
+  GLib::Object::Supplyish.new($s.Supply, %sigs, $signal);
+  # my $supply = $s.Supply;
+  #
+  # $supply.^lookup('tap').wrap: my method (|c) {
+  #   %sigs{$signal} = True;
+  #   # # cw: Wrap on the Callable in |c to add the default
     # #     exception handler.
     # if c.list[0] ~~ Callable {
     #   my $wrapped = sub (|a) {
@@ -170,9 +173,9 @@ sub create-signal-supply (%sigs, $signal, $s) is export {
     # } else {
     #   nextsame;
     # }
-    nextsame;
-  };
-  $supply
+  #   nextsame;
+  # };
+  # $supply
 }
 
 #| ppr(*@a) - Potential Pointer Return. Handles values, potentially pointers,
