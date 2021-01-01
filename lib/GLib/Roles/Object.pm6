@@ -425,6 +425,17 @@ role GLib::Roles::Object {
     });
   }
 
+  method clear_object {
+    # Until a better place can be found...
+    sub g_clear_object ( CArray[Pointer[GObject]] )
+      is native(gobject)
+      { * }
+
+    my $op = CArray[Pointer[GObject]].new;
+    $op[0] = cast(Pointer[GObject], $!o);
+    g_clear_object($op);
+  }
+
   method is_type(GObjectOrPointer $t) {
     is_type($t, self);
   }
