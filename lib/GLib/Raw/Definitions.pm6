@@ -13,18 +13,8 @@ our @ERRORS       is export;
 our $ERROR-THROWS is export;
 our $DEBUG        is export = 0;
 
-class X::GLib::GError is Exception {
-  has $!gerror handles <domain code>;
-
-  submethod BUILD (:$!gerror) { }
-
-  method new ($gerror) {
-    self.bless( :$gerror, message => $gerror.message );
-  }
-}
-
 # Forced compile count
-my constant forced = 110;
+my constant forced = 124;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
