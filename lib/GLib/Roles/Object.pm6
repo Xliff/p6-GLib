@@ -66,6 +66,11 @@ role GLib::Roles::Object {
     self!setObject($object) if $object;
   }
 
+  # This will not work while ::Object is still a role!
+  # method attributes ($key) {
+  #   X::GLib::Object::AttributeNotFound.new(attribute => $key).throw;
+  # }
+
   method gist-data {
     %data.gist;
   }
@@ -139,11 +144,6 @@ role GLib::Roles::Object {
     $object ?? ( $raw ?? $object !! self.bless( :$object ) )
             !! Nil;
   }
-
-  # cw: Only make active when Object's HOW is ClassHOW
-  # method attributes ($key) {
-  #   die "Unknown attributes: $key!"
-  # }
 
   # Not inherited. Punned directly to the object. So how is that gonna work?
   method resolveCreationOptions (*%options) {
