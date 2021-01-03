@@ -20,9 +20,9 @@ BEGIN {
     GLib::Raw::Definitions
     GLib::Raw::Object
     GLib::Raw::Enums
+    GLib::Raw::Exceptions
     GLib::Raw::Structs
     GLib::Raw::Subs
     GLib::Raw::Struct_Subs
-    GLib::Raw::Exports
   >;
 }

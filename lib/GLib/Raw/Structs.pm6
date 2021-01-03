@@ -5,6 +5,7 @@ use Method::Also;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
+use GLib::Raw::Exceptions;
 use GLib::Raw::Object;
 use GLib::Raw::Subs;
 use GLib::Raw::Struct_Subs;
