@@ -5,8 +5,6 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Raw::Type;
 
-use GLib::Value;
-
 use GLib::Roles::StaticClass;
 
 class GLib::Object::Type {
