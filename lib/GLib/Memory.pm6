@@ -13,10 +13,10 @@ use GLib::Roles::StaticClass;
 class GLib::Memory {
   also does GLib::Roles::StaticClass;
 
-  method clear_pointer (gpointer $pp, GDestroyNotify $destroy)
+  method clear_pointer (gpointer $pp, &destroy)
     is also<clear-pointer>
   {
-    g_clear_pointer($pp, $destroy);
+    g_clear_pointer($pp, &destroy);
   }
 
   method free (gpointer $mem) {
