@@ -373,11 +373,45 @@ class GValue {
   HAS GTypeValueList  $.data1  is rw;
   HAS GTypeValueList  $.data2  is rw;
 
-  method g_type is also<g-type type> is rw {
+  proto method g_type (|)
+    is also<g-type type>
+  { * }
+
+  multi method g_type(:$fundamental is required) {
+    # Subs from GLib::Raw::Types included here to prevent circularity.
+    sub g_type_parent (GType)
+      returns GType
+      is native(gobject)
+    { * }
+
+    sub g_type_fundamental (GType)
+      returns GType
+      is native(gobject)
+    { * }
+
+    sub g_type_name (GType)
+      returns Str
+      is native(gobject)
+    { * }
+
+    my $f = g_type_fundamental($!g_type);
+    say "Fundamental type of { g_type_name($!g_type) } is { g_type_name($f) }"
+      if $DEBUG;
+
+    GTypeEnum($f);
+  }
+  multi method g_type (:$enum = True) is rw {
     Proxy.new:
-      FETCH => -> $           { GTypeEnum($!g_type) },
+      FETCH => sub ($) {
+         if $enum {
+           return GTypeEnum($!g_type) if GTypeEnum.enums.values.any == $!g_type
+         }
+         $!g_type
+      },
+
       STORE => -> $, Int() $i { $!g_type = $i };
   }
+
 }
 
 class GValueArray           is repr<CStruct> does GLib::Roles::Pointers is export {
