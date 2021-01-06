@@ -7,7 +7,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Value;
 
 class GLib::Value {
-  has GValue $!v is implementor;
+  has GValue $!v is implementor handles <type>;
 
   submethod BUILD(:$type, GValue :$value) {
     $!v = $value // GValue.new;
@@ -125,12 +125,12 @@ class GLib::Value {
     when G_TYPE_OBJECT   { self.object;     }
     #when G_TYPE_VARIANT { }
     default {
-      warn "{ $_.Str } type NYI.";
+      "<< { $_.Str } type NYI >>";
     }
   }
 
   method value is rw {
-    self.valueFromGType(self.type);
+    self.valueFromGType( self.type( :fundamental ) );
   }
 
   # ↓↓↓↓ ATTRIBUTES ↓↓↓↓
@@ -206,9 +206,6 @@ class GLib::Value {
   #     }
   #   );
   # }
-  method type {
-    GTypeEnum( $!v.g_type // 0 );
-  }
 
   method enum is rw {
     Proxy.new(
