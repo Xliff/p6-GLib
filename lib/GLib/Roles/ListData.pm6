@@ -4,7 +4,7 @@ use NativeCall;
 
 use GLib::Raw::Types;
 
-role GLib::Roles::ListData[::T] {
+role GLib::Roles::ListData[::T, :$direct] {
   also does Positional;
   also does Iterable;
 
@@ -78,13 +78,19 @@ role GLib::Roles::ListData[::T] {
   method !_data(GList $n) is rw {
     Proxy.new:
       FETCH => sub ($) {
+        return "<< NULL { T.^name } VALUE!>>" unless $n.data;
         my $deref = False;
         given T {
           when  uint64 | uint32 | uint16 | uint8 |
                  int64 |  int32 |  int16 |  int8 |
                  num64 |  num32
           {
-            $deref = True; proceed
+            if $direct {
+              +$n.data;
+            } else {
+              $deref = True;
+              proceed
+            }
           }
 
           when .REPR eq 'CStruct' {
@@ -92,7 +98,6 @@ role GLib::Roles::ListData[::T] {
           }
 
           when $deref.so {
-            # Run time, or will this break then?
             nativecast(
               Pointer.^parameterize(T),
               $n.data
@@ -104,9 +109,15 @@ role GLib::Roles::ListData[::T] {
           }
 
           when Str {
-            my $o = nativecast(Str, $n.data);
-            say "Str: $o" if $DEBUG;
-            $o;
+            # my $o = nativecast(CArray[uint8], $n.data);
+            # my $c = 0;
+            # my @a;
+            # while $o[$c] {
+            #   say "{ $c }: { $o[$c].chr }";
+            #   @a.push: $o[$c++];
+            # }
+            # Buf.new(@a).decode;
+            nativecast(str, $n.data);
           }
 
           default {
