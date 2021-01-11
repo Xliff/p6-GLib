@@ -13,8 +13,8 @@ class GLib::Timeout {
   also does GLib::Roles::StaticClass;
 
   method add (
-    Int() $interval,
-    &function,
+    Int()    $interval,
+             &function,
     gpointer $data = gpointer;
   ) {
     my guint $i = $interval;
