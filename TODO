@@ -8,3 +8,5 @@
  note that you CANNOT use self, as that would be a tautology. You must use the class object of 
  class implementing the protected method! This means that "is protected" trait must capture this in some
  way, shape or form.
+
+- Refine GLib::Object::Closure!

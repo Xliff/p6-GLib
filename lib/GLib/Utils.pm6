@@ -12,6 +12,10 @@ class GLib::Utils {
     g_abort();
   }
 
+  method error_name (Int() $errno) {
+    g_strerror($errno);
+  }
+
   method find_program_in_path (Str $program) {
     g_find_program_in_path($program);
   }
@@ -89,7 +93,7 @@ class GLib::Utils {
   multi method parse_debug_string (Str() $string, @keys) {
     die '@keys must only contain GDebugKey entries!'
       unless @keys.all ~~ GDebugKey;
-      
+
     samewith($string, GLib::Roles::TypedBuffer.new(@keys), @keys.elem)
   }
   multi method parse_debug_string (

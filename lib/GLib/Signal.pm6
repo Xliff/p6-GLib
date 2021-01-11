@@ -16,7 +16,7 @@ use GLib::Roles::StaticClass;
 class GLib::Signal {
   also does GLib::Roles::StaticClass;
 
-  # method new_valist (Str() $signal_name, GType $itype, GSignalFlags $signal_flags, GClosure $class_closure, GSignalAccumulator $accumulator, gpointer $accu_data, GSignalCMarshaller $c_marshaller, GType $return_type, guint $n_params, va_list $args) {
+  # method new_valist (Str() $signal_name, GType $itype, GSignalFlags $signal_flags, GClosure() $class_closure, GSignalAccumulator $accumulator, gpointer $accu_data, GSignalCMarshaller $c_marshaller, GType $return_type, guint $n_params, va_list $args) {
   #   g_signal_new_valist($signal_name, $itype, $signal_flags, $class_closure, $accumulator, $accu_data, $c_marshaller, $return_type, $n_params, $args);
   # }
 
@@ -25,7 +25,7 @@ class GLib::Signal {
     Str() $signal_name,
     Int() $itype,
     Int() $signal_flags,
-    GClosure $class_closure,
+    GClosure() $class_closure,
     GSignalAccumulator $accumulator,
     gpointer $accu_data,
     GSignalCMarshaller $c_marshaller,
@@ -113,7 +113,7 @@ class GLib::Signal {
   method connect_closure (
     GObject() $instance,
     Str() $detailed_signal,
-    GClosure $closure,
+    GClosure() $closure,
     Int() $after
   )
     is also<connect-closure>
@@ -127,7 +127,7 @@ class GLib::Signal {
     GObject() $instance,
     Int() $signal_id,
     GQuark $detail,
-    GClosure $closure,
+    GClosure() $closure,
     Int() $after
   )
     is also<connect-closure-by-id>
@@ -212,7 +212,9 @@ class GLib::Signal {
     GObject() $instance,
     gpointer $func,
     gpointer $data = Pointer
-  ) {
+  )
+    is also<disconnect-by-func>
+  {
     self.handlers_disconnect_matched(
       $instance,
       G_SIGNAL_MATCH_FUNC +| G_SIGNAL_MATCH_DATA,
@@ -275,7 +277,7 @@ class GLib::Signal {
     Int() $mask,
     Int() $signal_id,
     GQuark $detail,
-    GClosure $closure,
+    GClosure() $closure,
     gpointer $func,
     gpointer $data
   )
@@ -313,7 +315,7 @@ class GLib::Signal {
     Int() $mask,
     Int() $signal_id,
     GQuark $detail,
-    GClosure $closure,
+    GClosure() $closure,
     gpointer $func,
     gpointer $data
   )
@@ -341,7 +343,7 @@ class GLib::Signal {
     Int() $mask,
     Int() $signal_id,
     GQuark $detail,
-    GClosure $closure,
+    GClosure() $closure,
     gpointer $func,
     gpointer $data
   )
@@ -365,7 +367,7 @@ class GLib::Signal {
     Int() $mask,
     Int() $signal_id,
     GQuark $detail,
-    GClosure $closure,
+    GClosure() $closure,
     gpointer $func,
     gpointer $data
   )
@@ -420,7 +422,7 @@ class GLib::Signal {
   method override_class_closure (
     Int() $signal_id,
     Int() $instance_type,
-    GClosure $class_closure
+    GClosure() $class_closure
   )
     is also<override-class-closure>
   {

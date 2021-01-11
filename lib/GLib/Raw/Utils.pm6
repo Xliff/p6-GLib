@@ -18,6 +18,12 @@ sub g_abort ()
 #   is export
 # { * }
 
+sub g_strerror (gint32 $errno)
+  returns Str
+  is native(glib)
+  is export
+{ * }
+
 sub g_find_program_in_path (Str $program)
   returns Str
   is native(glib)

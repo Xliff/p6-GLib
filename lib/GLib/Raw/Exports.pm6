@@ -11,7 +11,7 @@ our %exported;
 sub glib-re-export ($compunit) is export {
   return if %exported{$compunit}:exists;
 
-  re-export($compunit);
+  re-export-everything($compunit);
   %exported{$compunit} = True;
 }
 
@@ -20,9 +20,9 @@ BEGIN {
     GLib::Raw::Definitions
     GLib::Raw::Object
     GLib::Raw::Enums
+    GLib::Raw::Exceptions
     GLib::Raw::Structs
     GLib::Raw::Subs
     GLib::Raw::Struct_Subs
-    GLib::Raw::Exports
   >;
 }

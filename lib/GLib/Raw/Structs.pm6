@@ -5,6 +5,7 @@ use Method::Also;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
+use GLib::Raw::Exceptions;
 use GLib::Raw::Object;
 use GLib::Raw::Subs;
 use GLib::Raw::Struct_Subs;
@@ -17,9 +18,16 @@ unit package GLib::Raw::Structs;
 class GValue                is repr<CStruct> does GLib::Roles::Pointers is export { ... }
 
 # Structs
+
+# Opaque to code?
+class GTypeInterface        is repr<CStruct> does GLib::Roles::Pointers is export {
+  has GType $.g-type;
+  has GType $.g-instance-type;
+}
+
 class GArray                is repr<CStruct> does GLib::Roles::Pointers is export {
-  has Str    $.data;
-  has uint32 $.len;
+  has Pointer $.data;
+  has uint32  $.len;
 }
 
 class GByteArray            is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -35,6 +43,18 @@ class GCond                 is repr<CStruct> does GLib::Roles::Pointers is expor
   # Private
   has gpointer $!p;
   has guint    @!i[2] is CArray;
+}
+
+class GDate                 is repr<CStruct> does GLib::Roles::Pointers is export {
+  has guint32 $.julian-days is rw;
+  has guint32 $!packed-data;
+
+  # cw: Accessor methods for packed fields?
+  # guint julian : 1;
+  # guint dmy    : 1;
+  # guint day    : 6;
+  # guint month  : 4;
+  # guint year   : 16;
 }
 
 class GError                is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -353,11 +373,45 @@ class GValue {
   HAS GTypeValueList  $.data1  is rw;
   HAS GTypeValueList  $.data2  is rw;
 
-  method g_type is also<g-type type> is rw {
+  proto method g_type (|)
+    is also<g-type type>
+  { * }
+
+  multi method g_type(:$fundamental is required) {
+    # Subs from GLib::Raw::Types included here to prevent circularity.
+    sub g_type_parent (GType)
+      returns GType
+      is native(gobject)
+    { * }
+
+    sub g_type_fundamental (GType)
+      returns GType
+      is native(gobject)
+    { * }
+
+    sub g_type_name (GType)
+      returns Str
+      is native(gobject)
+    { * }
+
+    my $f = g_type_fundamental($!g_type);
+    say "Fundamental type of { g_type_name($!g_type) } is { g_type_name($f) }"
+      if $DEBUG;
+
+    GTypeEnum($f);
+  }
+  multi method g_type (:$enum = True) is rw {
     Proxy.new:
-      FETCH => -> $           { GTypeEnum($!g_type) },
+      FETCH => sub ($) {
+         if $enum {
+           return GTypeEnum($!g_type) if GTypeEnum.enums.values.any == $!g_type
+         }
+         $!g_type
+      },
+
       STORE => -> $, Int() $i { $!g_type = $i };
   }
+
 }
 
 class GValueArray           is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -381,6 +435,10 @@ class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
   has GData         $!qdata;
   has guint         $!ref_count;
   has guint         $!param_id;
+
+  method getTypeName {
+    self.g_type_instance.getTypeName;
+  }
 }
 
 class GParamSpecChar      is repr<CStruct> does GLib::Roles::Pointers is export {

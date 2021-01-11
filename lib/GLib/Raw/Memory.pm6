@@ -8,7 +8,7 @@ unit package GLib::Raw::Memory;
 
 ### /usr/include/glib-2.0/glib/gmem.h
 
-sub g_clear_pointer (gpointer $pp, GDestroyNotify $destroy)
+sub g_clear_pointer ( gpointer $pp, &destroy (gpointer) )
   is native(glib)
   is export
 { * }

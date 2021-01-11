@@ -3,10 +3,9 @@ use v6.c;
 use Method::Also;
 
 use GLib::Raw::Types;
-
 use GLib::Raw::TimeZone;
 
-class GTK::Compat::TimeZone {
+class GLib::TimeZone {
   has GTimeZone $!tz is implementor;
 
   submethod BUILD (:$timezone) {

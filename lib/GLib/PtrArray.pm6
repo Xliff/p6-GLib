@@ -4,13 +4,11 @@ use Method::Also;
 use NativeCall;
 
 use GLib::Raw::Types;
-
-
-
 use GLib::Raw::Array;
 
 class GLib::PtrArray {
   also does Positional;
+  also does Iterable;
 
   has GPtrArray $!pa;
 
@@ -195,6 +193,23 @@ class GLib::PtrArray {
     my guint $i = $index;
 
     $!pa.data[$i];
+  }
+
+  method EXISTS-POS (Int() $index) {
+    $index > 0 && $index < self.elems;
+  }
+
+  method iterator {
+    my $self = self;
+
+    class :: does Iterator {
+      has $.index is rw = 0;
+
+      method pull-one {
+        $.index++ while $self.elems > $.index;
+        $self.elems > $.index ?? self.index($.index) !! IterationEnd;
+      }
+    }.new;
   }
 
   # ↑↑↑↑ METHODS ↑↑↑↑

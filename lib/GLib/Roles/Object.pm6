@@ -66,8 +66,25 @@ role GLib::Roles::Object {
     self!setObject($object) if $object;
   }
 
+  # This will not work while ::Object is still a role!
+  # method attributes ($key) {
+  #   X::GLib::Object::AttributeNotFound.new(attribute => $key).throw;
+  # }
+
   method gist-data {
     %data.gist;
+  }
+
+  method initAllRoles ($prefix) {
+    self.?"roleInit-{ $prefix.tc }{ .[1] }"()
+      for self.^roles.unique
+                     .map({ [ .^name, .^shortname ] })
+                     .grep({
+                       [&&](
+                         .[0].starts-with($prefix),
+                         .[0].contains('Signals').not
+                       )
+                     });
   }
 
   method new-object-obj (GObject $object) {
@@ -127,11 +144,6 @@ role GLib::Roles::Object {
     $object ?? ( $raw ?? $object !! self.bless( :$object ) )
             !! Nil;
   }
-
-  # cw: Only make active when Object's HOW is ClassHOW
-  # method attributes ($key) {
-  #   die "Unknown attributes: $key!"
-  # }
 
   # Not inherited. Punned directly to the object. So how is that gonna work?
   method resolveCreationOptions (*%options) {
@@ -221,7 +233,7 @@ role GLib::Roles::Object {
   }
 
   method getClass (:$raw = False) {
-    self.ρ-getClass(GObjectClass, GLib::Object::Class, :$raw);
+    self.ρ-getClass(GObjectClass, ::('GLib::Class::Object'), :$raw);
   }
   method ρ-getClass ($CS is raw, $C is raw, :$raw = True) {
     my $p := cast(Pointer.^parameterize($CS), $!o.g_type_instance.g_class);
@@ -411,6 +423,17 @@ role GLib::Roles::Object {
         .GValue;
       }
     });
+  }
+
+  method clear_object {
+    # Until a better place can be found...
+    sub g_clear_object ( CArray[Pointer[GObject]] )
+      is native(gobject)
+      { * }
+
+    my $op = CArray[Pointer[GObject]].new;
+    $op[0] = cast(Pointer[GObject], $!o);
+    g_clear_object($op);
   }
 
   method is_type(GObjectOrPointer $t) {

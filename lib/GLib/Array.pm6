@@ -3,16 +3,19 @@ use v6.c;
 use Method::Also;
 
 use GLib::Raw::Types;
-
 use GLib::Raw::Array;
+
+use GLib::Roles::TypedBuffer;
 
 class GLib::Array {
   also does Positional;
 
   has GArray $!a;
+  has        $!ca;
 
-  submethod BUILD(:$array) {
-    $!a = $array;
+  submethod BUILD (:$array, :$type = Mu) {
+    $!a  = $array;
+    self.setType($type) unless $type =:= Mu
   }
 
   submethod DESTROY {
@@ -27,8 +30,11 @@ class GLib::Array {
     >
   { $!a }
 
-  multi method new (GArray :$array, :$ref = True) {
-    my $o = self.bless( :$array );
+  # $ref is false due to warning when wrapping GPtrArrays
+  multi method new (GArray $array, :$type, :$ref = False) {
+    return Nil unless $array;
+
+    my $o = self.bless( :$array, :$type );
     $o.upref if $ref;
     $o;
   }
@@ -38,7 +44,7 @@ class GLib::Array {
     Int() $element_size
   ) {
     my guint ($zt, $c, $es) = ($zero_terminated, $clear, $element_size);
-    my $a = g_array_new($!a, $c, $es);
+    my       $a             = g_array_new($!a, $c, $es);
 
     $a ?? self.bless( array => $a ) !! Nil;
   }
@@ -71,6 +77,26 @@ class GLib::Array {
     $a ?? self.bless( array => $a ) !! Nil;
   }
 
+  method setType (\t = Mu) {
+    use NativeCall;
+    
+    die 'Cannot use Mu as a type!' unless t !=:= Mu;
+
+    $!ca = cast(CArray[Pointer[t]], $!a.data);
+  }
+
+  method AT-POS (\k) {
+    unless $!ca {
+      warn 'Cannot use as Positional until .setType is called!';
+      return Nil;
+    }
+
+    die X::OutOfRange.new( payload => "Index { k } does not exist!" )
+      unless k < self.elems;
+
+    $!ca[k];
+  }
+
   # ↓↓↓↓ SIGNALS ↓↓↓↓
   # ↑↑↑↑ SIGNALS ↑↑↑↑
 
@@ -86,6 +112,10 @@ class GLib::Array {
 
     g_array_append_vals($!a, $data, $l);
     self;
+  }
+
+  method elems {
+    $!a.len;
   }
 
   method free (Int() $free_segment) {

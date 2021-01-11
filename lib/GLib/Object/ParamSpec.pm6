@@ -3,6 +3,7 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
+use GLib::Raw::Type;
 use GLib::Raw::Types;
 use GLib::Object::Raw::ParamSpec;
 
@@ -15,6 +16,7 @@ class GLib::Object::ParamSpec {
     flags
     checkType
     getType
+    getTypeName
   >;
 
   submethod BUILD (:$spec) {
@@ -24,6 +26,14 @@ class GLib::Object::ParamSpec {
   method GLib::Raw::Definitions::GParamSpec
     is also<GParamSpec>
   { $!ps }
+
+  method valueTypeName {
+    g_type_name($!ps.value_type);
+  }
+
+  method ownerTypeName {
+    g_type_name($!ps.owner_type);
+  }
 
   method new (GParamSpec $spec, :$ref = True) {
     return Nil unless $spec;

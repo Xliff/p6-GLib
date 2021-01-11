@@ -51,22 +51,9 @@ class GLib::GList {
   subset ValidListTypes where
     GLib::Raw::Structs::GSList | GLib::Raw::Structs::GList;
 
-  multi method new (GList $list) {
-    $list ?? self.bless(:$list) !! Nil;
-  }
-  multi method new (@list) {
-    my $l = GLib::GList.new;
-    for @list {
-      # What about prototype numeric data (ints, nums) and Str?
-      $l.append( cast(Pointer, $_) );
-    }
-    $l;
-  }
-  multi method new {
-    my $list = g_list_alloc();
-
-    $list ?? self.bless(:$list) !! Nil;
-  }
+  # multi method new (GList $list) {
+  #   $list ?? self.bless(:$list) !! Nil;
+  # }
   multi method new (ValidListTypes $list is copy) {
     return Nil unless $list;
 
@@ -74,6 +61,43 @@ class GLib::GList {
     $list = cast(GList, $list) unless $list ~~ GList;
 
     self.bless(:$list);
+  }
+  multi method new (@list, :$signed = False, :$double = False) {
+    my $l = GLib::GList.new;
+    for @list {
+      # Properly handle non-Str Cool data.
+      my ($ov, $use-arr, \t, $v) = ($_, False);
+      given $ov {
+        when .REPR eq <CPointer CStruct>.any { $ov .= p }
+
+        when Rat { $ov .= Num; proceed }
+        when Int {
+          $use-arr = True;
+          when $signed.so { t := $double ?? CArray[int64] !!  CArray[int32]  }
+          default         { t := $double ?? CArray[uint64] !! CArray[uint32] }
+        }
+        when Rat | Num {
+          $use-arr = True;
+          t := $double ?? CArray[num64] !!  CArray[num32]
+        }
+
+        # Str
+        default { $ov = ~$ov unless $ov ~~ Str }
+      }
+      if $use-arr {
+        $v = t.new;
+        $v[0] = $ov;
+      } else {
+        $v = $ov;
+      }
+      $l.append( cast(Pointer, $v) );
+    }
+    $l;
+  }
+  multi method new {
+    my $list = g_list_alloc();
+
+    $list ?? self.bless(:$list) !! Nil;
   }
 
   method GLib::Raw::Structs::GList
@@ -111,7 +135,7 @@ class GLib::GList {
   }
 
   # NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE
-  # Probably better to finish work on GTK::Compat::ListData role and move
+  # Probably better to finish work on GLib::Roles::ListData role and move
   # the Array backing to it. Until that decision has been made, this code
   # has been deactivated.
   #

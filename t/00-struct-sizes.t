@@ -3,16 +3,20 @@ use v6.c;
 use Test;
 use NativeCall;
 
+use GLib::Compat::Definitions;
 use GLib::Raw::Structs;
 
-plan 53;
+plan 55;
 
-require ::($_ = "GLib::Raw::Structs");
-for ::($_ ~ "::EXPORT::DEFAULT").WHO
-                                .keys
-                                .grep( *.defined && *.starts-with('G') )
-                                .sort
-{
+#require ::($_ = "GLib::Raw::Structs");
+my $cu      = 'GLib::Raw::Structs::EXPORT::DEFAULT';
+my @classes = ::($cu).WHO
+                     .keys
+                     .grep( *.defined && *.starts-with('G') )
+                     .sort;
+@classes.push: 'tm';
+
+for @classes {
   sub sizeof () returns int64 { ... }
   trait_mod:<is>( &sizeof, :native('t/00-struct-sizes.so') );
   trait_mod:<is>( &sizeof, :symbol('sizeof_' ~ $_) );

@@ -7,6 +7,7 @@ use GLib::Raw::Enums;
 use GLib::Raw::Object;
 
 use GLib::Roles::Pointers;
+use GLib::Object::Supplyish;
 
 unit package GLib::Raw::Subs;
 
@@ -143,7 +144,10 @@ multi sub resolve-gstrv(CArray[Str] $p, $length?) is export {
   $p[ $l ] = Str unless $p[$l - 1] =:= Str;
   $p;
 }
-multi sub resolve-gstrv(*@rg) is export {
+multi sub resolve-gstrv(@rg) is export {
+  resolve-gstrv( |@rg );
+}
+multi sub resolve-gstrv( *@rg where *.all !~~ Positional ) is export {
   my $gs = CArray[Str].new;
   my $c = 0;
   for @rg {
@@ -151,18 +155,31 @@ multi sub resolve-gstrv(*@rg) is export {
       unless $_ ~~ Str || $_.^can('Str').elems;
     $gs[$c++] = $_.Str;
   }
-  $gs[$gs.elems] = Str unless $gs[*-1] =:= Str;
+  $gs[$gs.elems] = Str unless $gs[* - 1] =:= Str;
   $gs;
 }
 
-sub create-signal-supply (%sigs, $signal, $s) is export {
-  my $supply = $s.Supply;
-  $supply.^lookup('tap').wrap: my method (|c) {
-    %sigs{$signal} = True;
-    nextsame;
-  };
-  $supply
-}
+#sub create-signal-supply (%sigs, $signal, $s) is export {
+#  GLib::Object::Supplyish.new($s.Supply, %sigs, $signal);
+  # my $supply = $s.Supply;
+  #
+  # $supply.^lookup('tap').wrap: my method (|c) {
+  #   %sigs{$signal} = True;
+  #   # # cw: Wrap on the Callable in |c to add the default
+    # #     exception handler.
+    # if c.list[0] ~~ Callable {
+    #   my $wrapped = sub (|a) {
+    #     CATCH { default { .message.say; .backtrace.concise.say } }
+    #     c.list[0](|a);
+    #   }
+    #   nextwith($supply, $wrapped, |c.hash)
+    # } else {
+    #   nextsame;
+    # }
+  #   nextsame;
+  # };
+  # $supply
+#}
 
 #| ppr(*@a) - Potential Pointer Return. Handles values, potentially pointers,
 #|            that are wrapped in a CArray. If value is a Pointer type AND
@@ -208,7 +225,7 @@ sub g_destroy_none(Pointer)
 { * }
 
 sub g_object_new (uint64 $object_type, Str)
-  returns gpointer
+  returns GObject
   is native(gobject)
   is export
 { * }

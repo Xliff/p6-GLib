@@ -6,6 +6,9 @@ use GLib::Roles::Pointers;
 
 unit package GLib::Compat::Definitions;
 
+my constant realUint is export = $*KERNEL.bits == 32 ?? uint32 !! uint64;
+my constant realInt  is export = $*KERNEL.bits == 32 ?? int32  !! int64;
+
 our constant PF_INET     is export = 2;
 our constant PF_INET6    is export = 10;
 our constant AF_INET     is export = PF_INET;
@@ -112,6 +115,21 @@ class stat        is repr<CStruct> is export does GLib::Roles::Pointers {
   has uint64 $.st_ctime_nsec;
   has uint64 $.__unused4;
   has uint64 $.__unused5;
+}
+
+class tm          is repr<CStruct> is export does GLib::Roles::Pointers {
+  has int32 $.tm_sec     is rw; #= seconds [0,61]
+  has int32 $.tm_min     is rw; #= minutes [0,59]
+  has int32 $.tm_hour    is rw; #= hour [0,23]
+  has int32 $.tm_mday    is rw; #= day of month [1,31]
+  has int32 $.tm_mon     is rw; #= month of year [0,11]
+  has int32 $.tm_year    is rw; #= years since 1900
+  has int32 $.tm_wday    is rw; #= day of week [0,6] (Sunday = 0)
+  has int32 $.tm_yday    is rw; #= day of year [0,365]
+  has int32 $.tm_isdst   is rw; #= daylight savings flag
+  has int64 $.tm_gmtoff  is rw; #= seconds east of UTC
+  has Str   $.tm_zone;          #= Timezone abbreviation
+
 }
 
 sub htonl (uint32)

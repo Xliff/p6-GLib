@@ -5,23 +5,47 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Object::Raw::Closure;
 
+use GLib::Roles::Object;
+
+our subset GClosureAncestry is export of Mu
+  where GClosure | GObject;
+
 class GLib::Object::Closure {
-  has GClosure $!c;
+  also does GLib::Roles::Object;
+  
+  has GClosure $!c is implementor;
 
   method BUILD (:$closure) {
-    self.setClosure($closure);
+    self.setClosure($closure) if $closure;
   }
 
-  method setClosure (GClosure $closure) {
-    $!c = $closure;
+  method setGClosure (GClosureAncestry $_) {
+    my $to-parent;
+
+    $!c = do {
+      when GClosure {
+        $to-parent = cast(GObject, $_);
+        $_
+      }
+
+      default {
+        $to-parent = $_;
+        cast(GClosure, $_);
+      }
+    }
+    self!setObject($to-parent);
   }
 
   method GLib::Raw::Structs::GClosure
     is also<GClosure>
   { $!c }
 
-  method new (GClosure $closure) {
+  method new (GClosureAncestry $closure, :$ref = True) {
     $closure ?? self.bless(:$closure) !! Nil;
+
+    my $o = self.bless( :$closure );
+    $o.ref if $ref;
+    $o;
   }
 
   method new_simple (Int() $size, gpointer $data = gpointer)

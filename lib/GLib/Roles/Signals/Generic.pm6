@@ -11,6 +11,10 @@ role GLib::Roles::Signals::Generic {
   has %!signals;
   has %!tapped-sigs;
 
+  method get-signal-id-generic ($name) {
+    %!signals{$name}[2];
+  }
+
   # Has this supply been created yet? If True, this is a good indication that
   # that signal $name has been tapped. It IS an indicator that the Supply
   # has been created.

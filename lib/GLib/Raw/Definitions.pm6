@@ -13,18 +13,8 @@ our @ERRORS       is export;
 our $ERROR-THROWS is export;
 our $DEBUG        is export = 0;
 
-class X::GLib::GError is Exception {
-  has $!gerror handles <domain code>;
-
-  submethod BUILD (:$!gerror) { }
-
-  method new ($gerror) {
-    self.bless( :$gerror, message => $gerror.message );
-  }
-}
-
 # Forced compile count
-my constant forced = 100;
+my constant forced = 124;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -50,6 +40,7 @@ sub glib-support is export {
 }
 
 constant realUInt is export = $*KERNEL.bits == 32 ?? uint32 !! uint64;
+constant realInt  is export = $*KERNEL.bits == 32 ?? int32  !! int64;
 
 constant gboolean                       is export := uint32;
 constant gchar                          is export := Str;
@@ -95,7 +86,7 @@ constant GCompareFunc                   is export := Pointer;
 constant GCopyFunc                      is export := Pointer;
 constant GClosureMarshal                is export := Pointer;
 constant GClosureNotify                 is export := Pointer;
-constant GDate                          is export := uint64;
+#constant GDate                          is export := uint64;
 constant GDestroyNotify                 is export := Pointer;
 constant GQuark                         is export := uint32;
 constant GEqualFunc                     is export := Pointer;
@@ -215,6 +206,8 @@ multi max (:&by = {$_}, :$all!, *@list) is export {
   # Extract and return all values matching the maximal...
   @list[ @values.kv.map: {$^index unless $^value cmp $max} ];
 }
+
+our $ERRNO is export := cglobal('libc.so.6', 'errno', int32);
 
 INIT {
 

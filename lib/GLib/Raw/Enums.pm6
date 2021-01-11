@@ -948,6 +948,42 @@ our enum GTestSubprocessFlagsEnum is export (
   G_TEST_SUBPROCESS_INHERIT_STDERR => 1 +< 2
 );
 
+constant GDateDMY is export := guint32;
+our enum GDateDMYEnum is export (
+  G_DATE_DAY   => 0,
+  G_DATE_MONTH => 1,
+  G_DATE_YEAR  => 2,
+);
+
+constant GDateMonth is export := guint32;
+our enum GDateMonthEnum is export (
+  G_DATE_BAD_MONTH =>  0,
+  G_DATE_JANUARY   =>  1,
+  G_DATE_FEBRUARY  =>  2,
+  G_DATE_MARCH     =>  3,
+  G_DATE_APRIL     =>  4,
+  G_DATE_MAY       =>  5,
+  G_DATE_JUNE      =>  6,
+  G_DATE_JULY      =>  7,
+  G_DATE_AUGUST    =>  8,
+  G_DATE_SEPTEMBER =>  9,
+  G_DATE_OCTOBER   => 10,
+  G_DATE_NOVEMBER  => 11,
+  G_DATE_DECEMBER  => 12,
+);
+
+constant GDateWeekday is export := guint32;
+our enum GDateWeekdayEnum is export (
+  G_DATE_BAD_WEEKDAY => 0,
+  G_DATE_MONDAY      => 1,
+  G_DATE_TUESDAY     => 2,
+  G_DATE_WEDNESDAY   => 3,
+  G_DATE_THURSDAY    => 4,
+  G_DATE_FRIDAY      => 5,
+  G_DATE_SATURDAY    => 6,
+  G_DATE_SUNDAY      => 7,
+);
+
 our $g-param-spec-types is export;
 
 sub get_paramspec_types ()
