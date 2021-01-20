@@ -32,7 +32,7 @@ S
 #    - These will be handled via a nativecast to Pointer
 
 class GLib::HashTable {
-  has GHashTable $!h;
+  has GHashTable $!h is implementor handles<p>;
 
   submethod BUILD (:$table) {
     $!h = $table;

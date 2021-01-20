@@ -1,17 +1,13 @@
 use v6.c;
 
 use Method::Also;
-
 use NativeCall;
 
-
-
 use GLib::Raw::Types;
-
 use GLib::Raw::ThreadPool;
 
 class GLib::ThreadPool {
-  has GThreadPool $!tp is implementor;
+  has GThreadPool $!tp is implementor handles<p>;
 
   submethod BUILD (:$threadpool) {
     $!tp = $threadpool;

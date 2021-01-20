@@ -10,7 +10,7 @@ use GLib::Raw::Date;
 use GLib::Roles::StaticClass;
 
 class GLib::Date {
-  has GDate $!d;
+  has GDate $!d is implementor handles<p>;
 
   submethod BUILD (:$date) {
     $!d = $date;

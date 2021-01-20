@@ -6,7 +6,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Variant;
 
 class GLib::VariantIter {
-  has GVariantIter $!vi is implementor;
+  has GVariantIter $!vi is implementor handles<p>;
 
   submethod BUILD (:$iter) {
     $!vi = $iter;

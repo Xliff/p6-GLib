@@ -10,7 +10,7 @@ use GLib::Raw::Error;
 use GLib::Roles::TypedBuffer;
 
 class GLib::Error {
-  has GError $!e is implementor handles <domain code message>;
+  has GError $!e is implementor handles<domain code message p>;
 
   submethod BUILD (:$error) {
     $!e = $error;

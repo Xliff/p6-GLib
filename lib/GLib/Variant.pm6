@@ -9,7 +9,7 @@ use GLib::Raw::Variant;
 use GLib::VariantType;
 
 class GLib::Variant {
-  has GVariant $!v is implementor;
+  has GVariant $!v is implementor handles<p>;
 
   submethod BUILD (:$variant) {
     $!v = $variant;

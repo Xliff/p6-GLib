@@ -7,7 +7,7 @@ use GLib::Raw::Types;
 use GLib::Raw::GSList;
 
 class GLib::GSList {
-  has GSList $!list;
+  has GSList $!list is implementor handles<p>;
   has GSList $!cur;
 
   has @!nat;

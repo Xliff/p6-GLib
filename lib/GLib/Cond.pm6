@@ -6,7 +6,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Thread;
 
 class GLib::Cond {
-  has GCond $!c;
+  has GCond $!c is implementor handles<p>;
 
   submethod BUILD (:$cond) {
     $!c = $cond;

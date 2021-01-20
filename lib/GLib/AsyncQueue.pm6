@@ -6,7 +6,7 @@ use GLib::Raw::Types;
 use GLib::Raw::AsyncQueue;
 
 class GLib::AsyncQueue {
-  has GAsyncQueue $!aq is implementor;
+  has GAsyncQueue $!aq is implementor handles<p>;
 
   submethod BUILD (:$queue) {
     $!aq = $queue;

@@ -10,7 +10,7 @@ class GLib::PtrArray {
   also does Positional;
   also does Iterable;
 
-  has GPtrArray $!pa;
+  has GPtrArray $!pa is implementor handles<p>;
 
   submethod BUILD(:$ptr-array) {
     $!pa = $ptr-array;

@@ -6,7 +6,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Scanner;
 
 class GLib::Scanner {
-  has GScanner $!s is implementor;
+  has GScanner $!s is implementor handles<p>;
 
   submethod BUILD (:$scanner) {
     $!s = $scanner;

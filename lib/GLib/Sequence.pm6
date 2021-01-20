@@ -8,7 +8,7 @@ use GLib::Raw::Sequence;
 class GLib::Sequence::Iter { ... }
 
 class GLib::Sequence {
-  has GSequence $!s;
+  has GSequence $!s is implementor handles<p>;
 
   submethod BUILD (:$sequence) {
     $!s = $sequence;

@@ -7,7 +7,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Timer;
 
 class GLib::Timer {
-  has GTimer $!t;
+  has GTimer $!t is implementor handles<p>;
 
   submethod BUILD (:$timer) {
     $!t = $timer;

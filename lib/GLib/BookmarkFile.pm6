@@ -8,7 +8,7 @@ use GLib::Raw::Types;
 use GLib::Raw::BookmarkFile;
 
 class GLib::BookmarkFile {
-  has GBookmarkFile $!bp;
+  has GBookmarkFile $!bp is implementor handles<p>;
 
   submethod BUILD (:$bookmark) {
     $!bp = $bookmark;

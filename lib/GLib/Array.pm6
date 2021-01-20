@@ -10,7 +10,7 @@ use GLib::Roles::TypedBuffer;
 class GLib::Array {
   also does Positional;
 
-  has GArray $!a;
+  has GArray $!a is implementor handles<p>;
   has        $!ca;
 
   submethod BUILD (:$array, :$type = Mu) {
@@ -79,7 +79,7 @@ class GLib::Array {
 
   method setType (\t = Mu) {
     use NativeCall;
-    
+
     die 'Cannot use Mu as a type!' unless t !=:= Mu;
 
     $!ca = cast(CArray[Pointer[t]], $!a.data);

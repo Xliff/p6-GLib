@@ -7,7 +7,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Checksum;
 
 class GLib::Checksum {
-  has GChecksum $!c is implementor;
+  has GChecksum $!c is implementor handles<p>;
 
   submethod BUILD (:$checksum) {
     $!c = $checksum;

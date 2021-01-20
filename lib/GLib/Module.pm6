@@ -6,7 +6,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Module;
 
 class GLib::Module {
-  has GModule $!m is implementor;
+  has GModule $!m is implementor handles<p>;
 
   # Change signature to (:module(:$!m)) in a later version? Means we
   # don't need the body.

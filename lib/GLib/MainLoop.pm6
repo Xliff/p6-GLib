@@ -7,7 +7,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Main;
 
 class GLib::MainLoop {
-  has GMainLoop $!ml is implementor;
+  has GMainLoop $!ml is implementor handles<p>;
 
   submethod BUILD (:$mainloop) {
     $!ml = $mainloop;

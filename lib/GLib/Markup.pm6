@@ -8,7 +8,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Markup;
 
 class GLib::Markup {
-  has GMarkupParseContext $!mp is implementor;
+  has GMarkupParseContext $!mp is implementor handles<p>;
 
   submethod BUILD (:$markup-parser) {
     $!mp = $markup-parser;

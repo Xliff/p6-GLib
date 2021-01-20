@@ -8,7 +8,7 @@ use GLib::Raw::Main;
 use GLib::MainContext;
 
 class GLib::Source {
-  has GSource $!gs is implementor;
+  has GSource $!gs is implementor handles<p>;
 
   submethod BUILD (GSource :$source, Int() :$attach = False) {
     self.setSource($source, :$attach) if $source;

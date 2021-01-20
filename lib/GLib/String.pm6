@@ -8,7 +8,7 @@ use GLib::Raw::String;
 use GLib::Raw::Bytes;
 
 class GLib::String {
-  has GString $!s;
+  has GString $!s is implementor handles<p>;
 
   submethod BUILD (:$string) {
     $!s = $string;

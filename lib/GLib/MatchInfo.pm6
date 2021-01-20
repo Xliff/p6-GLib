@@ -8,7 +8,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Regex;
 
 class GLib::MatchInfo {
-  has GMatchInfo $!m;
+  has GMatchInfo $!m is implementor handles<p>;
 
   submethod BUILD (:$match) {
     $!m = $match;

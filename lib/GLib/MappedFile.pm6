@@ -9,7 +9,7 @@ use GLib::Raw::MappedFile;
 use GLib::Bytes;
 
 class GLib::MappedFile {
-  has GMappedFile $!mf;
+  has GMappedFile $!mf is implementor handles<p>;
 
   submethod BUILD (:$mapped) {
     $!mf = $mapped if $mapped;

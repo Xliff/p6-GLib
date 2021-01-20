@@ -6,7 +6,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Thread;
 
 class GLib::Mutex {
-  has GMutex $!m;
+  has GMutex $!m is implementor handles<p>;
 
   submethod BUILD (:$mutex) {
     $!m = $mutex;

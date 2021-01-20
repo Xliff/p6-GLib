@@ -7,7 +7,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Pattern;
 
 class GLib::Pattern {
-  has GPatternSpec $!p;
+  has GPatternSpec $!p is implementor handles<p>;
 
   submethod BUILD (:$pattern) {
     $!p = $pattern;

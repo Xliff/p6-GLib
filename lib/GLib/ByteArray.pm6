@@ -8,7 +8,7 @@ use GLib::Raw::Arrays;
 use GLib::Bytes;
 
 class GLib::ByteArray {
-  has GByteArray $!ba is implementor handles <len Blob>;
+  has GByteArray $!ba is implementor handles<len Blob p>;
 
   submethod BUILD (:$byte-array) {
     $!ba = $byte-array;

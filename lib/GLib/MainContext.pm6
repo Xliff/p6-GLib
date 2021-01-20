@@ -9,7 +9,7 @@ use GLib::Raw::Main;
 use GLib::Roles::TypedBuffer;
 
 class GLib::MainContext {
-  has GMainContext $!mc;
+  has GMainContext $!mc is implementor handles<p>;
 
   submethod BUILD (:$maincontext) {
     $!mc = $maincontext;

@@ -9,7 +9,7 @@ use GLib::Raw::DateTime;
 use GLib::TimeZone;
 
 class GLib::DateTime {
-  has GDateTime $!dt is implementor;
+  has GDateTime $!dt is implementor handles<p>;
 
   submethod BUILD (:$datetime) {
     $!dt = $datetime;

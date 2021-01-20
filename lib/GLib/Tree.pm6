@@ -16,7 +16,7 @@ use GLib::Raw::Tree;
 # to allow consuming code to retrieve it.
 
 class GLib::Tree {
-  has GTree $!t is implementor;
+  has GTree $!t is implementor handles<p>;
   has $.type;
 
   submethod BUILD (:$tree, :$type) {

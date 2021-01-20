@@ -4,13 +4,10 @@ use Method::Also;
 use NativeCall;
 
 use GLib::Raw::Types;
-
-
-
 use GLib::Raw::KeyFile;
 
 class GLib::KeyFile  {
-  has GKeyFile $!kf;
+  has GKeyFile $!kf is implementor handles<p>;
 
   submethod BUILD(:$file) {
     $!kf = $file;

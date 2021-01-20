@@ -7,7 +7,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Value;
 
 class GLib::Value {
-  has GValue $!v is implementor handles <type>;
+  has GValue $!v is implementor handles <type p>;
 
   submethod BUILD(:$type, GValue :$value) {
     $!v = $value // GValue.new;

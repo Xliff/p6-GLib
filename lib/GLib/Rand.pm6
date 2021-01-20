@@ -7,7 +7,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Rand;
 
 class GLib::Rand {
-  has GRand $!r is implementor;
+  has GRand $!r is implementor handles<p>;
 
   submethod BUILD (:$rand) {
     $!r = $rand;

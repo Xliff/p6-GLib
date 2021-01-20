@@ -10,7 +10,7 @@ use GLib::Raw::Regex;
 use GLib::MatchInfo;
 
 class GLib::Regex {
-  has GRegex $!r;
+  has GRegex $!r is implementor handles<p>;
 
   submethod BUILD (:$regex) {
     $!r = $regex;

@@ -6,7 +6,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Bytes;
 
 class GLib::Bytes {
-  has GBytes $!b is implementor;
+  has GBytes $!b is implementor handles<p>;
 
   submethod BUILD (GBytes :$bytes) {
     $!b = $bytes;

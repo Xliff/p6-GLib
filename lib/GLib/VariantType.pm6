@@ -10,7 +10,7 @@ use GLib::Raw::VariantType;
 # OPAQUE STRUCT (BOXED?)
 
 class GLib::VariantType {
-  has GVariantType $!vt is implementor;
+  has GVariantType $!vt is implementor handles<p>;
 
   submethod BUILD (:$type) {
     $!vt = $type;

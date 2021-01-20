@@ -8,7 +8,7 @@ use GLib::Raw::Types;
 use GLib::Raw::HMAC;
 
 class GLib::HMAC {
-  has GHmac $!h is implementor;
+  has GHmac $!h is implementor handles<p>;
 
   submethod BUILD (:$hmac) {
     $!h = $hmac;

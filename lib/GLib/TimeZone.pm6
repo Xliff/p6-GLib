@@ -6,7 +6,7 @@ use GLib::Raw::Types;
 use GLib::Raw::TimeZone;
 
 class GLib::TimeZone {
-  has GTimeZone $!tz is implementor;
+  has GTimeZone $!tz is implementor handles<p>;
 
   submethod BUILD (:$timezone) {
     $!tz = $timezone;
