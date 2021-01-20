@@ -149,7 +149,6 @@ role GLib::Roles::Object {
   method resolveCreationOptions (*%options) {
     my (%new-opts; %not-found);
 
-    say "A: { self.attributes.gist }" if $DEBUG;
     say "O: { %options.keys }"        if $DEBUG;
 
     for %options.pairs -> $a {

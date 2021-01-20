@@ -14,7 +14,11 @@ our $ERROR-THROWS is export;
 our $DEBUG        is export = 0;
 
 # Forced compile count
+<<<<<<< Updated upstream
 my constant forced = 124;
+=======
+my constant forced = 103;
+>>>>>>> Stashed changes
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
