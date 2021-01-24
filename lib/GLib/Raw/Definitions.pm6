@@ -11,14 +11,10 @@ unit package GLib::Raw::Definitions;
 our $ERROR        is export;
 our @ERRORS       is export;
 our $ERROR-THROWS is export;
-our $DEBUG        is export = 0;
+our $DEBUG        is export;
 
 # Forced compile count
-<<<<<<< Updated upstream
-my constant forced = 124;
-=======
-my constant forced = 103;
->>>>>>> Stashed changes
+my constant forced = 133;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -57,7 +53,7 @@ constant gint16                         is export := int16;
 constant gint32                         is export := int32;
 constant gint64                         is export := int64;
 constant glong                          is export := int64;
-constant goffset                        is export := uint64;
+constant goffset                        is export := int64;
 constant gpointer                       is export := Pointer;
 constant gsize                          is export := uint64;
 constant gssize                         is export := int64;
@@ -185,22 +181,6 @@ class GVariantBuilder          is repr<CPointer> is export does GLib::Roles::Poi
 class GVariantDict             is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantIter             is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantType             is repr<CPointer> is export does GLib::Roles::Pointers { }
-
-our role Implementor is export {};
-
-# Mark
-multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) is export {
-  # YYY - Warning if a second attribute is marked?
-  attr does Implementor;
-}
-
-# Find.
-sub findProperImplementor ($attrs) is export {
-  # Will need to search the entire attributes list for the
-  # proper main variable. Then sort for the one with the largest
-  # MRO.
-  $attrs.grep( * ~~ Implementor ).sort( -*.package.^mro.elems )[0]
-}
 
 # "Exhaustive" maximal...
 multi max (:&by = {$_}, :$all!, *@list) is export {
