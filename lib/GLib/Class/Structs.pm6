@@ -6,7 +6,7 @@ use GLib::Raw::Definitions;
 use GLib::Raw::Structs;
 use GLib::Raw::Object;
 
-use GLib::Roles::Pointers;
+
 
 use GLib::Roles::TypedBuffer;
 
