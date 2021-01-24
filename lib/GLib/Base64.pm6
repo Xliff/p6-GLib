@@ -5,14 +5,9 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Raw::Base64;
 
+use GLib::Roles::StaticClass;
+
 class GLib::Base64 {
-
-  method new (|) {
-    warn 'GLib::Base64 is a static class and does not need instantiation.'
-      if $DEBUG;
-
-    GLib::Base64;
-  }
 
   multi method decode (Str() $text, :$all = False) {
     samewith($text, $, :$all);
