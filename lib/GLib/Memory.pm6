@@ -5,7 +5,6 @@ use Method::Also;
 use NativeCall;
 
 use GLib::Raw::Types;
-
 use GLib::Raw::Memory;
 
 use GLib::Roles::StaticClass;
