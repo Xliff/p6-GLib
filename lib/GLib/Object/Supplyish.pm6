@@ -33,6 +33,11 @@ class GLib::Object::Supplyish {
         $name = self!generateTapName
       } until not %!taps{$name}:exists;
     }
+    # Wrap handler?
+    # &handler.wrap(-> |c {
+    #   CATCH { default { .message.say; .backtrace.concise.say } }
+    #   nextsame;
+    # });
     self.untap if %!signals{$!signal} && $replace;
     %!signals{$!signal} = True;
     @!tap-names.push: $name;
