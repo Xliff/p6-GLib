@@ -4,7 +4,7 @@ use NativeCall;
 
 use GLib::Raw::Types;
 
-use GLib::Roles::Pointers;
+
 
 unit package GLib::Object::IsType;
 
