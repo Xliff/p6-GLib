@@ -1,7 +1,6 @@
 use v6.c;
 
 use GLib::Raw::Types;
-
 use GLib::Raw::Hostname;
 
 use GLib::Roles::StaticClass;
