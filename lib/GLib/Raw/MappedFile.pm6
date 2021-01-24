@@ -21,7 +21,7 @@ sub g_mapped_file_get_bytes (GMappedFile $file)
 { * }
 
 sub g_mapped_file_get_contents (GMappedFile $file)
-  returns Str
+  returns CArray[uint8]
   is native(glib)
   is export
 { * }
