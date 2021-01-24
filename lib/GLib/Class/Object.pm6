@@ -6,7 +6,7 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Object::ParamSpec;
 
-use GLib::Roles::Pointers;
+
 
 class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is export {
   HAS GTypeClass      $.g_type_class;
