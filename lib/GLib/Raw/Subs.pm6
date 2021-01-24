@@ -6,7 +6,6 @@ use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
 use GLib::Raw::Object;
 
-use GLib::Roles::Pointers;
 use GLib::Object::Supplyish;
 
 unit package GLib::Raw::Subs;
