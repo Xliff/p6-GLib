@@ -5,14 +5,9 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Raw::Quark;
 
+use GLib::Roles::StaticClass;
+
 class GLib::Quark {
-
-  method new (|) {
-    die 'GLib::Quark is static and does not require instantiation.'
-      if $DEBUG;
-
-    GLib::Quark;
-  }
 
   method from_static_string (Str() $string) is also<from-static-string> {
     g_quark_from_static_string($string);
