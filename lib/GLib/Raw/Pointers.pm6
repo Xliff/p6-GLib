@@ -5,5 +5,5 @@ use NativeCall;
 unit package GLib::Raw::Pointers;
 
 sub p ($p) is export {
-  cast(Pointer, $p);
+  nativecast(Pointer, $p);
 }
