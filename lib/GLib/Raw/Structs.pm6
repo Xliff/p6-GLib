@@ -86,8 +86,8 @@ class GList                 is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method data is rw {
     Proxy.new:
-      FETCH => sub ($)              { $!data },
-      STORE => -> $, GList() $nv {
+      FETCH => sub ($)           { $!data },
+      STORE => -> $, Pointer $nv {
         # Thank GOD we can now replace this monstrosity:
         # nqp::bindattr(
         #   nqp::decont(self),
@@ -96,7 +96,9 @@ class GList                 is repr<CStruct> does GLib::Roles::Pointers is expor
         #   nqp::decont( nativecast(Pointer, $nv) )
         # )
         # ...with this lesser one:
-        ::?CLASS.^Attributes[0].set_value(self, $nv);
+        #::?CLASS.^Attributes[0].set_value(self, $nv);
+        # ... and now maybe this sensible one...
+        $!data := $nv;
       };
   }
 }
@@ -369,7 +371,7 @@ class GTypeValueList        is repr('CUnion')  does GLib::Roles::Pointers is exp
 };
 
 class GValue {
-  has ulong           $.g_type;
+  has ulong           $!g_type;
   HAS GTypeValueList  $.data1  is rw;
   HAS GTypeValueList  $.data2  is rw;
 
