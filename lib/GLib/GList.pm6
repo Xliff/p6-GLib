@@ -2,10 +2,9 @@ use v6.c;
 
 use Method::Also;
 use NativeCall;
+use NativeHelpers::Blob;
 
-use GLib::Raw::Definitions;
-use GLib::Raw::Structs;
-use GLib::Raw::Subs;
+use GLib::Raw::Types;
 use GLib::Raw::GList;
 
 # See if this will work properly:
@@ -17,7 +16,7 @@ class GLib::GList {
   #also does Positional;
   #also does Iterator;
 
-  has GList $!list;
+  has GList $!list is implementor handles<p>;
   has GList $!cur;
 
   # Left active, but see NOTE.
@@ -62,35 +61,60 @@ class GLib::GList {
 
     self.bless(:$list);
   }
-  multi method new (@list, :$signed = False, :$double = False) {
+  multi method new (
+    @list,
+    :$signed   = False,
+    :$double   = False,
+    :$direct   = False,
+    :$encoding = 'utf8'
+  ) {
     my $l = GLib::GList.new;
+
+    # We already start with a List with 1 NULL data element. We must
+    # fill THAT first, before we start appending, so we need to distinguish
+    # that.
+    my $firstElement = True;
     for @list {
       # Properly handle non-Str Cool data.
       my ($ov, $use-arr, \t, $v) = ($_, False);
-      given $ov {
-        when .REPR eq <CPointer CStruct>.any { $ov .= p }
-
-        when Rat { $ov .= Num; proceed }
-        when Int {
-          $use-arr = True;
-          when $signed.so { t := $double ?? CArray[int64] !!  CArray[int32]  }
-          default         { t := $double ?? CArray[uint64] !! CArray[uint32] }
-        }
-        when Rat | Num {
-          $use-arr = True;
-          t := $double ?? CArray[num64] !!  CArray[num32]
-        }
-
-        # Str
-        default { $ov = ~$ov unless $ov ~~ Str }
-      }
-      if $use-arr {
-        $v = t.new;
-        $v[0] = $ov;
+      if $ov ~~ Int && $direct {
+        $v = Pointer.new($ov);
       } else {
-        $v = $ov;
+        given $ov {
+          # For all implementor-based classes
+          when .^lookup('p').so { $ov .= p }
+
+          when Rat { $ov .= Num; proceed }
+          when Int {
+            $use-arr = True;
+            when $signed.so { t := $double ?? CArray[int64] !!  CArray[int32]  }
+            default         { t := $double ?? CArray[uint64] !! CArray[uint32] }
+          }
+          when Rat | Num {
+            $use-arr = True;
+            t := $double ?? CArray[num64] !!  CArray[num32]
+          }
+
+          # Str
+          default {
+            $ov = ~$ov unless $ov ~~ Str;
+            $ov = pointer-to( $ov.encode($encoding) );
+          }
+        }
+        if $use-arr {
+          $v    = t.new;
+          $v[0] = $ov;
+        } else {
+          $v = $ov;
+        }
+        $v = cast(Pointer, $v) unless $v ~~ Pointer;
       }
-      $l.append( cast(Pointer, $v) );
+      if $firstElement {
+        $l.data       = $v;
+        $firstElement = False;
+      } else {
+        $l.append($v);
+      }
     }
     $l;
   }
@@ -181,7 +205,7 @@ class GLib::GList {
   }
 
   method copy_deep (
-    &func,
+            &func,
     Pointer $user_data = Pointer
   )
     is also<copy-deep>
@@ -216,7 +240,7 @@ class GLib::GList {
   }
 
   method foreach (
-    &func,
+            &func,
     Pointer $user_data = Pointer
   ) {
     g_list_foreach($!list, &func, $user_data);
@@ -267,7 +291,7 @@ class GLib::GList {
 
   method insert_sorted_with_data (
     Pointer $data,
-    &func,
+            &func,
     Pointer $user_data = Pointer
   )
     is also<insert-sorted-with-data>
