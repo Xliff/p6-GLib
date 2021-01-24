@@ -6,7 +6,7 @@ use NativeCall;
 use GLib::Object::IsType;
 use GLib::Raw::Types;
 
-use GLib::Value;;
+use GLib::Value;
 use GLib::Object::Type;
 
 use GLib::Class::Object;
@@ -22,12 +22,6 @@ my %data;
 
 # To be rolled into GLib::Roles::Object at some point!
 role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
-  has %!signals-object;
-
-  method disconnect-object-signal ($name) {
-    self.disconnect($name, %!signals-object);
-  }
-
   # GObject, GParamSpec, gpointer
   method connect-notify (
     $obj,
@@ -35,7 +29,8 @@ role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
     &handler?
   ) {
     my $hid;
-    %!signals-object{$signal} //= do {
+    return $_ with self.getSignal($signal);
+    my $sig //= do {
       my $s = Supplier.new;
       $hid = g_connect_notify($obj, $signal,
         -> $, $ps, $ud --> gboolean {
@@ -49,8 +44,9 @@ role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
       );
       [ $s.Supply, $obj, $hid ];
     };
-    %!signals-object{$signal}[0].tap(&handler) with &handler;
-    %!signals-object{$signal}[0];
+    $sig[0].tap(&handler) with &handler;
+    $sig[0];
+    self.setSignal($signal, $sig);
   }
 
 }
@@ -63,6 +59,8 @@ role GLib::Roles::Object {
   has GObject $!o;
 
   submethod BUILD (:$object) {
+    say "Object: { $object // '<<NIL>>' }";
+
     self!setObject($object) if $object;
   }
 
@@ -101,14 +99,30 @@ role GLib::Roles::Object {
     is also<new-object-with-properties>
   { * }
 
-  multi method new_object_with_properties (*@args) {
+  # RAW capitalized to prevent conflict with a potential GObject's "raw"
+  # property
+  multi method new_object_with_properties (
+    *@args,
+    :$RAW       =  False,
+    :$TYPE,
+    :pairs(:$p) is required
+  ) {
+    if $DEBUG {
+      say "P: \@args";
+      say "\tK: { .key } / V: { .value // '<<NIL!>' }" for @args;
+    }
     die 'Array passed to .new_object_with_properties must have an even number of elements!'
-      unless @args.elems % 2 == 0;
+      unless @args.elems %% 2;
 
-    samewith( |@args.Hash )
+    samewith( :$TYPE, |@args.Hash )
   }
-  multi method new_object_with_properties (:$raw = False, *%props) {
+  multi method new_object_with_properties (:$RAW = False, :$TYPE, *%props) {
     my (@names, @values);
+
+    if $DEBUG {
+      say "P: \%props";
+      say "\tK: { .key } / V: { .value // '<<NIL!>>' }" for %props.pairs;
+    }
 
     my %v-props = self.resolveCreationOptions( |%props );
     for %v-props.keys {
@@ -119,20 +133,23 @@ role GLib::Roles::Object {
     samewith(
       @names.elems,
       ArrayToCArray(Str, @names),
-      GLib::Roles::TypedBuffer[GValue].new(@values),
-      :$raw
+      GLib::Roles::TypedBuffer[GValue].new(@values).p,
+      raw  => $RAW,
+      type => $TYPE
     );
   }
   multi method new_object_with_properties (
     Int()       $num-props,
     CArray[Str] $names,
     Pointer     $values,
-                :$raw       = False
+                :$raw       = False,
+    Int()       :$type      = Int,
   ) {
     my guint $n = $num-props;
-    my GType $t = ::?CLASS.get-type;
+    my GType $t = $type // ::?CLASS.get_type;
 
-    say "T: $t" if $DEBUG;
+    say "T: { GLib::Object::Type.new($t).name }" if $DEBUG;
+    say "CLASS = { ::?CLASS.^name }";
 
     my $object = g_object_new_with_properties(
       $t,
@@ -141,16 +158,18 @@ role GLib::Roles::Object {
       $values
     );
 
-    $object ?? ( $raw ?? $object !! self.bless( :$object ) )
+    say "Object name: { ::?CLASS.^name }";
+    say "Object value: { $$object }";
+
+    $object ?? ( $raw ?? $object !! self.new( $object, :!ref ) )
             !! Nil;
   }
 
   # Not inherited. Punned directly to the object. So how is that gonna work?
   method resolveCreationOptions (*%options) {
-    my (%new-opts; %not-found);
+    my (%new-opts, %not-found);
 
-    say "O: { %options.keys }"        if $DEBUG;
-
+    say "O: { %options.keys }" if $DEBUG;
     for %options.pairs -> $a {
       say "K: { $a.key }" if $DEBUG;
 
