@@ -24,5 +24,6 @@ BEGIN {
     GLib::Raw::Structs
     GLib::Raw::Subs
     GLib::Raw::Struct_Subs
+    GLib::Roles::Pointers
   >;
 }
