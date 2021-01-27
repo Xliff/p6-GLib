@@ -7,6 +7,8 @@ use NativeHelpers::Blob;
 use GLib::Raw::Types;
 use GLib::Raw::GList;
 
+use GLib::Roles::ListData;
+
 # See if this will work properly:
 # - Move ALL data related routines to a ListData parameterized role.
 # - Have raw_data method implemented in client classes that return the pointer
@@ -384,4 +386,17 @@ class GLib::GList {
     $!dirty = True;
   }
 
+}
+
+sub returnGList ( $gl is copy, $glist, $raw, $T = Str, $O? ) is export {
+  return Nil unless $gl;
+  return $gl if     $glist && $raw;
+
+  $gl = GLib::GList.new($gl) but GLib::Roles::ListData[$T];
+  return $gl if $glist;
+
+  return $gl.Array if $raw;
+  die 'Cannot convert GList to Object array when no Object-type specified!'
+    unless $O !~~ Nil;
+  $gl.Array.map({ $O.new($_) });
 }
