@@ -180,21 +180,13 @@ class GLib::Convert {
     $all.not ?? $rv !! ($rv, $br, $bw);
   }
 
-  proto method filename_to_uri (|)
+  method filename_to_uri (
+    Str() $filename,
+    Str() $hostname                = Str,
+    CArray[Pointer[GError]] $error = gerror
+  )
     is also<filename-to-uri>
-  { * }
-
-  multi method filename_to_uri (
-    Str() $filename,
-    CArray[Pointer[GError]] $error = gerror
-  ) {
-    samewith($filename, Str, $error);
-  }
-  multi method filename_to_uri (
-    Str() $filename,
-    Str() $hostname,
-    CArray[Pointer[GError]] $error = gerror
-  ) {
+  {
     clear_error;
     my $rv = g_filename_to_uri($filename, $hostname, $error);
     set_error($error);
