@@ -20,6 +20,30 @@ constant gObjectTypeKey = 'p6-GObject-Type';
 
 my %data;
 
+class ProvidesData does Associative {
+  has $!p;
+
+  submethod BUILD ( :$!p ) { }
+
+  method AT-KEY (\k) is rw {
+    Proxy.new:
+      FETCH => -> $       { %data{$!p}{k}     }
+      STORE => -> $, (\v) { %data{$!p}{k} = v };
+  }
+
+  method EXISTS-KEY (\k) {
+    %data{$!p}{k}:exists;
+  }
+
+  method clear (\k) {
+    %data{$!p}{k}:delete;
+  }
+
+  method new ($p) {
+    self.bless( :$p );
+  }
+}
+
 # To be rolled into GLib::Roles::Object at some point!
 role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
   # GObject, GParamSpec, gpointer
@@ -45,8 +69,7 @@ role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
       [ $s.Supply, $obj, $hid ];
     };
     $sig[0].tap(&handler) with &handler;
-    $sig[0];
-    self.setSignal($signal, $sig);
+    self.setSignal($signal, $sig)[0];
   }
 
 }
@@ -57,11 +80,13 @@ role GLib::Roles::Object {
   also does GLib::Roles::Signals::GObject;
 
   has GObject $!o;
+  has $!data-proxy;
 
   submethod BUILD (:$object) {
     say "Object: { $object // '<<NIL>>' }";
 
     self!setObject($object) if $object;
+    $!data-proxy = ProvidesData.new(+$object.p);
   }
 
   # This will not work while ::Object is still a role!
@@ -415,6 +440,12 @@ role GLib::Roles::Object {
 
   method unset-data ($k) {
     %data{+$!o.p}{$k}:delete if %data{+$!o.p}{$k}:exists;
+  }
+
+  # cw: Provides a hash-like interface at this method.
+  #     Will To replace the above 3 methods.
+  method data {
+    $!data-proxy;
   }
 
   method !checkNames(@names) {
