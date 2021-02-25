@@ -32,8 +32,8 @@ role GLib::Roles::Signals::Generic {
 
   # If I cannot share attributes between roles, then each one will have
   # to have its own signature, or clean-up routine.
-  method disconnect-all is also<disconnect_all> {
-    self.disconnect($_) for %!signals.keys;
+  method disconnect-all ($sig) is also<disconnect_all> {
+    self.disconnect($_) for $sig.keys;
   }
 
   method disconnect ($signal) {
@@ -69,7 +69,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -103,7 +103,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -130,7 +130,7 @@ role GLib::Roles::Signals::Generic {
         Pointer, 0
       );
       my $supply = $s.Supply;
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -160,7 +160,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -186,7 +186,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -217,7 +217,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -248,7 +248,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -278,7 +278,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -304,7 +304,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -330,7 +330,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -356,7 +356,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -382,7 +382,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -408,7 +408,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -438,7 +438,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -467,7 +467,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -496,7 +496,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -525,7 +525,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -553,7 +553,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -584,7 +584,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ self.create-signal-supply(%!tapped-sigs, $signal, $s), $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
