@@ -74,7 +74,7 @@ class GLib::GList {
 
     # We already start with a List with 1 NULL data element. We must
     # fill THAT first, before we start appending, so we need to distinguish
-    # that.
+    # it.
     my $firstElement = True;
     for @list {
       # Properly handle non-Str Cool data.
