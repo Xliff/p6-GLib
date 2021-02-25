@@ -23,7 +23,9 @@ my %data;
 class ProvidesData does Associative {
   has $!p;
 
-  submethod BUILD ( :$!p ) { }
+  submethod BUILD ( :$p ) {
+    $!p = $p if $p
+  }
 
   method AT-KEY (\k) is rw {
     Proxy.new:
@@ -83,10 +85,10 @@ role GLib::Roles::Object {
   has $!data-proxy;
 
   submethod BUILD (:$object) {
-    say "Object: { $object // '<<NIL>>' }";
-
-    self!setObject($object) if $object;
-    $!data-proxy = ProvidesData.new(+$object.p);
+    if $object {
+      self!setObject($object);
+      $!data-proxy = ProvidesData.new(+$object.p);
+    }
   }
 
   # This will not work while ::Object is still a role!
