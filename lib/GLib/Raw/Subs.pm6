@@ -214,6 +214,17 @@ sub return-with-all ($v) is export {
         !! Nil
 }
 
+# The assumption here is "Transfer: Full"
+sub propReturnObject ($oo, $raw, \P, $C? is raw, :$ref = False) is export {
+  my $o = $oo;
+  return Nil unless $o;
+
+  $o = cast(P, $o);
+  return $o if $raw || $C =:= Nil;
+
+  $C.new($o, :$ref);
+}
+
 sub subarray ($a, $o) is export {
   my $b = nativecast(Pointer[$a.of], $a);
   nativecast(CArray[$a.of], $b.add($o) );

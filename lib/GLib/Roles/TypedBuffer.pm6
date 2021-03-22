@@ -108,6 +108,13 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   multi method new-typedbuffer-obj (
+    $s,
+    :$clear        =  True,
+    :sized(:$size) is required
+  ) {
+    self.bless( size => $s, :$clear );
+  }
+  multi method new-typedbuffer-obj (
     Pointer $buffer,
     :$autosize = True,
     :$clear    = False
@@ -115,7 +122,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     $buffer ?? self.bless( :$buffer, :$autosize, :$clear ) !! Nil;
   }
   multi method new-typedbuffer-obj (@entries) {
-    return Pointer unless @entries;
+    return (Pointer but GLib::Roles::Pointers) unless @entries;
 
     die "TypedBuffer type must be a CStruct, not a { T.REPR } via { T.^name }"
       unless T.REPR eq 'CStruct';

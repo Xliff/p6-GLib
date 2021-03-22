@@ -1,7 +1,5 @@
 use v6;
 
-use CompUnit::Util :re-export;
-
 use GLib::Raw::Exports;
 
 unit package GLib::Raw::Types;

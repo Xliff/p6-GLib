@@ -3,7 +3,7 @@ use v6.c;
 use NativeCall;
 
 # Number of times full project has needed to be compiled
-my constant forced = 78;
+my constant forced = 98;
 
 our role Implementor is export {};
 

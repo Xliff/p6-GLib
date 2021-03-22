@@ -92,7 +92,7 @@ class GLib::GSList {
     g_slist_append($!list, $data);
   }
 
-  method concat (GSList $list2) {
+  method concat (GSList() $list2) {
     g_slist_concat($!list, $list2);
   }
 
@@ -104,7 +104,7 @@ class GLib::GSList {
     g_slist_copy_deep($!list, $func, $user_data);
   }
 
-  method delete_link (GSList $link) is also<delete-link> {
+  method delete_link (GSList() $link) is also<delete-link> {
     g_slist_delete_link($!list, $link);
   }
 
@@ -144,7 +144,7 @@ class GLib::GSList {
     g_slist_insert($!list, $data, $p);
   }
 
-  method insert_before (GSList $sibling, gpointer $data)
+  method insert_before (GSList() $sibling, gpointer $data)
     is also<insert-before>
   {
     g_slist_insert_before($!list, $sibling, $data);
@@ -190,7 +190,7 @@ class GLib::GSList {
     g_slist_nth_data($!list, $nn);
   }
 
-  method position (GSList $llink) {
+  method position (GSList() $llink) {
     g_slist_position($!list, $llink);
   }
 
@@ -206,7 +206,7 @@ class GLib::GSList {
     g_slist_remove_all($!list, $data);
   }
 
-  method remove_link (GSList $link) is also<remove-link> {
+  method remove_link (GSList() $link) is also<remove-link> {
     g_slist_remove_link($!list, $link);
   }
 

@@ -151,6 +151,8 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
                                              #  const GValue *value1,
                                              #  const GValue *value2) # --> gint
 
+  # See comments on GSourceCallbackFuncs on how to properly implement
+  # C-function-pointer handling.
   method instance_init is rw {
     Proxy.new:
       FETCH => sub ($) { $!instance_init },
@@ -257,25 +259,45 @@ class GSourceCallbackFuncs  is repr<CStruct> does GLib::Roles::Pointers is expor
      self.get   = $get   if $get.defined;
    }
 
-  method ref is rw {
+   # Since this is a class of callbacks, it might behoove this class to
+   # be a bit chimeric in it's handling of each member.
+   #
+   # Fortunately, we're already doing much of this with objects, so let's
+   # emulate that behavior with function pointers.
+   #
+   # Below, each method will return a function pointer with :raw set,
+   # OR a ready-to-use Callable if not.
+   #
+   # Callable return is implemented here, currently NYI over much of the larger
+   # work
+  method ref (:$raw = False) is rw {
     Proxy.new:
-      FETCH => sub ($)        { $!ref },
+      FETCH => sub ($) {
+        $raw ?? $!ref
+             !! cast( :(gpointer --> int64), $!get );
+      },
       STORE => -> $, \func {
         $!ref := set_func_pointer( &(func), &sprintf-P-L )
       };
   }
 
-  method unref is rw {
+  method unref (:$raw = False) is rw {
     Proxy.new:
-      FETCH => sub ($)        { $!unref },
+      FETCH => sub ($)        {
+        $raw ?? $!unref
+             !! cast( :(gpointer --> int64), $!unref)
+      },
       STORE => -> $, \func {
         $!unref := set_func_pointer( &(func), &sprintf-P-L )
       };
   }
 
-  method get is rw {
+  method get (:$raw = False) is rw {
     Proxy.new:
-      FETCH => sub ($)        { $!get },
+      FETCH => sub ($) {
+        $raw ?? $!get
+             !! cast( :(gpointer, GSource, & (gpointer --> guint32), gpointer) )
+      }
       STORE => -> $, \func {
         $!get := set_func_pointer( &(func), &sprintf-PSƒP )
       };
