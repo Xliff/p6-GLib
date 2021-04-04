@@ -6,7 +6,11 @@ use GLib::Raw::Types;
 
 use GLib::Raw::GSList;
 
+use GLib::Roles::PointerBasedList;
+
 class GLib::GSList {
+  also does GLib::Roles::PointerBasedList;
+
   has GSList $!list is implementor handles<p>;
   has GSList $!cur;
 
@@ -32,21 +36,7 @@ class GLib::GSList {
     self.free;
   }
 
-  # XXX - THIS DOES NOT CURRENTLY WORK WITHOUT A WAY TO SET DATA! - XXX
-  # Not liking this. See if it can be improved.
-  multi method new (@list) {
-    my $list;
-    for @list {
-      my $l = GLib::GSList.alloc();
-      $l.data = $_;
-      with $list  {
-        $list.append($l);
-      } else {
-        $list = self.bless(list => $l);
-      }
-    }
-    $list;
-  }
+  # Identity
   multi method new (GSList $list?) {
     with $list {
       self.bless(:$list);
@@ -54,6 +44,30 @@ class GLib::GSList {
       my $list = GLib::GSList.alloc();
       self.bless(:$list)
     }
+  }
+
+  # XXX - THIS DOES NOT CURRENTLY WORK WITHOUT A WAY TO SET DATA! - XXX
+  # Not liking this. See if it can be improved.
+  multi method new (
+    @list,
+    :$signed   = False,
+    :$double   = False,
+    :$direct   = False,
+    :$encoding = 'utf8',
+    :$typed
+  ) {
+    my $l = GLib::GSList.new;
+
+    self.appendToList(
+      $l,
+      @list,
+      :$signed,
+      :$double,
+      :$direct,
+      :$encoding,
+      :$typed
+    );
+    $l;
   }
 
   method GLib::Raw::Structs::GSList

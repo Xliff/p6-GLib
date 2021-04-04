@@ -2,12 +2,12 @@ use v6.c;
 
 use Method::Also;
 use NativeCall;
-use NativeHelpers::Blob;
 
 use GLib::Raw::Types;
 use GLib::Raw::GList;
 
 use GLib::Roles::ListData;
+use GLib::Roles::PointerBasedList;
 
 # See if this will work properly:
 # - Move ALL data related routines to a ListData parameterized role.
@@ -15,6 +15,7 @@ use GLib::Roles::ListData;
 #   attribute.
 
 class GLib::GList {
+  also does GLib::Roles::PointerBasedList;
   #also does Positional;
   #also does Iterator;
 
@@ -68,56 +69,24 @@ class GLib::GList {
     :$signed   = False,
     :$double   = False,
     :$direct   = False,
-    :$encoding = 'utf8'
+    :$encoding = 'utf8',
+    :$typed
   ) {
     my $l = GLib::GList.new;
 
     # We already start with a List with 1 NULL data element. We must
     # fill THAT first, before we start appending, so we need to distinguish
     # it.
-    my $firstElement = True;
-    for @list {
-      # Properly handle non-Str Cool data.
-      my ($ov, $use-arr, \t, $v) = ($_, False);
-      if $ov ~~ Int && $direct {
-        $v = Pointer.new($ov);
-      } else {
-        given $ov {
-          # For all implementor-based classes
-          when .^lookup('p').so { $ov .= p }
+    self.addToList(
+      $l,
+      @list,
+      :$signed,
+      :$double,
+      :$direct,
+      :$encoding,
+      :$typed
+    );
 
-          when Rat { $ov .= Num; proceed }
-          when Int {
-            $use-arr = True;
-            when $signed.so { t := $double ?? CArray[int64] !!  CArray[int32]  }
-            default         { t := $double ?? CArray[uint64] !! CArray[uint32] }
-          }
-          when Rat | Num {
-            $use-arr = True;
-            t := $double ?? CArray[num64] !!  CArray[num32]
-          }
-
-          # Str
-          default {
-            $ov = ~$ov unless $ov ~~ Str;
-            $ov = pointer-to( $ov.encode($encoding) );
-          }
-        }
-        if $use-arr {
-          $v    = t.new;
-          $v[0] = $ov;
-        } else {
-          $v = $ov;
-        }
-        $v = cast(Pointer, $v) unless $v ~~ Pointer;
-      }
-      if $firstElement {
-        $l.data       = $v;
-        $firstElement = False;
-      } else {
-        $l.append($v);
-      }
-    }
     $l;
   }
   multi method new {
