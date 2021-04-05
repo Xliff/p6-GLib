@@ -14,7 +14,7 @@ our $ERROR-THROWS is export;
 our $DEBUG        is export;
 
 # Forced compile count
-my constant forced = 153;
+my constant forced = 158;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -174,6 +174,7 @@ class GThread                  is repr<CPointer> is export does GLib::Roles::Poi
 class GThreadPool              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTimer                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTimeZone                is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GTypeModule              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTypePlugin              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTokenValue              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariant                 is repr<CPointer> is export does GLib::Roles::Pointers { }
