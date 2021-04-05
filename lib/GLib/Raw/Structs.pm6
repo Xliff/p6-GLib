@@ -369,6 +369,25 @@ class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is expor
 
 }
 
+class GQueue                is repr<CStruct> does GLib::Roles::Pointers is export {
+  has GList $!head;
+  has GList $!tail;
+  has guint $.length is rw; # Change WITH CARE!
+
+  method head is rw {
+    Proxy.new:
+      FETCH => -> $             { $!head },
+      STORE => -> $, GList() $h { $!head := $h };
+  }
+
+  method tail is rw {
+    Proxy.new:
+      FETCH => -> $             { $!tail },
+      STORE => -> $, GList() $t { $!tail := $t };
+  }
+
+}
+
 class GString               is repr<CStruct> does GLib::Roles::Pointers is export {
   has Str       $.str;
   has realUInt  $.len;
