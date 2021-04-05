@@ -6,8 +6,6 @@ use GLib::Raw::Definitions;
 use GLib::Raw::Structs;
 use GLib::Raw::Object;
 
-
-
 use GLib::Roles::TypedBuffer;
 
 unit package GLib::Class::Structs;
