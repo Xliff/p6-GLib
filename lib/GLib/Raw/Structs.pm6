@@ -876,3 +876,50 @@ class GMutex                 is repr<CUnion>  does GLib::Roles::Pointers is expo
   has gpointer      $!p;
   HAS guint         @!i is CArray;
 }
+
+class GNode                  is repr<CUnion>  does GLib::Roles::Pointers is export {
+  has gpointer $!data;
+  has GNode    $!next;
+  has GNode    $!prev;
+  has GNode    $!parent;
+  has GNode    $!children;
+
+  method data is rw {
+    Proxy.new:
+      FETCH => -> $              { $!data },
+      STORE => -> $, gpointer $d { $!data := $d };
+  }
+
+  method next is rw {
+    Proxy.new:
+      FETCH => -> $             { $!next },
+      STORE => -> $, GNode() $n { $!next := $n };
+  }
+
+  method prev is rw {
+    Proxy.new:
+      FETCH => -> $             { $!prev },
+      STORE => -> $, GNode() $n { $!prev := $n };
+  }
+
+  method parent is rw {
+    Proxy.new:
+      FETCH => -> $             { $!parent },
+      STORE => -> $, GNode() $n { $!parent := $n };
+  }
+
+  method next is rw {
+    Proxy.new:
+      FETCH => -> $             { $!children },
+      STORE => -> $, GNode() $n { $!children := $n };
+  }
+
+  # Use in place of GNODE_IS_ROOT
+  method is_root {
+    $!parent.defined.not && $!prev.defined.not && $!next.defined.not
+  }
+
+  # Use in place of GNODE_IS_LEAF
+  method is_leaf { $!cildren.defined.not }
+
+}
