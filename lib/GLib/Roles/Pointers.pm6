@@ -2,10 +2,10 @@ use v6.c;
 
 use NativeCall;
 
+use GLib::Roles::Implementor;
+
 # Number of times full project has needed to be compiled
 my constant forced = 98;
-
-our role Implementor is export {};
 
 # Mark
 multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) is export {
