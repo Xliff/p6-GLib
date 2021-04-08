@@ -1,6 +1,7 @@
 use v6.c;
 
 use NativeCall;
+use NativeHelpers::Blob;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
@@ -228,6 +229,62 @@ sub propReturnObject ($oo, $raw, \P, $C? is raw, :$ref = False) is export {
 sub subarray ($a, $o) is export {
   my $b = nativecast(Pointer[$a.of], $a);
   nativecast(CArray[$a.of], $b.add($o) );
+}
+
+sub toPointer (
+  $value,
+  :$signed   = False,
+  :$double   = False,
+  :$direct   = False,
+  :$encoding = 'utf8',
+  :$typed
+)
+  is export
+{
+  if $typed !=:= Nil {
+    if $value.^can($typed.^name) -> $m {
+      $_ = $m($_);
+    }
+    die "Value does not support { .^name } variables. Will only accept {
+         $typed.^name }!"
+    unless $value ~~ $typed;
+  }
+
+  # Properly handle non-Str Cool data.
+  my ($ov, $use-arr, \t, $v) = ($value, False);
+  if $ov ~~ Int && $direct {
+    $v = Pointer.new($ov);
+  } else {
+    given $ov {
+      # For all implementor-based classes
+      when .^lookup('p').so { $ov .= p }
+
+      when Rat { $ov .= Num; proceed }
+      when Int {
+        $use-arr = True;
+        when $signed.so { t := $double ?? CArray[int64] !!  CArray[int32]  }
+        default         { t := $double ?? CArray[uint64] !! CArray[uint32] }
+      }
+      when Rat | Num {
+        $use-arr = True;
+        t := $double ?? CArray[num64] !!  CArray[num32]
+      }
+
+      # Str
+      default {
+        $ov = ~$ov unless $ov ~~ Str;
+        $ov = pointer-to( $ov.encode($encoding) );
+      }
+    }
+    if $use-arr {
+      $v    = t.new;
+      $v[0] = $ov;
+    } else {
+      $v = $ov;
+    }
+    $v = cast(Pointer, $v) unless $v ~~ Pointer;
+  }
+  $v
 }
 
 sub g_destroy_none(Pointer)
