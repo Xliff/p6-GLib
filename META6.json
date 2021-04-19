@@ -66,7 +66,6 @@
       "GLib::Object::Raw::ParamSpec"  :  "lib/GLib/Object/Raw/ParamSpec.pm6"   ,
       "GLib::Object::Raw::TypeModule" :  "lib/GLib/Object/Raw/TypeModule.pm6"  ,
       "GLib::Object::Type"            :  "lib/GLib/Object/Type.pm6"            ,
-      "GLib::Object::TypeModule"      :  "lib/GLib/Object/TypeModule.pm6"      ,
       "GLib::Raw::Array"              :  "lib/GLib/Raw/Array.pm6"              ,
       "GLib::Raw::Arrays"             :  "lib/GLib/Raw/Arrays.pm6"             ,
       "GLib::Raw::AsyncQueue"         :  "lib/GLib/Raw/AsyncQueue.pm6"         ,
@@ -165,7 +164,8 @@
       "GLib::Roles::Object"           :  "lib/GLib/Roles/Object.pm6"           ,
       "GLib::VariantDict"             :  "lib/GLib/VariantDict.pm6"            ,
       "GLib::Object::Binding"         :  "lib/GLib/Object/Binding.pm6"         ,
-      "GLib::Object::Closure"         :  "lib/GLib/Object/Closure.pm6"         
+      "GLib::Object::Closure"         :  "lib/GLib/Object/Closure.pm6"         ,
+      "GLib::Object::TypeModule"      :  "lib/GLib/Object/TypeModule.pm6"      
     },
     "name": "p6-GLib",
     "perl": "6.c",
