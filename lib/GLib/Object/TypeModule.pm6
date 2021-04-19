@@ -4,6 +4,11 @@ use GLib::Raw::Types;
 use GLib::Class::Structs;
 use GLib::Object::Raw::TypeModule;
 
+use GLib::Roles::Object;
+
+our subset GTypeModuleAncestry is export of Mu
+  where GTypeModule | GObject;
+
 class GLib::Object::TypeModule {
   also does GLib::Roles::Object;
 
@@ -35,7 +40,7 @@ class GLib::Object::TypeModule {
   method new (GTypeModuleAncestry $type-module, :$ref = True) {
     return Nil unless $type-module;
 
-    $o = self.bless( :$type-module );
+    my $o = self.bless( :$type-module );
     $o.ref if $ref;
     $o;
   }

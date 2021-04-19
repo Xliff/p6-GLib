@@ -4,6 +4,7 @@ use NativeCall;
 
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
+use GLib::Raw::Structs;
 use GLib::Class::Structs;
 
 unit package GLib::Object::Raw::TypeModule;
