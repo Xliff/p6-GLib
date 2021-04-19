@@ -84,7 +84,7 @@ sub ArrayToCArray(\T, @a) is export {
   $ca;
 }
 
-multi sub CStringArrayToArray(CArray[Str] $sa, Int(Cool) $len) {
+multi sub CStringArrayToArray(CArray[Str] $sa, Int(Cool) $len) is export {
   CArrayToArray($sa, $len);
 }
 multi sub CStringArrayToArray (CArray[Str] $sa) is export {
