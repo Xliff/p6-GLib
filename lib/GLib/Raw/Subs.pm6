@@ -287,6 +287,33 @@ sub toPointer (
   $v
 }
 
+# Add Role to redefine name of method (guifa++)
+sub buildAccessors (\O) is export {
+	my $proxy = sub ($n, \attr) {
+		my $m = method :: is rw {
+			Proxy.new(
+				FETCH => -> $,    { attr.get_value(self)    },
+				STORE => -> $, \v { attr.set_value(self, v) }
+			);
+		}
+    $m.set_name($n);
+    $m;
+	}
+
+	for O.^attributes.kv -> $k, \a {
+		my $full-name = a.name;
+    my ($, $attr-name) = $full-name.&separate(2);
+		next unless a.readonly;
+
+		print "  Adding { $attr-name } to { O.^name }..." if $DEBUG;
+		O.^add_method(
+			$attr-name,
+			$proxy($attr-name, a)    #= $proxy() returns Method
+		);
+		say 'done' if $DEBUG;
+	}
+}
+
 sub g_destroy_none(Pointer)
   is export
 { * }
