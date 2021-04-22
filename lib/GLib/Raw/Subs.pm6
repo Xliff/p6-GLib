@@ -340,12 +340,22 @@ sub g_object_set_string_data (GObject $o, Str $key, Str $data)
   is export
 { * }
 
-sub g_object_get_string_data (GObject $o, Str $key)
-  returns Str
+sub _g_object_get_string_data (GObject $o, Str $key)
+  returns CArray[uint8]
   is native(gobject)
   is symbol('g_object_get_data')
-  is export
 { * }
+
+sub g_object_get_string_data (GObject $o, Str $key) is export {
+  my $d = _g_object_get_string_data($o, $key);
+
+  my $c = 0;
+  my @d;
+  while $d[$c++] -> $nc { @d.push: $nc }
+  my $s = Buf.new(@d).decode;
+  free( cast(Pointer, $d) );
+  $s;
+}
 
 # sub g_object_set_int(GObject $o, Str $key, int32 $data is rw)
 #   is native(gobject)
