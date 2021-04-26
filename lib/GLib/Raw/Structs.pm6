@@ -389,9 +389,15 @@ class GQueue                is repr<CStruct> does GLib::Roles::Pointers is expor
 }
 
 class GString               is repr<CStruct> does GLib::Roles::Pointers is export {
-  has Str       $.str;
+  has Str       $!str;
   has realUInt  $.len;
   has realUInt  $.allocated_len;
+
+  method str is rw {
+    Proxy.new:
+      FETCH => -> $           { $!str       },
+      STORE => -> $, Str() $v { $!str := $v };
+  }
 }
 
 class GTimeVal              is repr<CStruct> does GLib::Roles::Pointers is export {
