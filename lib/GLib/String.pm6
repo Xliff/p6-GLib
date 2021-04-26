@@ -8,7 +8,7 @@ use GLib::Raw::String;
 use GLib::Raw::Bytes;
 
 class GLib::String {
-  has GString $!s is implementor handles<p>;
+  has GString $!s is implementor handles<p str>;
 
   submethod BUILD (:$string) {
     $!s = $string;
@@ -18,7 +18,10 @@ class GLib::String {
     is also<GString>
   { $!s }
 
-  method new (Str() $init = Str) {
+  multi method new (GString $string, :$ref) {
+    $string ?? self.bless( :$string ) !! Nil;
+  }
+  multi method new (Str() $init = Str) {
     my $string = g_string_new($init);
 
     $string ?? self.bless( :$string ) !! Nil;
