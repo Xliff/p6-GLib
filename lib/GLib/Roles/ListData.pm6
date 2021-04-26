@@ -18,7 +18,14 @@ role GLib::Roles::ListData[::T, :$direct] {
 
     @!nat = ();
     loop ($l = self.first; $l.defined; $l = $l.next) {
-      @!nat.push: self.data($l);
+      use nqp;
+
+      # Must insure that results from C are properly prepared for the
+      # High Level Language
+      my $s = self.data($l);
+      $s = nqp::unbox_s($s) if T ~~ Str;
+      
+      @!nat.push: $s;
     }
     self.cleaned;
     @!nat;
