@@ -364,8 +364,8 @@ sub returnGList ( $gl is copy, $glist, $raw, $T = Str, $O? ) is export {
   $gl = GLib::GList.new($gl) but GLib::Roles::ListData[$T];
   return $gl if $glist;
 
-  return $gl.Array if $raw;
-  die 'Cannot convert GList to Object array when no Object-type specified!'
-    unless $O !~~ Nil;
+  return $gl.Array if $raw || $O === Any;
+  #die 'Cannot convert GList to Object array when no Object-type specified!'
+  #  if $O =:= Nil;
   $gl.Array.map({ $O.new($_) });
 }
