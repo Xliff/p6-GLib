@@ -58,8 +58,16 @@ sub p ($p) is export {
 }
 
 # Moved from p6-GStreamer
-sub nocr ($s) is export {
+sub nolf ($s) is export {
   $s.subst("\n", ' ', :g);
+}
+
+sub lf ($s) is export {
+  $s.subst("\r\n", "\n", :g);
+}
+
+sub crlf ($s) is export {
+  $s.subst("\n", "\r\n", :g);
 }
 
 sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
