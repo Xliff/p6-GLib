@@ -137,3 +137,7 @@ sub htonl (uint32)
   is native
   is export
 { * }
+
+# cw: Yeah, and now we have to worry about this...
+constant LC_ADDRESS  is export = 9;
+constant LC_MESSAGES is export = 5;
