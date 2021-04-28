@@ -19,6 +19,8 @@ sub memcpy         (Pointer, Pointer ,size_t --> Pointer) is export is native { 
 sub memset         (Pointer, int32, size_t)               is export is native { * }
 sub dup2           (int32, int32 --> int32)               is export is native { * }
 sub isatty         (int32 --> int32)                      is export is native { * }
+# Needed for minimal I18n
+sub setlocale      (int32, Str --> Str)                   is export is native { * }
 
 sub native-open    (Str, int32, int32 $m = 0)
   is export
@@ -86,9 +88,21 @@ sub separate (Str() $s, Int() $p) is export {
   ( $s.substr(0, $p), $s.substr($p, *) )
 }
 
+sub checkForType(\T, $v is copy) is export {
+  if T !=:= Nil {
+    if $v.^lookup(T.^name) -> $m {
+      $v = $m($v);
+    }
+    die "Value does not support { .^name } variables. Will only accept {
+         T.^name }!"
+    unless $v ~~ T;
+  }
+  $v;
+}
+
 sub ArrayToCArray(\T, @a) is export {
   my $ca =  CArray[T].new;
-  $ca[$_] = @a[$_] for ^@a.elems;
+  $ca[$_] = checkForType(T, @a[$_]) for ^@a.elems;
   $ca;
 }
 
@@ -249,14 +263,7 @@ sub toPointer (
 )
   is export
 {
-  if $typed !=:= Nil {
-    if $value.^can($typed.^name) -> $m {
-      $_ = $m($_);
-    }
-    die "Value does not support { .^name } variables. Will only accept {
-         $typed.^name }!"
-    unless $value ~~ $typed;
-  }
+  $value = checkForType($typed, $value);
 
   # Properly handle non-Str Cool data.
   my ($ov, $use-arr, \t, $v) = ($value, False);
