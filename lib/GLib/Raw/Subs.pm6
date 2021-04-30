@@ -181,6 +181,16 @@ multi sub resolve-gstrv( *@rg where *.all !~~ Positional ) is export {
   $gs;
 }
 
+sub getBackupPath ($p is copy, $pre = 'bak') is export {
+  $p .= IO if $p ~~ Str;
+  my ($safe-fh, $serial);
+  my $fhp = $p;
+  repeat {
+    $safe-fh = $fhp.extension("{ $pre }{ $serial++ }", parts => 0);
+  } until $safe-fh.e.not;
+  $safe-fh;
+}
+
 #sub create-signal-supply (%sigs, $signal, $s) is export {
 #  GLib::Object::Supplyish.new($s.Supply, %sigs, $signal);
   # my $supply = $s.Supply;
