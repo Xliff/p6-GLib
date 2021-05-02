@@ -72,6 +72,11 @@ sub crlf ($s) is export {
   $s.subst("\n", "\r\n", :g);
 }
 
+# cw: Coerces the value of $a to a value within $r.
+sub clamp($a, Range() $r) is export {
+  max( $r.min, min($a, $r.max) )
+}
+
 sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
   return $t if ($n // 0) > 0;
   repeat {
