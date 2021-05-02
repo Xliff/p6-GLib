@@ -87,19 +87,18 @@ class GLib::FileUtils {
   multi method file_get_contents (IO::Path $path) {
     my $rv = samewith($path.absolute, $, $, :all);
 
-    $rv[0] ?? $rv.skip(1) !! Nil;
+    $rv[0] ?? $rv[1] !! Nil;
   }
   multi method file_get_contents (
     Str()                   $filename,
-                            $contents is rw,
-                            $length   is rw,
     CArray[Pointer[GError]] $error    =  gerror,
     :$all = False
   ) {
-    my ($c, $l) = (CArray[Str].new, $length);
-    $c[0] = Str;
+    (my $c = CArray[Str].new)[0] = Str;
 
-    samewith($filename, $c, $l // gsize, $error);
+    my $rv = samewith($filename, $c, $, $error, :all);
+
+    $rv[0] ?? $rv[1] !! Nil;
   }
   multi method file_get_contents (
     Str()                   $filename,
@@ -115,7 +114,7 @@ class GLib::FileUtils {
     set_error($error);
 
     $length = $l;
-    $all.not ?? $rv !! ($rv, $length);
+    $all.not ?? $rv !! ( $rv, ppr($contents) );
   }
 
   method file_open_tmp (
@@ -128,6 +127,7 @@ class GLib::FileUtils {
     clear_error;
     my $fd = g_file_open_tmp($tmpl, $name_used, $error);
     set_error($error);
+    $fd
   }
 
   proto method file_read_link (|)
