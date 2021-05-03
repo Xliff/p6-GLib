@@ -5,12 +5,14 @@ use GLib::Class::Structs;
 use GLib::Object::Raw::TypeModule;
 
 use GLib::Roles::Object;
+use GLib::Roles::TypePlugin;
 
 our subset GTypeModuleAncestry is export of Mu
   where GTypeModule | GObject;
 
 class GLib::Object::TypeModule {
   also does GLib::Roles::Object;
+  also does GLib::Roles::TypePlugin;
 
   has GTypeModule $!tm is implementor;
 
@@ -32,6 +34,7 @@ class GLib::Object::TypeModule {
       }
     }
     self!setObject($to-parent);
+    self.roleInit-GTypePlugin;
   }
 
   method GLib::Raw::Definitions::GTypeModule
