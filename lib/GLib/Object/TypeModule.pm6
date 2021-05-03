@@ -8,7 +8,7 @@ use GLib::Roles::Object;
 use GLib::Roles::TypePlugin;
 
 our subset GTypeModuleAncestry is export of Mu
-  where GTypeModule | GObject;
+  where GTypeModule | GTypePlugin | GObject;
 
 class GLib::Object::TypeModule {
   also does GLib::Roles::Object;
