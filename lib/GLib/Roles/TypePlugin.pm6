@@ -8,6 +8,13 @@ use GLib::Roles::Object;
 role GLib::Roles::TypePlugin {
   has GTypePlugin $!tp;
 
+  method roleInit-GTypePlugin {
+    return if $!tp;
+
+    my \i = findProperImplementor(self.^attributes);
+    $!tp = cast( GTypePlugin, i.get_value(self) );
+  }
+
   method complete_interface_info (
     Int()          $instance_type,
     Int()          $interface_type,
