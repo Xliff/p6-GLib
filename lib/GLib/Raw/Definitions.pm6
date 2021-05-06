@@ -20,20 +20,35 @@ my constant forced = 168;
 constant glib         is export  = 'glib-2.0',v0;
 constant gobject      is export  = 'gobject-2.0',v0;
 
-sub glib-support is export {
-  state $libname = '';
+sub resources-info {
+  my $ext = 'dll';
+  my $os = $*DISTRO.is-win ?? 'windows' !! 'unix';
+  if $os eq 'unix' {
+    # Which one?
+    $os = $*KERNEL.name;
+    $ext = 'so';
+  }
+  my $arch = '/.dockerenv'.IO.e ?? qqx{uname -m}.chomp !! $*KERNEL.arch;
 
-  unless $libname {
-    my $ext = 'dll';
-    my $os = $*DISTRO.is-win ?? 'windows' !! 'unix';
-    if $os eq 'unix' {
-      # Which one?
-      $os = $*KERNEL.name;
-      $ext = 'so';
-    }
-    my $arch = '/.dockerenv'.IO.e ?? qqx{uname -m}.chomp !! $*KERNEL.arch;
+  ($arch, $os, $ext);
+}
+
+sub glib-support is export {
+  state $libname = do {
+    my ($arch, $os, $ext) = resources-info;
     my $libkey = "lib/{ $arch }/{ $os }/glib-support.{ $ext }";
     say "Using '$libkey' as support library.";
+    $libname = %?RESOURCES{$libkey}.absolute;
+  }
+
+  $libname;
+}
+
+sub tree-helper is export {
+  state $libname = do {
+    my ($arch, $os, $ext) = resources-info;
+    my $libkey = "lib/{ $arch }/{ $os }/tree-helper.{ $ext }";
+    say "Using '$libkey' as tree support library.";
     $libname = %?RESOURCES{$libkey}.absolute;
   }
 
