@@ -1010,5 +1010,7 @@ sub getEnumValueByNick(\T, Str() $nick) is export {
 }
 
 INIT {
+  CATCH { .message.say; .backtrace.concise.say }
+  
   $g-param-spec-types = get_paramspec_types;
 }

@@ -14,7 +14,7 @@ our $ERROR-THROWS is export;
 our $DEBUG        is export;
 
 # Forced compile count
-my constant forced = 158;
+my constant forced = 168;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -31,8 +31,9 @@ sub glib-support is export {
       $os = $*KERNEL.name;
       $ext = 'so';
     }
+    my $arch = '/.dockerenv'.IO.e ?? qqx{uname -m} !! $*KERNEL.arch;
     $libname = %?RESOURCES{
-      "lib/{ $*KERNEL.arch }/{ $os }/glib-support.{ $ext }"
+      "lib/{ $arch }/{ $os }/glib-support.{ $ext }"
     }.absolute;
   }
 
