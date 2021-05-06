@@ -31,10 +31,10 @@ sub glib-support is export {
       $os = $*KERNEL.name;
       $ext = 'so';
     }
-    my $arch = '/.dockerenv'.IO.e ?? qqx{uname -m} !! $*KERNEL.arch;
-    $libname = %?RESOURCES{
-      "lib/{ $arch }/{ $os }/glib-support.{ $ext }"
-    }.absolute;
+    my $arch = '/.dockerenv'.IO.e ?? qqx{uname -m}.chomp !! $*KERNEL.arch;
+    my $libkey = "lib/{ $arch }/{ $os }/glib-support.{ $ext }";
+    say "Using '$libkey' as support library.";
+    $libname = %?RESOURCES{$libkey}.absolute;
   }
 
   $libname;
