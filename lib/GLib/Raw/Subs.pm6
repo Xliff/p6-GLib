@@ -106,8 +106,29 @@ sub checkForType(\T, $v is copy) is export {
 }
 
 sub ArrayToCArray(\T, @a) is export {
-  my $ca =  CArray[T].new;
-  $ca[$_] = checkForType(T, @a[$_]) for ^@a.elems;
+  enum Handling <P NP>;
+  my $handling;
+  my $ca = (do given (T.REPR // '') {
+    when 'P6opaque' {
+      when T ~~ Str                      { $handling = P;  CArray[T]          }
+
+      proceed
+    }
+
+    when 'CPointer' | 'P6str'  |
+         'P6num'    | 'P6int'            { $handling = P;  CArray[T]          }
+    when 'CStruct'  | 'CUnion'           { $handling = NP; CArray[Pointer[T]] }
+
+    default {
+      "ArrayToCArray does not know how to handle a REPR of '$_' for type {
+       T.^name }"
+    }
+  }).new;
+  for ^@a.elems {
+    my $typed = checkForType(T, @a[$_]);
+
+    $ca[$_] = $handling eq P ?? $typed !! cast(Pointer[T], $typed)
+  }
   $ca;
 }
 
