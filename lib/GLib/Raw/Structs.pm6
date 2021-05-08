@@ -15,6 +15,9 @@ use GLib::Roles::TypeInstance;
 
 unit package GLib::Raw::Structs;
 
+# cw: Testing this thought out...
+our $ERROR-REPLACEMENT is export = sub { %ERROR{$*PID} };
+
 class GValue                is repr<CStruct> does GLib::Roles::Pointers is export { ... }
 
 # Structs
@@ -632,8 +635,9 @@ sub get-error ($e) is export {
 
 sub set_error(CArray $e) is export {
   if $e[0].defined {
-    $ERROR = get-error($e);
+    $ERROR = %ERROR{$*PID} = get-error($e);
     X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
+    #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
     @ERRORS.push: [ $ERROR, Backtrace.new ];
   }
 }

@@ -8,10 +8,11 @@ use GLib::Roles::Pointers;
 
 unit package GLib::Raw::Definitions;
 
-our $ERROR        is export;
-our @ERRORS       is export;
-our $ERROR-THROWS is export;
-our $DEBUG        is export;
+our $ERROR            is export;
+our (%ERROR, %ERRORS) is export;
+our @ERRORS           is export;
+our $ERROR-THROWS     is export;
+our $DEBUG            is export;
 
 # Forced compile count
 my constant forced = 168;
@@ -37,7 +38,7 @@ sub glib-support is export {
   state $libname = do {
     my ($arch, $os, $ext) = resources-info;
     my $libkey = "lib/{ $arch }/{ $os }/glib-support.{ $ext }";
-    say "Using '$libkey' as support library.";
+    say "Using '$libkey' as support library." if $DEBUG;
     $libname = %?RESOURCES{$libkey}.absolute;
   }
 
@@ -48,7 +49,7 @@ sub tree-helper is export {
   state $libname = do {
     my ($arch, $os, $ext) = resources-info;
     my $libkey = "lib/{ $arch }/{ $os }/tree-helper.{ $ext }";
-    say "Using '$libkey' as tree support library.";
+    say "Using '$libkey' as tree support library." if $DEBUG;
     $libname = %?RESOURCES{$libkey}.absolute;
   }
 
