@@ -112,11 +112,11 @@ role GLib::Roles::Object {
                      });
   }
 
-  method new-object-obj (GObject $object) {
+  method new-object-obj (::?CLASS:U: GObject $object) {
     $object ?? self.bless( :$object ) !! Nil;
   }
 
-  method new-object-ptr (Int() $type) {
+  method new-object-ptr (::?CLASS:U: Int() $type) {
     my GType $t = $type;
 
     g_object_new($t, Str);
@@ -743,6 +743,19 @@ role GLib::Roles::Object {
   }
 
 }
+
+class GLib::Object does GLib::Roles::Object {
+
+  method new (GObject() $object, :$ref = True) {
+    return Nil unless $object;
+
+    my $o = self.bless( :$object );
+    $o.ref if $ref;
+    $o;
+  }
+
+}
+
 
 sub g_connect_notify (
   GObject $app,
