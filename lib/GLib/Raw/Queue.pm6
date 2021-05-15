@@ -51,7 +51,7 @@ sub g_queue_find_custom (
 
 sub g_queue_foreach (
   GQueue   $queue,
-  Pointer, # GFunc $func,
+           &func (gpointer, gpointer), # GFunc $func,
   gpointer $user_data
 )
   is native(glib)
