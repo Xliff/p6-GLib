@@ -12,6 +12,9 @@ class GLib::Queue {
     $!q = $queue if $queue
   }
 
+  method GLib::Raw::Structs::GQueue
+  { $!q }
+
   multi method new (GQueue $queue) {
     $queue ?? self.bless( :$queue ) !! Nil;
   }
@@ -72,6 +75,7 @@ class GLib::Queue {
   }
 
   method foreach (&func, gpointer $user_data) {
+
     g_queue_foreach($!q, &func, $user_data);
   }
 
