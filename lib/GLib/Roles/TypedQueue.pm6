@@ -1,6 +1,6 @@
 use v6.c;
 
-use GLib::Raw::Subs;
+use NativeCall;
 
 role GLib::Roles::TypedQueue[::T, $raw, ::O = Mu, :$ref = True] {
 
@@ -13,7 +13,7 @@ role GLib::Roles::TypedQueue[::T, $raw, ::O = Mu, :$ref = True] {
     self.foreach(-> $d is copy, $ud {
       my $non-object = False;
 
-      $d = cast(T, $d) unless T ~~ Int;
+      $d = nativecast(T, $d) unless T ~~ Int;
       given T {
         when Int       { $d = +$d; proceed  }
         when Int | Str { $non-object = True }
