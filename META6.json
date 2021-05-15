@@ -18,6 +18,7 @@
     "provides": {
       "GLib::Raw::Exceptions"         :  "lib/GLib/Raw/Exceptions.pm6"         ,
       "GLib::Raw::Pointers"           :  "lib/GLib/Raw/Pointers.pm6"           ,
+      "GLib::Roles::TypedQueue"       :  "lib/GLib/Roles/TypedQueue.pm6"       ,
       "GLib::Object::Supplyish"       :  "lib/GLib/Object/Supplyish.pm6"       ,
       "GLib::Raw::Exports"            :  "lib/GLib/Raw/Exports.pm6"            ,
       "GLib::Roles::Implementor"      :  "lib/GLib/Roles/Implementor.pm6"      ,
