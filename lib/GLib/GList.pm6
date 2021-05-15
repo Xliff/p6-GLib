@@ -148,11 +148,20 @@ class GLib::GList {
   #   @!nat;
   # }
 
-  method append (Pointer $data) {
+  multi method append (Pointer $data) {
     my $list = g_list_append($!list, $data);
 
     $!dirty = True;
     $!list = $list;
+  }
+  multi method append (GLib::GList:U: $list is copy, Pointer $data) {
+    $list = do if $list.^lookup('GList') -> $m {
+      $m($list)
+    } else {
+      $list = GList.new;
+    }
+
+    g_list_append($list, $data);
   }
 
   multi method concat (
@@ -306,11 +315,20 @@ class GLib::GList {
     g_list_position($!list, $llink);
   }
 
-  method prepend (Pointer $data) {
-    my $list = g_list_prepend($!list, $data);
+  multi method prepend (Pointer $data) {
+    my $list = GLib::GList.prepend($!list, $data);
 
     $!dirty = True;
     $!list = $list;
+  }
+  multi method prepend (GLib::GList:U: $list is copy, Pointer $data) {
+    $list = do if $list.^lookup('GList') -> $m {
+      $m($list)
+    } else {
+      $list = GList.new;
+    }
+
+    g_list_prepend($list, $data);
   }
 
   method remove (Pointer $data) {
