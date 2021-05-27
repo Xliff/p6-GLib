@@ -148,11 +148,23 @@ class GLib::GList {
   #   @!nat;
   # }
 
+  multi method append (@data) {
+    self.append($_) for @data;
+    self
+  }
+  multi method append ($data) {
+    samewith( toPointer($data) );
+  }
   multi method append (Pointer $data) {
-    my $list = g_list_append($!list, $data);
-
-    $!dirty = True;
-    $!list = $list;
+    # Insure works for newly created list with no contents!
+    if $!list.data {
+      g_list_append($!list, $data);
+      $!dirty = True;
+    } else {
+      $!list.data = $data;
+    }
+    # Allow chaining .append!
+    self
   }
   multi method append (GLib::GList:U: $list is copy, Pointer $data) {
     $list = do if $list.^lookup('GList') -> $m {
