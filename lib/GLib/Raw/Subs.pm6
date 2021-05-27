@@ -9,18 +9,21 @@ use GLib::Raw::Object;
 
 use GLib::Object::Supplyish;
 
+use GLib::Roles::Pointers;
+
 unit package GLib::Raw::Subs;
 
 # Cribbed from https://github.com/CurtTilmes/perl6-dbmysql/blob/master/lib/DB/MySQL/Native.pm6
-sub malloc         (size_t --> Pointer)                   is export is native { * }
-sub realloc        (Pointer, size_t --> Pointer)          is export is native { * }
-sub calloc         (size_t, size_t --> Pointer)           is export is native { * }
-sub memcpy         (Pointer, Pointer ,size_t --> Pointer) is export is native { * }
-sub memset         (Pointer, int32, size_t)               is export is native { * }
-sub dup2           (int32, int32 --> int32)               is export is native { * }
-sub isatty         (int32 --> int32)                      is export is native { * }
+sub malloc         (size_t --> Pointer)                    is export is native { * }
+sub realloc        (Pointer, size_t --> Pointer)           is export is native { * }
+sub calloc         (size_t, size_t --> Pointer)            is export is native { * }
+sub memcpy         (Pointer, Pointer, size_t --> Pointer)  is export is native { * }
+sub memcmp         (Pointer, Pointer, size_t --> int32)    is export is native { * }
+sub memset         (Pointer, int32, size_t)                is export is native { * }
+sub dup2           (int32, int32 --> int32)                is export is native { * }
+sub isatty         (int32 --> int32)                       is export is native { * }
 # Needed for minimal I18n
-sub setlocale      (int32, Str --> Str)                   is export is native { * }
+sub setlocale      (int32, Str --> Str)                    is export is native { * }
 
 sub native-open    (Str, int32, int32 $m = 0)
   is export
@@ -91,6 +94,12 @@ sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
 sub separate (Str() $s, Int() $p) is export {
   die '$p outside of string range!' unless $p ~~ 0 .. $s.chars;
   ( $s.substr(0, $p), $s.substr($p, *) )
+}
+
+sub createReturnArray (\T) is export {
+  my \at = T.REPR eq 'CStruct' ?? Pointer[T] !! T;
+  (my $a = CArray[at].new)[0] = at;
+  $a;
 }
 
 sub checkForType(\T, $v is copy) is export {
@@ -291,18 +300,16 @@ sub subarray ($a, $o) is export {
 
 sub toPointer (
   $value,
-  :$signed   = False,
-  :$double   = False,
-  :$direct   = False,
-  :$encoding = 'utf8',
+  :$signed   =  False,
+  :$double   =  False,
+  :$direct   =  False,
+  :$encoding =  'utf8',
   :$typed
 )
   is export
 {
-  $value = checkForType($typed, $value);
-
   # Properly handle non-Str Cool data.
-  my ($ov, $use-arr, \t, $v) = ($value, False);
+  my ($ov, $use-arr, \t, $v) = ( checkForType($typed, $value), False );
   if $ov ~~ Int && $direct {
     $v = Pointer.new($ov);
   } else {
@@ -324,7 +331,9 @@ sub toPointer (
       # Str
       default {
         $ov = ~$ov unless $ov ~~ Str;
-        $ov = pointer-to( $ov.encode($encoding) );
+        # Better to use CArray[uint8] as it is less volatile than Str;
+        my $ca = CArray[uint8].new( $ov.encode($encoding) );
+        $ov = pointer-to($ca);
       }
     }
     if $use-arr {
@@ -343,7 +352,10 @@ sub buildAccessors (\O) is export {
 	my $proxy = sub ($n, \attr) {
 		my $m = method :: is rw {
 			Proxy.new(
-				FETCH => -> $,    { attr.get_value(self)    },
+				FETCH => -> $,    { my $p = attr.get_value(self);
+                            ($p does GLib::Roles::Pointers)
+                              if $p ~~ (Pointer, CArray).any;
+                            $p },
 				STORE => -> $, \v { attr.set_value(self, v) }
 			);
 		}
