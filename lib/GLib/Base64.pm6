@@ -8,6 +8,7 @@ use GLib::Raw::Base64;
 use GLib::Roles::StaticClass;
 
 class GLib::Base64 {
+  also does GLib::Roles::StaticClass;
 
   multi method decode (Str() $text, :$all = False) {
     samewith($text, $, :$all);
