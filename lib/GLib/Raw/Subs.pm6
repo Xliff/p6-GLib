@@ -366,7 +366,7 @@ sub buildAccessors (\O) is export {
 	for O.^attributes.kv -> $k, \a {
 		my $full-name = a.name;
     my ($, $attr-name) = $full-name.&separate(2);
-		next unless a.readonly;
+		next if a.has_accessor;
 
 		print "  Adding { $attr-name } to { O.^name }..." if $DEBUG;
 		O.^add_method(
