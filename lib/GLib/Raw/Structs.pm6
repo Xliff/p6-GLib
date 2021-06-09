@@ -882,12 +882,12 @@ class GTestLogBuffer         is repr<CStruct> does GLib::Roles::Pointers is expo
   has GSList        $!msgs;
 }
 
-class GMutex                 is repr<CUnion>  does GLib::Roles::Pointers is export {
+class GMutex                 is repr<CStruct>  does GLib::Roles::Pointers is export {
   has gpointer      $!p;
   HAS guint         @!i is CArray;
 }
 
-class GNode                  is repr<CUnion>  does GLib::Roles::Pointers is export {
+class GNode                  is repr<CStruct>  does GLib::Roles::Pointers is export {
   has gpointer $!data;
   has GNode    $!next;
   has GNode    $!prev;
@@ -932,4 +932,8 @@ class GNode                  is repr<CUnion>  does GLib::Roles::Pointers is expo
   # Use in place of GNODE_IS_LEAF
   method is_leaf { $!children.defined.not }
 
+}
+
+class GWeakRef               is repr<CStruct>  does GLib::Roles::Pointers is export {
+  has Pointer $!priv;
 }
