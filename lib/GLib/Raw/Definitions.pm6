@@ -21,7 +21,7 @@ my constant forced = 168;
 constant glib         is export  = 'glib-2.0',v0;
 constant gobject      is export  = 'gobject-2.0',v0;
 
-sub resources-info {
+sub resources-info is export {
   my $ext = 'dll';
   my $os = $*DISTRO.is-win ?? 'windows' !! 'unix';
   if $os eq 'unix' {
