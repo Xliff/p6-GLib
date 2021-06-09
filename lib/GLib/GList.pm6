@@ -13,7 +13,6 @@ use GLib::Roles::PointerBasedList;
 # - Move ALL data related routines to a ListData parameterized role.
 # - Have raw_data method implemented in client classes that return the pointer
 #   attribute.
-
 class GLib::GList {
   also does GLib::Roles::PointerBasedList;
   #also does Positional;
@@ -398,4 +397,8 @@ sub returnGList ( $gl is copy, $glist, $raw, $T = Str, $O? ) is export {
   #die 'Cannot convert GList to Object array when no Object-type specified!'
   #  if $O =:= Nil;
   $gl.Array.map({ $O.new($_) });
+}
+
+sub returnGListObjects ( $gl, $T = Str, $O? ) is export {
+  returnGList($gl, False, False, $T, $O);
 }
