@@ -20,6 +20,9 @@ class GLib::MainLoop {
     >
   { $!ml }
 
+  multi method new (GMainLoop $mainloop) {
+    $mainloop ?? self.bless( :$mainloop ) !! Nil;
+  }
   multi method new (Int() $is_running = False) {
     samewith(GMainContext, $is_running);
   }
@@ -27,9 +30,10 @@ class GLib::MainLoop {
     GMainContext() $context,
     Int()          $is_running
   ) {
-    my gboolean $ir = $is_running;
+    my gboolean $ir       = $is_running;
+    my          $mainloop = g_main_loop_new($context, $ir);
 
-    self.bless( mainloop => g_main_loop_new($context, $ir) );
+    $mainloop ?? self.bless( :$mainloop ) !! Nil;
   }
 
   method get_context
