@@ -1,0 +1,2999 @@
+ === Method::Also === 
+Stage start      :   0.000
+Stage parse      :   2.536
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.005
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+Method::Also compile time: 3.21917363
+ === GLib::Object::Supplyish === 
+Stage start      :   0.000
+Stage parse      :   2.575
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Object::Supplyish compile time: 3.1926362
+ === GLib::Raw::Exceptions === 
+Stage start      :   0.000
+Stage parse      :   2.605
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.000
+Stage moar       :   0.000
+
+GLib::Raw::Exceptions compile time: 3.26826931
+ === GLib::Raw::Exports === 
+Stage start      :   0.000
+Stage parse      :   2.599
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Exports compile time: 3.35176525
+ === GLib::Roles::Implementor === 
+Stage start      :   0.000
+Stage parse      :   2.710
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.000
+Stage moar       :   0.000
+
+GLib::Roles::Implementor compile time: 3.34527718
+ === NativeHelpers::Blob === 
+Stage start      :   0.000
+Stage parse      :   2.806
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+NativeHelpers::Blob compile time: 3.51028557
+ === GLib::Raw::ReturnedValue === 
+Stage start      :   0.000
+Stage parse      :   2.193
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+
+GLib::Raw::ReturnedValue compile time: 2.8285146
+ === GLib::Roles::Pointers === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Pointers.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.297
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.004
+    Stage mast       :   0.013
+    Stage mbc        :   0.002
+Stage parse      :   4.474
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.000
+Stage moar       :   0.000
+
+GLib::Roles::Pointers compile time: 5.06988006
+ === GLib::Compat::Definitions === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Compat/Definitions.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.368
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.011
+    Stage mast       :   0.039
+    Stage mbc        :   0.003
+Stage parse      :   4.712
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Compat::Definitions compile time: 5.23672218
+ === GLib::Raw::Definitions === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Definitions.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.403
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.012
+    Stage mast       :   0.041
+    Stage mbc        :   0.004
+Stage parse      :   4.558
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Definitions compile time: 5.07803674
+ === GLib::Raw::Env === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Env.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.761
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.006
+    Stage mast       :   0.037
+    Stage mbc        :   0.009
+Stage parse      :   5.318
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Env compile time: 5.87264563
+ === GLib::Raw::Struct_Subs === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Struct_Subs.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.966
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.011
+    Stage mast       :   0.047
+    Stage mbc        :   0.015
+Stage parse      :   5.542
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Struct_Subs compile time: 6.09165235
+ === GLib::Raw::Sequence === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Sequence.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.427
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.091
+    Stage mbc        :   0.037
+Stage parse      :   6.353
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Sequence compile time: 6.93330355
+ === GLib::Raw::Enums === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Enums.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.142
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.056
+    Stage mast       :   0.123
+    Stage mbc        :   0.041
+Stage parse      :   7.008
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.004
+Stage mast       :   0.007
+Stage mbc        :   0.003
+Stage moar       :   0.000
+
+GLib::Raw::Enums compile time: 7.63275546
+ === GLib::Roles::TypeInstance === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/TypeInstance.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.109
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.005
+    Stage mast       :   0.019
+    Stage mbc        :   0.005
+Stage parse      :   4.431
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Roles::TypeInstance compile time: 4.97373261
+ === GLib::Raw::Object === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Object.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.331
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.010
+    Stage mast       :   0.031
+    Stage mbc        :   0.007
+Stage parse      :   4.620
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Object compile time: 5.13793971
+ === GLib::Raw::Subs === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Subs.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.951
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.086
+    Stage mast       :   0.214
+    Stage mbc        :   0.046
+Stage parse      :   6.626
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Subs compile time: 7.14032179
+ === GLib::Roles::TypedArray === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/TypedArray.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.510
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.005
+    Stage mast       :   0.014
+    Stage mbc        :   0.003
+Stage parse      :   5.156
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Roles::TypedArray compile time: 5.68688205
+ === GLib::Raw::ExtendedTypes === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/ExtendedTypes.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.078
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.014
+    Stage mast       :   0.056
+    Stage mbc        :   0.035
+Stage parse      :   5.645
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::ExtendedTypes compile time: 6.1793126
+ === GLib::Raw::Structs === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Structs.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.567
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.081
+    Stage mast       :   0.240
+    Stage mbc        :   0.020
+Stage parse      :   6.373
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Structs compile time: 6.93485542
+ === GLib::Raw::Types === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Types.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.891
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.001
+    Stage mast       :   0.017
+    Stage mbc        :   0.003
+Stage parse      :   5.864
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.010
+Stage mast       :   0.019
+Stage mbc        :   0.009
+Stage moar       :   0.000
+
+GLib::Raw::Types compile time: 6.52857574
+ === GLib::Raw::TypePlugin === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/TypePlugin.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.950
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.005
+    Stage mast       :   0.029
+    Stage mbc        :   0.004
+Stage parse      :   5.833
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::TypePlugin compile time: 6.58835917
+ === GLib::Raw::Thread === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Thread.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.303
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.050
+    Stage mast       :   0.307
+    Stage mbc        :   0.099
+Stage parse      :   7.862
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Thread compile time: 8.48364954
+ === GLib::Raw::Test === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Test.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.192
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.098
+    Stage mast       :   0.235
+    Stage mbc        :   0.085
+Stage parse      :   8.582
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Test compile time: 9.20830234
+ === GLib::Raw::Type === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Type.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.297
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.105
+    Stage mast       :   0.347
+    Stage mbc        :   0.157
+Stage parse      :   9.911
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.005
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Type compile time: 10.547479
+ === GLib::Roles::ListData === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/ListData.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.359
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.054
+    Stage mast       :   0.101
+    Stage mbc        :   0.027
+Stage parse      :   8.879
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.003
+Stage moar       :   0.000
+
+GLib::Roles::ListData compile time: 10.16917837
+ === GLib::Roles::References === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/References.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.427
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.017
+    Stage mast       :   0.049
+    Stage mbc        :   0.018
+Stage parse      :   8.882
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Roles::References compile time: 10.26932685
+ === GLib::Roles::StaticClass === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/StaticClass.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.905
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.015
+    Stage mast       :   0.023
+    Stage mbc        :   0.009
+Stage parse      :   9.195
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Roles::StaticClass compile time: 10.49752781
+ === GLib::Raw::Utils === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Utils.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.335
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.018
+    Stage mast       :   0.054
+    Stage mbc        :   0.032
+Stage parse      :   9.683
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Utils compile time: 11.0305421
+ === GLib::Roles::PointerBasedList === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/PointerBasedList.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.006
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.041
+    Stage mast       :   0.039
+    Stage mbc        :   0.018
+Stage parse      :  10.047
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Roles::PointerBasedList compile time: 11.41454541
+ === GLib::Sequence === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Sequence.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.676
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.081
+    Stage mast       :   0.236
+    Stage mbc        :   0.019
+Stage parse      :  10.406
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Sequence compile time: 11.75049318
+ === GLib::Roles::TypedBuffer === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/TypedBuffer.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.347
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.036
+    Stage mast       :   0.083
+    Stage mbc        :   0.014
+Stage parse      :  10.725
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Roles::TypedBuffer compile time: 12.08674202
+ === GLib::Raw::VariantType === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/VariantType.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.848
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.028
+    Stage mast       :   0.085
+    Stage mbc        :   0.033
+Stage parse      :  11.282
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::VariantType compile time: 12.49408282
+ === GLib::Raw::Unicode === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Unicode.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.360
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.144
+    Stage mast       :   0.183
+    Stage mbc        :   0.059
+Stage parse      :  12.167
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Unicode compile time: 13.37491302
+ === GLib::Raw::Value === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Value.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.501
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.045
+    Stage mast       :   0.153
+    Stage mbc        :   0.174
+Stage parse      :  12.562
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Value compile time: 13.89131725
+ === GLib::Raw::Variant === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Variant.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.349
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.078
+    Stage mast       :   0.276
+    Stage mbc        :   0.144
+Stage parse      :  13.359
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Variant compile time: 14.69970893
+ === GLib::UUID === 
+Stage start      :   0.000
+
+    precomp lib/GLib/UUID.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.591
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.016
+    Stage mast       :   0.044
+    Stage mbc        :   0.012
+Stage parse      :   9.064
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::UUID compile time: 10.03187123
+ === GLib::Utils === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Utils.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.382
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.047
+    Stage mast       :   0.100
+    Stage mbc        :   0.011
+Stage parse      :  10.808
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Utils compile time: 11.5238426
+ === GLib::Unicode === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Unicode.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.291
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.296
+    Stage mast       :   0.493
+    Stage mbc        :   0.019
+Stage parse      :  11.611
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.004
+Stage moar       :   0.000
+
+GLib::Unicode compile time: 12.36497818
+ === GLib::Mutex === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Mutex.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.744
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.046
+    Stage mbc        :   0.017
+Stage parse      :   9.840
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Mutex compile time: 11.18380518
+ === GLib::Object::IsType === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/IsType.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.492
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.009
+    Stage mast       :   0.027
+    Stage mbc        :   0.012
+Stage parse      :  10.286
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Object::IsType compile time: 11.78651674
+ === GLib::VariantType === 
+Stage start      :   0.000
+
+    precomp lib/GLib/VariantType.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.496
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.063
+    Stage mast       :   0.238
+    Stage mbc        :   0.060
+Stage parse      :  11.129
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::VariantType compile time: 12.3438502
+ === GLib::Class::Structs === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Class/Structs.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.461
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.040
+    Stage mast       :   0.126
+    Stage mbc        :   0.017
+Stage parse      :  11.112
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Class::Structs compile time: 12.32652954
+ === GLib::Object::Raw::Closure === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/Closure.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.539
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.027
+    Stage mast       :   0.065
+    Stage mbc        :   0.104
+Stage parse      :  11.015
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Object::Raw::Closure compile time: 12.49648691
+ === GLib::Value === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Value.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.613
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.102
+    Stage mast       :   0.325
+    Stage mbc        :   0.024
+Stage parse      :  12.670
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Value compile time: 13.47049446
+ === GLib::VariantIter === 
+Stage start      :   0.000
+
+    precomp lib/GLib/VariantIter.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.367
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.042
+    Stage mbc        :   0.016
+Stage parse      :  11.446
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::VariantIter compile time: 12.69866778
+ === GLib::Cond === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Cond.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.196
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.054
+    Stage mast       :   0.053
+    Stage mbc        :   0.020
+Stage parse      :  11.861
+Stage syntaxcheck:   0.000
+Stage ast        :   0.004
+Stage optimize   :   0.001
+Stage mast       :   0.008
+Stage mbc        :   0.010
+Stage moar       :   0.000
+
+GLib::Cond compile time: 13.09336883
+ === GLib::Object::Raw::Binding === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/Binding.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.101
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.043
+    Stage mast       :   0.106
+    Stage mbc        :   0.075
+Stage parse      :  12.008
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Object::Raw::Binding compile time: 13.5069389
+ === GLib::Env === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Env.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.565
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.037
+    Stage mast       :   0.107
+    Stage mbc        :   0.016
+Stage parse      :  13.223
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Env compile time: 14.5755072
+ === GLib::Object::Raw::ParamSpec === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/ParamSpec.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.292
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.258
+    Stage mast       :   0.538
+    Stage mbc        :   0.157
+Stage parse      :  13.328
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.007
+Stage mbc        :   0.003
+Stage moar       :   0.000
+
+GLib::Object::Raw::ParamSpec compile time: 14.85835802
+ === GLib::Raw::Base64 === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Base64.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.962
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.056
+    Stage mast       :   0.090
+    Stage mbc        :   0.019
+Stage parse      :  15.570
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.008
+Stage mbc        :   0.013
+Stage moar       :   0.000
+
+GLib::Raw::Base64 compile time: 17.5844301
+ === GLib::Raw::Error === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Error.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.246
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.018
+    Stage mast       :   0.071
+    Stage mbc        :   0.020
+Stage parse      :  16.116
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.004
+Stage mast       :   0.003
+Stage mbc        :   0.004
+Stage moar       :   0.000
+
+GLib::Raw::Error compile time: 18.4902413
+ === GLib::Object::Raw::TypeModule === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Raw/TypeModule.pm6
+    Stage start      :   0.000
+    Stage parse      :   9.126
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.055
+    Stage mast       :   0.108
+    Stage mbc        :   0.031
+Stage parse      :  16.924
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.007
+Stage mbc        :   0.005
+Stage moar       :   0.000
+
+GLib::Object::Raw::TypeModule compile time: 18.70118093
+ === GLib::Object::Type === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Type.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.057
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.176
+    Stage mast       :   0.315
+    Stage mbc        :   0.017
+Stage parse      :  16.784
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Object::Type compile time: 18.85185331
+ === GLib::Raw::HMAC === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/HMAC.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.321
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.100
+    Stage mast       :   0.181
+    Stage mbc        :   0.069
+Stage parse      :  16.216
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.005
+Stage mast       :   0.010
+Stage mbc        :   0.005
+Stage moar       :   0.000
+
+GLib::Raw::HMAC compile time: 18.1826099
+ === GLib::Raw::Checksum === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Checksum.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.419
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.032
+    Stage mast       :   0.330
+    Stage mbc        :   0.045
+Stage parse      :  16.780
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Checksum compile time: 18.98378931
+ === GLib::Raw::Bytes === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Bytes.pm6
+    Stage start      :   0.000
+    Stage parse      :   9.221
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.067
+    Stage mast       :   0.109
+    Stage mbc        :   0.038
+Stage parse      :  17.267
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.007
+Stage mbc        :   0.005
+Stage moar       :   0.000
+
+GLib::Raw::Bytes compile time: 19.3468887
+ === GLib::Raw::Convert === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Convert.pm6
+    Stage start      :   0.000
+    Stage parse      :   9.226
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.090
+    Stage mast       :   0.147
+    Stage mbc        :   0.043
+Stage parse      :  17.166
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.007
+Stage mbc        :   0.012
+Stage moar       :   0.000
+
+GLib::Raw::Convert compile time: 19.30583219
+ === GLib::Raw::AsyncQueue === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/AsyncQueue.pm6
+    Stage start      :   0.000
+    Stage parse      :   9.629
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.043
+    Stage mast       :   0.158
+    Stage mbc        :   0.241
+Stage parse      :  17.807
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::AsyncQueue compile time: 19.74062285
+ === GLib::Raw::Hostname === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Hostname.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.491
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.029
+    Stage mast       :   0.108
+    Stage mbc        :   0.027
+Stage parse      :  16.273
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.013
+Stage mbc        :   0.018
+Stage moar       :   0.000
+
+GLib::Raw::Hostname compile time: 18.30637005
+ === GLib::Raw::GSList === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/GSList.pm6
+    Stage start      :   0.002
+    Stage parse      :  10.075
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.090
+    Stage mast       :   0.298
+    Stage mbc        :   0.112
+Stage parse      :  18.176
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.002
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::GSList compile time: 20.34436147
+ === GLib::Raw::GList === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/GList.pm6
+    Stage start      :   0.000
+    Stage parse      :  10.226
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.075
+    Stage mast       :   0.264
+    Stage mbc        :   0.137
+Stage parse      :  18.561
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::GList compile time: 20.59328154
+ === GLib::Raw::FileUtils === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/FileUtils.pm6
+    Stage start      :   0.000
+    Stage parse      :  10.807
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.155
+    Stage mast       :   0.375
+    Stage mbc        :   0.189
+Stage parse      :  19.173
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.004
+Stage mast       :   0.007
+Stage mbc        :   0.010
+Stage moar       :   0.000
+
+GLib::Raw::FileUtils compile time: 21.27193165
+ === GLib::Raw::BookmarkFile === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/BookmarkFile.pm6
+    Stage start      :   0.000
+    Stage parse      :  11.340
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.151
+    Stage mast       :   0.500
+    Stage mbc        :   0.187
+Stage parse      :  19.642
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.006
+Stage mast       :   0.008
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::BookmarkFile compile time: 21.8287145
+ === GLib::Raw::Arrays === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Arrays.pm6
+    Stage start      :   0.000
+    Stage parse      :  11.980
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.203
+    Stage mast       :   0.544
+    Stage mbc        :   0.127
+Stage parse      :  20.712
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.002
+Stage mast       :   0.018
+Stage mbc        :   0.009
+Stage moar       :   0.000
+
+GLib::Raw::Arrays compile time: 22.50545306
+ === GLib::Raw::Date === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Date.pm6
+    Stage start      :   0.000
+    Stage parse      :  11.827
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.091
+    Stage mast       :   0.371
+    Stage mbc        :   0.106
+Stage parse      :  20.386
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.014
+Stage moar       :   0.000
+
+GLib::Raw::Date compile time: 22.55235789
+ === GLib::Raw::DateTime === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/DateTime.pm6
+    Stage start      :   0.000
+    Stage parse      :  11.707
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.127
+    Stage mast       :   0.398
+    Stage mbc        :   0.157
+Stage parse      :  20.388
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.002
+Stage mast       :   0.005
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::DateTime compile time: 22.6651177
+ === GLib::Raw::Array === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Array.pm6
+    Stage start      :   0.000
+    Stage parse      :  12.174
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.110
+    Stage mast       :   0.426
+    Stage mbc        :   0.144
+Stage parse      :  20.755
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Array compile time: 22.86777907
+ === GLib::Raw::HashTable === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/HashTable.pm6
+    Stage start      :   0.002
+    Stage parse      :  11.824
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.103
+    Stage mast       :   0.274
+    Stage mbc        :   0.137
+Stage parse      :  19.867
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::HashTable compile time: 21.9047142
+ === GLib::Raw::IOChannel === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/IOChannel.pm6
+    Stage start      :   0.002
+    Stage parse      :  11.254
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.142
+    Stage mast       :   0.343
+    Stage mbc        :   0.112
+Stage parse      :  20.001
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.008
+Stage mbc        :   0.012
+Stage moar       :   0.000
+
+GLib::Raw::IOChannel compile time: 22.0519411
+ === GLib::Raw::MappedFile === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/MappedFile.pm6
+    Stage start      :   0.002
+    Stage parse      :   7.383
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.013
+    Stage mast       :   0.113
+    Stage mbc        :   0.027
+Stage parse      :  14.937
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::MappedFile compile time: 16.9698918
+ === GLib::Raw::Module === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Module.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.935
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.039
+    Stage mast       :   0.158
+    Stage mbc        :   0.024
+Stage parse      :  15.669
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Module compile time: 17.5277929
+ === GLib::Raw::Markup === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Markup.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.592
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.059
+    Stage mast       :   0.093
+    Stage mbc        :   0.039
+Stage parse      :  16.061
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.009
+Stage mast       :   0.007
+Stage mbc        :   0.010
+Stage moar       :   0.000
+
+GLib::Raw::Markup compile time: 18.0086669
+ === GLib::Raw::Memory === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Memory.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.834
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.040
+    Stage mast       :   0.133
+    Stage mbc        :   0.038
+Stage parse      :  16.436
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Memory compile time: 18.2872397
+ === GLib::Raw::Log === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Log.pm6
+    Stage start      :   0.000
+    Stage parse      :   9.028
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.064
+    Stage mast       :   0.147
+    Stage mbc        :   0.049
+Stage parse      :  16.690
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.008
+Stage mbc        :   0.009
+Stage moar       :   0.000
+
+GLib::Raw::Log compile time: 18.75169587
+ === GLib::Raw::Quarks === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Quarks.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.763
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.039
+    Stage mast       :   0.039
+    Stage mbc        :   0.012
+Stage parse      :  14.929
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.006
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Quarks compile time: 16.70298317
+ === GLib::Raw::Pattern === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Pattern.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.130
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.039
+    Stage mast       :   0.078
+    Stage mbc        :   0.026
+Stage parse      :  15.604
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Pattern compile time: 17.8214246
+ === GLib::Raw::Node === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Node.pm6
+    Stage start      :   0.000
+    Stage parse      :   9.342
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.061
+    Stage mast       :   0.240
+    Stage mbc        :   0.060
+Stage parse      :  17.061
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Node compile time: 18.8833229
+ === GLib::Raw::Quark === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Quark.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.995
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.019
+    Stage mast       :   0.053
+    Stage mbc        :   0.018
+Stage parse      :  15.645
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Quark compile time: 17.67633254
+ === GLib::Raw::KeyFile === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/KeyFile.pm6
+    Stage start      :   0.000
+    Stage parse      :  11.652
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.141
+    Stage mast       :   0.482
+    Stage mbc        :   0.116
+Stage parse      :  20.040
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::KeyFile compile time: 22.22857011
+ === GLib::Raw::Rand === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Rand.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.620
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.052
+    Stage mast       :   0.103
+    Stage mbc        :   0.068
+Stage parse      :  16.399
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Rand compile time: 18.3639859
+ === GLib::Raw::Queue === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Queue.pm6
+    Stage start      :   0.000
+    Stage parse      :   9.455
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.089
+    Stage mast       :   0.263
+    Stage mbc        :   0.075
+Stage parse      :  17.218
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.005
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Queue compile time: 19.24197581
+ === GLib::Raw::Slice === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Slice.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.228
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.027
+    Stage mast       :   0.088
+    Stage mbc        :   0.054
+Stage parse      :  15.634
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Slice compile time: 17.38322611
+ === GLib::Raw::Spawn === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Spawn.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.963
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.070
+    Stage mast       :   0.102
+    Stage mbc        :   0.050
+Stage parse      :  15.223
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Spawn compile time: 17.28078362
+ === GLib::Raw::Scanner === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Scanner.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.600
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.049
+    Stage mast       :   0.140
+    Stage mbc        :   0.105
+Stage parse      :  15.919
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Scanner compile time: 17.82171955
+ === GLib::Raw::Regex === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Regex.pm6
+    Stage start      :   0.002
+    Stage parse      :   9.553
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.077
+    Stage mast       :   0.182
+    Stage mbc        :   0.057
+Stage parse      :  17.104
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Regex compile time: 19.27301658
+ === GLib::Raw::Signal === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Signal.pm6
+    Stage start      :   0.000
+    Stage parse      :   9.028
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.077
+    Stage mast       :   0.164
+    Stage mbc        :   0.041
+Stage parse      :  16.442
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Signal compile time: 18.63784678
+ === GLib::Raw::ThreadPool === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/ThreadPool.pm6
+    Stage start      :   0.001
+    Stage parse      :   7.483
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.025
+    Stage mast       :   0.077
+    Stage mbc        :   0.036
+Stage parse      :  14.530
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.016
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::ThreadPool compile time: 16.61043482
+ === GLib::Raw::String === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/String.pm6
+    Stage start      :   0.000
+    Stage parse      :   8.985
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.064
+    Stage mast       :   0.190
+    Stage mbc        :   0.082
+Stage parse      :  16.481
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::String compile time: 18.26502298
+ === GLib::Raw::Main === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Main.pm6
+    Stage start      :   0.000
+    Stage parse      :  12.825
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.157
+    Stage mast       :   0.370
+    Stage mbc        :   0.221
+Stage parse      :  21.573
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.002
+Stage mast       :   0.005
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Main compile time: 23.55528371
+ === GLib::Raw::TimeZone === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/TimeZone.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.676
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.027
+    Stage mast       :   0.087
+    Stage mbc        :   0.029
+Stage parse      :  10.232
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::TimeZone compile time: 12.10721075
+ === GLib::Roles::Bindable === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Bindable.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.219
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.024
+    Stage mast       :   0.064
+    Stage mbc        :   0.019
+Stage parse      :   9.663
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Roles::Bindable compile time: 11.36583322
+ === GLib::Roles::Properties === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Properties.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.726
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.162
+    Stage mast       :   0.208
+    Stage mbc        :   0.009
+Stage parse      :   9.841
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.003
+Stage moar       :   0.000
+
+GLib::Roles::Properties compile time: 11.4728038
+ === GLib::Raw::Timer === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Timer.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.187
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.089
+    Stage mast       :   0.042
+    Stage mbc        :   0.022
+Stage parse      :  10.346
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Raw::Timer compile time: 12.085344
+ === GLib::Raw::Tree === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Raw/Tree.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.586
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.031
+    Stage mast       :   0.144
+    Stage mbc        :   0.036
+Stage parse      :  10.935
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Raw::Tree compile time: 12.75880653
+ === GLib::ThreadPool === 
+Stage start      :   0.000
+
+    precomp lib/GLib/ThreadPool.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.039
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.060
+    Stage mast       :   0.079
+    Stage mbc        :   0.013
+Stage parse      :  10.472
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.008
+Stage mbc        :   0.025
+Stage moar       :   0.000
+
+GLib::ThreadPool compile time: 11.70773709
+ === GLib::Scanner === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Scanner.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.962
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.079
+    Stage mast       :   0.136
+    Stage mbc        :   0.031
+Stage parse      :  11.283
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Scanner compile time: 12.36965683
+ === GLib::String === 
+Stage start      :   0.000
+
+    precomp lib/GLib/String.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.079
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.091
+    Stage mast       :   0.238
+    Stage mbc        :   0.024
+Stage parse      :  11.217
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::String compile time: 12.4802368
+ === GLib::Slice === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Slice.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.473
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.154
+    Stage mast       :   0.093
+    Stage mbc        :   0.010
+Stage parse      :  11.559
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Slice compile time: 12.8748649
+ === GLib::Signal === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Signal.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.731
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.146
+    Stage mast       :   0.199
+    Stage mbc        :   0.011
+Stage parse      :  12.101
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Signal compile time: 13.23308698
+ === GLib::Spawn === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Spawn.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.910
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.069
+    Stage mast       :   0.320
+    Stage mbc        :   0.011
+Stage parse      :  12.926
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Spawn compile time: 14.17813709
+ === GLib::Roles::Signals::Generic === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Signals/Generic.pm6
+    Stage start      :   0.000
+    Stage parse      :  10.360
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.306
+    Stage mast       :   0.490
+    Stage mbc        :   0.187
+Stage parse      :  17.064
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Roles::Signals::Generic compile time: 18.36296474
+ === GLib::TimeZone === 
+Stage start      :   0.000
+
+    precomp lib/GLib/TimeZone.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.173
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.049
+    Stage mast       :   0.063
+    Stage mbc        :   0.015
+Stage parse      :  11.051
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::TimeZone compile time: 12.12560614
+ === GLib::Timer === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Timer.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.793
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.045
+    Stage mast       :   0.079
+    Stage mbc        :   0.029
+Stage parse      :  12.082
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Timer compile time: 12.86858086
+ === GLib::AsyncQueue === 
+Stage start      :   0.000
+
+    precomp lib/GLib/AsyncQueue.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.625
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.036
+    Stage mast       :   0.083
+    Stage mbc        :   0.021
+Stage parse      :  11.559
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.006
+Stage moar       :   0.000
+
+GLib::AsyncQueue compile time: 13.31796019
+ === GLib::Tree === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Tree.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.050
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.067
+    Stage mast       :   0.147
+    Stage mbc        :   0.013
+Stage parse      :  12.016
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.009
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Tree compile time: 13.54284211
+ === GLib::BookmarkFile === 
+Stage start      :   0.000
+
+    precomp lib/GLib/BookmarkFile.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.806
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.106
+    Stage mast       :   0.420
+    Stage mbc        :   0.016
+Stage parse      :  11.886
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::BookmarkFile compile time: 13.70553651
+ === GLib::Base64 === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Base64.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.908
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.039
+    Stage mast       :   0.242
+    Stage mbc        :   0.010
+Stage parse      :  12.376
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.004
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Base64 compile time: 13.993587
+ === GLib::Checksum === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Checksum.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.921
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.048
+    Stage mast       :   0.128
+    Stage mbc        :   0.018
+Stage parse      :  12.327
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Checksum compile time: 14.22543258
+ === GLib::Bytes === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Bytes.pm6
+    Stage start      :   0.000
+    Stage parse      :   5.891
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.066
+    Stage mast       :   0.069
+    Stage mbc        :   0.010
+Stage parse      :  12.466
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.003
+Stage moar       :   0.000
+
+GLib::Bytes compile time: 14.26301901
+ === GLib::Array === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Array.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.577
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.068
+    Stage mast       :   0.194
+    Stage mbc        :   0.034
+Stage parse      :  12.360
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Array compile time: 14.37030502
+ === GLib::Convert === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Convert.pm6
+    Stage start      :   0.001
+    Stage parse      :   6.367
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.091
+    Stage mast       :   0.269
+    Stage mbc        :   0.014
+Stage parse      :  12.852
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Convert compile time: 14.51336218
+ === GLib::Date === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Date.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.544
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.060
+    Stage mast       :   0.190
+    Stage mbc        :   0.009
+Stage parse      :  12.969
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Date compile time: 14.71635891
+ === GLib::Variant === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Variant.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.668
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.080
+    Stage mast       :   0.205
+    Stage mbc        :   0.048
+Stage parse      :  13.871
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Variant compile time: 15.5752845
+ === GLib::Error === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Error.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.240
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.015
+    Stage mast       :   0.034
+    Stage mbc        :   0.005
+Stage parse      :   7.693
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Error compile time: 9.26365005
+ === GLib::HMAC === 
+Stage start      :   0.000
+
+    precomp lib/GLib/HMAC.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.355
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.058
+    Stage mbc        :   0.009
+Stage parse      :   8.070
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::HMAC compile time: 9.5933082
+ === GLib::GSList === 
+Stage start      :   0.000
+
+    precomp lib/GLib/GSList.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.203
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.054
+    Stage mast       :   0.133
+    Stage mbc        :   0.011
+Stage parse      :   8.009
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::GSList compile time: 9.64619674
+ === GLib::GList === 
+Stage start      :   0.000
+
+    precomp lib/GLib/GList.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.743
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.043
+    Stage mast       :   0.084
+    Stage mbc        :   0.065
+Stage parse      :   8.431
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::GList compile time: 9.95376998
+ === GLib::FileUtils === 
+Stage start      :   0.000
+
+    precomp lib/GLib/FileUtils.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.619
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.054
+    Stage mast       :   0.201
+    Stage mbc        :   0.007
+Stage parse      :   8.507
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.003
+Stage moar       :   0.000
+
+GLib::FileUtils compile time: 10.33704346
+ === GLib::DateTime === 
+Stage start      :   0.000
+
+    precomp lib/GLib/DateTime.pm6
+    Stage start      :   0.000
+    Stage parse      :   4.184
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.062
+    Stage mast       :   0.178
+    Stage mbc        :   0.094
+Stage parse      :   9.394
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.007
+Stage mbc        :   0.005
+Stage moar       :   0.000
+
+GLib::DateTime compile time: 10.76735565
+ === GLib::Hostname === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Hostname.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.161
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.023
+    Stage mast       :   0.086
+    Stage mbc        :   0.011
+Stage parse      :  12.090
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Hostname compile time: 13.62819174
+ === GLib::MainContext === 
+Stage start      :   0.000
+
+    precomp lib/GLib/MainContext.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.246
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.072
+    Stage mast       :   0.138
+    Stage mbc        :   0.015
+Stage parse      :  13.005
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.006
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::MainContext compile time: 14.47574042
+ === GLib::MainLoop === 
+Stage start      :   0.000
+
+    precomp lib/GLib/MainLoop.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.998
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.053
+    Stage mast       :   0.110
+    Stage mbc        :   0.016
+Stage parse      :  13.492
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::MainLoop compile time: 15.065079
+ === GLib::Pattern === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Pattern.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.430
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.027
+    Stage mast       :   0.068
+    Stage mbc        :   0.024
+Stage parse      :  13.324
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Pattern compile time: 15.13802854
+ === GLib::HashTable === 
+Stage start      :   0.000
+
+    precomp lib/GLib/HashTable.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.093
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.102
+    Stage mast       :   0.264
+    Stage mbc        :   0.023
+Stage parse      :  13.918
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::HashTable compile time: 15.37290086
+ === GLib::Quark === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Quark.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.489
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.024
+    Stage mast       :   0.161
+    Stage mbc        :   0.010
+Stage parse      :  13.528
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Quark compile time: 15.34587366
+ === GLib::Markup === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Markup.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.836
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.038
+    Stage mast       :   0.110
+    Stage mbc        :   0.021
+Stage parse      :  13.810
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Markup compile time: 15.40951347
+ === GLib::Module === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Module.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.789
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.030
+    Stage mast       :   0.071
+    Stage mbc        :   0.015
+Stage parse      :  13.797
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Module compile time: 15.57447706
+ === GLib::Rand === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Rand.pm6
+    Stage start      :   0.000
+    Stage parse      :   6.938
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.042
+    Stage mast       :   0.154
+    Stage mbc        :   0.011
+Stage parse      :  13.699
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Rand compile time: 15.6066345
+ === GLib::PtrArray === 
+Stage start      :   0.000
+
+    precomp lib/GLib/PtrArray.pm6
+    Stage start      :   0.002
+    Stage parse      :   7.137
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.094
+    Stage mast       :   0.144
+    Stage mbc        :   0.014
+Stage parse      :  13.978
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::PtrArray compile time: 15.7273318
+ === GLib::Node === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Node.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.202
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.087
+    Stage mast       :   0.167
+    Stage mbc        :   0.016
+Stage parse      :  14.053
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Node compile time: 15.75577011
+ === GLib::MappedFile === 
+Stage start      :   0.000
+
+    precomp lib/GLib/MappedFile.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.139
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.038
+    Stage mast       :   0.057
+    Stage mbc        :   0.012
+Stage parse      :  14.243
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::MappedFile compile time: 15.8545869
+ === GLib::Queue === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Queue.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.114
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.085
+    Stage mast       :   0.280
+    Stage mbc        :   0.011
+Stage parse      :  14.079
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.003
+Stage mbc        :   0.002
+Stage moar       :   0.000
+
+GLib::Queue compile time: 15.92954035
+ === GLib::Log === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Log.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.662
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.059
+    Stage mast       :   0.144
+    Stage mbc        :   0.007
+Stage parse      :  14.415
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Log compile time: 16.08639642
+ === GLib::Memory === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Memory.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.107
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.018
+    Stage mast       :   0.058
+    Stage mbc        :   0.005
+Stage parse      :  14.509
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Memory compile time: 16.22124877
+ === GLib::MatchInfo === 
+Stage start      :   0.000
+
+    precomp lib/GLib/MatchInfo.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.051
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.031
+    Stage mast       :   0.054
+    Stage mbc        :   0.081
+Stage parse      :  14.621
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::MatchInfo compile time: 16.35809843
+ === GLib::KeyFile === 
+Stage start      :   0.000
+
+    precomp lib/GLib/KeyFile.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.889
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.175
+    Stage mast       :   0.280
+    Stage mbc        :   0.011
+Stage parse      :  14.883
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::KeyFile compile time: 16.43411302
+ === GLib::Object::ParamSpec === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/ParamSpec.pm6
+    Stage start      :   0.000
+    Stage parse      :   7.754
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.075
+    Stage mast       :   0.237
+    Stage mbc        :   0.020
+Stage parse      :  15.022
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Object::ParamSpec compile time: 16.83865037
+ === GLib::Source === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Source.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.609
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.030
+    Stage mast       :   0.082
+    Stage mbc        :   0.008
+Stage parse      :   5.363
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Source compile time: 6.06741427
+ === GLib::Test === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Test.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.947
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.054
+    Stage mast       :   0.220
+    Stage mbc        :   0.017
+Stage parse      :   5.955
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.002
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Test compile time: 6.65806746
+ === GLib::Regex === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Regex.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.453
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.094
+    Stage mast       :   0.170
+    Stage mbc        :   0.012
+Stage parse      :   6.375
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Regex compile time: 7.0168745
+ === GLib::ByteArray === 
+Stage start      :   0.000
+
+    precomp lib/GLib/ByteArray.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.768
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.020
+    Stage mast       :   0.031
+    Stage mbc        :   0.007
+Stage parse      :   5.588
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::ByteArray compile time: 6.27183283
+ === GLib::URI === 
+Stage start      :   0.000
+
+    precomp lib/GLib/URI.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.854
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.017
+    Stage mast       :   0.032
+    Stage mbc        :   0.012
+Stage parse      :   5.627
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::URI compile time: 6.2924966
+ === GLib::Timeout === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Timeout.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.729
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.030
+    Stage mast       :   0.037
+    Stage mbc        :   0.004
+Stage parse      :   5.657
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.002
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Timeout compile time: 6.367072
+ === GLib::Class::Object === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Class/Object.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.311
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.019
+    Stage mast       :   0.058
+    Stage mbc        :   0.010
+Stage parse      :   6.277
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Class::Object compile time: 6.97748582
+ === GLib::Class::TypeModule === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Class/TypeModule.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.474
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.005
+    Stage mast       :   0.029
+    Stage mbc        :   0.003
+Stage parse      :   5.046
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Class::TypeModule compile time: 5.6582502
+ === GLib::IOChannel === 
+Stage start      :   0.000
+
+    precomp lib/GLib/IOChannel.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.010
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.057
+    Stage mast       :   0.142
+    Stage mbc        :   0.009
+Stage parse      :   5.761
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::IOChannel compile time: 6.33811405
+ === GLib::Roles::Object === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/Object.pm6
+    Stage start      :   0.000
+    Stage parse      :   3.756
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.085
+    Stage mast       :   0.198
+    Stage mbc        :   0.019
+Stage parse      :   6.591
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Roles::Object compile time: 7.2098957
+ === GLib::Roles::TypePlugin === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Roles/TypePlugin.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.584
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.013
+    Stage mast       :   0.029
+    Stage mbc        :   0.008
+Stage parse      :   5.338
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.012
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Roles::TypePlugin compile time: 5.94009165
+ === GLib::Object::Closure === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Closure.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.617
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.022
+    Stage mast       :   0.064
+    Stage mbc        :   0.005
+Stage parse      :   5.379
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.011
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Object::Closure compile time: 5.96953139
+ === GLib::VariantDict === 
+Stage start      :   0.000
+
+    precomp lib/GLib/VariantDict.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.740
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.013
+    Stage mast       :   0.035
+    Stage mbc        :   0.008
+Stage parse      :   5.470
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.011
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::VariantDict compile time: 6.07477914
+ === GLib::Object::Binding === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/Binding.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.862
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.017
+    Stage mast       :   0.034
+    Stage mbc        :   0.005
+Stage parse      :   5.772
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.001
+Stage mast       :   0.002
+Stage mbc        :   0.012
+Stage moar       :   0.000
+
+GLib::Object::Binding compile time: 6.36234829
+ === GLib::Object::TypeModule === 
+Stage start      :   0.000
+
+    precomp lib/GLib/Object/TypeModule.pm6
+    Stage start      :   0.000
+    Stage parse      :   2.245
+    Stage syntaxcheck:   0.000
+    Stage ast        :   0.000
+    Stage optimize   :   0.017
+    Stage mast       :   0.036
+    Stage mbc        :   0.003
+Stage parse      :   4.620
+Stage syntaxcheck:   0.000
+Stage ast        :   0.000
+Stage optimize   :   0.000
+Stage mast       :   0.001
+Stage mbc        :   0.001
+Stage moar       :   0.000
+
+GLib::Object::TypeModule compile time: 5.21958349
+
+Total compile time: 202.62068403s
