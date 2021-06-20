@@ -15,7 +15,7 @@ our $ERROR-THROWS     is export;
 our $DEBUG            is export;
 
 # Forced compile count
-my constant forced = 168;
+my constant forced = 170;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -75,8 +75,8 @@ constant gpointer                       is export := Pointer;
 constant gsize                          is export := uint64;
 constant gssize                         is export := int64;
 constant guchar                         is export := Str;
-constant gshort                         is export := int8;
-constant gushort                        is export := uint8;
+constant gshort                         is export := int16;
+constant gushort                        is export := uint16;
 constant guint                          is export := uint32;
 constant guint8                         is export := uint8;
 constant guint16                        is export := uint16;
