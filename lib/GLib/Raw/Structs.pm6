@@ -20,6 +20,27 @@ our $ERROR-REPLACEMENT is export = sub { %ERROR{$*PID} };
 
 class GValue                is repr<CStruct> does GLib::Roles::Pointers is export { ... }
 
+# CArray replacement for sized classes
+class SizedCArray is CArray {
+  has        $!size;
+  has CArray $!native handles *.grep({ ( .name // '' ) ne 'elems' });
+
+  method size is rw {
+    Proxy.new:
+      FETCH => -> $     { $!size },
+      STORE => -> $, \s { $!size = s }
+  }
+
+  method elems { $!size.defined ?? $!size !! nextsame }
+
+  submethod BUILD ( :$!native, :$!size ) { }
+
+  method new ($native, $size) {
+    self.bless( :$native, :$size );
+  }
+
+}
+
 # Structs
 
 # Opaque to code?
@@ -31,6 +52,8 @@ class GTypeInterface        is repr<CStruct> does GLib::Roles::Pointers is expor
 class GArray                is repr<CStruct> does GLib::Roles::Pointers is export {
   has Pointer $.data;
   has uint32  $.len;
+
+  method p { +$!data }
 }
 
 class GByteArray            is repr<CStruct> does GLib::Roles::Pointers is export {
