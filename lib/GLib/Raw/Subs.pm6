@@ -75,6 +75,19 @@ sub crlf ($s) is export {
   $s.subst("\n", "\r\n", :g);
 }
 
+proto sub intRange (|) is export
+{ * }
+
+multi sub intRange ($bits, $signed = False) {
+  intRange(:$bits, :$signed);
+}
+multi sub intRange (:$bits, :$signed = False) {
+  $signed ??
+    2 ** $bits *-1 .. 2 ** $bits -1
+    !!
+    0 .. 2 ** $bits
+}
+
 # cw: Coerces the value of $a to a value within $r.
 sub clamp($a, Range() $r) is export {
   max( $r.min, min($a, $r.max) )
@@ -102,14 +115,44 @@ sub createReturnArray (\T) is export {
   $a;
 }
 
-sub checkForType(\T, $v is copy) is export {
-  if T !=:= Nil {
-    if $v.^lookup(T.^name) -> $m {
-      $v = $m($v);
+sub resolveNativeType (\T) is export {
+  say "Resolving { T.^name } to its Raku equivalent...";
+  do given T {
+    when num32 | num64     { Num }
+
+    when int8  | uint8  |
+         int16 | uint16 |
+         int32 | uint32 |
+         int64 | uint64
+                           { Int }
+
+    when str               { Str }
+
+    default                {
+      given T.REPR {
+        when 'CArray'                { CArray }
+        when 'CStruct' | 'CPointer'  { T }
+      }
     }
-    die "Value does not support { .^name } variables. Will only accept {
-         T.^name }!"
-    unless $v ~~ T;
+  }
+}
+
+sub checkForType(\T, $v is copy) is export {
+  if T !=== Nil {
+    if T !~~ $v.WHAT {
+      my $resolved-name = resolveNativeType(T).^name;
+      $resolved-name ~= "[{ T.of.^name }]" if $resolved-name eq 'CArray';
+      if $v.^lookup($resolved-name) -> $m {
+        say "Using coercer at { T.^name }.$resolved-name...";
+        $v = $m($v);
+      }
+      # Note reversal of usual comparison. This is due to the fact that
+      # nativecall types must be compatible with the value, not the
+      # other way around. In a;; other cases, T and $v should have
+      # the same type value.
+      die "Value does not support { $v.^name } variables. Will only accept {
+        T.^name }!" unless T ~~ $v.WHAT;
+    }
   }
   $v;
 }
@@ -298,17 +341,38 @@ sub subarray ($a, $o) is export {
   nativecast(CArray[$a.of], $b.add($o) );
 }
 
+sub nativeSized (\T, *%options) is export {
+  given T {
+    when int8  | uint8                   { 1 }
+    when int16 | uint16                  { 2 }
+    when int32 | uint32                  { 4 }
+    when int64 | uint64                  { 8 }
+    when num32                           { 4 }
+    when num64                           { 8 }
+    when Str                             { $*KERNEL.bits div 8 }
+    when Int   | Num                     { %options<double> ?? 32 !! 64 }
+    when .REPR eq <CStruct CPointer>.any { $*KERNEL.bits div 8 }
+
+    default {
+      # cw: Really need to start typing these!!
+      die "Do not have type sizing rules for { T.^name }!";
+    }
+  }
+}
+
 sub toPointer (
   $value,
-  :$signed   =  False,
-  :$double   =  False,
-  :$direct   =  False,
-  :$encoding =  'utf8',
+  :$signed   = False,
+  :$double   = False,
+  :$direct   = False,
+  :$encoding = 'utf8',
   :$typed
 )
   is export
 {
   # Properly handle non-Str Cool data.
+  return $value if $value ~~ Pointer;
+  return ($typed !=== Nil ?? $typed !! Nil) unless $value.defined;
   my ($ov, $use-arr, \t, $v) = ( checkForType($typed, $value), False );
   if $ov ~~ Int && $direct {
     $v = Pointer.new($ov);
