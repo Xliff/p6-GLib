@@ -21,14 +21,20 @@ our $ERROR-REPLACEMENT is export = sub { %ERROR{$*PID} };
 class GValue                is repr<CStruct> does GLib::Roles::Pointers is export { ... }
 
 # CArray replacement for sized classes
-class SizedCArray is CArray {
-  has        $!size;
-  has CArray $!native handles *.grep({ ( .name // '' ) ne 'elems' });
+class SizedCArray is CArray is export does Positional {
+  has               $!size;
+
+  # Delegate everything but 'elems'
+  has CArray[uint8] $!native handles *.grep({ ( .name // '' ) ne 'elems' });
 
   method size is rw {
     Proxy.new:
       FETCH => -> $     { $!size },
       STORE => -> $, \s { $!size = s }
+  }
+
+  method AT-POS (\k) {
+    $!native[k];
   }
 
   method elems { $!size.defined ?? $!size !! nextsame }
