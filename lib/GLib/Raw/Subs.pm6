@@ -331,10 +331,11 @@ sub propReturnObject ($oo, $raw, \P, $C? is raw, :$ref = False) is export {
   return Nil unless $o;
 
   $o = cast(P, $o);
-  return $o if $raw || $C =:= Nil;
+  return $o if $raw || $C === Nil;
 
   $C.new($o, :$ref);
 }
+our &returnObject is export := &propReturnObject;
 
 sub subarray ($a, $o) is export {
   my $b = nativecast(Pointer[$a.of], $a);
@@ -439,6 +440,12 @@ sub buildAccessors (\O) is export {
 		);
 		say 'done' if $DEBUG;
 	}
+}
+
+sub nullTerminatedBuffer (CArray[uint8] $data) is export {
+  my $t-idx = 0;
+  repeat { } while $data[$t-idx++];
+  CArray[uint8].new( $data[^$t-idx] );
 }
 
 sub g_destroy_none(Pointer)
