@@ -48,6 +48,7 @@ class ProvidesData does Associative {
 
 # To be rolled into GLib::Roles::Object at some point!
 role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
+
   # GObject, GParamSpec, gpointer
   method connect-notify (
     $obj,
@@ -68,7 +69,7 @@ role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ $s.Supply, $obj, $hid ];
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     $sig[0].tap(&handler) with &handler;
     self.setSignal($signal, $sig)[0];
@@ -331,10 +332,68 @@ role GLib::Roles::Object {
   method GLib::Raw::Object::GObject
   { $!o }
 
-  method equals (GObject() $b) { +self.p == +$b.p }
+  method equals (GObject() $b)
+    is also<sameAs>
+  { +self.p == +$b.p }
 
   # Remove when Method::Also is fixed!
   method GObject ( :object(:$obj) ) { $obj ?? self !! $!o }
+
+  method signal-data {
+    state (%signal-data, %signal-object);
+
+    unless %signal-data{ self.WHERE } {
+      %signal-data{ self.WHERE } = (
+        notify => sub ($detail?) {
+          my $sig-name = 'notify';
+          $sig-name ~= "::{$detail}" if $detail;
+
+          self.connect-notify($!o, $sig-name);
+        }
+      ).Hash;
+
+      say "\%signal-data creation [CONTROL]: { %signal-data{ self.WHERE }<notify>.gist }";
+    }
+
+    unless %signal-object{ self.WHERE } {
+      say '[Object]: Creating...';
+      state @keys = %signal-data{ self.WHERE }.keys unless @keys;
+      my $self = self;
+
+      %signal-object{ self.WHERE } = (class :: does Associative {
+
+        method !getData (\k) {
+          %signal-data{ $self.WHERE }{k} ?? %signal-data{ $self.WHERE }{k}
+                                         !! Nil;
+        }
+
+        method AT-KEY (\k) {
+          self!getData(k).clone;
+        }
+
+        method EXISTS-KEY (\k) {
+          self!getData(k).defined;
+        }
+
+        method keys {
+          @keys;
+        }
+
+      }).new;
+
+    }
+
+    say "SO [Object]: { %signal-object{ self.WHERE }.gist }";
+    say "SO [control]: { %signal-object{ self.WHERE }<notify>.gist }";
+
+    %signal-object{ self.WHERE };
+  }
+
+  method signal-names {
+    state @signal-names = 'notify'.Array;
+
+    @signal-names;
+  }
 
   method notify ($detail?) {
     my $sig-name = 'notify';
