@@ -52,6 +52,38 @@ role GLib::Roles::Signals::Generic {
     %!signals{$name};
   }
 
+  method Signals {
+    my %lex-signals := %!signals;
+    my $self        = self;
+
+    state $anony-hash = (class :: does Associative {
+      method AT-KEY (\k) {
+        return Nil unless k eq $self.signal-data.keys.any;
+
+        # cw: $self.signal-data{k} looks to be Nil!
+        say "SELF: { $self }";
+        say "CONTROL: { $self.signal-data<notify>.gist }";
+        say "VALUE: { $self.signal-data{k}.gist }";
+
+        %lex-signals{k} = $self.signal-data{k}() unless %lex-signals{k};
+
+        Proxy.new:
+          FETCH => -> $,    { %lex-signals{k}        },
+          STORE => -> $, \c { %lex-signals{k}.tap(c) };
+      }
+
+      method EXISTS-KEY (\k) {
+        %lex-signals{k}:exists;
+      }
+
+      method keys {
+        $self.signal-data.keys
+      }
+    }).new;
+
+    $anony-hash;
+  }
+
   multi method connect (
     $obj,
     $signal,
@@ -590,7 +622,7 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal}[0];
   }
 
-    # GstAppSrc, guint64, gpointer --> gboolean
+  # GstAppSrc, guint64, gpointer --> gboolean
   method connect-long-ruint32 (
     $obj,
     $signal,
@@ -629,12 +661,12 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal} //= do {
       my \𝒮 = Supplier.new;
       $hid = g-connect-error($obj, $signal,
-        -> $, $, $ud {
+        -> $, $e, $ud {
           CATCH {
             default { 𝒮.note($_) }
           }
 
-          𝒮.emit( [self, $, $ud ] );
+          𝒮.emit( [self, $e, $ud ] );
         },
         Pointer, 0
       );
