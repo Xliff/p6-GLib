@@ -78,12 +78,18 @@ sub crlf ($s) is export {
 proto sub intRange (|) is export
 { * }
 
-multi sub intRange ($bits, $signed = False) {
+multi sub intRange (\T) {
+  my $name = T.^name;
+  (my $bits = $name) ~~ s/.+? (\d+) $/$0/;
+  $bits .= Int;
+  samewith( :$bits, signed => $name.starts-with('u').not )
+}
+multi sub intRange ($bits where *.defined, $signed = False) {
   intRange(:$bits, :$signed);
 }
 multi sub intRange (:$bits, :$signed = False) {
   $signed ??
-    2 ** $bits *-1 .. 2 ** $bits -1
+    -1 * 2 ** ($bits - 1) .. 2 ** ($bits - 1) - 1
     !!
     0 .. 2 ** $bits
 }
@@ -442,10 +448,11 @@ sub buildAccessors (\O) is export {
 	}
 }
 
+# cw: Still some concern over the this....
 sub nullTerminatedBuffer (CArray[uint8] $data) is export {
   my $t-idx = 0;
   repeat { } while $data[$t-idx++];
-  CArray[uint8].new( $data[^$t-idx] );
+  CArray[uint8].new( |$data[^$t-idx], 0 );
 }
 
 sub g_destroy_none(Pointer)
