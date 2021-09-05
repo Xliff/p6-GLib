@@ -109,6 +109,15 @@ class GError                is repr<CStruct> does GLib::Roles::Pointers is expor
         ::?CLASS.^attributes[* - 1].set_value(self, $val)
       };
   }
+
+  method gist {
+    my $domain-extra = %DOMAINS{ self.domain }:exists
+      ?? " [{ %DOMAINS{ self.domain }( self.code ) }] " !! '';
+
+    self.^name ~ ".new(domain => { self.domain }, " ~
+    "code => { self.code }{ $domain-extra })";
+  }
+
 }
 
 class GList                 is repr<CStruct> does GLib::Roles::Pointers is export {
