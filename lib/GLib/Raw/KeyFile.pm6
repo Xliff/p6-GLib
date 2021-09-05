@@ -18,9 +18,9 @@ sub g_key_file_free (GKeyFile $key_file)
 { * }
 
 sub g_key_file_get_boolean (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -29,21 +29,21 @@ sub g_key_file_get_boolean (
 { * }
 
 sub g_key_file_get_boolean_list (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  gsize $length,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
+  gsize                   $length      is rw,
   CArray[Pointer[GError]] $error
 )
-  returns uint32
+  returns CArray[uint32]
   is native(glib)
   is export
 { * }
 
 sub g_key_file_get_comment (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -52,9 +52,9 @@ sub g_key_file_get_comment (
 { * }
 
 sub g_key_file_get_double (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns gdouble
@@ -63,13 +63,13 @@ sub g_key_file_get_double (
 { * }
 
 sub g_key_file_get_double_list (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  gsize $length,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
+  gsize                   $length      is rw,
   CArray[Pointer[GError]] $error
 )
-  returns gdouble
+  returns CArray[gdouble]
   is native(glib)
   is export
 { * }
@@ -81,9 +81,9 @@ sub g_key_file_get_groups (GKeyFile $key_file, gsize $length)
 { * }
 
 sub g_key_file_get_int64 (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns gint64
@@ -92,9 +92,9 @@ sub g_key_file_get_int64 (
 { * }
 
 sub g_key_file_get_integer (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns gint
@@ -103,21 +103,21 @@ sub g_key_file_get_integer (
 { * }
 
 sub g_key_file_get_integer_list (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  gsize $length,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
+  gsize                   $length      is rw,
   CArray[Pointer[GError]] $error
 )
-  returns gint
+  returns CArray[gint]
   is native(glib)
   is export
 { * }
 
 sub g_key_file_get_keys (
-  GKeyFile $key_file,
-  Str $group_name,
-  gsize $length,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  gsize                   $length      is rw,
   CArray[Pointer[GError]] $error
 )
   returns CArray[Str]
@@ -127,9 +127,9 @@ sub g_key_file_get_keys (
 
 sub g_key_file_get_locale_for_key (
   GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  Str $locale
+  Str      $group_name,
+  Str      $key,
+  Str      $locale
 )
   returns Str
   is native(glib)
@@ -137,10 +137,10 @@ sub g_key_file_get_locale_for_key (
 { * }
 
 sub g_key_file_get_locale_string (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  Str $locale,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
+  Str                     $locale,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -149,11 +149,11 @@ sub g_key_file_get_locale_string (
 { * }
 
 sub g_key_file_get_locale_string_list (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  Str $locale,
-  gsize $length,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
+  Str                     $locale,
+  gsize                   $length      is rw,
   CArray[Pointer[GError]] $error
 )
   returns CArray[Str]
@@ -168,9 +168,9 @@ sub g_key_file_get_start_group (GKeyFile $key_file)
 { * }
 
 sub g_key_file_get_string (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -179,10 +179,10 @@ sub g_key_file_get_string (
 { * }
 
 sub g_key_file_get_string_list (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  gsize $length,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
+  gsize                   $length      is rw,
   CArray[Pointer[GError]] $error
 )
   returns CArray[Str]
@@ -191,9 +191,9 @@ sub g_key_file_get_string_list (
 { * }
 
 sub g_key_file_get_uint64 (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns guint64
@@ -202,9 +202,9 @@ sub g_key_file_get_uint64 (
 { * }
 
 sub g_key_file_get_value (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns Str
@@ -219,9 +219,9 @@ sub g_key_file_has_group (GKeyFile $key_file, Str $group_name)
 { * }
 
 sub g_key_file_has_key (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -230,9 +230,9 @@ sub g_key_file_has_key (
 { * }
 
 sub g_key_file_load_from_bytes (
-  GKeyFile $key_file,
-  GBytes $bytes,
-  uint32 $flags,                # GKeyFileFlags $flags,
+  GKeyFile                $key_file,
+  GBytes                  $bytes,
+  uint32                  $flags,                # GKeyFileFlags $flags,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -241,10 +241,10 @@ sub g_key_file_load_from_bytes (
 { * }
 
 sub g_key_file_load_from_data (
-  GKeyFile $key_file,
-  Str $data,
-  gsize $length,
-  uint32 $flags,                # GKeyFileFlags $flags,
+  GKeyFile                $key_file,
+  Str                     $data,
+  gsize                   $length,
+  uint32                  $flags,                # GKeyFileFlags $flags,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -253,10 +253,10 @@ sub g_key_file_load_from_data (
 { * }
 
 sub g_key_file_load_from_data_dirs (
-  GKeyFile $key_file,
-  Str $file,
-  Str $full_path,
-  uint32 $flags,                # GKeyFileFlags $flags,
+  GKeyFile                $key_file,
+  Str                     $file,
+  Str                     $full_path,
+  uint32                  $flags,                # GKeyFileFlags $flags,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -265,11 +265,11 @@ sub g_key_file_load_from_data_dirs (
 { * }
 
 sub g_key_file_load_from_dirs (
-  GKeyFile $key_file,
-  Str $file,
-  Str $search_dirs,
-  Str $full_path,
-  uint32 $flags,                # GKeyFileFlags $flags,
+  GKeyFile                $key_file,
+  Str                     $file,
+  Str                     $search_dirs,
+  Str                     $full_path,
+  uint32                  $flags,                # GKeyFileFlags $flags,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -278,9 +278,9 @@ sub g_key_file_load_from_dirs (
 { * }
 
 sub g_key_file_load_from_file (
-  GKeyFile $key_file,
-  Str $file,
-  uint32 $flags,                # GKeyFileFlags $flags,
+  GKeyFile                $key_file,
+  Str                     $file,
+  uint32                  $flags,                # GKeyFileFlags $flags,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -301,9 +301,9 @@ sub g_key_file_ref (GKeyFile $key_file)
 { * }
 
 sub g_key_file_remove_comment (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -312,8 +312,8 @@ sub g_key_file_remove_comment (
 { * }
 
 sub g_key_file_remove_group (
-  GKeyFile $key_file,
-  Str $group_name,
+  GKeyFile                $key_file,
+  Str                     $group_name,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -322,9 +322,9 @@ sub g_key_file_remove_group (
 { * }
 
 sub g_key_file_remove_key (
-  GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  GKeyFile                $key_file,
+  Str                     $group_name,
+  Str                     $key,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -333,8 +333,8 @@ sub g_key_file_remove_key (
 { * }
 
 sub g_key_file_save_to_file (
-  GKeyFile $key_file,
-  Str $filename,
+  GKeyFile                $key_file,
+  Str                     $filename,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -344,8 +344,8 @@ sub g_key_file_save_to_file (
 
 sub g_key_file_set_boolean (
   GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
+  Str      $group_name,
+  Str      $key,
   gboolean $value
 )
   is native(glib)
@@ -366,9 +366,9 @@ sub g_key_file_set_comment (
 
 sub g_key_file_set_double (
   GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  gdouble $value
+  Str      $group_name,
+  Str      $key,
+  gdouble  $value
 )
   is native(glib)
   is export
@@ -376,9 +376,9 @@ sub g_key_file_set_double (
 
 sub g_key_file_set_int64 (
   GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  gint64 $value
+  Str      $group_name,
+  Str      $key,
+  gint64   $value
 )
   is native(glib)
   is export
@@ -386,9 +386,9 @@ sub g_key_file_set_int64 (
 
 sub g_key_file_set_integer (
   GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  gint $value
+  Str      $group_name,
+  Str      $key,
+  gint     $value
 )
   is native(glib)
   is export
@@ -401,10 +401,10 @@ sub g_key_file_set_list_separator (GKeyFile $key_file, Str $separator)
 
 sub g_key_file_set_locale_string (
   GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  Str $locale,
-  Str $string
+  Str      $group_name,
+  Str      $key,
+  Str      $locale,
+  Str      $string
 )
   is native(glib)
   is export
@@ -412,9 +412,9 @@ sub g_key_file_set_locale_string (
 
 sub g_key_file_set_string (
   GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  Str $string
+  Str      $group_name,
+  Str      $key,
+  Str      $string
 )
   is native(glib)
   is export
@@ -422,9 +422,9 @@ sub g_key_file_set_string (
 
 sub g_key_file_set_uint64 (
   GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  guint64 $value
+  Str      $group_name,
+  Str      $key,
+  guint64  $value
 )
   is native(glib)
   is export
@@ -432,17 +432,17 @@ sub g_key_file_set_uint64 (
 
 sub g_key_file_set_value (
   GKeyFile $key_file,
-  Str $group_name,
-  Str $key,
-  Str $value
+  Str      $group_name,
+  Str      $key,
+  Str      $value
 )
   is native(glib)
   is export
 { * }
 
 sub g_key_file_to_data (
-  GKeyFile $key_file,
-  gsize $length,
+  GKeyFile                $key_file,
+  gsize                   $length    is rw,
   CArray[Pointer[GError]] $error
 )
   returns Str
