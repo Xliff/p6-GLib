@@ -155,6 +155,17 @@ our enum GIOStatusEnum is export <
   G_IO_STATUS_AGAIN
 >;
 
+constant GKeyFileError      is export := guint;
+our enum GKeyFileErrorEnum  is export <
+  G_KEY_FILE_ERROR_UNKNOWN_ENCODING
+  G_KEY_FILE_ERROR_PARSE
+  G_KEY_FILE_ERROR_NOT_FOUND
+  G_KEY_FILE_ERROR_KEY_NOT_FOUND
+  G_KEY_FILE_ERROR_GROUP_NOT_FOUND
+  G_KEY_FILE_ERROR_INVALID_VALUE
+>;
+
+
 constant GKeyFileFlags      is export := guint;
 our enum GKeyFileFlagsEnum  is export (
   G_KEY_FILE_NONE              => 0,
@@ -1009,8 +1020,12 @@ sub getEnumValueByNick(\T, Str() $nick) is export {
   ::(T)( %cache{n}{$nick} )
 }
 
+our %DOMAINS is export = (
+  51 => GKeyFileErrorEnum
+);
+
 INIT {
   CATCH { .message.say; .backtrace.concise.say }
-  
+
   $g-param-spec-types = get_paramspec_types;
 }
