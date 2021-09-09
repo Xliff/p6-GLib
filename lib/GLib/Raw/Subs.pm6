@@ -212,11 +212,11 @@ multi sub CArrayToArray(CArray $ca, Int(Cool) $len) is export {
   @a;
 }
 
-sub get_flags($t, $s, $j = ', ') is export {
-  $t.enums
-    .map({ $s +& .value ?? .key !! '' })
-    .grep(* ne '')
-    .join($j);
+sub getFlags($t, $s) is export {
+  $t.pairs
+    .grep({ $s +& .value })
+    .map( *.key )
+    .Set
 }
 
 # GLib-level
@@ -456,6 +456,7 @@ sub nullTerminatedBuffer (CArray[uint8] $data) is export {
 }
 
 sub g_destroy_none(Pointer)
+  is native(glib)
   is export
 { * }
 
