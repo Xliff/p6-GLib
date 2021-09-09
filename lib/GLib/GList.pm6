@@ -386,7 +386,16 @@ class GLib::GList {
 
 }
 
-sub returnGList ( $gl is copy, $glist, $raw, $T = Str, $O? ) is export {
+sub returnGList (
+  $gl     is copy,
+  $glist,
+  $raw,
+  $T      =  Str,
+  $O?,
+  :$seq   =  True
+)
+  is export
+{
   return Nil unless $gl;
   return $gl if     $glist && $raw;
 
@@ -396,9 +405,12 @@ sub returnGList ( $gl is copy, $glist, $raw, $T = Str, $O? ) is export {
   return $gl.Array if $raw || $O === Any;
   #die 'Cannot convert GList to Object array when no Object-type specified!'
   #  if $O =:= Nil;
-  $gl.Array.map({ $O.new($_) });
+
+  my $list = $gl.Array.map({ $O.new($_) });
+  return $list if $seq;
+  $list.Array;
 }
 
-sub returnGListObjects ( $gl, $T = Str, $O? ) is export {
-  returnGList($gl, False, False, $T, $O);
+sub returnGListObjects ( $gl, $T = Str, $O?, :$seq = True ) is export {
+  returnGList($gl, False, False, $T, $O, :$seq);
 }
