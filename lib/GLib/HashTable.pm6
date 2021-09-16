@@ -227,6 +227,15 @@ class GLib::HashTable does Associative {
   # }
   # # STATIC METHODS -- end
 
+  # cw: Provided for role Associative. It is best not to alias get_keys()
+  method keys {
+    self.get_keys
+  }
+
+  method elems {
+    self.keys.elems;
+  }
+
   method get_keys (:$raw = False, :$glist = False, :$type = Str, :$o)
     is also<get-keys>
   {
@@ -623,7 +632,7 @@ class GLib::HashTableIter {
       double     => $val-double,
       signed     => $val-signed
     ) if $val-type !=== Nil;
-    
+
     ($key, $val);
   }
   multi method next (
