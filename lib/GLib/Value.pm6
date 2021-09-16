@@ -70,7 +70,7 @@ class GLib::Value {
     }
   }
 
-  method gtypeFromType (GLib::Value:U: \T) {
+  method gtypeFromType (GLib::Value:U: \T) is also<gtypeFromEnum> {
     die 'The parameter to gtypeFromType must be a type object!' if T.defined;
 
     do given T {
