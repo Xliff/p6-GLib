@@ -1,6 +1,7 @@
 use v6.c;
 
 use NativeCall;
+use NativeHelpers::Blob;
 
 use GLib::Raw::Types;
 use GLib::Raw::HashTable;
@@ -11,6 +12,8 @@ INIT {
   say qq:to/S/ unless %*ENV<P6_BUILDING_GTK>.so;
 »»»»»»
 » Please note that the objects in { $?FILE } are classed as use-at-your-own-risk!
+» Accessing an object created from C should be usable, but creating objects of
+» this type, via Raku, may behave erratically.
 »»»»»»
 S
 
@@ -19,23 +22,24 @@ S
 # Oy-ya-mama! The issues with this class. Let me start on the fact that it's
 # all POINTER BASED. This is easy for C, but not so easy for Perl6 given
 # the differences in typing system.. So let's try and determine scope.
-#  - This object is to handle keys of all primative types. (Str, Num, Int)
-#    - Int and Num types will be converted to the native equivalent and passed
-#      via CArray[::T][0]
+#  - This object will handle keys of native types (Int, Str, Num, CStruct, CPointer)
+#    - These will be handled via a nativecast to Pointer
 #  - This object is to handle values of all primative types. (Str, Num, Int)
 #    - Int and Num types will be converted to the native equivalent and passed
 #      via CArray[::T][0]
-#  - This object will handle keys of native types (REPR eq <CStruct CPointer>.any
-#    - These will be handled via a nativecast to Pointer
-#  - This object will handle values of native types (REPR eq <CStruct CPointer>.any
 #    - By extension, this means that this object will also handle all GObject derivatives
-#    - These will be handled via a nativecast to Pointer
+#       - These will be handled via a nativecast to Pointer
 
-class GLib::HashTable {
+class GLib::HashTable::String { ... }
+
+class GLib::HashTable does Associative {
   has GHashTable $!h is implementor handles<p>;
 
-  submethod BUILD (:$table) {
-    $!h = $table;
+  has $!type;
+  has &!hash_func;
+
+  submethod BUILD (:$hash-table, :$!type) {
+    $!h = $hash-table;
   }
 
   submethod DESTROY {
@@ -46,17 +50,38 @@ class GLib::HashTable {
   { $!h }
 
   # Really, the only thing that's needed.
-  # Look into the diff between %table and *%table.
-  multi method new(%table) {
-    my $o = GLib::HashTable.new(&g_str_hash, &g_str_equal);
-    $o.insert($_, %table{$_}) for %table.keys;
+  # Look into the diff between %tabe and *%table.
+  multi method new (
+    %table,
+    :$key-encoding = 'utf8',
+    :$key-double   = True,
+    :$key-signed   = False,
+    :$val-encoding = 'utf8',
+    :$val-double   = True,
+    :$val-signed   = False
+  ) {
+    my $o = GLib::HashTable::String.new(&g_str_hash, &g_str_equal);
+    for %table.keys {
+      $o.insert(
+        $_,
+        %table{$_},
+        :$key-encoding,
+        :$key-double,
+        :$key-signed,
+        :$val-encoding,
+        :$val-double,
+        :$val-signed,
+      )
+    }
     $o;
   }
 
-  multi method new (GHashTable $table) {
-    my $o = self.bless(:$table);
-    $o.upref;
+  multi method new (GHashTable $hash-table, :$ref = True) {
+    my $o = self.bless( :$hash-table );
+    $o.ref if $ref;
+    $o;
   }
+
   # COPIED FROM THE DOC PAGES IN FULL, FOR PROPER REFERENCE.
   #
   # Creates a new GHashTable with a reference count of 1.
@@ -74,15 +99,18 @@ class GLib::HashTable {
   # key_equal_func is called with the key from the hash table as its first
   # parameter, and the user-provided key to check against as its second.
   multi method new (
-    # These parameters WILL NOT WORK
+    # These parameters WILL NOT WORK -- (2 years later): Huh? Why not?
     &hash_func,
     &key_equal_func
   ) {
-    g_hash_table_new(&hash_func, &key_equal_func);
+    my $hash-table = g_hash_table_new(&hash_func, &key_equal_func);
+
+    $hash-table ?? self.bless( :$hash-table ) !! Nil;
   }
 
   method new_full (
     # THESE PARAMETERS WILL NOT WORK. See above.
+    # (2 years later): Again... why not?
     &hash_func,
     &key_equal_func,
     GDestroyNotify $key_destroy_func   = Pointer,
@@ -96,12 +124,37 @@ class GLib::HashTable {
     );
   }
 
-  method add ($key) {
-    g_hash_table_add($!h, $key);
+  method add (
+    $key       is copy,
+    :$encoding =  'utf8',
+    :$double   =  True,
+    :$signed   =  False
+  ) {
+    g_hash_table_add(
+      $!h,
+      toPointer($key, :$encoding, :$double, :$signed)
+    );
   }
 
-  method contains ($key) {
-    g_hash_table_contains($!h, $key);
+  method contains (
+    $key       is copy,
+    :$encoding =  'utf8',
+    :$double   =  True,
+    :$signed   =  False,
+    :$typed    =  Str
+  ) {
+    say "H: { $!h }";
+    say ".contains K: { $key }";
+
+    # cw: Broken, again. We need to grab the key type at object creation
+    #     time as the key routines DEPEND on it, and up til now, we've
+    #     been depending on Str semantics, rather than generic-value
+    #     semantics.
+
+    #$key = toPointer($key, :$encoding, :$double, :$signed, :$typed);
+    #say "after cast (Str): { $key }";
+
+    so g_hash_table_contains($!h, $key);
   }
 
   method destroy {
@@ -124,216 +177,393 @@ class GLib::HashTable {
     g_hash_table_foreach_steal($!h, &func, $user_data);
   }
 
-  # STATIC METHODS -- start
-  method g_direct_equal (GLib::HashTable:U: $v1, $v2) {
-    g_direct_equal($v1, $v2);
-  }
+  # # STATIC METHODS -- start
+  # method g_direct_equal (GLib::HashTable:U: $v1, $v2) {
+  #   g_direct_equal($v1, $v2);
+  # }
+  #
+  # method g_direct_hash (GLib::HashTable:U: Pointer $dh) {
+  #   g_direct_hash($dh);
+  # }
+  #
+  # method g_double_equal (GLib::HashTable:U: $v1, $v2) {
+  #   g_double_equal($v1, $v2);
+  # }
+  #
+  # method g_double_hash (GLib::HashTable:U: CArray[num64] $d) {
+  #   g_double_hash($d);
+  # }
+  #
+  # method g_int64_equal (GLib::HashTable:U: $v1, $v2) {
+  #   g_int64_equal($v1, $v2);
+  # }
+  #
+  # method g_int64_hash (GLib::HashTable:U: CArray[int64] $i) {
+  #   g_int64_hash($i);
+  # }
+  #
+  # method g_int_equal (GLib::HashTable:U: $i1, $i2) {
+  #   g_int_equal($i1, $i2);
+  # }
+  #
+  # method g_int_hash (GLib::HashTable:U: CArray[int32] $i) {
+  #   g_int_hash($i);
+  # }
+  #
+  # method g_str_equal (GLib::HashTable:U: Str $s1, Str $s2) {
+  #   g_str_equal($s1, $s2);
+  # }
+  #
+  # method g_str_hash (GLib::HashTable:U: Str $s) {
+  #   g_str_hash($s);
+  # }
+  # # STATIC METHODS -- end
 
-  method g_direct_hash (GLib::HashTable:U: Pointer $dh) {
-    g_direct_hash($dh);
-  }
+  method get_keys (:$raw = False, :$glist = False, :$type = Str, :$o) {
+    my $kl = g_hash_table_get_keys($!h);
 
-  method g_double_equal (GLib::HashTable:U: $v1, $v2) {
-    g_double_equal($v1, $v2);
-  }
-
-  method g_double_hash (GLib::HashTable:U: CArray[num64] $d) {
-    g_double_hash($d);
-  }
-
-  method g_int64_equal (GLib::HashTable:U: $v1, $v2) {
-    g_int64_equal($v1, $v2);
-  }
-
-  method g_int64_hash (GLib::HashTable:U: CArray[int64] $i) {
-    g_int64_hash($i);
-  }
-
-  method g_int_equal (GLib::HashTable:U: $i1, $i2) {
-    g_int_equal($i1, $i2);
-  }
-
-  method g_int_hash (GLib::HashTable:U: CArray[int32] $i) {
-    g_int_hash($i);
-  }
-
-  method g_str_equal (GLib::HashTable:U: Str $s1, Str $s2) {
-    g_str_equal($s1, $s2);
-  }
-
-  method g_str_hash (GLib::HashTable:U: Str $s) {
-    g_str_hash($s);
-  }
-  # STATIC METHODS -- end
-
-  method get_keys {
-    g_hash_table_get_keys($!h);
+    returnGList($kl, :$raw, :$glist, :$type, :$o)
   }
 
   # Keys can be of various types, so no easy way to do this. Will have to
   # consider the various options: Str, int32, int64, double, Pointer
-  method get_keys_as_array (Int() $length is rw) {
+
+  proto method get_keys_as_array (|)
+  { * }
+
+  multi method get_keys_as_array (:$type = Str, :$object) {
+    samewith($, :$type, :$object);
+  }
+  multi method get_keys_as_array ($length is rw, :$type = Str, :$object) {
     my guint $l = $length;
 
-    # ??? WTF ???
-
-    warn "{ &*ROUTINE.name } NYI";
+    my $ar = g_hash_table_get_keys_as_array($!h, $l)
+      but GLib::Roles::TypedBuffer[$type];
+    $length = $l;
+    $object === Nil ?? $ar.Array !! $ar.Array.map({ $object.new($_) });
   }
 
-  # Will return a list of POINTERS!
-  method get_values (:$type) {
-    my $die_msg = qq:to/D/.chomp;
-      \$type must be native compatible. This means that the type must be{ ''
-      } one of the following:
-        Str uint8/16/32/64 num32/64, CStruct-based or CPointer-based.
-      D
+  # cw: Will return a lsit of CArray or Pointers -- Caller determines type!
+  my enum ValueReturn <CARRAY POINTER>;
 
-    die $die_msg unless
-      $type ~~ (
-        Str,
-        uint8, int8, uint16, int16, uint32, int32, uint64, int64,
-        num32, num64
-      ).any
-      ||
-      $type.REPR eq <CStruct CArray>.any;
+  my $default-value-return = CARRAY;
 
-    my $l = GLib::GList.new( g_hash_table_get_values($!h) );
+  method setValueReturn(:$array, :$pointer) {
+    die 'Must use one of :$array or :$pointer in call to setValueReturn'
+      unless $array || $pointer;
 
-    $type.defined ?? $l
-                  !! $l but GLib::Roles::ListData[$type];
+    die
+      'Cannot use both :$array and :$pointer in the same call to setValueReturn'
+    unless $array ^^ $pointer;
+
+    $default-value-return = CARRAY  if $array;
+    $default-value-return = POINTER if $pointer;
   }
 
-  # Will have to be multi-typed
-  multi method insert (Str $key, Str $value) {
-    g_hash_table_insert_str($!h, $key, $value);
+  method get_values (:$return = $default-value-return) {
+    GLib::GList.new( g_hash_table_get_values($!h) )
+      but GLib::Roles::ListData[
+        $default-value-return == CARRAY ?? CArray !! Pointer
+      ];
   }
-  multi method insert (Str $key, Num $value) {
-    my $v = CArray[num64].new;
-    $v[0] = $value;
-    g_hash_table_insert_double($!h, $key, $v);
+
+  # cw: Shall use a hash of key => TYPE pairs. This matching is valid for the
+  # last time key was stored, and will be used as a DEFAULT at lookup
+  # time. When using the Associative interface, this object will always
+  # do its best to return a typed value. If you want a RAW value returned,
+  # use .lookup(:raw)
+  multi method insert (
+        $key,
+    Int $value,
+        :$key-encoding = 'utf8',
+        :$key-double   = True,
+        :$key-signed   = False,
+        :$val-encoding = 'utf8',
+        :$val-double   = True,
+        :$val-signed   = False,
+  ) {
+    so g_hash_table_insert(
+      $!h,
+      toPointer(
+        $key,
+        encoding => $key-encoding,
+        double   => $key-double,
+        signed   => $key-signed,
+        typed    => $key.WHAT
+      ),
+      toPointer(
+        $value,
+        encoding => $val-encoding,
+        double   => $val-double,
+        signed   => $val-signed,
+        typed    => $value.WHAT
+      )
+    );
   }
-  multi method insert (Str $key, Int $value) {
-    my ($v, &sub);
-    if $value.abs.log(2).floor >= 32 {
-      $v = CArray[uint64].new;
-      &sub = &g_hash_table_insert_int64;
-    } else {
-      $v = CArray[uint32].new;
-      &sub = &g_hash_table_insert_int;
-    }
-    $v[0] = $value;
-    &sub($!h, $key, $v);
-  }
-  multi method insert (Str $key, $value is copy) {
+  multi method insert ($key, $value is copy) {
     die "Do not know how to handle { $value.^name } for GLib::HashTable!"
       unless $value.REPR eq <CPointer CStruct>.any;
+
     my Pointer $v = $value.REPR eq 'CStruct' ?? cast(Pointer, $value) !! $value;
-    g_hash_table_insert_pointer($!h, $key, $v);
+
+    g_hash_table_insert(
+      $!h,
+      toPointer($key),
+      $v
+    );
   }
 
-  method lookup ($key) {
-    g_hash_table_lookup($!h, $key);
+  # --- START -- For Role Associative
+  method ASSIGN-KEY (\k, \v) {
+    self.contains(k) ?? self.replace(k, v) !! self.insert(k, v);
   }
 
-  method lookup_extended ($lookup_key, $orig_key, $value) {
-    g_hash_table_lookup_extended($!h, $lookup_key, $orig_key, $value);
+  method AT-KEY (\k) is rw {
+    Proxy.new:
+      FETCH => -> $     { self.lookup(k) },
+      STORE => -> $, \v { self.ASSIGN-KEY(k, v) }
+  }
+
+  method EXISTS-KEY (\k) {
+    self.contains(k);
+  }
+  # --- END -- For Role Associative
+
+  method lookup ($key,
+    :$typed,
+    :$encoding = 'utf8',
+    :$double   = True,
+    :$signed   = False,
+  ) {
+    my $v = g_hash_table_lookup(
+      $!h,
+      toPointer($key)
+    )
+    # cw: Return a typed value if :$typed
+    $v;
+  }
+
+  proto method lookup_extended (|)
+  { * }
+
+  multi method lookup_extended (
+    $lookup_key,
+    :$encoding = 'utf8',
+    :$double   = True,
+    :$signed   = False,
+  ) {
+    samewith($lookup_key, $, $, :all, :$encoding, :$double, :$signed);
+  }
+  multi method lookup_extended (
+    $lookup_key,
+    $orig_key    is               rw,
+    $value       is               rw,
+                 :$all          = False,
+                 :$key-encoding = 'utf8',
+                 :$key-double   = True,
+                 :$key-signed   = False,
+                 :$val-type
+
+  ) {
+    my @return-pointers = CArray[Pointer].new;
+    @return-pointers[0, 1] = Pointer.new(0) xx 0;
+
+    my $rv = g_hash_table_lookup_extended(
+      $!h,
+      toPointer($lookup_key),
+      @return-pointers[0],
+      @return-pointers[1]
+    );
+
+    if $val-type {
+      @return-pointers[1] = do given $val-type {
+        when int32 | int64 | num32 | num64 {
+          cast(Pointer[$_], @return-pointers[1]).deref
+        }
+
+        when Str {
+          cast(Str, @return-pointers[1])
+        }
+
+        when .REPR eq <CPointer CStruct> {
+          cast($_, @return-pointers[1]);
+        }
+
+        default {
+          die "Don't know how to handle $val-type of { $val-type.^name }"
+        }
+      }
+    }
+
+    $all ?? $rv !! ($rv, |@return-pointers);
   }
 
   method ref {
     g_hash_table_ref($!h);
   }
 
-  method remove ($key) {
-    g_hash_table_remove($!h, $key);
+  method remove (
+    $key,
+    :$encoding = 'utf8',
+    :$double   = True,
+    :$signed   = False,
+  ) {
+    g_hash_table_remove(
+      $!h,
+      toPointer($key, :$encoding, :$double, :$signed)
+    );
   }
 
   method remove_all {
     g_hash_table_remove_all($!h);
   }
 
-  method replace ($key, $value) {
-    g_hash_table_replace($!h, $key, $value);
+  method replace (
+    $key,
+    $value,
+    :$key-encoding   = 'utf8',
+    :$key-signed     = False,
+    :$key-double     = False,
+    :$value-encoding = 'utf8',
+    :$value-signed   = False,
+    :$value-double   = False
+  ) {
+    g_hash_table_replace(
+      $!h,
+      toPointer(
+        $key,
+        encoding => $key-encoding,
+        signed   => $key-signed,
+        double   => $key-double
+      ),
+      toPointer(
+        $value,
+        encoding => $value-encoding,
+        signed   => $value-signed,
+        double   => $value-double
+      ),
+    );
   }
 
   method size {
     g_hash_table_size($!h);
   }
 
-  method steal ($key) {
-    g_hash_table_steal($!h, $key);
+  method steal (
+    $key,
+    :$encoding = 'utf8',
+    :$double   = True,
+    :$signed   = False,
+  ) {
+    g_hash_table_steal(
+      $!h,
+      toPointer($key, :$encoding, :$double, :$signed)
+    );
   }
 
   method steal_all {
     g_hash_table_steal_all($!h);
   }
 
-  method steal_extended ($lookup_key, $stolen_key,  $stolen_value) {
-    g_hash_table_steal_extended($!h, $lookup_key, $stolen_key, $stolen_value);
+  proto method steal_extended (|)
+  { * }
+
+  multi method steal_extended (
+    $lookup_key,
+    :$encoding    =  'utf8',
+    :$double      =  True,
+    :$signed      =  False
+  ) {
+    my $rv = samewith($lookup_key, $, $, :all, :$encoding, :$double, :$signed);
+
+    $rv ?? $rv.skip(1) !! Nil;
+  }
+  multi method steal_extended (
+    $lookup_key,
+    $stolen_key   is rw,
+    $stolen_value is rw,
+    :$all         =  False,
+    :$encoding    =  'utf8',
+    :$double      =  True,
+    :$signed      =  False
+  ) {
+    my @return-pointers = CArray[Pointer].new;
+    @return-pointers[0, 1] = Pointer.new(0) xx 2;
+
+    my $rv = g_hash_table_steal_extended(
+      $!h,
+      toPointer($lookup_key, :$encoding, :$double, :$signed),
+      |@return-pointers
+    );
+    ($stolen_key, $stolen_value) = @return-pointers;
+
+    $all.not ?? $rv !! ($rv, |@return-pointers);
   }
 
   method unref {
     g_hash_table_unref($!h);
+
   }
 
 }
 
 class GLib::HashTable::String is GLib::HashTable {
   method new {
-    self.new(&g_str_hash, &g_str_equal);
+    nextwith(&g_str_hash, &g_str_equal);
   }
 }
 
 class GLib::HashTable::Int is GLib::HashTable {
   method new {
-    self.new(&g_int_hash, &g_int_equal);
+    nextwith( &g_int_hash, &g_int_equal, type => int32 );
   }
 }
 
 class GLib::HashTable::Int64 is GLib::HashTable {
   method new {
-    self.new(&g_int64_hash, &g_int64_equal);
+    nextwith( &g_int64_hash, &g_int64_equal, type => int64);
   }
 }
 
 class GLib::HashTable::Double is GLib::HashTable {
   method new {
-    self.new(&g_double_hash, &g_double_equal);
+    self.new( &g_double_hash, &g_double_equal, type => num64);
   }
 }
 
 # OPAQUE STRUCT
 
 class GLib::HashTableIter {
-    has GHashTableIter $!hi;
+  has GHashTableIter $!hi;
 
-    method GLib::Raw::Definitions::GHashTableIter
-    { $!hi }
+  method GLib::Raw::Definitions::GHashTableIter
+  { $!hi }
 
-    method get_hash_table {
-      GLib::HashTable.new(
-        g_hash_table_iter_get_hash_table($!hi)
-      );
-    }
-
-    method init (GHashTable() $hash_table) {
-      my $i = GHashTableIter;
-      self.bless( iter => g_hash_table_iter_init($i, $hash_table) );
-    }
-
-    method next (Pointer $key, Pointer $value) {
-      so g_hash_table_iter_next($!hi, $key, $value);
-    }
-
-    method remove {
-      g_hash_table_iter_remove($!hi);
-    }
-
-    method replace (Pointer $value) {
-      g_hash_table_iter_replace($!hi, $value);
-    }
-
-    method steal {
-      g_hash_table_iter_steal($!hi);
-    }
-
+  method get_hash_table {
+    GLib::HashTable.new(
+      g_hash_table_iter_get_hash_table($!hi)
+    );
   }
+
+  method init (GHashTable() $hash_table) {
+    my $i = GHashTableIter;
+    self.bless( iter => g_hash_table_iter_init($i, $hash_table) );
+  }
+
+  method next (Pointer $key, Pointer $value) {
+    so g_hash_table_iter_next($!hi, $key, $value);
+  }
+
+  method remove {
+    g_hash_table_iter_remove($!hi);
+  }
+
+  method replace (Pointer $value) {
+    g_hash_table_iter_replace($!hi, $value);
+  }
+
+  method steal {
+    g_hash_table_iter_steal($!hi);
+  }
+
+}
