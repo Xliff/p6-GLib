@@ -367,13 +367,63 @@ sub nativeSized (\T, *%options) is export {
   }
 }
 
+sub fromPointer (
+  $v,
+  $typed,
+  :$signed   = False,
+  :$double   = False,
+  :$encoding = 'utf8',
+)
+  is export
+{
+  return $v unless $typed !=== Nil;
+
+  do given $typed {
+    when Int {
+      $_ = $double ?? ( $signed ?? int64 !! uint64 )
+                   !! ( $signed ?? int32 !! uint32 );
+      proceed;
+    }
+
+    when Num {
+      $_ = $double ?? num64 !! num32;
+      proceed;
+    }
+
+    when int32 | int64 | uint32 | uint64 | num32 | num64 {
+      cast(CArray[$_], $v)[0]
+    }
+
+    when Str {
+      do if $encoding ne 'utf8' {
+        # cw: Proper path
+        Buf.new( cast(CArray[uint8], $v) ).decode($encoding);
+      } else {
+        # cw: Fast path
+        cast(Str, $v);
+      }
+    }
+
+    when .REPR eq <CStruct CPointer>.any {
+      cast($_, $v);
+    }
+
+    default {
+      die "Don't know how to handle { $typed.^name } when converting from a {
+          '' }pointer";
+    }
+
+  }
+}
+
 sub toPointer (
   $value,
   :$signed   = False,
   :$double   = False,
   :$direct   = False,
   :$encoding = 'utf8',
-  :$typed
+  :$all      = False,
+  :$typed    = Str
 )
   is export
 {
@@ -402,6 +452,7 @@ sub toPointer (
       # Str
       default {
         $ov = ~$ov unless $ov ~~ Str;
+        t := Str;
         # Better to use CArray[uint8] as it is less volatile than Str;
         my $ca = CArray[uint8].new( $ov.encode($encoding) );
         $ov = pointer-to($ca);
@@ -415,7 +466,7 @@ sub toPointer (
     }
     $v = cast(Pointer, $v) unless $v ~~ Pointer;
   }
-  $v
+  $all.not ?? $v !! ($v, \t);
 }
 
 # Add Role to redefine name of method (guifa++)
