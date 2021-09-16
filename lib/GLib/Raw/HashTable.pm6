@@ -266,9 +266,9 @@ sub g_hash_table_iter_init (
 { * }
 
 sub g_hash_table_iter_next (
-  GHashTableIter $iter,
-  gpointer       $key,
-  gpointer       $value
+  GHashTableIter  $iter,
+  CArray[Pointer] $key,   # But only using first, so Pointer
+  CArray[Pointer] $value  # But only using first, so Pointer
 )
   returns uint32
   is native(glib)
