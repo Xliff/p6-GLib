@@ -37,6 +37,7 @@ class GLib::HashTable does Associative {
 
   has $!type;
   has &!hash_func;
+  has %!dict;
 
   submethod BUILD (:$hash-table, :$!type) {
     $!h = $hash-table;
@@ -272,15 +273,20 @@ class GLib::HashTable does Associative {
   # time. When using the Associative interface, this object will always
   # do its best to return a typed value. If you want a RAW value returned,
   # use .lookup(:raw)
+  #
+  # Must provide a mechanism for setting this dictionary for when the
+  # GHashTable is created by C.
   multi method insert (
-        $key,
-    Int $value,
-        :$key-encoding = 'utf8',
-        :$key-double   = True,
-        :$key-signed   = False,
-        :$val-encoding = 'utf8',
-        :$val-double   = True,
-        :$val-signed   = False,
+    $key,
+    $value,
+    :$val-typed,
+    :$key-typed    = Str,
+    :$key-encoding = 'utf8',
+    :$key-double   = True,
+    :$key-signed   = False,
+    :$val-encoding = 'utf8',
+    :$val-double   = True,
+    :$val-signed   = False,
   ) {
     so g_hash_table_insert(
       $!h,
@@ -289,32 +295,28 @@ class GLib::HashTable does Associative {
         encoding => $key-encoding,
         double   => $key-double,
         signed   => $key-signed,
-        typed    => $key.WHAT
+        typed    => $key-typed
       ),
       toPointer(
         $value,
         encoding => $val-encoding,
         double   => $val-double,
         signed   => $val-signed,
-        typed    => $value.WHAT
+        typed    => $val-typed // $value.WHAT
       )
     );
   }
-  multi method insert ($key, $value is copy) {
-    die "Do not know how to handle { $value.^name } for GLib::HashTable!"
-      unless $value.REPR eq <CPointer CStruct>.any;
 
-    my Pointer $v = $value.REPR eq 'CStruct' ?? cast(Pointer, $value) !! $value;
-
-    g_hash_table_insert(
-      $!h,
-      toPointer($key),
-      $v
-    );
+  multi method setDictionary (*%dict) {
+    samewith(%dict)
+  }
+  multi method setDictionary (%dict) {
+    %!dict = %dict;
   }
 
   # --- START -- For Role Associative
   method ASSIGN-KEY (\k, \v) {
+    %!dict{k} = v.WHAT;
     self.contains(k) ?? self.replace(k, v) !! self.insert(k, v);
   }
 
@@ -329,8 +331,9 @@ class GLib::HashTable does Associative {
   }
   # --- END -- For Role Associative
 
-  method lookup ($key,
-    :$typed,
+  method lookup (
+    $key,
+    :$typed    = %!dict{$key},
     :$encoding = 'utf8',
     :$double   = True,
     :$signed   = False,
@@ -338,8 +341,31 @@ class GLib::HashTable does Associative {
     my $v = g_hash_table_lookup(
       $!h,
       toPointer($key)
-    )
+    );
+
     # cw: Return a typed value if :$typed
+    if $typed !=== Nil {
+      $v = do given $typed {
+        when Int {
+          my \t = $double ?? ( $signed ?? int64 !! uint64 )
+                          !! ( $signed ?? int32 !! uint32 );
+
+          cast(CArray[t], $v)[0];
+        }
+
+        when Num {
+          cast(CArray[$double ?? num64 !! num32], $v)[0]
+        }
+
+        when Str {
+          cast(Str, $v)
+        }
+
+        when .REPR eq <CStruct CPointer>.any {
+          cast($_, $v);
+        }
+      }
+    }
     $v;
   }
 
