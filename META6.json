@@ -4,7 +4,8 @@
         "Config::INI",
         "CompUnit::Util",
         "Dependency::Sort",
-        "Method::Also"
+        "Method::Also",
+	"NativeHelpers::Blob"
     ],
     "description": "Perl6 library bindings for GNOME's GLib",
     "version": "r0.1",

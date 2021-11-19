@@ -23,14 +23,15 @@ class GLib::MatchInfo {
   { $!m }
 
   method expand_references (
-    Str() $string_to_expand,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                   $string_to_expand,
+    CArray[Pointer[GError]] $error             = gerror
   )
     is also<expand-references>
   {
     clear_error;
     my $rv = g_match_info_expand_references($!m, $string_to_expand, $error);
     set_error($error);
+
     $rv;
   }
 
@@ -59,9 +60,9 @@ class GLib::MatchInfo {
   }
   multi method fetch_named_pos (
     Str() $name,
-    $start_pos is rw,
-    $end_pos is rw,
-    :$all = False
+          $start_pos is rw,
+          $end_pos   is rw,
+          :$all      =  False
   ) {
     my gint ($s, $e) = 0 xx 2;
 
@@ -81,9 +82,9 @@ class GLib::MatchInfo {
   }
   multi method fetch_pos (
     Int() $match_num,
-    $start_pos is rw,
-    $end_pos is rw,
-    :$all = False
+          $start_pos  is rw,
+          $end_pos    is rw,
+          :$all       =  False
   ) {
     my gint $m = $match_num;
     my gint ($s, $e) = 0 xx 2;
@@ -143,6 +144,7 @@ class GLib::MatchInfo {
     clear_error;
     my $rv = so g_match_info_next($!m, $error);
     set_error($error);
+
     $rv;
   }
 

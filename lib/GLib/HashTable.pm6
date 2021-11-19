@@ -62,13 +62,36 @@ class GLib::HashTable does Associative {
     :$key-signed   = False,
     :$val-encoding = 'utf8',
     :$val-double   = True,
-    :$val-signed   = False
+    :$val-signed   = False,
+    :$variant      = False
   ) {
     my $o = GLib::HashTable::String.new(&g_str_hash, &g_str_equal);
     for %table.keys {
+      my $v = %table{$_};
+
+      if $variant {
+        $v = do given $v {
+          when Int {
+            $val-signed ?? ( $val-double ?? GLib::Variant.new-int64($_)
+                                         !! GLib::Variant.new-int32($_) )
+                        !! ( $val-double ?? GLib::Variant.new-uint64($_)
+                                         !! GLib::Variant.new-uint32($_) )
+          }
+
+          when Str  { GLib::Variant.new-string($_)  }
+          when Num  { GLib::Variant.new-double($_)  }
+          when Bool { GLib::Variant.new-boolean($_) }
+
+          default {
+            die "Do not know how to handle { .^name } when adding {
+                 '' }values as Variants to a HashTable!";
+          }
+        }
+      }
+
       $o.insert(
         $_,
-        %table{$_},
+        $v,
         :$key-encoding,
         :$key-double,
         :$key-signed,
