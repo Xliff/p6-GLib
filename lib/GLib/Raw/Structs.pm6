@@ -51,8 +51,11 @@ class SizedCArray is CArray is export does Positional {
 
 # Opaque to code?
 class GTypeInterface        is repr<CStruct> does GLib::Roles::Pointers is export {
-  has GType $.g-type;
-  has GType $.g-instance-type;
+  has GType $.g_type;
+  has GType $.g_instance_type;
+
+  method g-type          { $!g_type          }
+  method g-instance-type { $!g_instance_type }
 }
 
 class GArray                is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -78,8 +81,10 @@ class GCond                 is repr<CStruct> does GLib::Roles::Pointers is expor
 }
 
 class GDate                 is repr<CStruct> does GLib::Roles::Pointers is export {
-  has guint32 $.julian-days is rw;
+  has guint32 $.julian_days is rw;
   has guint32 $!packed-data;
+
+  method julian-days is rw { $!julian_days }
 
   # cw: Accessor methods for packed fields?
   # guint julian : 1;
@@ -194,7 +199,7 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
 
   # See comments on GSourceCallbackFuncs on how to properly implement
   # C-function-pointer handling.
-  method instance_init is rw {
+  method instance_init is rw is also<instance-init> {
     Proxy.new:
       FETCH => sub ($) { $!instance_init },
       STORE => -> $, \func {
@@ -210,7 +215,7 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
       };
   }
 
-  method value_set_default is rw {
+  method value_set_default is rw is also<value-set-default> {
     Proxy.new:
       FETCH => sub ($) { $!finalize },
       STORE => -> $, \func {
@@ -218,7 +223,7 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
       };
   }
 
-  method value_validate is rw {
+  method value_validate is rw is also<value-validate> {
     Proxy.new:
       FETCH => sub ($) { $!value_validate },
       STORE => -> $, \func {
@@ -226,7 +231,7 @@ class GParamSpecTypeInfo    is repr<CStruct> does GLib::Roles::Pointers is expor
       };
   }
 
-  method value_cmp is rw {
+  method value_cmp is rw is also<value-cmp> {
     Proxy.new:
       FETCH => sub ($) { $!values_cmp },
       STORE => -> $, \func {
@@ -269,6 +274,9 @@ class GSignalInvocationHint is repr<CStruct> does GLib::Roles::Pointers is expor
   has guint   $.signal_id;
   has GQuark  $.detail;
   has guint32 $.run_type;             # GSignalFlags
+
+  method signal-id { $!signal_id }
+  method run-type  { $!run_type  }
 }
 
 class GSignalQuery          is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -279,6 +287,13 @@ class GSignalQuery          is repr<CStruct> does GLib::Roles::Pointers is expor
   has GType          $.return_type;
   has guint          $.n_params;
   has CArray[uint64] $.param_types;
+
+  method signal-id    { $!signal_id    }
+  method signal-name  { $!signal_name  }
+  method signal-flags { $!signal_flags }
+  method return-type  { $!return_type  }
+  method n-params     { $!n_params     }
+  method param-types  { $!param_types  }
 }
 
 class GSList                is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -439,11 +454,16 @@ class GString               is repr<CStruct> does GLib::Roles::Pointers is expor
       FETCH => -> $           { $!str       },
       STORE => -> $, Str() $v { $!str := $v };
   }
+
+  method allocated-len { $!allocated_len }
 }
 
 class GTimeVal              is repr<CStruct> does GLib::Roles::Pointers is export {
   has glong $.tv_sec;
   has glong $.tv_usec;
+
+  method tv_sec  { $!tv_sec  }
+  method tv_usec { $!tv_usec }
 };
 
 class GTypeValueList        is repr('CUnion')  does GLib::Roles::Pointers is export {
@@ -456,6 +476,16 @@ class GTypeValueList        is repr('CUnion')  does GLib::Roles::Pointers is exp
   has num32           $.v_float   is rw;
   has num64           $.v_double  is rw;
   has OpaquePointer   $.v_pointer is rw;
+
+  method v-int     is rw { $!v_int     }
+  method v-uint    is rw { $!v_uint    }
+  method v-long    is rw { $!v_long    }
+  method v-ulong   is rw { $!v_ulong   }
+  method v-int64   is rw { $!v_int64   }
+  method v-uint64  is rw { $!v_uint64  }
+  method v-float   is rw { $!v_float   }
+  method v-double  is rw { $!v_double  }
+  method v-pointer is rw { $!v_pointer }
 };
 
 class GValue {
@@ -464,7 +494,10 @@ class GValue {
   HAS GTypeValueList  $.data2  is rw;
 
   proto method g_type (|)
-    is also<g-type type>
+    is also<
+      g-type
+      type
+    >
   { * }
 
   multi method g_type(:$fundamental is required) {
@@ -508,6 +541,9 @@ class GValueArray           is repr<CStruct> does GLib::Roles::Pointers is expor
   has guint    $.n_values;
   has gpointer $.values;          # GValue *
   has guint    $.n_preallocated;
+
+  method n-values       { $!n_values       }
+  method n-preallocated { $!n_preallocated }
 }
 
 class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -529,6 +565,12 @@ class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
   method getTypeName {
     self.g_type_instance.getTypeName;
   }
+
+  method g_type_instance { $!g_type_instance }
+  method value_type      { $!value_type      }
+  method owner_type      { $!owner_type      }
+  method ref_count       { $!ref_count       }
+  method param_id        { $!param_id        }
 }
 
 class GParamSpecChar      is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -536,6 +578,9 @@ class GParamSpecChar      is repr<CStruct> does GLib::Roles::Pointers is export 
   has gint8         $.minimum;
   has gint8         $.maximum;
   has gint8         $.default_value;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecUChar     is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -543,6 +588,9 @@ class GParamSpecUChar     is repr<CStruct> does GLib::Roles::Pointers is export 
   has guint8        $.minimum;
   has guint8        $.maximum;
   has guint8        $.default_value;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecBoolean   is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -555,6 +603,9 @@ class GParamSpecInt       is repr<CStruct> does GLib::Roles::Pointers is export 
   has gint          $.minimum;
   has gint          $.maximum;
   has gint          $.default_value;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecUInt      is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -562,6 +613,9 @@ class GParamSpecUInt      is repr<CStruct> does GLib::Roles::Pointers is export 
   has guint         $.minimum;
   has guint         $.maximum;
   has guint         $.default_value;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecLong      is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -569,6 +623,9 @@ class GParamSpecLong      is repr<CStruct> does GLib::Roles::Pointers is export 
   has glong         $.minimum;
   has glong         $.maximum;
   has glong         $.default_value;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecULong     is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -576,6 +633,9 @@ class GParamSpecULong     is repr<CStruct> does GLib::Roles::Pointers is export 
   has gulong        $.minimum;
   has gulong        $.maximum;
   has gulong        $.default_value;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecInt64     is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -583,6 +643,9 @@ class GParamSpecInt64     is repr<CStruct> does GLib::Roles::Pointers is export 
   has gint64        $.minimum;
   has gint64        $.maximum;
   has gint64        $.default_value;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecUInt64    is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -590,11 +653,17 @@ class GParamSpecUInt64    is repr<CStruct> does GLib::Roles::Pointers is export 
   has guint64       $.minimum;
   has guint64       $.maximum;
   has guint64       $.default_value;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecUnichar   is repr<CStruct> does GLib::Roles::Pointers is export {
   HAS GParamSpec    $.parent_instance;
   has gunichar      $.default_value;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecEnum      is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -606,7 +675,10 @@ class GParamSpecEnum      is repr<CStruct> does GLib::Roles::Pointers is export 
     # Not defined here, so late binding!
     cast( ::('GEnumClass'), $!enum_class );
   }
-  method enum-class { self.enum_class }
+
+  method enum-class      { self.enum_class }
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecFlags     is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -618,7 +690,10 @@ class GParamSpecFlags     is repr<CStruct> does GLib::Roles::Pointers is export 
     # Not defined here, so late binding!
     cast( ::('GFlagsClass'), $!flags_class );
   }
-  method flags-class { self.flags_class }
+
+  method flags-class     { self.flags_class }
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecFloat     is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -627,6 +702,9 @@ class GParamSpecFloat     is repr<CStruct> does GLib::Roles::Pointers is export 
   has gfloat        $.maximum;
   has gfloat        $.default_value;
   has gfloat        $.epsilon;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecDouble    is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -635,12 +713,19 @@ class GParamSpecDouble    is repr<CStruct> does GLib::Roles::Pointers is export 
   has gdouble       $.maximum;
   has gdouble       $.default_value;
   has gdouble       $.epsilon;
+
+  method parent-instance { $!parent_instance }
+  method default-value   { $!default_value   }
 }
 
 class GParamSpecValueArray  is repr<CStruct> does GLib::Roles::Pointers is export {
   HAS GParamSpec    $.parent_instance;
   has GParamSpec    $.element_spec;
   has guint         $.fixed_n_elements;
+
+  method parent-instance                 { $!parent_instance  }
+  method element-spec                    { $!element_spec     }
+  method fixed-n-elements is also<elems> { $!fixed_n_elements }
 }
 
 # Global subs requiring above structs
@@ -763,21 +848,21 @@ class GOptionEntry        is repr<CStruct> does GLib::Roles::Pointers is export 
   has Str         $!description;
   has Str         $!arg_description;
 
-  method long_name is rw {
+  method long_name is rw is also<long-name> {
     Proxy.new:
       FETCH => sub ($)        { self.^attributes(:local)[0].get_value(self) },
       STORE => -> $, Str() \s { self.^attributes(:local)[0]
                                     .set_value(self, s)                     };
   }
 
-  method short_name is rw {
+  method short_name is rw is also<short-name> {
     Proxy.new:
       FETCH => sub ($)        { self.^attributes(:local)[1].get_value(self) },
       STORE => -> $, Str() \s { self.^attributes(:local)[1]
                                     .set_value(self, s)                     };
   }
 
-  method arg_data is rw {
+  method arg_data is rw is also<arg-data> {
     Proxy.new:
       FETCH => sub ($)           { self.^attributes(:local)[4].get_value(self) },
       STORE => -> $, gpointer \p { self.^attributes(:local)[4]
@@ -791,7 +876,7 @@ class GOptionEntry        is repr<CStruct> does GLib::Roles::Pointers is export 
                                     .set_value(self, s)                     };
   }
 
-  method arg_description is rw {
+  method arg_description is rw is also<arg-description> {
     Proxy.new:
       FETCH => sub ($)           { self.^attributes(:local)[6].get_value(self) },
       STORE => -> $, gpointer \p { self.^attributes(:local)[6]
@@ -806,6 +891,10 @@ class GInterfaceInfo      is repr<CStruct> does GLib::Roles::Pointers is export 
   has Pointer $!interface_init;     #= GInterfaceInitFunc
   has Pointer $!interface_finalize; #= GInterfaceFinalizeFunc
   has Pointer $!interface_data;
+
+  method interface_init     { $!interface_init     }
+  method interface_finalize { $!interface_finalize }
+  method interface_data     { $!interface_data     }
 }
 
 class GTypeValueTable     is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -818,6 +907,15 @@ class GTypeValueTable     is repr<CStruct> does GLib::Roles::Pointers is export 
   has Pointer $!collect_value;      #= (GValue *value, guint n_collect_values, GTypeCValue *collect_values, guint collect_flags --> Str);
   has Str     $!lcopy_format;
   has Pointer $!lcopy_value;        #= (const GValue *value, guint n_collect_values, GTypeCValue *collect_values, guint collect_flags --> Str);
+
+  method value_init         { $!value_init         }
+  method value_free         { $!value_free         }
+  method value_copy         { $!value_copy         }
+  method value_peek_pointer { $!value_peek_pointer }
+  method collect_format     { $!collect_format     }
+  method collect_value      { $!collect_value      }
+  method lcopy_format       { $!lcopy_format       }
+  method lcopy_value        { $!lcopy_value        }
 }
 
 class GTypeQuery          is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -825,6 +923,10 @@ class GTypeQuery          is repr<CStruct> does GLib::Roles::Pointers is export 
   has Str   $!type_name;
   has guint $!class_size;
   has guint $!instance_size;
+
+  method type-name     { $!type_name     }
+  method class-size    { $!class_size    }
+  method instance-size { $!instance_size }
 }
 
 class GTypeInfo           is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -842,6 +944,18 @@ class GTypeInfo           is repr<CStruct> does GLib::Roles::Pointers is export 
   has Pointer         $!instance_init;  #= GInstanceInitFunc
   # value handling
   has GTypeValueTable $!value_table;
+
+  method class-size     { $!class_size     }
+  method base-init      { $!base_init      }
+  method base-finalize  { $!base_finalize  }
+  method class-init     { $!class_init     }
+  method class-finalize { $!class_finalize }
+  method class-data     { $!class_data     }
+  method instance-size  { $!instance_size  }
+  method n-preallocs    { $!n_preallocs    }
+  method instance-init  { $!instance_init  }
+  method value-table    { $!value_table    }
+
 }
 
 class GTypeFundamentalInfo is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -854,12 +968,17 @@ our subset GObjectOrPointer of Mu is export
 
 class GHookList                  is repr<CStruct> does GLib::Roles::Pointers is export {
   has gulong  $.seq_id;
-  has guint   $.hook_size; # :16
-  has guint   $.is_setup; # :1
+  has guint   $.hook_size;                # :16
+  has guint   $.is_setup;                 # :1
   has GHook   $.hooks;
   has Pointer $!dummy3;
-  has Pointer $.finalize_hook; # GHookFinalizeFunc
-  HAS Pointer @!dummy[2] is CArray;
+  has Pointer $.finalize_hook;            # GHookFinalizeFunc
+  HAS Pointer @!dummy[2]       is CArray;
+
+  method seq-id        { $!seq_id }
+  method hook-size     { $!hook_size }
+  method is-setup      { $!is_setup }
+  method finalize-hook { $!finalize_hook }
 }
 
 class GParameter            is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -905,6 +1024,13 @@ class GTestConfig            is repr<CStruct> does GLib::Roles::Pointers is expo
   has gboolean      $.test_verbose     is rw; #= extra info
   has gboolean      $.test_quiet       is rw; #= reduce output
   has gboolean      $.test_undefined   is rw; #= run tests that are meant to assert
+
+  method test-initialized is rw { $!test_initialized }
+  method test-quick       is rw { $!test_quick }
+  method test-perf        is rw { $!test_perf }
+  method test-verbose     is rw { $!test_verbose }
+  method test-quiet       is rw { $!test_quiet }
+  method test-undefined   is rw { $!test_undefined }
 }
 
 class GTestLogMsg            is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -913,6 +1039,10 @@ class GTestLogMsg            is repr<CStruct> does GLib::Roles::Pointers is expo
   has CArray[Str]   $.strings               ; #= NULL terminated
   has guint         $.n_nums           is rw;
   has CArray[num64] $.nums                  ;
+
+  method log-type  is rw { $!log_type  }
+  method n-strings is rw { $!n_strings }
+  method n-nums    is rw { $!n_nums    }
 }
 
 class GTestLogBuffer         is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -920,9 +1050,9 @@ class GTestLogBuffer         is repr<CStruct> does GLib::Roles::Pointers is expo
   has GSList        $!msgs;
 }
 
-class GMutex                 is repr<CStruct>  does GLib::Roles::Pointers is export {
+class GMutex                 is repr<CUnion>  does GLib::Roles::Pointers is export {
   has gpointer      $!p;
-  HAS guint         @!i is CArray;
+  HAS guint         @!i[2] is CArray;
 }
 
 class GNode                  is repr<CStruct>  does GLib::Roles::Pointers is export {
@@ -963,12 +1093,12 @@ class GNode                  is repr<CStruct>  does GLib::Roles::Pointers is exp
   }
 
   # Use in place of GNODE_IS_ROOT
-  method is_root {
+  method is_root is also<is-root> {
     $!parent.defined.not && $!prev.defined.not && $!next.defined.not
   }
 
   # Use in place of GNODE_IS_LEAF
-  method is_leaf { $!children.defined.not }
+  method is_leaf is also<is-leaf> { $!children.defined.not }
 
 }
 
