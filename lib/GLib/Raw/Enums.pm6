@@ -6,6 +6,8 @@ use GLib::Raw::Definitions;
 
 unit package GLib::Raw::Enums;
 
+our %strToGType is export;
+
 # In the future, this mechanism may need to be used via BEGIN block for all
 # enums that vary by OS -- Kaiepi++!
 #
@@ -1006,7 +1008,7 @@ sub get_paramspec_types ()
 sub getEnumValueByNick(\T, Str() $nick) is export {
   state %cache;
 
-  my \n := T.^name;
+  my \n := T.^wname;
   unless %cache{n}:exists {
     my $remove = max :all, :by{.chars},
       keys [∩] T.enums.keys».match(/.+/, :ex)».Str;
@@ -1023,6 +1025,12 @@ sub getEnumValueByNick(\T, Str() $nick) is export {
 our %DOMAINS is export = (
   51 => GKeyFileErrorEnum
 );
+
+BEGIN {
+  %strToGType = GTypeEnum.enums.pairs.map({
+    Pair.new( .key.subst("G_TYPE_").lc, GTypeEnum( .value ) )
+  });
+}
 
 INIT {
   CATCH { .message.say; .backtrace.concise.say }
