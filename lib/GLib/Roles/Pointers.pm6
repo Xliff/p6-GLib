@@ -2,10 +2,15 @@ use v6.c;
 
 use NativeCall;
 
-use GLib::Roles::Implementor;
+use CompUnit::Util :re-export;
+
+need GLib::Roles::Implementor;
+import GLib::Roles::Implementor;
+
+BEGIN re-export-everything('GLib::Roles::Implementor');
 
 # Number of times full project has needed to be compiled
-my constant forced = 98;
+my constant forced = 153;
 
 # Mark
 multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) is export {
@@ -13,28 +18,22 @@ multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) is export {
   attr does Implementor;
 }
 
-# Find.
-sub findProperImplementor ( $attrs, :rev(:$reverse) ) is export {
-  # Will need to search the entire attributes list for the
-  # proper main variable. Then sort for the one with the largest
-  # MRO.
-  my @implementors = $attrs.grep( * ~~ Implementor )
-                           .sort( -*.package.^mro.elems );
-  @implementors .= reverse if $reverse;
-  @implementors[0];
-}
-
+constant GRI = GLib::Roles::Implementor;
 
 role GLib::Roles::Pointers {
 
   method p {
     if self.REPR eq <CStruct CPointer>.any {
       self ~~ Pointer ?? self !! nativecast(Pointer, self);
-    } elsif findProperImplementor(self.^attributes) -> \i {
+    } elsif GLR::findProperImplementor(self.^attributes) -> \i {
       nativecast( Pointer, i.get_value(self) )
     } else {
       self ~~ Pointer ?? self !! nativecast(Pointer, self);
     }
+  }
+
+  method Numeric {
+    +self.p;
   }
 
 }
