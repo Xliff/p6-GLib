@@ -14,6 +14,7 @@ use GLib::Class::Object;
 use GLib::Roles::Bindable;
 use GLib::Roles::TypedBuffer;
 
+use GLib::Roles::Implementor;
 use GLib::Roles::Signals::Generic;
 
 constant gObjectTypeKey = 'p6-GObject-Type';
@@ -48,6 +49,7 @@ class ProvidesData does Associative {
 
 # To be rolled into GLib::Roles::Object at some point!
 role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
+
   # GObject, GParamSpec, gpointer
   method connect-notify (
     $obj,
@@ -79,9 +81,11 @@ role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
 # cw: Time to grow up.
 role GLib::Roles::Object {
   also does GLib::Roles::Bindable;
+  also does GLib::Roles::Implementor;
   also does GLib::Roles::Signals::GObject;
 
   has GObject $!o;
+
   has $!data-proxy;
 
   submethod BUILD (:$object) {
@@ -264,10 +268,6 @@ role GLib::Roles::Object {
     }
 
     %new-opts;
-  }
-
-  method getImplementor {
-    findProperImplementor(self.^attributes);
   }
 
   method roleInit-Object {
@@ -491,11 +491,22 @@ role GLib::Roles::Object {
     is_type($t, self);
   }
 
-  method get_property (Str() $name, GValue() $value) is also<get-property> {
+
+  multi method get_property (|)
+    is also<get-property>
+  { * }
+
+  multi method get_property (Str() $name, GValue() $value, :$raw = False)  {
     g_object_get_property($!o, $name, $value);
+
+    propReturnObject($value, $raw, |GLib::Value.getTypePair);
   }
 
-  method prop_set(Str() $name, GValue() $value) is also<prop-set> {
+  method set_property (Str() $name, GValue() $value) {
+    g_object_set_property($!o, $name, $value);
+  }
+
+  method prop_set (Str() $name, GValue() $value) is also<prop-set> {
     self.set_prop($name, $value);
   }
 
@@ -546,19 +557,20 @@ role GLib::Roles::Object {
     my @v = ( GLib::Value.new($type).GValue );
 
     samewith( [ $name ], @v );
-    $raw ?? @v[0].GValue !! @v[0];
+
+    propReturnObject(@v[0], $raw, |GLib::Value.getTypePair);
   }
   multi method get_prop (Str() $name, GLib::Value $value, :$raw = True) {
     my $vp = $value.GValue;
 
     samewith($name, $vp);
-    $raw ?? $vp !! $value;
+    propReturnObject($vp, $raw, |GLib::Value.getTypePair);
   }
   multi method get_prop (Str() $name, GValue $value, :$raw = True) {
     my @v = ($value);
 
     samewith( $name.Array, @v );
-    $raw ?? $value !! GLib::Value.new($value);
+    propReturnObject($value, $raw, |GLib::Value.getTypePair);
   }
   multi method get_prop (@names, @values) {
     my @n = self!checkNames(@names);
@@ -658,7 +670,7 @@ role GLib::Roles::Object {
     g_object_set_ptr($!o, $key, Pointer);
   }
 
-  method !get_data_abstract(@keys, ::T, &f) {
+  method !get-data-abstract(@keys, \T, &f) {
     @keys = @keys.map({
       die 'Elements in @keys must be Str-compatible!'
         unless $_ ~~ Str || .^lookup('Str');
@@ -666,13 +678,16 @@ role GLib::Roles::Object {
     });
 
     my @a = do for @keys {
-      my T $v = 0;
+      my $v = CArray[T].new;
+      $v[0] = T;
 
-      f($_, $v, Str);
-      $v;
+      say "{ $_ }: { $v.^name } ({ &f.name })";
+
+      f($!o, $_, $v, Str);
+      cast(CArray[uint8], $v);
     };
 
-    @a.elems > 1 ?? @a !! @a[0];
+    @a.elems == 1 ?? @a.head !! @a;
   }
 
   method get_data_ptr (*@keys) {
@@ -694,26 +709,29 @@ role GLib::Roles::Object {
     self!get-data-abstract(@keys,     Str, &g_object_get_string);
   }
   method get_data_float (*@keys) {
-    self!get-data-abstract(@keys, gdouble, &g_object_get_float);
+    self!get-data-abstract(@keys,  gfloat, &g_object_get_float);
   }
   method get_data_double (*@keys) {
     self!get-data-abstract(@keys, gdouble, &g_object_get_double);
   }
 
-  method !set_data_abstract(@pairs, ::T, ::NT, $value, &f) {
+  method !set-data-abstract(@pairs, ::T, ::NT, &f) {
+    @pairs .= map({ $_ ~~ Pair ?? |(.key, .value) !! $_ });
+
+    die 'Cannot use array with odd number of elements!'
+      unless +@pairs % 2 == 0;
+
     @pairs = @pairs.rotor(2).map({
       die 'Elements in @pairs must be Str, { T.^name } groups!'
         unless .[0] ~~ Str || .^lookup('Str');
       die 'Elements in @pairs must be Str, { T.^name } groups!'
-        unless .[1] ~~ T || (my $m = .^lookup(T.^name));
+        unless .[1] ~~ T || ( my $m = .^lookup(T.^name) );
 
-      ( .[0].Str, $m(.[1]) );
+      ( .[0].Str, $m( .[1] ) );
     });
 
-    for @pairs {
-      my NT $v = $value;
-
-      f($_, $v, Str);
+    for @pairs -> ($k, $v) {
+      f($!o, $k, $v, Str);
     }
   }
 
@@ -770,6 +788,11 @@ sub g_connect_notify (
 { * }
 
 sub g_object_get_property (GObject $o, Str $key, GValue $value)
+  is native(gobject)
+  is export
+{ * }
+
+sub g_object_set_property (GObject $o, Str $key, GValue $value)
   is native(gobject)
   is export
 { * }
