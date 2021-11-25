@@ -6,7 +6,11 @@ use NativeCall;
 use GLib::Raw::Types;
 use GLib::Raw::Value;
 
+use GLib::Roles::Implementor;
+
 class GLib::Value {
+  also does GLib::Roles::Implementor;
+  
   has GValue $!v is implementor handles <type p>;
 
   submethod BUILD(:$type, GValue :$value) {
