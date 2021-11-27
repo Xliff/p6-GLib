@@ -332,14 +332,30 @@ sub return-with-all ($v) is export {
 }
 
 # The assumption here is "Transfer: Full"
-sub propReturnObject ($oo, $raw, \P, $C? is raw, :$ref = False) is export {
+sub propReturnObject (
+  $oo,
+  $raw,
+  \P,
+  $C?                    is raw,
+  :$ref                  =  False,
+  :$attempt-real-resolve =  False
+) is export {
   my $o = $oo;
   return Nil unless $o;
 
-  $o = cast(P, $o);
-  return $o if $raw || $C === Nil;
+  unless $attempt-real-resolve {
+    $o = cast(P, $o);
+    return $o if $raw || $C === Nil;
 
-  $C.new($o, :$ref);
+    return $C.new($o, :$ref)
+  }
+
+  my $o1   = GLib::Object.new( cast(GObject, $o) );
+  my $type = $o1.objectType.name;
+
+  return cast( ::($type), $o );
+
+  $o1.createAsOriginal;
 }
 our &returnObject is export := &propReturnObject;
 
@@ -611,7 +627,7 @@ sub g_object_set_int_data (
 
 sub g_object_get_uint_data (
   GObject $object,
-  Str     $name,
+  Str     $name
 )
   returns CArray[guint]
   is native(gobject)
@@ -629,37 +645,37 @@ sub g_object_set_uint_data (
   is export
 { * }
 
-sub g_object_get_string (GObject $object, Str $key, Str $val)
+sub g_object_get_string (GObject $object, Str $key, CArray[Str] $val, Str)
   is native(gobject)
   is symbol('g_object_get')
   is export
 { * }
 
-sub g_object_set_string (GObject $object, Str $key, Str $val)
+sub g_object_set_string (GObject $object, Str $key, Str $val, Str)
   is native(gobject)
   is symbol('g_object_set')
   is export
 { * }
 
-sub g_object_get_ptr (GObject $object, Str $key, Pointer $val)
+sub g_object_get_ptr (GObject $object, Str $key, CArray[Pointer] $val, Str)
   is native(gobject)
   is symbol('g_object_get')
   is export
 { * }
 
-sub g_object_set_ptr (GObject $object, Str $key, Pointer $val)
+sub g_object_set_ptr (GObject $object, Str $key, Pointer $val, Str)
   is native(gobject)
   is symbol('g_object_set')
   is export
 { * }
 
-sub g_object_get_float (GObject $object, Str $key, CArray[gfloat] $val)
+sub g_object_get_float (GObject $object, Str $key, CArray[gfloat] $val, Str)
   is native(gobject)
   is symbol('g_object_get')
   is export
 { * }
 
-sub g_object_set_float (GObject $object, Str $key, CArray[gfloat] $val, Str)
+sub g_object_set_float (GObject $object, Str $key, gfloat $val, Str)
   is native(gobject)
   is symbol('g_object_set')
   is export
@@ -677,9 +693,9 @@ sub g_object_get_double (
 { * }
 
 sub g_object_set_double (
-  GObject         $object,
-  Str             $key,
-  CArray[gdouble] $val,
+  GObject  $object,
+  Str      $key,
+  gdouble  $val,
   Str
 )
   is native(gobject)
@@ -693,19 +709,19 @@ sub g_object_get_int (GObject $object, Str $key, CArray[gint] $val, Str)
   is export
 { * }
 
-sub g_object_set_int (GObject $object, Str $key, CArray[gint] $val, Str)
+sub g_object_set_int (GObject $object, Str $key, gint $val, Str)
   is native(gobject)
   is symbol('g_object_set')
   is export
 { * }
 
-sub g_object_get_uint (GObject $object, Str $key, CArray[gint] $val, Str)
+sub g_object_get_uint (GObject $object, Str $key, CArray[guint] $val, Str)
   is native(gobject)
   is symbol('g_object_get')
   is export
 { * }
 
-sub g_object_set_uint (GObject $object, Str $key, CArray[gint] $val, Str)
+sub g_object_set_uint (GObject $object, Str $key, guint $val, Str)
   is native(gobject)
   is symbol('g_object_set')
   is export
@@ -717,7 +733,7 @@ sub g_object_get_int64 (GObject $object, Str $key, CArray[gint64] $val, Str)
   is export
 { * }
 
-sub g_object_set_int64 (GObject $object, Str $key, CArray[gint64] $val, Str)
+sub g_object_set_int64 (GObject $object, Str $key, gint64 $val, Str)
   is native(gobject)
   is symbol('g_object_set')
   is export
@@ -735,9 +751,9 @@ sub g_object_get_uint64 (
 { * }
 
 sub g_object_set_uint64 (
-  GObject         $object,
-  Str             $key,
-  CArray[guint64] $val,
+  GObject $object,
+  Str     $key,
+  guint64 $val,
   Str
 )
   is native(gobject)
