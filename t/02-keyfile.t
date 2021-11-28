@@ -12,6 +12,8 @@ my $io = '.'.IO;
 $io .= add('t') unless $io.add('test.ini').e;
 $io .= add('test.ini');
 
+plan 6;
+
 unless $key-file.load-from-file(
   $io.absolute,
   G_KEY_FILE_KEEP_COMMENTS +| G_KEY_FILE_KEEP_TRANSLATIONS
@@ -24,7 +26,6 @@ my $int-value    = $key-file.get-integer('test', 'int_value');
 my $str-value    = $key-file.get-string('test', 'str_value');
 my $double-value = $key-file.get-double('test', 'double_value');
 
-diag "str: { $str-value }\nint: { $int-value }\ndouble: { $double-value }";
 is $str-value,    'hello world',            "Value from the key 'test/str_value' is correct";
 is $int-value,    5,                        "Value from the key 'test/int_value' is correct";
 is $double-value, 8.888765,                 "Value from the key 'test/double_value' is correct";
@@ -44,15 +45,10 @@ is $str-value,    'hello worldhello world', "Value from the key 'test/str_value'
 my @sv = ($str-value, $int-value, $double-value);
 $key-file.set-string-list('test', 'str_list', @sv);
 
-diag $key-file.to-data;
-
 my @groups = $key-file.get-groups;
-diag @groups.gist;
 for @groups.kv ->  $k, $v {
-  say "group: { $k }/{ @groups.elems - 1 }\t{ $v }";
   my @keys = $key-file.get-keys($v)[];
   for @keys.kv -> $kk, $kv {
     my $value = $key-file.get-value($v, $kv);
-    say "\t\tkey: { $kk }/{ @keys.elems - 1 }\t{ $kv } => { $value }"
   }
 }
