@@ -6,7 +6,7 @@ use NativeCall;
 use GLib::Compat::Definitions;
 use GLib::Raw::Structs;
 
-plan 56;
+plan 59;
 
 #require ::($_ = "GLib::Raw::Structs");
 my $cu      = 'GLib::Raw::Structs::EXPORT::DEFAULT';
