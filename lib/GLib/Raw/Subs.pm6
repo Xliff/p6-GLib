@@ -175,7 +175,7 @@ sub ArrayToCArray(\T, @a) is export {
 
     when 'CPointer' | 'P6str'  |
          'P6num'    | 'P6int'            { $handling = P;  CArray[T]          }
-    when 'CStruct'  | 'CUnion'           { $handling = NP; CArray[Pointer[T]] }
+    when 'CStruct'  | 'CUnion'           { $handling = NP; 4[Pointer[T]] }
 
     default {
       "ArrayToCArray does not know how to handle a REPR of '$_' for type {
@@ -341,6 +341,7 @@ sub propReturnObject (
   :$attempt-real-resolve =  False
 ) is export {
   my $o = $oo;
+
   return Nil unless $o;
 
   unless $attempt-real-resolve {
@@ -520,6 +521,18 @@ sub nullTerminatedBuffer (CArray[uint8] $data) is export {
   my $t-idx = 0;
   repeat { } while $data[$t-idx++];
   CArray[uint8].new( |$data[^$t-idx], 0 );
+}
+
+sub newCArray (\T) is export {
+  my $s = T.REPR eq 'CStruct';
+
+  (
+    my $p = $s ?? CArray[T] !! CArray[Pointer[T]]
+  )[0] = (
+    $s ?? T !! Pointer[T];
+  );
+
+  $p;
 }
 
 sub g_destroy_none(Pointer)
