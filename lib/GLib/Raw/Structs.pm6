@@ -987,14 +987,14 @@ class GParameter            is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method name is rw {
     Proxy.new:
-      FETCH => sub ($)                { $!name },
+      FETCH => sub ($)             { $!name },
       STORE => -> $, Str() $val    { self.^attributes(:local)[0]
                                          .set_value(self, $val)    };
   }
 
   method value is rw {
     Proxy.new:
-      FETCH => sub ($)                { $!value },
+      FETCH => sub ($)             { $!value },
       STORE => -> $, GValue() $val { self.^attributes(:local)[0]
                                          .set_value(self, $val)    };
   }

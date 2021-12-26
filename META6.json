@@ -13,8 +13,8 @@
     "license": "GPL-3.0",
     "source-url": "https://github.com/Xliff/p6-GLib",
     "resources": [
-      "lib/linux/libtree-helper.so",
-      "lib/windows/treehelper.dll"
+      "lib/x86_64/linux/tree-helper.so",
+      "lib/x86_64/linux/glib-support.so"
     ],
     "provides": {
       "GLib::Raw::Exceptions"         :  "lib/GLib/Raw/Exceptions.pm6"         ,

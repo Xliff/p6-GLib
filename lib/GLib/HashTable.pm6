@@ -10,6 +10,8 @@ use GLib::Raw::HashTable;
 
 use GLib::GList;
 
+use GLib::Roles::Implementor;
+
 INIT {
   say qq:to/S/ unless %*ENV<P6_BUILDING_GTK>.so;
 »»»»»»
@@ -35,6 +37,8 @@ S
 class GLib::HashTable::String { ... }
 
 class GLib::HashTable does Associative {
+  also does GLib::Roles::Implementor;
+  
   has GHashTable $!h is implementor handles<p>;
 
   has $!type;
