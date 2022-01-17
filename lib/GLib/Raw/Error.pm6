@@ -2,7 +2,9 @@ use v6.c;
 
 use NativeCall;
 
-use GLib::Raw::Types;
+use GLib::Raw::Definitions;
+use GLib::Raw::Object;
+use GLib::Raw::Structs;
 
 sub g_error_copy (GError $error)
   returns GError

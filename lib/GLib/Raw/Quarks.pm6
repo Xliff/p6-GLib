@@ -2,7 +2,7 @@ use v6.c;
 
 use NativeCall;
 
-use GLib::Raw::Types;
+use GLib::Raw::Definitions;
 
 sub g_convert_error_quark ()
   returns GQuark

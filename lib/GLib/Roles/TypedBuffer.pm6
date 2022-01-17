@@ -3,14 +3,22 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
-use GLib::Raw::Types;
+use GLib::Raw::Subs;
 
 role GLib::Roles::TypedBuffer[::T] does Positional {
   has $!size;
   has Pointer $!b;
 
   # What if not all malloc'd at once?
-  submethod BUILD (:$buffer, :$size, :$autosize = True, :$clear) {
+  submethod BUILD (
+    :$buffer,
+    :$null-terminated,
+    :$size,
+    :$autosize         is copy = True,
+    :$clear
+  ) {
+    $autosize = False if $null-terminated;
+
     if $buffer.defined {
       # *********************************************
       # Please note this is NOT portable! Please see:
@@ -18,16 +26,44 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
       # *********************************************
       #$!size = malloc_usable_size($!b = $buffer) div nativesizeof(T);
       $!b = $buffer;
-      $!size = $autosize ?? malloc_usable_size($!b) div nativesizeof(T) !! 0;
+
+      # $autosize is not portable, and should be subject to SERIOUS checks before
+      # its use. The correct thing to here is use $null-terminated!
+      $!size = do {
+        when $autosize.so        { malloc_usable_size($!b) div nativesizeof(T) }
+
+        when $null-terminated.so {
+          my $c = 0;
+
+          # cw: --DANGER-- This loop has the potential to run endlessly!
+          loop {
+            given T {
+              when .REPR eq 'CStruct' {
+                my $e  = self[$c++];
+
+                $e .= deref if T.of         ~~ Pointer              &&
+                               T.of.of.REPR eq <CStruct CUnion>.any;
+                last if $e.^attributes[0].get_value($e).not;
+              }
+
+              default { last if self[$c++].not }
+            }
+          }
+        }
+      };
+
+      # cw: Zero out existing buffer
       if $clear {
         loop (my $i = 0; $i < $!size; $i++) {
           self.bind($i, T.new);
         }
       }
+
     } else {
       die 'Must pass in $size' unless $size.defined;
 
       my uint64 $s1 = $!size = $size;
+
       $!b = calloc( $s1, nativesizeof(T) )
     }
   }
@@ -93,6 +129,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
       nativecast(Pointer, $elem),
       nativesizeof(T)
     );
+    $elem;
   }
 
   method elems {
@@ -100,7 +137,17 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   # cw: These to be dropped for .new-typedbuffer-obj
-  multi method new (Pointer $buffer, :$autosize = True, :$clear = False) {
+  multi method new (Pointer $buffer, :$null-terminated is required) {
+    return Nil unless $buffer;
+
+    self.bless( :$buffer, :$null-terminated );
+  }
+  multi method new (
+    Pointer $buffer,
+            :$null-terminated where *.not,
+            :$autosize                     = True,
+            :$clear                        = False
+  ) {
     self.new-typedbuffer-obj($buffer, :$autosize, :$clear);
   }
   multi method new (@entries) {

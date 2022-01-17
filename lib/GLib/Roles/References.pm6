@@ -3,7 +3,8 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
-use GLib::Raw::Types;
+use GLib::Raw::Object;
+use GLib::Raw::Subs;
 
 role GLib::Roles::References {
   has GObject $!ref;

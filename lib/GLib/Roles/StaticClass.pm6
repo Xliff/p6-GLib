@@ -1,6 +1,6 @@
 use v6.c;
 
-use GLib::Raw::Types;
+use GLib::Raw::Definitions;
 
 role GLib::Roles::StaticClass {
 

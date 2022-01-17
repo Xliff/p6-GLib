@@ -8,14 +8,19 @@ use GLib::Roles::Pointers;
 
 unit package GLib::Raw::Definitions;
 
-our $ERROR            is export;
-our (%ERROR, %ERRORS) is export;
-our @ERRORS           is export;
-our $ERROR-THROWS     is export;
-our $DEBUG            is export;
+our $ERROR                is export;
+our (%ERROR, %ERRORS)     is export;
+our @ERRORS               is export;
+our $ERROR-THROWS         is export;
+our $DEBUG                is export;
+
+our &ALL-ERRORS-FATAL     is export = -> $e { False };
+our &ALL-ERRORS-NON-FATAL is export = -> $e { True  };
+
+our &ERROR-NON-FATAL      is export = &ALL-ERRORS-FATAL;
 
 # Forced compile count
-my constant forced = 170;
+my constant forced = 235;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;

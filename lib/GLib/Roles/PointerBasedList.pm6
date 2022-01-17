@@ -1,9 +1,8 @@
 use v6.c;
 
-use GLib::Raw::Types;
+use GLib::Raw::Subs;
 
 use NativeCall;
-use GLib::Raw::Subs;
 
 role GLib::Roles::PointerBasedList {
 
@@ -17,16 +16,22 @@ role GLib::Roles::PointerBasedList {
     :$typed
   ) {
     my $firstElement = True;
-    for @list -> $_ is copy {
+    for @list {
       # Should be abstracted to a sub, toPointer()
+
+      #say "A: { .gist }";
+
       my $v = toPointer(
         $_,
-        :$signed   = False,
-        :$double   = False,
-        :$direct   = False,
-        :$encoding = 'utf8',
+        :$signed,
+        :$double,
+        :$direct,
+        :$encoding,
         :$typed
       );
+
+      #say "tpV: { $v.gist }";
+
       if $firstElement {
         $l.data       = $v;
         $firstElement = False;

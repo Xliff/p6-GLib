@@ -97,7 +97,7 @@ class GDate                 is repr<CStruct> does GLib::Roles::Pointers is expor
 class GError                is repr<CStruct> does GLib::Roles::Pointers is export {
   has uint32        $.domain;
   has int32         $.code;
-  has Str           $!message;
+  has CArray[uint8] $!message;
 
   submethod BUILD (:$!domain, :$!code, :$message) {
     self.message = $message;
@@ -107,11 +107,28 @@ class GError                is repr<CStruct> does GLib::Roles::Pointers is expor
     self.bless(:$domain, :$code, :$message);
   }
 
-  method message is rw {
+  method message ( :$encoding = 'utf8' ) is rw {
     Proxy.new:
-      FETCH => sub ($) { $!message },
-      STORE => -> $, Str() $val {
-        ::?CLASS.^attributes[* - 1].set_value(self, $val)
+      FETCH => -> $ {
+        Buf.new( nullTerminatedBuffer($!message) ).decode($encoding)
+      },
+
+      STORE => -> $, $val is copy {
+        $val .= Str if $val.^can('Str') && $val ~~ Str;
+
+        $!message := do given $val {
+          when CArray[uint8] {
+            $_
+          }
+
+          when Str {
+            CArray[uint8].new( .encode($encoding) )
+          }
+
+          when Pointer {
+            cast(CArray[uint8], $_)
+          }
+        }
       };
   }
 
@@ -141,16 +158,19 @@ class GList                 is repr<CStruct> does GLib::Roles::Pointers is expor
         #   '$!data',
         #   nqp::decont( nativecast(Pointer, $nv) )
         # )
-        # ...with this lesser one:
+        # ...with this lesser one:1
         #::?CLASS.^Attributes[0].set_value(self, $nv);
         # ... and now maybe this sensible one...
         $!data := $nv;
-      };
+      }
   }
 }
 
 #| Skip Struct
-class GLogField-Str         is repr<CStruct> does GLib::Roles::Pointers is export {
+class GLogField-Str         is repr<CStruct> does GLib::Roles::Pointers
+  is   export
+  does StructSkipsTest['will test GLogField, instead']
+{
   has Str     $.key;
   has Str     $.value;
   has gssize  $.length is rw;
@@ -252,14 +272,20 @@ class GPtrArray             is repr<CStruct> does GLib::Roles::Pointers is expor
 }
 
 #| Skip Struct
-class GPollFDNonWin         is repr<CStruct> does GLib::Roles::Pointers is export {
+class GPollFDNonWin         is repr<CStruct> does GLib::Roles::Pointers
+  is   export
+  does StructSkipsTest['is a pseudo-struct']
+{
   has gint	    $.fd;
   has gushort 	$.events;
   has gushort 	$.revents;
 }
 
 #| Skip Struct
-class GPollFDWin            is repr<CStruct> does GLib::Roles::Pointers is export {
+class GPollFDWin            is repr<CStruct> does GLib::Roles::Pointers
+  is   export
+  does StructSkipsTest['is a pseudo-struct']
+{
   has gushort 	$.events;
   has gushort 	$.revents;
 }
@@ -299,6 +325,12 @@ class GSignalQuery          is repr<CStruct> does GLib::Roles::Pointers is expor
 class GSList                is repr<CStruct> does GLib::Roles::Pointers is export {
   has Pointer $!data;
   has GSList  $.next;
+
+  method data is rw {
+    Proxy.new:
+      FETCH => -> $      { $!data       },
+      STORE => -> $, \nv { $!data := nv };
+  }
 }
 
 class GSourceCallbackFuncs  is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -759,9 +791,12 @@ sub get-error ($e) is export {
 sub set_error(CArray $e) is export {
   if $e[0].defined {
     $ERROR = %ERROR{$*PID} = get-error($e);
-    X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
+    if $ERROR-THROWS {
+      X::GLib::Error.new($ERROR).throw
+        unless $ERROR.&ERROR-NON-FATAL
+    }
     #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
-    @ERRORS.push: [ $ERROR, Backtrace.new ];
+    @ERRORS.push: [ $ERROR, DateTime.now, Backtrace.new ];
   }
 }
 

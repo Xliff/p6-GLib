@@ -122,7 +122,7 @@ sub createReturnArray (\T) is export {
 }
 
 sub resolveNativeType (\T) is export {
-  say "Resolving { T.^name } to its Raku equivalent...";
+  # say "Resolving { T.^name } to its Raku equivalent...";
   do given T {
     when num32 | num64     { Num }
 
@@ -149,7 +149,7 @@ sub checkForType(\T, $v is copy) is export {
       my $resolved-name = resolveNativeType(T).^name;
       $resolved-name ~= "[{ T.of.^name }]" if $resolved-name eq 'CArray';
       if $v.^lookup($resolved-name) -> $m {
-        say "Using coercer at { T.^name }.$resolved-name...";
+        #say "Using coercer at { T.^name }.$resolved-name...";
         $v = $m($v);
       }
       # Note reversal of usual comparison. This is due to the fact that
@@ -163,19 +163,25 @@ sub checkForType(\T, $v is copy) is export {
   $v;
 }
 
-sub ArrayToCArray(\T, @a) is export {
+sub ArrayToCArray(\T, @a, :$null = False) is export {
   enum Handling <P NP>;
   my $handling;
+
+  my $NT = T;
   my $ca = (do given (T.REPR // '') {
     when 'P6opaque' {
-      when T ~~ Str                      { $handling = P;  CArray[T]          }
+      when T ~~ Str                      { $handling = P;  CArray[T]  }
 
       proceed
     }
 
+    when 'P6num'                         { $NT = 0e0; proceed }
+    when 'P6int'                         { $NT = 0  ; proceed }
     when 'CPointer' | 'P6str'  |
-         'P6num'    | 'P6int'            { $handling = P;  CArray[T]          }
-    when 'CStruct'  | 'CUnion'           { $handling = NP; 4[Pointer[T]] }
+         'P6num'    | 'P6int'            { $handling = P;  CArray[T] }
+
+    when 'CStruct'  | 'CUnion'           { $NT = Pointer[T];
+                                           $handling = NP; CArray[$NT] }
 
     default {
       "ArrayToCArray does not know how to handle a REPR of '$_' for type {
@@ -187,6 +193,7 @@ sub ArrayToCArray(\T, @a) is export {
 
     $ca[$_] = $handling eq P ?? $typed !! cast(Pointer[T], $typed)
   }
+  $ca[ $ca.elems ] = $NT if $null;
   $ca;
 }
 
@@ -212,11 +219,14 @@ multi sub CArrayToArray(CArray $ca, Int(Cool) $len) is export {
   @a;
 }
 
-sub getFlags($t, $s) is export {
-  $t.pairs
-    .grep({ $s +& .value })
-    .map( *.key )
-    .Set
+sub getFlags(::T, $f) is export {
+  T.enums
+   .grep({ $f +& .value })
+   .map({ T( .value ) })
+}
+
+sub setToFlags(::T, $s) is export {
+  $s.map({ T( $_ ~~ Pair ?? .key !! $_ ) }).sum
 }
 
 # GLib-level
@@ -446,7 +456,10 @@ sub toPointer (
 {
   # Properly handle non-Str Cool data.
   return $value if $value ~~ Pointer;
-  return ($typed !=== Nil ?? $typed !! Nil) unless $value.defined;
+
+  #return ($typed !=== Nil ?? $typed !! Nil) unless $value.defined;
+  return Pointer unless $value.defined;
+
   my ($ov, $use-arr, \t, $v) = ( checkForType($typed, $value), False );
   if $ov ~~ Int && $direct {
     $v = Pointer.new($ov);
@@ -517,9 +530,11 @@ sub buildAccessors (\O) is export {
 }
 
 # cw: Still some concern over the this....
-sub nullTerminatedBuffer (CArray[uint8] $data) is export {
+sub nullTerminatedBuffer (CArray[uint8] $data, :$maxsize = 32768) is export {
   my $t-idx = 0;
-  repeat { } while $data[$t-idx++];
+  repeat {
+    die "Buffer exceeds maximum of { $maxsize }!" if $t-idx > $maxsize;
+  } while $data[$t-idx++];
   CArray[uint8].new( |$data[^$t-idx], 0 );
 }
 
@@ -527,9 +542,9 @@ sub newCArray (\T) is export {
   my $s = T.REPR eq 'CStruct';
 
   (
-    my $p = $s ?? CArray[T] !! CArray[Pointer[T]]
+    my $p = ( $s ?? CArray[Pointer[T]] !! CArray[T] ).new
   )[0] = (
-    $s ?? T !! Pointer[T];
+    $s ?? Pointer[T] !! T;
   );
 
   $p;
@@ -773,3 +788,7 @@ sub g_object_set_uint64 (
   is symbol('g_object_set')
   is export
 { * }
+
+role StructSkipsTest[$r] is export {
+  method reason { $r.Str }
+}

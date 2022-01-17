@@ -21,6 +21,12 @@ constant gObjectTypeKey = 'p6-GObject-Type';
 
 my %data;
 
+role PropertyMethod is export { }
+
+multi sub trait_mod:<is> (Method \m, :$g-property!) is export {
+  m does PropertyMethod;
+}
+
 class ProvidesData does Associative {
   has $!p;
 
@@ -434,7 +440,10 @@ role GLib::Roles::Object {
     %data{+$!o.p}{$k};
   }
 
-  method set-data ($k, $v) {
+  multi method set-data (Pair $p) {
+    samewith($p.key, $p.value)
+  }
+  multi method set-data ($k, $v) {
     say "Setting { $k } to { $v } for { +$!o.p }..." if $DEBUG;
 
     %data{+$!o.p}{$k} = $v;

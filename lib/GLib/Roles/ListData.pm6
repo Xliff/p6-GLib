@@ -2,7 +2,9 @@ use v6.c;
 
 use NativeCall;
 
-use GLib::Raw::Types;
+use GLib::Raw::Definitions;
+use GLib::Raw::Subs;
+use GLib::Raw::Structs;
 
 role GLib::Roles::ListData[::T, :$direct] {
   also does Positional;
@@ -24,7 +26,7 @@ role GLib::Roles::ListData[::T, :$direct] {
       # High Level Language
       my $s = self.data($l);
       $s = nqp::unbox_s($s) if T ~~ Str;
-      
+
       @!nat.push: $s;
     }
     self.cleaned;

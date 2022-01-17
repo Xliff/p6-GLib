@@ -3,9 +3,11 @@ use v6.c;
 use NativeCall;
 
 use GLib::Raw::Definitions;
+use GLib::Raw::Object;
+use GLib::Raw::Structs;
+
 
 unit package GLib::Raw::Env;
-
 
 ### /usr/include/glib-2.0/glib/genviron.h
 
