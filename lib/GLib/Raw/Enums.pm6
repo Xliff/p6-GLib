@@ -1032,8 +1032,8 @@ BEGIN {
   });
 }
 
-INIT {
-  CATCH { .message.say; .backtrace.concise.say }
+#INIT {
+#  CATCH { .message.say; .backtrace.concise.say }
 
-  $g-param-spec-types = get_paramspec_types;
-}
+  #$g-param-spec-types = get_paramspec_types;
+#}

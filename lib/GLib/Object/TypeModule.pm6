@@ -1,8 +1,14 @@
 use v6.c;
 
-use GLib::Raw::Types;
-use GLib::Class::Structs;
+use GLib::Raw::Definitions;
+use GLib::Raw::Enums;
+use GLib::Raw::Object;
+use GLib::Raw::Structs;
+use GLib::Raw::Subs;
+
 use GLib::Object::Raw::TypeModule;
+
+use GLib::Class::Structs;
 
 use GLib::Roles::Object;
 use GLib::Roles::TypePlugin;

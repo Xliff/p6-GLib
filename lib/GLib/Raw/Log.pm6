@@ -3,15 +3,16 @@ use v6.c;
 use NativeCall;
 
 use GLib::Raw::Definitions;
+use GLib::Raw::Enums;
 use GLib::Raw::Object;
 use GLib::Raw::Structs;
 
 unit package GLib::Raw::Log;
 
 sub g_log_default_handler (
-  Str $log_domain,
-  guint $log_level,
-  Str $message,
+  Str      $log_domain,
+  guint    $log_level,
+  Str      $message,
   gpointer $unused_data
 )
   is native(glib)
@@ -51,11 +52,11 @@ sub g_set_printerr_handler ( &func (Str) )
 { * }
 
 sub g_warn_message (
-  Str $domain,
-  Str $file,
+  Str  $domain,
+  Str  $file,
   gint $line,
-  Str $func,
-  Str $warnexpr
+  Str  $func,
+  Str  $warnexpr
 )
   is native(glib)
   is export
@@ -88,9 +89,9 @@ sub g_log_set_fatal_mask (Str $log_domain, guint $fatal_mask)
 { * }
 
 sub g_log_set_handler (
-  Str $log_domain,
-  guint $log_levels,
-  &log_func (Str, GLogLevelFlags, Str, gpointer),
+  Str      $log_domain,
+  guint    $log_levels,
+           &log_func (Str, GLogLevelFlags, Str, gpointer),
   gpointer $user_data
 )
   returns guint
@@ -99,10 +100,10 @@ sub g_log_set_handler (
 { * }
 
 sub g_log_set_handler_full (
-  Str $log_domain,
-  guint $log_levels,
-  &log_func (Str, GLogLevelFlags, Str, gpointer),
-  gpointer $user_data,
+  Str            $log_domain,
+  guint          $log_levels,
+                 &log_func (Str, GLogLevelFlags, Str, gpointer),
+  gpointer       $user_data,
   GDestroyNotify $destroy
 )
   returns guint
@@ -111,8 +112,14 @@ sub g_log_set_handler_full (
 { * }
 
 sub g_log_set_writer_func (
-  &func (GLogLevelFlags, Pointer, gsize, Pointer --> GLogWriterOutput),
-  gpointer $user_data,
+                 &func (
+                   GLogLevelFlags,
+                   Pointer,
+                   gsize,
+                   Pointer
+                   --> GLogWriterOutput
+                 ),
+  gpointer       $user_data,
   GDestroyNotify $user_data_free
 )
   is native(glib)
@@ -120,17 +127,17 @@ sub g_log_set_writer_func (
 { * }
 
 sub g_log_structured_array (
-  guint $log_level,
+  guint    $log_level,
   gpointer $fields,      #= Array of GLogField
-  gsize $n_fields
+  gsize    $n_fields
 )
   is native(glib)
   is export
 { * }
 
 sub g_log_variant (
-  Str $log_domain,
-  guint $log_level,
+  Str      $log_domain,
+  guint    $log_level,
   GVariant $fields
 )
   is native(glib)
@@ -138,9 +145,9 @@ sub g_log_variant (
 { * }
 
 sub g_log_writer_default (
-  guint $log_level,
+  guint    $log_level,
   gpointer $fields,   #= Array of GLogField
-  gsize $n_fields,
+  gsize    $n_fields,
   gpointer $user_data
 )
   returns uint32 # GLogWriterOutput
@@ -149,9 +156,9 @@ sub g_log_writer_default (
 { * }
 
 sub g_log_writer_format_fields (
-  guint $log_level,
-  Pointer $fields,    #= Array of GLogField
-  gsize $n_fields,
+  guint    $log_level,
+  Pointer  $fields,    #= Array of GLogField
+  gsize    $n_fields,
   gboolean $use_color
 )
   returns Str
@@ -166,9 +173,9 @@ sub g_log_writer_is_journald (gint $output_fd)
 { * }
 
 sub g_log_writer_journald (
-  guint $log_level,
-  Pointer $fields,      #= Array of GLogField
-  gsize $n_fields,
+  guint    $log_level,
+  Pointer  $fields,      #= Array of GLogField
+  gsize    $n_fields,
   gpointer $user_data
 )
   returns uint32 # GLogWriterOutput
@@ -177,9 +184,9 @@ sub g_log_writer_journald (
 { * }
 
 sub g_log_writer_standard_streams (
-  guint $log_level,
-  Pointer $fields,     #= Array of GLogField
-  gsize $n_fields,
+  guint    $log_level,
+  Pointer  $fields,     #= Array of GLogField
+  gsize    $n_fields,
   gpointer $user_data
 )
   returns uint32 # GLogWriterOutput
@@ -195,9 +202,9 @@ sub g_log_writer_supports_color (gint $output_fd)
 
 # Converted '...' definitions
 sub g_log (
-  Str $log_domain,
+  Str    $log_domain,
   uint32 $log_level,
-  Str $format
+  Str    $format
 )
   is native(glib)
   is export

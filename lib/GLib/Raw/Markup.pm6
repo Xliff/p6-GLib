@@ -3,6 +3,7 @@ use v6.c;
 use NativeCall;
 
 use GLib::Raw::Definitions;
+use GLib::Raw::Enums;
 use GLib::Raw::Object;
 use GLib::Raw::Structs;
 
@@ -23,7 +24,7 @@ sub g_markup_escape_text (Str $text, gssize $length)
 { * }
 
 sub g_markup_parse_context_end_parse (
-  GMarkupParseContext $context,
+  GMarkupParseContext     $context,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -50,8 +51,8 @@ sub g_markup_parse_context_get_element_stack (GMarkupParseContext $context)
 
 sub g_markup_parse_context_get_position (
   GMarkupParseContext $context,
-  gint $line_number,
-  gint $char_number
+  gint                $line_number,
+  gint                $char_number
 )
   is native(glib)
   is export
@@ -64,10 +65,10 @@ sub g_markup_parse_context_get_user_data (GMarkupParseContext $context)
 { * }
 
 sub g_markup_parse_context_new (
-  GMarkupParser $parser,
+  GMarkupParser     $parser,
   GMarkupParseFlags $flags,
-  gpointer $user_data,
-  GDestroyNotify $user_data_dnotify
+  gpointer          $user_data,
+  GDestroyNotify    $user_data_dnotify
 )
   returns GMarkupParseContext
   is native(glib)
@@ -75,9 +76,9 @@ sub g_markup_parse_context_new (
 { * }
 
 sub g_markup_parse_context_parse (
-  GMarkupParseContext $context,
-  Str $text,
-  gssize $text_len,
+  GMarkupParseContext     $context,
+  Str                     $text,
+  gssize                  $text_len,
   CArray[Pointer[GError]] $error
 )
   returns uint32
@@ -93,8 +94,8 @@ sub g_markup_parse_context_pop (GMarkupParseContext $context)
 
 sub g_markup_parse_context_push (
   GMarkupParseContext $context,
-  GMarkupParser $parser,
-  gpointer $user_data
+  GMarkupParser       $parser,
+  gpointer            $user_data
 )
   is native(glib)
   is export
@@ -111,8 +112,10 @@ sub g_markup_parse_context_unref (GMarkupParseContext $context)
   is export
 { * }
 
-sub g_markup_vprintf_escaped (Str $format, va_list $args)
-  returns Str
-  is native(glib)
-  is export
-{ * }
+# cw: va_list not supported!
+#
+# sub g_markup_vprintf_escaped (Str $format, va_list $args)
+#   returns Str
+#   is native(glib)
+#   is export
+# { * }

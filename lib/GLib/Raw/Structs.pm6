@@ -18,7 +18,7 @@ unit package GLib::Raw::Structs;
 # cw: Testing this thought out...
 our $ERROR-REPLACEMENT is export = sub { %ERROR{$*PID} };
 
-class GValue                is repr<CStruct> does GLib::Roles::Pointers is export { ... }
+class GValue is repr<CStruct> does GLib::Roles::Pointers is export { ... }
 
 # CArray replacement for sized classes
 class SizedCArray is CArray is export does Positional {
@@ -362,7 +362,7 @@ class GSourceCallbackFuncs  is repr<CStruct> does GLib::Roles::Pointers is expor
     Proxy.new:
       FETCH => sub ($) {
         $raw ?? $!ref
-             !! cast( :(gpointer --> int64), $!get );
+             !! cast( :(gpointer --> int64), $!ref );
       },
       STORE => -> $, \func {
         $!ref := set_func_pointer( &(func), &sprintf-P-L )
@@ -384,7 +384,10 @@ class GSourceCallbackFuncs  is repr<CStruct> does GLib::Roles::Pointers is expor
     Proxy.new:
       FETCH => sub ($) {
         $raw ?? $!get
-             !! cast( :(gpointer, GSource, & (gpointer --> guint32), gpointer) )
+             !! cast(
+                  :(gpointer, GSource, & (gpointer --> guint32), gpointer),
+                  $!get
+                )
       }
       STORE => -> $, \func {
         $!get := set_func_pointer( &(func), &sprintf-PSƒP )
@@ -423,7 +426,13 @@ class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method prepare is rw {
     Proxy.new:
-      FETCH => sub ($) { $!prepare },
+      FETCH => sub ($) {
+        cast(
+          :(GSource, gint is rw),
+          $!prepare
+        )
+      },
+
       STORE => -> $, \func {
         $!prepare := set_func_pointer( &(func), &sprintf-SCi-b);
       };
@@ -431,7 +440,7 @@ class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method check is rw {
     Proxy.new:
-      FETCH => sub ($) { $!check },
+      FETCH => sub ($) { cast( :(GSource), $!check ) },
       STORE => -> $, \func {
         $!check := set_func_pointer( &(func), &sprintf-S-b);
       }
@@ -439,7 +448,14 @@ class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method dispatch is rw {
     Proxy.new:
-      FETCH => sub ($) { $!dispatch },
+      # (GSource, GSourceFunc &, gpointer)
+      FETCH => sub ($) {
+        cast(
+          :(GSource, & (gpointer --> guint32), gpointer),
+          $!dispatch
+        )
+      },
+
       STORE => -> $, \func {
         $!dispatch := set_func_pointer( &(func), &sprintf-SƒP-b);
       }
@@ -447,7 +463,8 @@ class GSourceFuncs          is repr<CStruct> does GLib::Roles::Pointers is expor
 
   method finalize is rw {
     Proxy.new:
-      FETCH => sub ($) { $!finalize },
+      FETCH => sub ($) { cast( :(GSource), $!finalize ) },
+
       STORE => -> $, \func {
         $!finalize := set_func_pointer( &(func), &sprintf-S-b);
       }
@@ -826,9 +843,11 @@ sub sprintf-PsV (
   Str,
   & (GParamSpec, GValue),
   gpointer
- --> int64
 )
-    is native is symbol('sprintf') { * }
+  returns int64
+  is native
+  is symbol('sprintf')
+{ * }
 
 sub sprintf-PsV-b (
   Blob,
@@ -855,7 +874,8 @@ sub sprintf-PsVV-i (
 { * }
 
 # Must be declared LAST.
-constant GPollFD            is export = $*DISTRO.is-win ?? GPollFDWin !! GPollFDNonWin;
+constant GPollFD          is export = $*DISTRO.is-win ?? GPollFDWin
+                                                      !! GPollFDNonWin;
 
 class GClosure            is repr<CStruct> does GLib::Roles::Pointers is export {
   has uint64 $!dummy1;

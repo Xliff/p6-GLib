@@ -3,6 +3,7 @@ use v6.c;
 use NativeCall;
 
 use GLib::Raw::Definitions;
+use GLib::Raw::Enums;
 use GLib::Raw::Object;
 use GLib::Raw::Structs;
 
@@ -16,8 +17,8 @@ sub g_hmac_copy (GHmac $hmac)
 
 sub g_compute_hmac_for_bytes (
   GChecksumType $digest_type,
-  GBytes $key,
-  GBytes $data
+  GBytes        $key,
+  GBytes        $data
 )
   returns Str
   is native(glib)
@@ -26,10 +27,10 @@ sub g_compute_hmac_for_bytes (
 
 sub g_compute_hmac_for_data (
   GChecksumType $digest_type,
-  Str $key,
-  gsize $key_len,
-  Str $data,
-  gsize $length
+  Str           $key,
+  gsize         $key_len,
+  Str           $data,
+  gsize         $length
 )
   returns Str
   is native(glib)
@@ -38,10 +39,10 @@ sub g_compute_hmac_for_data (
 
 sub g_compute_hmac_for_string (
   GChecksumType $digest_type,
-  Str $key,
-  gsize $key_len,
-  Str $str,
-  gssize $length
+  Str           $key,
+  gsize         $key_len,
+  Str           $str,
+  gssize        $length
 )
   returns Str
   is native(glib)
@@ -49,9 +50,9 @@ sub g_compute_hmac_for_string (
 { * }
 
 sub g_hmac_get_digest (
-  GHmac $hmac,
+  GHmac         $hmac,
   CArray[uint8] $buffer,
-  gsize $digest_len is rw
+  gsize         $digest_len is rw
 )
   is native(glib)
   is export

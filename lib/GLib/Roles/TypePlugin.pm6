@@ -1,9 +1,15 @@
 use v6.c;
 
-use GLib::Raw::Types;
+use GLib::Raw::Definitions;
+use GLib::Raw::Enums;
+use GLib::Raw::Object;
+use GLib::Raw::Structs;
+use GLib::Raw::Subs;
+
 use GLib::Raw::TypePlugin;
 
 use GLib::Roles::Object;
+use GLib::Roles::Implementor;
 
 role GLib::Roles::TypePlugin {
   has GTypePlugin $!tp;
