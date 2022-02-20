@@ -10,7 +10,7 @@ use GLib::Roles::Implementor;
 
 class GLib::Value {
   also does GLib::Roles::Implementor;
-  
+
   has GValue $!v is implementor handles <type p>;
 
   submethod BUILD(:$type, GValue :$value) {
@@ -529,4 +529,33 @@ sub gv_ptr ($p) is export {
   my $gv = GLib::Value.new( G_TYPE_POINTER );
   $gv.pointer = $p;
   $gv;
+}
+
+sub valuetoGValue (
+  $_,
+  :$signed,
+  :$unsigned  is copy,
+  :$single,
+  :$double    is copy
+) is export {
+  $unsigned //= $signed.so.not;
+  $double   //= $single.so.not;
+
+  when Str                           { gv_str($_)         }
+  when ::('GLib::Roles::Object')     { gv_obj( .GObject ) }
+  when GObject                       { gv_obj($_)         }
+  when .REPR eq <CStruct CUnion>.any { gv_ptr($_)         }
+
+  when Num                           { $double ?? gv_dbl($_) !! gv_flt($_) }
+
+  when Int                           {
+    $signed ?? ( $single ?? gv_int($_)  !! gv_int64($_)  )
+            !! ( $single ?? gv_uint($_) !! gv_uint64($_) )
+  }
+
+  default {
+    say "Do not know how to handle object of type {
+         .^name } in update!"
+
+  }
 }
