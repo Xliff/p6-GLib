@@ -54,7 +54,7 @@ sub g_time_zone_new_local ()
   is export
 { * }
 
-sub g_time_zone_new_offset (gint32 $seconds)
+sub g_time_zone_new_offset (guint32 $seconds)
   returns GTimeZone
   is native(glib)
   is export
