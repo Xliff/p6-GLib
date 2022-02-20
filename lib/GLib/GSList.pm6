@@ -58,7 +58,7 @@ class GLib::GSList {
   ) {
     my $l = GLib::GSList.new;
 
-    self.appendToList(
+    self.addToList(
       $l,
       @list,
       :$signed,
