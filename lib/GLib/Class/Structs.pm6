@@ -170,7 +170,7 @@ sub g_enum_register_static (Str $name, GEnumValue $const_static_values)
   is export
 { * }
 
-sub g_enum_to_string (GType $g_enum_type, gint $value)
+sub g_enum_to_string (GType $g_enum_type, guint $value)
   returns Str
   is native(gobject)
   is export

@@ -14,6 +14,15 @@ class GLib::Object::Supplyish {
     %!signals := $signals;
   }
 
+  # cw: Act like a supply if an unknown method name is given.
+  #     This is SLOW, though. Maybe find a better way?
+  #     Maybe use delegation on $!supply?
+  method FALLBACK ($name, |c) {
+    if $!supply.^can($name) {
+      $!supply."$name"(|c);
+    }
+  }
+
   method new ($supply, $signals, $signal) {
     self.bless( :$supply, :$signals, :$signal )
   }
@@ -33,15 +42,17 @@ class GLib::Object::Supplyish {
         $name = self!generateTapName
       } until not %!taps{$name}:exists;
     }
-    # Wrap handler?
-    # &handler.wrap(-> |c {
-    #   CATCH { default { .message.say; .backtrace.concise.say } }
-    #   nextsame;
-    # });
     self.untap if %!signals{$!signal} && $replace;
     %!signals{$!signal} = True;
     @!tap-names.push: $name;
-    %!taps{$name} = $!supply.tap(&handler);
+
+    # The CATCH block here means that user-supplied handlers no longer need
+    # to specify it. Bonus: It is harmless to existing code that does.
+    %!taps{$name} = $!supply.tap(-> *@a {
+      CATCH { default { .message.say; .backtrace.concise.say } }
+
+      &handler(|@a);
+    });
   }
 
   method list {
@@ -50,6 +61,7 @@ class GLib::Object::Supplyish {
 
   method untap (:$name is copy) is also<disconnect> {
     $name //= @!tap-names.tail;
+    @!tap-names.pop;
     %!taps{$name}.close;
     %!taps{$name}:delete;
     %!signals{$!signal} = %!taps.elems.so;

@@ -13,13 +13,16 @@ use GLib::GList;
 use GLib::Roles::Implementor;
 
 INIT {
-  say qq:to/S/ unless %*ENV<P6_BUILDING_GTK>.so;
-»»»»»»
-» Please note that the objects in { $?FILE } are classed as use-at-your-own-risk!
-» Accessing an object created from C should be usable, but creating objects of
-» this type, via Raku, may behave erratically.
-»»»»»»
-S
+  once {
+    say qq:to/S/ unless %*ENV<P6_BUILDING_GTK>.so;
+      »»»»»»
+      » Please note that the objects in { $?FILE } are classed as
+      » use-at-your-own-risk! Accessing an object created from C should be
+      » usable, but creating objects of this type, via Raku, may behave
+      » erratically.
+      »»»»»»
+      S
+  }
 
 }
 
@@ -38,7 +41,7 @@ class GLib::HashTable::String { ... }
 
 class GLib::HashTable does Associative {
   also does GLib::Roles::Implementor;
-  
+
   has GHashTable $!h is implementor handles<p>;
 
   has $!type;

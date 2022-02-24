@@ -3,7 +3,11 @@ use v6.c;
 use GLib::Raw::Types;
 use GLib::Raw::Node;
 
+use GLib::Roles::Implementor;
+
 class GLib::Node {
+  also does GLib::Roles::Implementor;
+  
   has GNode $!n is implementor handles<data next prev children parent>;
 
   submethod BUILD (:$node) {

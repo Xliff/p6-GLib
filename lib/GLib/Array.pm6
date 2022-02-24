@@ -6,9 +6,11 @@ use GLib::Raw::Types;
 use GLib::Raw::Array;
 
 use GLib::Roles::TypedBuffer;
+use GLib::Roles::Implementor;
 
 class GLib::Array {
   also does Positional;
+  also does GLib::Roles::Implementor;
 
   has GArray $!a is implementor handles<p>;
   has        $!ca;

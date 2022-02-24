@@ -265,7 +265,7 @@ class GLib::Queue {
   }
 
   method push_nth (gpointer $data, Int() $n) is also<push-nth> {
-    my guint $nn = $n;
+    my gint $nn = $n;
 
     g_queue_push_nth($!q, $data, $nn);
   }

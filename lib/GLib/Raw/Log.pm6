@@ -157,7 +157,7 @@ sub g_log_writer_format_fields (
   is export
 { * }
 
-sub g_log_writer_is_journald (gint $output_fd)
+sub g_log_writer_is_journald (guint $output_fd)
   returns uint32
   is native(glib)
   is export
@@ -185,7 +185,7 @@ sub g_log_writer_standard_streams (
   is export
 { * }
 
-sub g_log_writer_supports_color (gint $output_fd)
+sub g_log_writer_supports_color (guint $output_fd)
   returns uint32
   is native(glib)
   is export

@@ -6,9 +6,12 @@ use NativeCall;
 use GLib::Raw::Types;
 use GLib::Raw::Main;
 
+use GLib::Roles::Implementor;
 use GLib::Roles::TypedBuffer;
 
 class GLib::MainContext {
+  also does GLib::Roles::Implementor;
+
   has GMainContext $!mc is implementor handles<p>;
 
   submethod BUILD (:$maincontext) {
@@ -205,8 +208,12 @@ class GLib::MainContext {
     self;
   }
 
-  method ref_thread_default is also<ref-thread-default> {
-    g_main_context_ref_thread_default();
+  method ref_thread_default ( :$raw = False ) is also<ref-thread-default> {
+    propReturnObject(
+      g_main_context_ref_thread_default(),
+      $raw,
+      |self.getTypePair
+    );
   }
 
   method release {

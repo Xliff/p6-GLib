@@ -157,7 +157,7 @@ sub g_ptr_array_free (GPtrArray $array, gboolean $free_seg)
   is export
 { * }
 
-sub g_ptr_array_insert (GPtrArray $array, gint $index_, gpointer $data)
+sub g_ptr_array_insert (GPtrArray $array, guint $index_, gpointer $data)
   is native(glib)
   is export
 { * }

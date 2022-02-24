@@ -22,7 +22,7 @@ sub g_timer_elapsed (GTimer $timer, gulong $microseconds)
   is export
 { * }
 
-sub g_time_val_add (GTimeVal $time_, glong $microseconds)
+sub g_time_val_add (GTimeVal $time_, gulong $microseconds)
   is native(glib)
   is export
 { * }
