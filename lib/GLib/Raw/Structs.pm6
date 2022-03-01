@@ -299,6 +299,18 @@ class GSignalQuery          is repr<CStruct> does GLib::Roles::Pointers is expor
 class GSList                is repr<CStruct> does GLib::Roles::Pointers is export {
   has Pointer $!data;
   has GSList  $.next;
+
+  method data is rw {
+    Proxy.new:
+      FETCH => -> $ { $!data },
+
+      STORE => -> $, \v {
+        die 'Attempting to set $!data with something that is not a pointer!'
+          unless v ~~ Pointer;
+
+        $!data := v;
+      }
+  }
 }
 
 class GSourceCallbackFuncs  is repr<CStruct> does GLib::Roles::Pointers is export {
