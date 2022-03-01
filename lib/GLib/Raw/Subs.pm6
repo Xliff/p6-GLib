@@ -139,9 +139,11 @@ package GLib::Raw::Subs {
       when str               { Str }
 
       default                {
-        given T.REPR {
-          when 'CArray'                { CArray }
-          when 'CStruct' | 'CPointer'  { T }
+        do if T.REPR eq <CPointer CStruct>.any {
+          T
+        } else {
+          # cw: I don't know if this is the best way to handle this.
+          die "Do not know how to handle a type of { .^name }!";
         }
       }
     }
@@ -149,11 +151,13 @@ package GLib::Raw::Subs {
 
   sub checkForType(\T, $v is copy) is export {
     if T !=== Nil {
-      if T !~~ $v.WHAT {
+      unless $v ~~ T {
+        say "Attempting to convert a { $v.^name } to { T.^name }...";
         my $resolved-name = resolveNativeType(T).^name;
         $resolved-name ~= "[{ T.of.^name }]" if $resolved-name eq 'CArray';
+        say "RN: { $resolved-name }";
         if $v.^lookup($resolved-name) -> $m {
-          say "Using coercer at { T.^name }.$resolved-name...";
+          say "Using coercer at { $v.^name }.$resolved-name...";
           $v = $m($v);
         }
         # Note reversal of usual comparison. This is due to the fact that
@@ -528,13 +532,9 @@ package GLib::Raw::Subs {
   }
 
   sub newCArray (\T) is export {
-    my $s = T.REPR eq 'CStruct';
-
-    (
-      my $p = $s ?? CArray[T] !! CArray[Pointer[T]]
-    )[0] = (
+    my $s = T.REPR eq 'CStruct' || T === Str;
+    (my $p = ( $s ?? CArray[T] !! CArray[ Pointer[T] ] ).new)[0] =
       $s ?? T !! Pointer[T];
-    );
 
     $p;
   }
