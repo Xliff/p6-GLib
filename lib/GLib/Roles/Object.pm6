@@ -29,9 +29,7 @@ class ProvidesData does Associative {
   }
 
   method AT-KEY (\k) is rw {
-    Proxy.new:
-      FETCH => -> $       { %data{$!p}{k}     }
-      STORE => -> $, (\v) { %data{$!p}{k} = v };
+    %data{$!p}{k}
   }
 
   method EXISTS-KEY (\k) {
@@ -89,10 +87,11 @@ role GLib::Roles::Object {
   has $!data-proxy;
 
   submethod BUILD (:$object) {
-    if $object {
-      self!setObject($object);
-      $!data-proxy = ProvidesData.new(+$object.p);
-    }
+    self!setObject($object) if $object
+  }
+
+  submethod TWEAK {
+    $!data-proxy = ProvidesData.new(+$!o.p);
   }
 
   # This will not work while ::Object is still a role!
@@ -440,7 +439,7 @@ role GLib::Roles::Object {
     %data{+$!o.p}{$k} = $v;
   }
 
-  method unset-data ($k) {
+  method unset-dassta ($k) {
     %data{+$!o.p}{$k}:delete if %data{+$!o.p}{$k}:exists;
   }
 
