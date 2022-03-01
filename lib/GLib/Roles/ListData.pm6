@@ -12,23 +12,28 @@ role GLib::Roles::ListData[::T, :$direct] {
     #«iterator elems AT-POS EXISTS-POS join :p6sort('sort')»;
 
   method !rebuild {
+    say '-- !rebuild start';
     return unless self.dirty;
 
-    my GList $l;
+    my $l;
 
     @!nat = ();
+    say '-- loop start';
     loop ($l = self.first; $l.defined; $l = $l.next) {
+      say "L: { $l }";
       use nqp;
 
       # Must insure that results from C are properly prepared for the
       # High Level Language
       my $s = self.data($l);
       $s = nqp::unbox_s($s) if T ~~ Str;
-      
+
       @!nat.push: $s;
     }
+    say '-- loop end';
     self.cleaned;
-    @!nat;
+
+    say '-- rebuild end';
   }
 
   method DataType { T }
@@ -73,16 +78,15 @@ role GLib::Roles::ListData[::T, :$direct] {
     @!nat.sort(|c);
   }
 
-  #method cur { ... }
-
-  multi method data (GList $n) is rw {
+  multi method data ($n) is rw {
     self!_data($n);
   }
   multi method data is rw {
     self!_data(self.cur);
   }
 
-  method !_data(GList $n) is rw {
+
+  method !_data($n) is rw {
     Proxy.new:
       FETCH => sub ($) {
         return "<< NULL { T.^name } VALUE!>>" unless $n.data;
