@@ -3,8 +3,8 @@ use v6.c;
 use Method::Also;
 
 use GLib::Raw::Types;
-
 use GLib::Raw::GSList;
+use GLib::Raw::GenericList;
 
 use GLib::Roles::PointerBasedList;
 
@@ -48,6 +48,7 @@ class GLib::GSList {
 
   # XXX - THIS DOES NOT CURRENTLY WORK WITHOUT A WAY TO SET DATA! - XXX
   # Not liking this. See if it can be improved.
+
   multi method new (
     @list,
     :$signed   = False,
@@ -74,13 +75,29 @@ class GLib::GSList {
     is also<GSList>
   { $!list }
 
+  method data is rw {
+    self!_data;
+  }
+
   method !_data is rw {
     $!cur.data;
+  }
+
+  method first {
+    #g_list_first($!list);
+    $!cur = $!list;
+  }
+
+  # Need a current pointer.
+  method next {
+    $!cur .= next;
   }
 
   method cleaned {
     $!dirty = False;
   }
+
+  #method cur { ... }
 
   method current_node
     is also<
@@ -90,10 +107,6 @@ class GLib::GSList {
       node
     >
   { $!cur }
-
-  method data is rw {
-    self!_data;
-  }
 
   # Import methods from
   # https://developer.gnome.org/glib/stable/glib-Singly-Linked-Lists.html
@@ -188,10 +201,6 @@ class GLib::GSList {
     g_slist_length($!list);
   }
 
-  method next {
-    $!cur .= next;
-  }
-
   method nth (Int() $n) {
     my guint $nn = $n;
 
@@ -241,6 +250,20 @@ class GLib::GSList {
     g_slist_sort_with_data($!list, $compare_func, $user_data);
   }
 
+}
+
+sub returnGSList (
+  $gl     is copy,
+  $glist,
+  $raw,
+  $T      =  Str,
+  $O?,
+  :$seq   =  True,
+  :$ref   =  False
+)
+  is export
+{
+  returnGenericList(GLib::GSList, $gl, $glist, $raw, $T, $O, :$seq, :$ref);
 }
 
 BEGIN {

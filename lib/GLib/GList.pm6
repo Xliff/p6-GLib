@@ -5,6 +5,7 @@ use NativeCall;
 
 use GLib::Raw::Types;
 use GLib::Raw::GList;
+use GLib::Raw::GenericList;
 
 use GLib::Roles::ListData;
 use GLib::Roles::PointerBasedList;
@@ -20,9 +21,6 @@ class GLib::GList {
 
   has GList $!list is implementor handles<p>;
   has GList $!cur;
-
-  # Left active, but see NOTE.
-  has $.dirty;
 
   submethod BUILD(:$list) {
     # die 'Must use a type object for $type when creating a GLib::GSList'
@@ -46,6 +44,25 @@ class GLib::GList {
   submethod DESTROY {
     #self.free;
   }
+
+  # Left active, but see NOTE.
+  has $.dirty;
+
+  method first {
+    #g_list_first($!list);
+    $!cur = $!list;
+  }
+
+  # Need a current pointer.
+  method next {
+    $!cur .= next;
+  }
+
+  method prev {
+    $!cur .=  prev;
+  }
+
+  #method cur { ... }
 
   # Since GSList is binary compatible with GList and is being used as an
   # alternative until GSList is stable...
@@ -111,23 +128,6 @@ class GLib::GList {
     $!dirty = False;
   }
 
-  method !_data is rw {
-    $!cur.data;
-  }
-
-  method data is rw {
-    self!_data;
-  }
-
-  # Need a current pointer.
-  method next {
-    $!cur .= next;
-  }
-
-  method prev {
-    $!cur .= prev;
-  }
-
   # NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE -- NOTE
   # Probably better to finish work on GLib::Roles::ListData role and move
   # the Array backing to it. Until that decision has been made, this code
@@ -146,6 +146,10 @@ class GLib::GList {
   #   }
   #   @!nat;
   # }
+
+  method !_data is rw {
+    $!cur.data;
+  }
 
   multi method append (@data) {
     self.append($_) for @data;
@@ -223,11 +227,6 @@ class GLib::GList {
     is also<find-custom>
   {
     g_list_find_custom($!list, $data, &func);
-  }
-
-  method first {
-    #g_list_first($!list);
-    $!cur = $!list;
   }
 
   method foreach (
@@ -392,23 +391,12 @@ sub returnGList (
   $raw,
   $T      =  Str,
   $O?,
-  :$seq   =  True
+  :$seq   =  True,
+  :$ref   =  False;
 )
   is export
 {
-  return Nil unless $gl;
-  return $gl if     $glist && $raw;
-
-  $gl = GLib::GList.new($gl) but GLib::Roles::ListData[$T];
-  return $gl if $glist;
-
-  return $gl.Array if $raw || $O === Any;
-  #die 'Cannot convert GList to Object array when no Object-type specified!'
-  #  if $O =:= Nil;
-
-  my $list = $gl.Array.map({ $O.new($_) });
-  return $list if $seq;
-  $list.Array;
+  returnGenericList(GLib::GList, $gl, $glist, $raw, $T, $O, :$seq, :$ref);
 }
 
 sub returnGListObjects ( $gl, $T = Str, $O?, :$seq = True ) is export {
