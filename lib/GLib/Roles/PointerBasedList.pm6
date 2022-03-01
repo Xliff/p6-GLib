@@ -18,15 +18,15 @@ role GLib::Roles::PointerBasedList {
   ) {
     my $firstElement = True;
     for @list -> $_ is copy {
-      # Should be abstracted to a sub, toPointer()
       my $v = toPointer(
         $_,
-        :$signed   = False,
-        :$double   = False,
-        :$direct   = False,
-        :$encoding = 'utf8',
+        :$signed,
+        :$double,
+        :$direct,
+        :$encoding,
         :$typed
       );
+      say "atl - V: { $v }";
       if $firstElement {
         $l.data       = $v;
         $firstElement = False;
