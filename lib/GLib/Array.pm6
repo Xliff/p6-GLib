@@ -34,7 +34,7 @@ class GLib::Array {
 
   method Array {
     my @array;
-    @array.push( $!ca[$_] ) for ^self.elems;
+    @array.push( self[$_] ) for ^self.elems;
     @array;
   }
 
@@ -127,7 +127,12 @@ class GLib::Array {
 
     die 'Cannot use Mu as a type!' unless t !=:= Mu;
 
-    $!ca = cast(CArray[Pointer[t]], $!a.data);
+    my \T = t;
+    T = Pointer[t] if t.REPR eq 'CStruct';
+
+    $!ca := cast(CArray[T], $!a.data);
+    # Method chaining.
+    self
   }
 
   method AT-POS (\k) {
