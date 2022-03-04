@@ -64,6 +64,10 @@ class GObject         is repr<CStruct> does GLib::Roles::Pointers is export {
   method getTypeName {
     self.g_type_instance.getTypeName;
   }
+
+  method getType {
+    self.g_type_instance.getType
+  }
 }
 
 sub g_type_check_instance_is_a (
