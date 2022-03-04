@@ -24,8 +24,13 @@ my %data;
 class ProvidesData does Associative {
   has $!p;
 
-  submethod BUILD ( :$p ) {
-    $!p = $p if $p
+  submethod BUILD (:$p) {
+    say 'ProvidesData created for ' ~ +($!p = $p);
+  }
+
+  method new ($p) {
+    say "ProvidesData P - $p";
+    self.bless( :$p );
   }
 
   method AT-KEY (\k) is rw {
@@ -40,9 +45,6 @@ class ProvidesData does Associative {
     %data{$!p}{k}:delete;
   }
 
-  method new ($p) {
-    self.bless( :$p );
-  }
 }
 
 # To be rolled into GLib::Roles::Object at some point!
@@ -85,13 +87,11 @@ role GLib::Roles::Object {
   has GObject $!o;
 
   has $!data-proxy;
+  has $!object-set;
 
   submethod BUILD (:$object) {
-    self!setObject($object) if $object
-  }
+    self!setObject($object) if $object;
 
-  submethod TWEAK {
-    $!data-proxy = ProvidesData.new(+$!o.p);
   }
 
   # This will not work while ::Object is still a role!
@@ -320,7 +320,8 @@ role GLib::Roles::Object {
   method !setObject ($obj) {
     say "SetObject ({ self }): { $obj }" if $DEBUG;
     $!o = $obj ~~ GObject ?? $obj !! cast(GObject, $obj);
-    say "ObjectSet ({ self }): { $!o }" if $DEBUG;
+    say "ObjectSet ({ self })-+-: { $!o }" if $DEBUG;
+    $!data-proxy = ProvidesData.new(+$!o.p);
   }
 
   method p { $!o.p }
@@ -330,10 +331,10 @@ role GLib::Roles::Object {
   method GLib::Raw::Object::GObject
   { $!o }
 
-  method equals (GObject() $b) { +self.p == +$b.p }
-
   # Remove when Method::Also is fixed!
-  method GObject ( :object(:$obj) ) { $obj ?? self !! $!o }
+  method GObject { $!o }
+
+  method equals (GObject() $b) { +self.p == +$b.p }
 
   method notify ($detail?) {
     my $sig-name = 'notify';
@@ -422,10 +423,11 @@ role GLib::Roles::Object {
   }
 
   multi method getType {
-    self.prop_get_string(gObjectTypeKey);
+    #self.prop_get_string(gObjectTypeKey);
+    ::?CLASS.getType( self.GObject );
   }
   multi method getType (::?CLASS:U: GObject $o) {
-    g_object_get_string_data($o, gObjectTypeKey);
+    GLib::Object::Type.new($o.getType);
   }
 
   # For storing Raku data types.
