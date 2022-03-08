@@ -49,7 +49,25 @@ class GLib::Object::Supplyish {
     # The CATCH block here means that user-supplied handlers no longer need
     # to specify it. Bonus: It is harmless to existing code that does.
     %!taps{$name} = $!supply.tap(-> *@a {
-      CATCH { default { .message.say; .backtrace.concise.say } }
+      # cw: TODO - filter out wrapper from exception frames.
+      CONTROL {
+        when CX::Warn {
+          .message.say;
+          .backtrace.concise.say;
+          .resume
+        }
+
+        default {
+          .rethrow
+        }
+      }
+
+      CATCH {
+        default {
+          .message.say;
+          .backtrace.concise.say;
+        }
+      }
 
       &handler(|@a);
     });
