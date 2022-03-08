@@ -19,7 +19,6 @@
     "provides": {
       "GLib::Raw::Pointers"           :  "lib/GLib/Raw/Pointers.pm6"           ,
       "GLib::Raw::Traits"             :  "lib/GLib/Raw/Traits.pm6"             ,
-      "GLib::Roles"                   :  "lib/GLib/Roles.pm6"                  ,
       "GLib::Roles::Implementor"      :  "lib/GLib/Roles/Implementor.pm6"      ,
       "GLib::Roles::TypedQueue"       :  "lib/GLib/Roles/TypedQueue.pm6"       ,
       "GLib::Roles::Pointers"         :  "lib/GLib/Roles/Pointers.pm6"         ,
@@ -85,6 +84,7 @@
       "GLib::Raw::FileUtils"          :  "lib/GLib/Raw/FileUtils.pm6"          ,
       "GLib::Raw::GList"              :  "lib/GLib/Raw/GList.pm6"              ,
       "GLib::Raw::GSList"             :  "lib/GLib/Raw/GSList.pm6"             ,
+      "GLib::Raw::GenericList"        :  "lib/GLib/Raw/GenericList.pm6"        ,
       "GLib::Raw::HMAC"               :  "lib/GLib/Raw/HMAC.pm6"               ,
       "GLib::Raw::HashTable"          :  "lib/GLib/Raw/HashTable.pm6"          ,
       "GLib::Raw::Hostname"           :  "lib/GLib/Raw/Hostname.pm6"           ,
