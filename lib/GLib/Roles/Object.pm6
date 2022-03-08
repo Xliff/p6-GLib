@@ -5,6 +5,7 @@ use NativeCall;
 
 use GLib::Object::IsType;
 use GLib::Raw::Types;
+use GLib::Raw::Traits;
 
 use GLib::Value;
 use GLib::Object::Type;
@@ -25,11 +26,12 @@ class ProvidesData does Associative {
   has $!p;
 
   submethod BUILD (:$p) {
-    say 'ProvidesData created for ' ~ +($!p = $p);
+    say 'ProvidesData created for ' ~ +($!p = $p)
+      #if $DEBUG > 3;
   }
 
   method new ($p) {
-    say "ProvidesData P - $p";
+    say "ProvidesData P - $p"; # if $DEBUG > 3;
     self.bless( :$p );
   }
 
@@ -291,8 +293,11 @@ role GLib::Roles::Object {
 
   # Move to camelCase for routines I've added to distinguish them from
   # GLib-linked methods.
-  method objectType (:$raw = False) {
-    my $t = $!o.g_type_instance.g_class.g_type;
+  multi method objectType (::?CLASS:D: :$raw = False) {
+    ::?CLASS.objectType($!o, :$raw);
+  }
+  multi method objectType (::?CLASS:U: $o where *.defined, :$raw = False) {
+    my $t = $o.g_type_instance.g_class.g_type;
     return $t if $raw;
 
     GLib::Object::Type.new($t);
@@ -411,7 +416,11 @@ role GLib::Roles::Object {
     $o.checkType($compare_type);
   }
 
-  method setType($typeName) {
+  method getType {
+    self.prop_get_string(gObjectTypeKey);
+  }
+
+  method setType ($typeName) {
     my $oldType = self.getType;
     self.prop_set_string(gObjectTypeKey, $typeName) unless $oldType.defined;
     warn "WARNING -- Using a $oldType as a $typeName"
@@ -420,14 +429,6 @@ role GLib::Roles::Object {
         $oldType.defined.not,
         $oldType eq $typeName
       );
-  }
-
-  multi method getType {
-    #self.prop_get_string(gObjectTypeKey);
-    ::?CLASS.getType( self.GObject );
-  }
-  multi method getType (::?CLASS:U: GObject $o) {
-    GLib::Object::Type.new($o.getType);
   }
 
   # For storing Raku data types.
@@ -505,6 +506,14 @@ role GLib::Roles::Object {
 
   method set_property (Str() $name, GValue() $value) {
     g_object_set_property($!o, $name, $value);
+  }
+
+  method getPropertyNames {
+    self.^attributes.grep( * ~~ PropertyMethod ).map( *.name );
+  }
+
+  method getAttributeNames {
+    self.^attributes.grep( * ~~ AttributeMethod ).map( *.name );
   }
 
   method prop_set (Str() $name, GValue() $value) is also<prop-set> {
