@@ -170,10 +170,10 @@ class GLib::Object::Type {
   multi method interfaces (
     $n_interfaces is rw,
     :$c-array = False,
-    :$raw = False
+    :$raw     = False
   ) {
-    my guint $n = 0;
-    my $ia = g_type_interfaces($!t, $n);
+    my guint $n  = 0;
+    my       $ia = g_type_interfaces($!t, $n);
 
     return Nil unless $ia;
     return $ia if     $c-array;
