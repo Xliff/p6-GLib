@@ -214,8 +214,13 @@ our $ERRNO is export := cglobal('libc.so.6', 'errno', int32);
 INIT {
 
   if %*ENV<P6_GLIB_DEBUG> {
-    say '»————————————> setting debug';
-    $DEBUG = True;
+    print '»————————————> setting debug';
+    if %*ENV<P6_GLIB_DEBUG>.Int -> \v {
+      $DEBUG = v unless v ~~ Failure;
+    }
+    $DEBUG //= 1;
+
+    say " ({ $DEBUG })";
   }
 
 }
