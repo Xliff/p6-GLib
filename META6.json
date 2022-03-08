@@ -18,7 +18,6 @@
     ],
     "provides": {
       "GLib::Raw::Pointers"           :  "lib/GLib/Raw/Pointers.pm6"           ,
-      "GLib::Raw::Traits"             :  "lib/GLib/Raw/Traits.pm6"             ,
       "GLib::Roles::Implementor"      :  "lib/GLib/Roles/Implementor.pm6"      ,
       "GLib::Roles::TypedQueue"       :  "lib/GLib/Roles/TypedQueue.pm6"       ,
       "GLib::Roles::Pointers"         :  "lib/GLib/Roles/Pointers.pm6"         ,
@@ -31,6 +30,7 @@
       "GLib::Raw::Exceptions"         :  "lib/GLib/Raw/Exceptions.pm6"         ,
       "GLib::Object::Supplyish"       :  "lib/GLib/Object/Supplyish.pm6"       ,
       "GLib::Raw::Exports"            :  "lib/GLib/Raw/Exports.pm6"            ,
+      "GLib::Raw::Traits"             :  "lib/GLib/Raw/Traits.pm6"             ,
       "GLib::Raw::ReturnedValue"      :  "lib/GLib/Raw/ReturnedValue.pm6"      ,
       "GLib::Roles::TypeInstance"     :  "lib/GLib/Roles/TypeInstance.pm6"     ,
       "GLib::Raw::Object"             :  "lib/GLib/Raw/Object.pm6"             ,
