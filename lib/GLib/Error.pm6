@@ -7,9 +7,12 @@ use NativeCall;
 use GLib::Raw::Types;
 use GLib::Raw::Error;
 
+use GLib::Roles::Implementor;
 use GLib::Roles::TypedBuffer;
 
 class GLib::Error {
+  also does GLib::Roles::Implementor;
+  
   has GError $!e is implementor handles<domain code message p>;
 
   submethod BUILD (:$error) {
