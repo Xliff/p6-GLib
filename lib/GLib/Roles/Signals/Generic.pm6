@@ -12,8 +12,8 @@ role GLib::Roles::Signals::Generic {
   has %!tapped-sigs;
   has %!signals;
 
-  method create-signal-supply ($signal, $s) is export {
-    GLib::Object::Supplyish.new($s.Supply, %!tapped-sigs, $signal);
+  method create-signal-supply ($signal, $s) {
+    create-signal-supply($s, %!tapped-sigs, $signal);
   }
 
   method get-signal-id ($name) {
