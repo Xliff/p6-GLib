@@ -85,3 +85,7 @@ class GLib::Object::Supplyish {
     %!signals{$!signal} = %!taps.elems.so;
   }
 }
+
+sub create-signal-supply ($s, $t, $signal) is export {
+  GLib::Object::Supplyish.new($s.Supply, $t, $signal);
+}
