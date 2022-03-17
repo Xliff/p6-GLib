@@ -17,9 +17,7 @@
       "lib/x86_64/linux/glib-support.so"
     ],
     "provides": {
-      "GLib::Raw::Pointers"           :  "lib/GLib/Raw/Pointers.pm6"           ,
       "GLib::Roles::Implementor"      :  "lib/GLib/Roles/Implementor.pm6"      ,
-      "GLib::Roles::TypedQueue"       :  "lib/GLib/Roles/TypedQueue.pm6"       ,
       "GLib::Roles::Pointers"         :  "lib/GLib/Roles/Pointers.pm6"         ,
       "GLib::Compat::Definitions"     :  "lib/GLib/Compat/Definitions.pm6"     ,
       "GLib::Raw::Definitions"        :  "lib/GLib/Raw/Definitions.pm6"        ,
@@ -52,6 +50,7 @@
       "GLib::Roles::PointerBasedList" :  "lib/GLib/Roles/PointerBasedList.pm6" ,
       "GLib::Roles::References"       :  "lib/GLib/Roles/References.pm6"       ,
       "GLib::Roles::StaticClass"      :  "lib/GLib/Roles/StaticClass.pm6"      ,
+      "GLib::Roles::TreeData"         :  "lib/GLib/Roles/TreeData.pm6"         ,
       "GLib::Roles::TypedBuffer"      :  "lib/GLib/Roles/TypedBuffer.pm6"      ,
       "GLib::Sequence"                :  "lib/GLib/Sequence.pm6"               ,
       "GLib::UUID"                    :  "lib/GLib/UUID.pm6"                   ,
