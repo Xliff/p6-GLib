@@ -815,3 +815,16 @@ multi sub infix:<=:=> (
 {
   $a.equals($b);
 }
+
+use MONKEY-TYPING;
+
+augment class GLib::Raw::Object::GObject {
+
+  method objectType  ( :$raw = False ) {
+    my $t = self.g_type_instance.g_class.g_type;
+    return $t if $raw;
+
+    GLib::Object::Type.new($t);
+  }
+  
+}
