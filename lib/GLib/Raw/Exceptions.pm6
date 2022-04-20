@@ -21,3 +21,9 @@ class X::GLib::Object::AttributeNotFound is Exception {
     self.bless(:$attribute);
   }
 }
+
+class X::GLib::Variant::NotAContainer is Exception {
+  method message {
+    'Variant is not a container, so cannot serve as a Positional!';
+  }
+}
