@@ -783,7 +783,7 @@ sub g_variant_hash_int32_loop (
   GVariantIter,
   Str,
   CArray[Str],
-  CArray[CArray[int32]
+  CArray[CArray[int32]]
 )
   returns gboolean
   is native(glib)

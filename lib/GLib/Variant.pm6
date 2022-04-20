@@ -646,7 +646,9 @@ class GLib::Variant {
     $raw ?? $sa !! CStringArrayToArray($sa)
   }
 
-  method get_child_value (Int() $index) is also<get-child-value> {
+  method get_child_value (Int() $index, :$raw = False)
+    is also<get-child-value>
+  {
     my gsize $i = $index;
 
     propReturnObject(
@@ -897,36 +899,41 @@ class GLib::Variant {
       }
     }
 
-    my ($k, $v, %h) = ( newCArray(Str), newCArray(valueType) )
+    my ($k, $v, %h) = ( newCArray(Str), newCArray(valueType) );
 
     g_variant_iter_init($i, self.GVariant);
 
-    # cw: Now what, genius! Can't multi this!
     my &s = ::("g_variant_hash_{ $typename }_loop");
     while ( &s($i, $subtype, $k, $v) ) {
       unless $raw {
         $v = do given valueType {
-          when GVariant {
-            my $v1 = propReturnObject($v, $raw, |self.getTypePair);
-            $v1 .= getValues unless $variant;
+          when Pointer[GVariant] {
+            my $v1 = propReturnObject($v[0].deref, $raw, |self.getTypePair);
+            $v1 .= getValue;
             $v1
           }
 
+          when Str {
+            $v[0];
+          }
+
           default {
-            $v.deref
+            $v[0][0]
           }
         }
       }
-      %h{$k} = $v;
+      %h{ $k[0] } = $v;
     }
     %h;
   }
 
   method getValue {
-    my $t = self.get_type_string
+    my $t = self.get_type_string;
 
-    # cw: Handle known patterns - a{sv} is a hash
-    return $var.Hash if $t.starts-with('a{sv}')
+    # cw: Handle known patterns - a{s[a-z]} is a hash
+    return self.Hash  if $t ~~ / 'a{s' \w '}' /;
+    # cw: The first token set needs to use regex to pull nested expressions!
+    return self.Array if $t ~~ /'a(' .+? ')' | 'a'\w | '(a' \w ')' /;
 
     do given $t {
       when 'm'             { my $var = self.get_maybe;   $var.getValue }
