@@ -23,24 +23,24 @@ class GLib::Timeout {
   }
 
   method add_full (
-    Int() $priority,
-    Int() $interval,
-    &function,
-    gpointer $data         = gpointer,
-    GDestroyNotify $notify = gpointer
+    Int()          $priority,
+    Int()          $interval,
+                   &function,
+    gpointer       $data      = gpointer,
+    GDestroyNotify $notify    = gpointer
   )
     is also<add-full>
   {
-    my gint $p = $priority;
+    my gint  $p = $priority;
     my guint $i = $interval;
 
     g_timeout_add_full($p, $i, &function, $data, $notify);
   }
 
   method add_seconds (
-    Int() $interval,
-    &function,
-    gpointer $data = gpointer
+    Int()    $interval,
+             &function,
+    gpointer $data      = gpointer
   )
     is also<add-seconds>
   {
@@ -50,15 +50,15 @@ class GLib::Timeout {
   }
 
   method add_seconds_full (
-    Int() $priority,
-    Int() $interval,
-    &function,
-    gpointer $data         = gpointer,
-    GDestroyNotify $notify = gpointer
+    Int()          $priority,
+    Int()          $interval,
+                   &function,
+    gpointer       $data      = gpointer,
+    GDestroyNotify $notify    = gpointer
   )
     is also<add-seconds-full>
   {
-    my gint $p = $priority;
+    my gint  $p = $priority;
     my guint $i = $interval;
 
     g_timeout_add_seconds_full($p, $i, &function, $data, $notify);

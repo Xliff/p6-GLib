@@ -29,7 +29,7 @@ my @classes =
            .sort;
 @classes.push: (%config<extra-test-classes> // '').split(',');
 
-plan 58;
+plan 59;
 
 for @classes {
   sub sizeof () returns int64 { ... }
@@ -47,7 +47,7 @@ for @classes {
 
   #diag $_;
   if
-    ($c.WHY.leading // '') ~~ / ['Opaque' | 'Skip Struct']':' (.+) $$ /
+    ($c.WHY.leading // '') ~~ / ['Opaque' | 'Skip Struct'] [':' (.+) ]? $$ /
     ||
     $c ~~ StructSkipsTest
   {

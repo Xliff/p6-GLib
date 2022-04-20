@@ -22,26 +22,26 @@ sub returnGenericList (
   return Nil unless $gl;
   return $gl if     $glist && $raw;
 
-  say '-- pre return gL';
+  #say '-- pre return gL';
 
   $gl = LT.new($gl) but GLib::Roles::ListData[$T];
   return $gl if $glist;
 
-  say '-- post return GL';
+  #say '-- post return GL';
 
   return $gl.Array if $raw || $O === Any;
   #die 'Cannot convert GList to Object array when no Object-type specified!'
   #  if $O =:= Nil;
 
-  say '-- pre Map';
+  #say '-- pre Map';
 
   my $list = $gl.Array.map({
-    say "GL-Map: { .gist }";
+     #say "GL-Map: { .gist } ({ +.p })";
     $O.new($_, :$ref);
   });
   return $list if $seq;
 
-  say '-- pre Array';
+  #say '-- pre Array';
 
   $list.Array;
 }

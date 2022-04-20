@@ -53,15 +53,17 @@ role GLib::Roles::Signals::Generic {
   }
 
   multi method connect (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   ) {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
-      #"O: $obj".say;
-      #"S: $signal".say;
+      "O: $obj".say;
+      "S: $signal".say;
+      $obj .= p if $obj.^can('p');
+
       $hid = g_connect($obj, $signal,
         -> $, $ud {
             $s.emit( [self, $ud] );
@@ -69,6 +71,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
+      "H: $hid".say;
       [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
@@ -673,10 +676,10 @@ role GLib::Roles::Signals::Generic {
 
 sub g_connect (
   Pointer $app,
-  Str $name,
-  &handler (GObject $h_widget, Pointer $h_data),
+  Str     $name,
+          &handler (GObject $h_widget, Pointer $h_data),
   Pointer $data,
-  uint32 $connect_flags
+  uint32  $connect_flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -685,10 +688,10 @@ sub g_connect (
 
 sub g_connect_rbool (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, Pointer --> gboolean),
+  Str     $name,
+          &handler (Pointer, Pointer --> gboolean),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -697,10 +700,10 @@ sub g_connect_rbool (
 
 sub g_connect_string (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, Str, Pointer),
+  Str     $name,
+          &handler (Pointer, Str, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -709,10 +712,10 @@ sub g_connect_string (
 
 sub g_connect_strstr (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, Str, Str, Pointer),
+  Str     $name,
+          &handler (Pointer, Str, Str, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -721,10 +724,10 @@ sub g_connect_strstr (
 
 sub g-connect-intint (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, gint, gint, Pointer),
+  Str     $name,
+          &handler (Pointer, gint, gint, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -733,10 +736,10 @@ sub g-connect-intint (
 
 sub g-connect-uintuint (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, guint, guint, Pointer),
+  Str     $name,
+          &handler (Pointer, guint, guint, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -745,10 +748,10 @@ sub g-connect-uintuint (
 
 sub g_connect_int (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, gint, Pointer),
+  Str     $name,
+          &handler (Pointer, gint, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -758,10 +761,10 @@ sub g_connect_int (
 # Define for each signal
 sub g_connect_uint (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, uint32, Pointer),
+  Str     $name,
+          &handler (Pointer, uint32, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -770,10 +773,10 @@ sub g_connect_uint (
 
 sub g_connect_double (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, gdouble, Pointer),
+  Str     $name,
+          &handler (Pointer, gdouble, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -782,10 +785,10 @@ sub g_connect_double (
 
 sub g_connect_pointer (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, Pointer, Pointer),
+  Str     $name,
+          &handler (Pointer, Pointer, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -794,10 +797,10 @@ sub g_connect_pointer (
 
 sub g_connect_uintint (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, uint32, gint, Pointer),
+  Str     $name,
+          &handler (Pointer, uint32, gint, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -806,10 +809,10 @@ sub g_connect_uintint (
 
 sub g_connect_uintintbool (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, uint32, gint, gboolean, Pointer),
+  Str     $name,
+          &handler (Pointer, uint32, gint, gboolean, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -818,10 +821,10 @@ sub g_connect_uintintbool (
 
 sub g_connect_str_rbool (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, Str, Pointer --> gboolean),
+  Str     $name,
+          &handler (Pointer, Str, Pointer --> gboolean),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -830,10 +833,10 @@ sub g_connect_str_rbool (
 
 sub g_connect_int_ruint (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, gint, Pointer --> guint),
+  Str     $name,
+          &handler (Pointer, gint, Pointer --> guint),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -842,10 +845,10 @@ sub g_connect_int_ruint (
 
 sub g_connect_int_rint (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, gint, Pointer --> gint),
+  Str     $name,
+          &handler (Pointer, gint, Pointer --> gint),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -854,10 +857,10 @@ sub g_connect_int_rint (
 
 sub g_connect_uint_ruint (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, guint, Pointer --> guint),
+  Str     $name,
+          &handler (Pointer, guint, Pointer --> guint),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -866,10 +869,10 @@ sub g_connect_uint_ruint (
 
 sub g-connect-uintint (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, uint32, gint, Pointer),
+  Str     $name,
+          &handler (Pointer, uint32, gint, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -878,10 +881,10 @@ sub g-connect-uintint (
 
 sub g-connect-gparam (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, GParamSpec, Pointer),
+  Str     $name,
+          &handler (Pointer, GParamSpec, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -891,10 +894,10 @@ sub g-connect-gparam (
 # Pointer, guint64, gpointer
 sub g-connect-long (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, guint64, Pointer),
+  Str     $name,
+          &handler (Pointer, guint64, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -904,10 +907,10 @@ sub g-connect-long (
 # Pointer, Str, gint, gpointer
 sub g-connect-strint (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, Str, gint, Pointer),
+  Str     $name,
+          &handler (Pointer, Str, gint, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -917,10 +920,10 @@ sub g-connect-strint (
 # Pointer, GVariant, Pointer
 sub g-connect-variant (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, GVariant, Pointer),
+  Str     $name,
+          &handler (Pointer, GVariant, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native('gobject-2.0')
@@ -931,10 +934,10 @@ sub g-connect-variant (
 # GObject, guint64, gpointer --> gboolean
 sub g-connect-long-ruint32 (
   Pointer $app,
-  Str $name,
-  &handler (Pointer, guint64, Pointer --> guint32),
+  Str     $name,
+          &handler (Pointer, guint64, Pointer --> guint32),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native(gobject)
@@ -944,10 +947,10 @@ sub g-connect-long-ruint32 (
 # GObject, GError, gpointer
 sub g-connect-error(
   Pointer $app,
-  Str $name,
-  &handler (Pointer, GError, Pointer),
+  Str     $name,
+          &handler (Pointer, GError, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native(gobject)
@@ -957,10 +960,10 @@ sub g-connect-error(
 # GObject, gpointer, gpointer
 sub g-connect-pointer(
   Pointer $app,
-  Str $name,
-  &handler (Pointer, Pointer, Pointer),
+  Str     $name,
+          &handler (Pointer, Pointer, Pointer),
   Pointer $data,
-  uint32 $flags
+  uint32  $flags
 )
   returns uint64
   is native(gobject)

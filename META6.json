@@ -57,7 +57,6 @@
       "GLib::Unicode"                 :  "lib/GLib/Unicode.pm6"                ,
       "GLib::Utils"                   :  "lib/GLib/Utils.pm6"                  ,
       "GLib::Value"                   :  "lib/GLib/Value.pm6"                  ,
-      "GLib::VariantIter"             :  "lib/GLib/VariantIter.pm6"            ,
       "GLib::VariantType"             :  "lib/GLib/VariantType.pm6"            ,
       "GLib::Class::Structs"          :  "lib/GLib/Class/Structs.pm6"          ,
       "GLib::Cond"                    :  "lib/GLib/Cond.pm6"                   ,
@@ -124,6 +123,7 @@
       "GLib::Timer"                   :  "lib/GLib/Timer.pm6"                  ,
       "GLib::Tree"                    :  "lib/GLib/Tree.pm6"                   ,
       "GLib::Variant"                 :  "lib/GLib/Variant.pm6"                ,
+      "GLib::VariantIter"             :  "lib/GLib/VariantIter.pm6"            ,
       "GLib::Array"                   :  "lib/GLib/Array.pm6"                  ,
       "GLib::AsyncQueue"              :  "lib/GLib/AsyncQueue.pm6"             ,
       "GLib::Base64"                  :  "lib/GLib/Base64.pm6"                 ,
@@ -183,7 +183,8 @@
       "File::Find",
       "LWP::Simple",
       "Inline::Perl5",
-      "IO::Socket::SSL"
+      "IO::Socket::SSL",
+      "DOM::Tiny"
     ],
     "support": {"source": null},
     "authors": ["clifton.wood@gmail.com"]

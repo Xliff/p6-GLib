@@ -5,7 +5,11 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Raw::TimeZone;
 
+use GLib::Roles::Implementor;
+
 class GLib::TimeZone {
+  also does GLib::Roles::Implementor;
+  
   has GTimeZone $!tz is implementor handles<p>;
 
   submethod BUILD (:$timezone) {
