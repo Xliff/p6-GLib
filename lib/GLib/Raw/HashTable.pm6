@@ -12,16 +12,17 @@ sub g_hash_table_add (GHashTable $hash_table, gpointer $key)
   is export
 { * }
 
+sub g_hash_table_contains (GHashTable $hash_table, Pointer $key)
+  returns uint32
+  is native(glib)
+  is export
+{ * }
+
 # multi sub g_hash_table_contains (GHashTable $hash_table, Str $key)
 #   returns uint32
 #   is native(glib)
 #   is export
 # { * }
-multi sub g_hash_table_contains (GHashTable $hash_table, Str $key)
-  returns uint32
-  is native(glib)
-  is export
-{ * }
 # multi sub g_hash_table_contains (GHashTable $hash_table, CArray[uint32] $key)
 #   returns uint32
 #   is native(glib)
@@ -94,38 +95,38 @@ sub g_direct_hash (gpointer $v)
   is export
 { * }
 
-sub g_double_equal (CArray[num64] $v1, CArray[num64] $v2)
+sub g_double_equal (gpointer $v1, gpointer $v2)
   returns uint32
   is native(glib)
   is export
 { * }
 
 
-sub g_double_hash (CArray[num64] $v)
+sub g_double_hash (gpointer $v)
   returns guint
   is native(glib)
   is export
 { * }
 
-sub g_int64_equal (CArray[gint64] $v1, CArray[gint64] $v2)
+sub g_int64_equal (gpointer $v1, gpointer $v2)
   returns uint32
   is native(glib)
   is export
 { * }
 
-sub g_int64_hash (CArray[int64] $v)
+sub g_int64_hash (gpointer $v)
   returns guint
   is native(glib)
   is export
 { * }
 
-sub g_int_equal (CArray[gint] $v1, CArray[gint] $v2)
+sub g_int_equal (gpointer $v1, gpointer $v2)
   returns uint32
   is native(glib)
   is export
 { * }
 
-sub g_int_hash (CArray[gint] $v)
+sub g_int_hash (gpointer $v)
   returns guint
   is native(glib)
   is export
@@ -357,7 +358,7 @@ sub g_hash_table_replace (
   returns uint32
   is native(glib)
   is export
-{ * }
+{ }
 
 sub g_hash_table_size (GHashTable $hash_table)
   returns guint
