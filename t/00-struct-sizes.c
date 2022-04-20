@@ -19,6 +19,45 @@
 
 typedef struct tm tm;
 
+typedef gint gatomicrefcount;
+
+struct _GVariantTypeInfo
+{
+  gsize fixed_size;
+  guchar alignment;
+  guchar container_class;
+};
+
+typedef struct _GVariantTypeInfo GVariantTypeInfo;
+
+struct _GVariant
+/* see below for field member documentation */
+{
+  GVariantTypeInfo *type_info;
+  gsize size;
+
+  union
+  {
+    struct
+    {
+      GBytes *bytes;
+      gconstpointer data;
+    } serialised;
+
+    struct
+    {
+      GVariant **children;
+      gsize n_children;
+    } tree;
+  } contents;
+
+  gint state;
+  gatomicrefcount ref_count;
+  gsize depth;
+};
+
+typedef struct _GVariant GVariant;
+
 s(tm)
 s(GArray)
 s(GByteArray)
@@ -112,7 +151,9 @@ s(GTypeQuery)
 s(GTypeValueTable)
 s(GValue)
 s(GValueArray)
+s(GVariant)
 s(GVariantBuilder)
 s(GVariantDict)
 s(GVariantIter)
+s(GVariantTypeInfo)
 s(GWeakRef)
