@@ -15,7 +15,10 @@ our $ERROR-THROWS     is export;
 our $DEBUG            is export;
 
 # Forced compile count
-my constant forced = 170;
+my constant forced = 212;
+
+constant GDOUBLE_MAX is export = 1.7976931348623157e308;
+constant INVALID_IDX is export = 2 ** 16 - 1;
 
 # Libs
 constant glib         is export  = 'glib-2.0',v0;
@@ -154,7 +157,6 @@ class GData                    is repr<CPointer> is export does GLib::Roles::Poi
 class GTree                    is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GChecksum                is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GHashTable               is repr<CPointer> is export does GLib::Roles::Pointers { }
-class GHashTableIter           is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GHmac                    is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GHook                    is repr<CPointer> is export does GLib::Roles::Pointers { }  #= size = 64
 class GIConv                   is repr<CPointer> is export does GLib::Roles::Pointers { }
@@ -194,10 +196,10 @@ class GTimeZone                is repr<CPointer> is export does GLib::Roles::Poi
 class GTypeModule              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTypePlugin              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTokenValue              is repr<CPointer> is export does GLib::Roles::Pointers { }
-class GVariant                 is repr<CPointer> is export does GLib::Roles::Pointers { }
+#class GVariant                 is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantBuilder          is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantDict             is repr<CPointer> is export does GLib::Roles::Pointers { }
-class GVariantIter             is repr<CPointer> is export does GLib::Roles::Pointers { }
+#class GVariantIter             is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantType             is repr<CPointer> is export does GLib::Roles::Pointers { }
 
 # "Exhaustive" maximal...
