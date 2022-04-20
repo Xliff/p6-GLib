@@ -25,8 +25,8 @@ class GLib::ByteArray {
   }
 
   method new_take (Blob() $data, Int() $len) is also<new-take> {
-    my gsize $l = $len;
-    my $ba = g_byte_array_new_take($data, $l);
+    my gsize $l  = $len;
+    my       $ba = g_byte_array_new_take($data, $l);
 
     $ba ?? self.bless( byte-array => $ba) !! Nil;
   }
