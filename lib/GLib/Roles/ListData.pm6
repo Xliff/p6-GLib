@@ -12,15 +12,15 @@ role GLib::Roles::ListData[::T, :$direct] {
     #«iterator elems AT-POS EXISTS-POS join :p6sort('sort')»;
 
   method !rebuild {
-    say '-- !rebuild start';
+    #say '-- !rebuild start';
     return unless self.dirty;
 
     my $l;
 
     @!nat = ();
-    say '-- loop start';
+    #say '-- loop start';
     loop ($l = self.first; $l.defined; $l = $l.next) {
-      say "L: { $l }";
+      #say "L: { $l }";
       use nqp;
 
       # Must insure that results from C are properly prepared for the
@@ -30,10 +30,10 @@ role GLib::Roles::ListData[::T, :$direct] {
 
       @!nat.push: $s;
     }
-    say '-- loop end';
+    #say '-- loop end';
     self.cleaned;
 
-    say '-- rebuild end';
+    #say '-- rebuild end';
   }
 
   method DataType { T }
