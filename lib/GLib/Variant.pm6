@@ -3,12 +3,18 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
+use GLib::Raw::Traits;
 use GLib::Raw::Types;
 use GLib::Raw::Variant;
 
 use GLib::VariantType;
 
+use GLib::Roles::Implementor;
+
 class GLib::Variant {
+  also does Positional;
+  also does GLib::Roles::Implementor;
+
   has GVariant $!v is implementor handles<p>;
 
   submethod BUILD (:$variant) {
@@ -19,7 +25,7 @@ class GLib::Variant {
     self.downref;
   }
 
-  method GLib::Raw::Definitions::GVariant
+  method GLib::Raw::Structs::GVariant
     is also<GVariant>
   { $!v }
 
@@ -30,16 +36,17 @@ class GLib::Variant {
   }
 
   multi method new (
-    GLib::Variant:U:
     Int() $bool,
-    :bool(:$boolean) is required
-  ) {
+         :bool(:$boolean) is required
+  )
+    is static
+  {
     self.new_boolean($bool);
   }
   method new_boolean(
-    GLib::Variant:U:
     Int() $bool
   )
+    is static
     is also<new-boolean>
   {
     my gboolean $b = $bool;
@@ -49,16 +56,17 @@ class GLib::Variant {
   }
 
   multi method new (
-    GLib::Variant:U:
     Int() $byte_val,
-    :$byte is required
-  ) {
+         :$byte      is required
+  )
+    is static
+  {
     self.new_byte($byte_val);
   }
   method new_byte(
-    GLib::Variant:U:
     Int() $byte
   )
+    is static
     is also<new-byte>
   {
     my uint8 $b = $byte;
@@ -68,16 +76,17 @@ class GLib::Variant {
   }
 
   multi method new (
-    GLib::Variant:U:
-    Str() $bytestring_val,
-    :$bytestring is required
-  ) {
+    Str()  $bytestring_val,
+          :$bytestring is required
+  )
+    is static
+  {
     self.new_bytestring($bytestring_val);
   }
   method new_bytestring(
-    GLib::Variant:U:
     Str() $bytestring
   )
+    is static
     is also<new-bytestring>
   {
     my $v = g_variant_new_bytestring($bytestring);
@@ -86,18 +95,19 @@ class GLib::Variant {
   }
 
   multi method new (
-    GLib::Variant:U:
     GVariant() $key,
     GVariant() $value,
-    :entry(:dict_entry(:$dict-entry)) is required
-  ) {
+               :entry(:dict_entry(:$dict-entry)) is required
+  )
+    is static
+  {
     self.new_dict_entry($key, $value);
   }
   method new_dict_entry (
-    GLib::Variant:U:
     GVariant() $key,
     GVariant() $value
   )
+    is static
     is also<new-dict-entry>
   {
     my $v = g_variant_new_dict_entry($key, $value);
@@ -106,44 +116,47 @@ class GLib::Variant {
   }
 
   multi method new (
-    GLib::Variant:U:
-    Num() $double_val,
-    :$double is required
-  ) {
+    Num()  $double_val,
+          :$double      is required
+  )
+    is static
+  {
     self.new_double($double_val);
   }
   method new_double (
-    GLib::Variant:U:
     Num() $double
   )
+    is static
     is also<new-double>
   {
     my gdouble $d = $double;
-    my $v = g_variant_new_double($d);
+    my         $v = g_variant_new_double($d);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
   multi method new (
-    GLib::Variant:U:
-    GVariantType() $element_type,
-    Pointer $elements,
-    Int() $n_elements,
-    Int() $element_size,
-    :fixed_array(:fixed-array(:$array)) is required
-  ) {
+    GVariantType()  $element_type,
+    Pointer         $elements,
+    Int()           $n_elements,
+    Int()           $element_size,
+                   :fixed_array(:fixed-array(:$array)) is required
+  )
+    is static
+  {
     self.new_fixed_array($element_type, $elements, $n_elements, $element_size);
   }
   method new_fixed_array (
-    GLib::Variant:U:
     GVariantType() $element_type,
-    Pointer $elements,
-    Int() $n_elements,
-    Int() $element_size
+    Pointer        $elements,
+    Int()          $n_elements,
+    Int()          $element_size
   )
+    is static
     is also<new-fixed-array>
   {
     my uint64 ($ne, $es) = ($n_elements, $element_size);
+
     my $v = g_variant_new_fixed_array(
       $element_type,
       $elements,
@@ -155,52 +168,52 @@ class GLib::Variant {
   }
 
   multi method new (
-    GLib::Variant:U:
-    GVariantType() $type,
-    GBytes $bytes_val,
-    Int() $trusted,
-    :$bytes is required
+    GVariantType()  $type,
+    GBytes          $bytes_val,
+    Int()           $trusted,
+                   :$bytes      is required
   ) {
     self.new_from_bytes($type, $bytes_val, $trusted);
   }
   method new_from_bytes (
-    GLib::Variant:U:
     GVariantType() $type,
-    GBytes $bytes,
-    Int() $trusted
+    GBytes         $bytes,
+    Int()          $trusted
   )
+    is static
     is also<new-from-bytes>
   {
     my gboolean $t = $trusted;
-    my $v = g_variant_new_from_bytes($type, $bytes, $t);
+    my          $v = g_variant_new_from_bytes($type, $bytes, $t);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
   multi method new (
-    GLib::Variant:U:
-    GVariantType() $type,
-    gconstpointer $data_val,
-    Int() $size,
-    Int() $trusted,
-    GDestroyNotify $notify = Pointer,
-    gpointer $user_data    = Pointer,
-    :$data is required
-  ) {
+    GVariantType()  $type,
+    gconstpointer   $data_val,
+    Int()           $size,
+    Int()           $trusted,
+    GDestroyNotify  $notify     = Pointer,
+    gpointer        $user_data  = Pointer,
+                   :$data                   is required
+  )
+    is static
+  {
     self.new_from_data($type, $data_val, $size, $trusted, $notify, $user_data);
   }
   method new_from_data (
-    GLib::Variant:U:
     GVariantType() $type,
-    gconstpointer $data,
-    Int() $size,
-    Int() $trusted,
-    GDestroyNotify $notify = Pointer,
-    gpointer $user_data    = Pointer
+    gconstpointer  $data,
+    Int()          $size,
+    Int()          $trusted,
+    GDestroyNotify $notify    = Pointer,
+    gpointer       $user_data = Pointer
   )
+    is static
     is also<new-from-data>
   {
-    my uint64 $s = $size;
+    my uint64   $s = $size;
     my gboolean $t = $trusted;
     my $v = g_variant_new_from_data(
       $type,
@@ -215,94 +228,99 @@ class GLib::Variant {
   }
 
   multi method new (
-    GLib::Variant:U:
-    Int() $handle_int,
-    :$handle is required
-  ) {
+    Int()  $handle_int,
+          :$handle      is required
+  )
+    is static
+  {
     self.new_handle($handle_int);
   }
   method new_handle(
-    GLib::Variant:U:
     Int() $handle
   )
+    is static
     is also<new-handle>
   {
     my gint $h = $handle;
-    my $v = g_variant_new_handle($h);
+    my      $v = g_variant_new_handle($h);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
   multi method new (
-    GLib::Variant:U:
-    Int() $value,
-    :$int16 is required
-  ) {
+    Int()  $value,
+          :$int16 is required
+  )
+    is static
+  {
     self.new_int16($value);
   }
   method new_int16 (
-    GLib::Variant:U:
     Int() $value
   )
+    is static
     is also<new-int16>
   {
     my int16 $val = $value;
-    my $v = g_variant_new_int16($val);
+    my         $v = g_variant_new_int16($val);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
   multi method new (
-    GLib::Variant:U:
-    Int() $value,
-    :$int32 is required
-  ) {
+    Int()  $value,
+          :$int32 is required
+  )
+    is static
+  {
     self.new_int32($value);
   }
   method new_int32 (
-    GLib::Variant:U:
     Int() $value
   )
+    is static
     is also<new-int32>
   {
     my int32 $val = $value;
-    my $v = g_variant_new_int32($val);
+    my         $v = g_variant_new_int32($val);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
   multi method new (
-    GLib::Variant:U:
-    Int() $value,
-    :$int64 is required
-  ) {
+    Int()  $value,
+          :$int64 is required
+  )
+    is static
+  {
     self.new_int64($value);
   }
   method new_int64 (
-    GLib::Variant:U:
     Int() $value
   )
+    is static
     is also<new-int64>
   {
     my int64 $val = $value;
-    my $v = g_variant_new_int64($val);
+    my         $v = g_variant_new_int64($val);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
   multi method new (
-    GLib::Variant:U:
-    GVariantType() $type,
-    GVariant() $child,
-    :$maybe is required
-  ) {
+    GVariantType()  $type,
+    GVariant()      $child,
+                   :$maybe is required
+  )
+    is static
+  {
     self.new_maybe($type, $child);
   }
   method new_maybe (
-    GLib::Variant:U:
     GVariantType() $type,
-    GVariant() $child
+    GVariant()     $child
   )
+    is static
     is also<new-maybe>
   {
     my $v = g_variant_new_maybe($type, $child);
@@ -311,16 +329,17 @@ class GLib::Variant {
   }
 
   multi method new (
-    GLib::Variant:U:
-    Str() $value,
-    :object_path(:object-path(:obj_path(:obj-path(:$path)))) is required
-  ) {
+    Str()  $value,
+          :object_path(:object-path(:obj_path(:obj-path(:$path)))) is required
+  )
+    is static
+  {
     self.new_object_path($value);
   }
   method new_object_path (
-    GLib::Variant:U:
     Str() $value
   )
+    is static
     is also<new-object-path>
   {
     my $v = g_variant_new_object_path($value);
@@ -333,16 +352,17 @@ class GLib::Variant {
   # }
 
   multi method new (
-    GLib::Variant:U:
-    Str() $value,
-    :$signature is required
-  ) {
+    Str()  $value,
+          :$signature is required
+  )
+    is static
+  {
     self.new_signature($value);
   }
   method new_signature (
-    GLib::Variant:U:
     Str() $value
   )
+    is static
     is also<new-signature>
   {
     my $v = g_variant_new_signature($value);
@@ -351,16 +371,17 @@ class GLib::Variant {
   }
 
   multi method new (
-    GLib::Variant:U:
-    Str() $value,
-    :$string is required
-  ) {
+    Str()  $value,
+          :$string is required
+  )
+    is static
+  {
     self.new_string($value);
   }
   method new_string (
-    GLib::Variant:U:
     Str() $value
   )
+    is static
     is also<new-string>
   {
     my $v = g_variant_new_string($value);
@@ -379,58 +400,61 @@ class GLib::Variant {
   # }
 
   multi method new (
-    GLib::Variant:U:
-    Int() $value,
-    :$uint16 is required
-  ) {
+    Int()  $value,
+          :$uint16 is required
+  )
+    is static
+  {
     self.new_uint16($value);
   }
   method new_uint16 (
-    GLib::Variant:U:
     Int() $value
   )
+    is static
     is also<new-uint16>
   {
     my uint16 $val = $value;
-    my $v = g_variant_new_uint16($val);
+    my          $v = g_variant_new_uint16($val);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
   multi method new (
-    GLib::Variant:U:
-    Int() $value,
-    :$uint32 is required
-  ) {
+    Int()  $value,
+          :$uint32 is required
+  )
+    is static
+  {
     self.new_uint32($value);
   }
   method new_uint32 (
-    GLib::Variant:U:
     Int() $value
   )
+    is static
     is also<new-uint32>
   {
     my uint32 $val = $value;
-    my $v = g_variant_new_uint32($val);
+    my          $v = g_variant_new_uint32($val);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
 
   multi method new (
-    GLib::Variant:U:
-    Int() $value,
-    :$uint64 is required
-  ) {
+    Int()  $value,
+          :$uint64 is required
+  )
+    is static
+  {
     self.new_uint64($value);
   }
   method new_uint64 (
-    GLib::Variant:U:
     Int() $value
   )
+    is static
     is also<new-uint64>
   {
     my uint64 $val = $value;
-    my $v = g_variant_new_uint64($val);
+    my          $v = g_variant_new_uint64($val);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
@@ -440,16 +464,17 @@ class GLib::Variant {
   # }
 
   multi method new (
-    GLib::Variant:U:
     GVariant() $value,
-    :$variant is required
-  ) {
+              :$variant is required
+  )
+    is static
+  {
     self.new_variant($value);
   }
   method new_variant (
-    GLib::Variant:U:
     GVariant() $value
   )
+    is static
     is also<new-variant>
   {
     my $v = g_variant_new_variant($value);
@@ -458,41 +483,40 @@ class GLib::Variant {
   }
 
   multi method parse (
-    GLib::Variant:U:
-    Str() $text,
-    :$all = False,
-    :$raw = False
+    Str()  $text,
+          :$all = False,
+          :$raw = False
   ) {
-    samewith($, $text, $, $, :$all);
+    samewith(GVariantType, $text, Str, $, :$all);
   }
   multi method parse (
-    GLib::Variant:U:
-    Str() $type,
-    Str() $text,
-    Str() $limit                   = Str,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False,
-    :$raw = False;
-  ) {
+    Str()                    $type,
+    Str()                    $text,
+    Str()                    $limit = Str,
+    CArray[Pointer[GError]]  $error = gerror,
+                            :$all   = False,
+                            :$raw   = False;
+  )
+    is static
+  {
     samewith(
       GLib::VariantType.check($type),
       $text,
       $limit,
-      $,
+      Str,
       $error,
       :$all,
       :$raw
     );
   }
   multi method parse (
-    GLib::Variant:U:
-    GVariantType() $type,
-    Str() $text,
-    Str() $limit,
-    $endptr is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False,
-    :$raw = False
+    GVariantType()           $type,
+    Str()                    $text,
+    Str()                    $limit,
+                             $endptr is rw,
+    CArray[Pointer[GError]]  $error         = gerror,
+                            :$all           = False,
+                            :$raw           = False
   ) {
     my $ep = CArray[Str].new;
     $ep[0] = Str;
@@ -509,7 +533,7 @@ class GLib::Variant {
     my $v = g_variant_parse(
       $type // GVariantType,
       explicitly-manage($text),
-      $limit // CArray[uint8],
+      $pl,
       $ep,
       $error
     );
@@ -625,7 +649,11 @@ class GLib::Variant {
   method get_child_value (Int() $index) is also<get-child-value> {
     my gsize $i = $index;
 
-    g_variant_get_child_value($!v, $i);
+    propReturnObject(
+      g_variant_get_child_value($!v, $i),
+      $raw,
+      |self.getChildValue
+    );
   }
 
   method get_data
@@ -700,13 +728,17 @@ class GLib::Variant {
     g_variant_get_int64($!v);
   }
 
-  method get_maybe
+  method get_maybe ( :$raw = False )
     is also<
       get-maybe
       maybe
     >
   {
-    g_variant_get_maybe($!v);
+    propReturnObject(
+      g_variant_get_maybe($!v),
+      $raw,
+      |self.getTypePair
+    );
   }
 
   method get_normal_form
@@ -830,38 +862,175 @@ class GLib::Variant {
       Nil;
   }
 
+  method getObjPath {
+    my $s = self.get_string;
+
+    warn "'$s' is not a valid object path!" unless $s ~~ / ^ \w+ % '/' $ /;
+    return $s;
+  }
+
+  method Hash ( :$raw = False, :$variant = False ) {
+    my $i = GVariantIter.new;
+    my $t = self.get_type_string;
+
+    die "'{ $t }' is not Hash compatible!"
+      unless $t ~~ /^ 'a' $<subtype>=[ '{s' (\w) '}' ] $/;
+
+    my ($subtype, $vt) = ($/<subtype>.Str, $vt.Str);
+
+    my $typename =
+    my \valueType = do given $vt {
+      when 'v'       { $typename = 'gvariant'; Pointer[GVariant] }
+      when 'b'       { $typename = 'uint32'  ; CArray[uint32]    }
+      when 'y'       { $typename = 'uint8'   ; CArray[uint8]     }
+      when 'n'       { $typename = 'int16'   ; CArray[int16]     }
+      when 'q'       { $typename = 'uint16'  ; CArray[uint16]    }
+      when 'i' | 'h' { $typename = 'int32'   ; CArray[int32]     }
+      when 'u'       { $typename = 'uint32'  ; CArray[uint32]    }
+      when 'x'       { $typename = 'int64'   ; CArray[int64]     }
+      when 't'       { $typename = 'uint64'  ; CArray[uint64]    }
+      when 'd'       { $typename = 'num64'   ; CArray[num64]     }
+      when 's' | 'g' { $typename = 'Str'     ; Str               }
+
+      default {
+        die "Unknown value type '{ $_ }'";
+      }
+    }
+
+    my ($k, $v, %h) = ( newCArray(Str), newCArray(valueType) )
+
+    g_variant_iter_init($i, self.GVariant);
+
+    # cw: Now what, genius! Can't multi this!
+    my &s = ::("g_variant_hash_{ $typename }_loop");
+    while ( &s($i, $subtype, $k, $v) ) {
+      unless $raw {
+        $v = do given valueType {
+          when GVariant {
+            my $v1 = propReturnObject($v, $raw, |self.getTypePair);
+            $v1 .= getValues unless $variant;
+            $v1
+          }
+
+          default {
+            $v.deref
+          }
+        }
+      }
+      %h{$k} = $v;
+    }
+    %h;
+  }
+
+  method getValue {
+    my $t = self.get_type_string
+
+    # cw: Handle known patterns - a{sv} is a hash
+    return $var.Hash if $t.starts-with('a{sv}')
+
+    do given $t {
+      when 'm'             { my $var = self.get_maybe;   $var.getValue }
+      when 'v'             { my $var = self.get_variant; $var.getValue }
+
+      when 'b'             { self.get_boolean }
+      when 'y'             { self.get_byte    }
+      when 'n'             { self.get_int16   }
+      when 'q'             { self.get_uint16  }
+      when 'i' | 'h'       { self.get_int32   }
+      when 'u'             { self.get_uint32  }
+      when 'x'             { self.get_int64   }
+      when 't'             { self.get_uint64  }
+      when 'd'             { self.get_double  }
+      when 's' | 'g'       { self.get_string  }
+      when 'o'             { self.getObjPath  }
+
+      default {
+        die "'{ $_ }' is an invalid type string!"
+      }
+    }
+  }
+
+  multi method isList {
+    samewith( self.get-type-string );
+  }
+  multi method isList ($t) {
+    $t.starts-with: '('
+    &&
+    $t.ends-with: ')'
+  }
+
+  multi method isHash {
+    samewith( self.get-type-string );
+  }
+  multi method isHash ($t) {
+    so $t ~~ / ^ 'a{s' \w '}' $/;
+  }
+
+  method Array {
+    return Nil unless self.elems;
+
+    my @return;
+    for ^self.elems {
+      my $v = self.get_child_value($_);
+
+      @return.push: $v.is_container ?? $v.List !! $v.getValue;
+    }
+  }
+
+  method List {
+    return Nil unless self.elems;
+
+    my $t = self.get_type_string;
+
+    die "Value is associative!" unless self.isList($t);
+
+    $t .= substr(1, * - 1);
+
+    my @return;
+    my $k = 0;
+    while $t.chars {
+      my $i = 1;
+
+      NEXT {
+        $k++;
+        $t .= substr($i);
+      };
+
+      my $var = self.get_child_value($k);
+
+      # cw: This needs to be recursive.
+      if $var.isList || $var.isHash {
+        @return.push: $var.List if $var.isList;
+        @return.push: $var.Hash if $var.isHash;
+        $i = $var.get_type_string.chars;
+        next;
+      }
+
+      @return.push: $var.getValue;
+    }
+  }
+
   method hash {
     g_variant_hash($!v);
   }
 
-  method is_container
-    is also<
-      is-container
-      container
-    >
-  {
+  method is_container is also<is-container> {
     so g_variant_is_container($!v);
   }
 
-  method is_floating
-    is also<
-      is-floating
-      floating
-    >
-  {
+  method is_floating is also<is-floating> {
     so g_variant_is_floating($!v);
   }
 
   # Shorter aliases go in favor of the get_* form
-  method is_normal_form is also<is-normal-form>
-  {
+  method is_normal_form is also<is-normal-form> {
     so g_variant_is_normal_form($!v);
   }
 
   method is_object_path (
-    GLib::Variant:U:
     Str() $path
   )
+    is static
     is also<is-object-path>
   {
     so g_variant_is_object_path($path);
@@ -872,9 +1041,9 @@ class GLib::Variant {
   }
 
   method is_signature (
-    GLib::Variant:U:
     Str() $signature
   )
+    is static
     is also<is-signature>
   {
     so g_variant_is_signature($signature);
@@ -896,10 +1065,10 @@ class GLib::Variant {
   }
 
   method parse_error_print_context (
-    GLib::Variant:U:
     GError() $error,
-    Str() $source_str
+    Str()    $source_str
   )
+    is static
     is also<parse-error-print-context>
   {
     g_variant_parse_error_print_context($error, $source_str);
@@ -947,6 +1116,12 @@ class GLib::Variant {
 
   method unref is also<downref> {
     g_variant_unref($!v);
+  }
+
+  # Positional only applies to containers
+  method AT-POS (\i) {
+    X::GLib::Variant::NotAContainer.throw unless self.is_container;
+    self.get_child_value(i);
   }
 
 }

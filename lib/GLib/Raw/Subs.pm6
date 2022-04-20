@@ -12,7 +12,6 @@ use GLib::Object::Supplyish;
 use GLib::Roles::Pointers;
 
 package GLib::Raw::Subs {
-
   # Cribbed from https://github.com/CurtTilmes/perl6-dbmysql/blob/master/lib/DB/MySQL/Native.pm6
   sub malloc         (size_t --> Pointer)                    is export is native { * }
   sub realloc        (Pointer, size_t --> Pointer)           is export is native { * }
@@ -162,7 +161,7 @@ package GLib::Raw::Subs {
         }
         # Note reversal of usual comparison. This is due to the fact that
         # nativecall types must be compatible with the value, not the
-        # other way around. In a;; other cases, T and $v should have
+        # other way around. In all other cases, T and $v should have
         # the same type value.
         die "Value does not support { $v.^name } variables. Will only accept {
           T.^name }!" unless T ~~ $v.WHAT;
@@ -317,11 +316,13 @@ package GLib::Raw::Subs {
           } else {
             my $p = .[0];
             $p.defined ?? ( .[0] !~~ Pointer ?? .[0]
-                                             !! (
+                                             !! do {
+                                                 say "PPR0: { .[0].of.^name }";
+                                                 say "PPR1: { .[0].of.REPR }";
                                                  .[0].of.REPR eq 'CStruct'
                                                     ?? .[0].deref
                                                     !! .[0]
-                                                )
+                                                }
                           )
                        !! Nil;
           }
@@ -524,17 +525,28 @@ package GLib::Raw::Subs {
   	}
   }
 
-  # cw: Still some concern over the this....
-  sub nullTerminatedBuffer (CArray[uint8] $data) is export {
-    my $t-idx = 0;
-    repeat { } while $data[$t-idx++];
-    CArray[uint8].new( |$data[^$t-idx], 0 );
+  sub nullTerminatedArraySize ($data where $data.REPR eq 'CArray') is export {
+    my $idx = 0;
+    repeat { } while $data[$idx++];
+    $idx;
   }
 
-  sub newCArray (\T) is export {
-    my $s = T.REPR eq 'CStruct' || T === Str;
+  # cw: Still some concern over the this....
+  sub nullTerminatedBuffer (CArray[uint8] $data) is export {
+    my $s = nullTerminatedArraySize($data);
+    CArray[uint8].new( |$data[^$s] );
+  }
+
+  sub newCArray (\T, $fv?, :$encoding = 'utf8' ) is export {
+    # cw: It's almost always better to make Str a CArray[uint8]
+    if (T, $fv).all ~~ Str {
+      return CArray[uint8].new( $fv.encode($encoding) );
+    }
+
+    my $s = T.REPR eq 'CStruct' || T ~~ Str;
     (my $p = ( $s ?? CArray[T] !! CArray[ Pointer[T] ] ).new)[0] =
-      $s ?? T !! Pointer[T];
+      $fv ?? $fv
+          !! ($s ?? T !! Pointer[T]);
 
     $p;
   }
