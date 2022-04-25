@@ -6,7 +6,7 @@ use NativeCall;
 use GLib::Raw::Types;
 
 role GLib::Roles::TypedBuffer[::T] does Positional {
-  has $!size;
+  has         $!size;
   has Pointer $!b;
 
   # What if not all malloc'd at once?
