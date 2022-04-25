@@ -175,20 +175,22 @@ package GLib::Raw::Subs {
     my $handling;
     my $ca = (do given (T.REPR // '') {
       when 'P6opaque' {
-        when T ~~ Str                      { $handling = P;  CArray[T]    }
+        when T ~~ Str                     { $handling = P;  CArray[T]          }
 
         proceed
       }
 
       when 'CPointer' | 'P6str'  |
-           'P6num'    | 'P6int'            { $handling = P;  CArray[T]    }
-      when 'CStruct'  | 'CUnion'           { $handling = NP; Pointer[T]   }
+           'P6num'    | 'P6int'           { $handling = P;  CArray[T]          }
+      when 'CStruct'  | 'CUnion'          { $handling = NP; CArray[Pointer[T]] }
 
       default {
         "ArrayToCArray does not know how to handle a REPR of '$_' for type {
          T.^name }"
       }
-    }).new;
+    });
+    return $ca unless @a.elems;
+    $ca = $ca.new;
     for ^@a.elems {
       my $typed = checkForType(T, @a[$_]);
 
