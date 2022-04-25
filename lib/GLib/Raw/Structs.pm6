@@ -758,7 +758,7 @@ sub g_error_free(GError $err)
 
 sub clear_error ($error = $ERROR) is export {
   g_error_free($error) if $error.defined;
-  $ERROR = Nil;
+  $ERROR = Nil if $error === $ERROR;
 }
 
 sub get-error ($e) is export {
@@ -769,11 +769,15 @@ sub get-error ($e) is export {
 }
 
 sub set_error(CArray $e) is export {
-  if $e[0].defined {
-    $ERROR = %ERROR{$*PID} = get-error($e);
+  state $lock = Lock.new;
+
+  $lock.protect: {
+    if $e[0].defined {
+      $ERROR = %ERROR{ $*PID } = get-error($e);
+      #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
+      @ERRORS.push: [ $ERROR, $*PID, Backtrace.new ];
+    }
     X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
-    #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
-    @ERRORS.push: [ $ERROR, Backtrace.new ];
   }
 }
 
