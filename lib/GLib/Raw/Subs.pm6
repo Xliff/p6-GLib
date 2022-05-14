@@ -49,6 +49,26 @@ package GLib::Raw::Subs {
 
   # Implement memcpy_pattern. Take pattern and write pattern.^elem bytes to successive areas in dest.
 
+  sub updateTypeClass (%ct, :$reverse = True) is export {
+    state $l = Lock.new;
+
+    $l.protect: {
+      %typeClass.append(
+        $reverse ?? %ct.antipairs.Hash !! %ct
+      );
+    }
+  }
+
+  sub isGTypeAnInteger ($v) is export {
+    return True if $v == $_ for G_TYPE_INT   ,
+                                G_TYPE_UINT  ,
+                                G_TYPE_LONG  ,
+                                G_TYPE_ULONG ,
+                                G_TYPE_INT64 ,
+                                G_TYPE_UINT64;
+    return False;
+  }
+
   sub getEndian is export {
     ( $*KERNEL.endian == BigEndian, $*KERNEL.endian == LittleEndian );
   }
@@ -170,7 +190,7 @@ package GLib::Raw::Subs {
     $v;
   }
 
-  sub ArrayToCArray(\T, @a) is export {
+  sub ArrayToCArray(\T, @a, :$null = False) is export {
     enum Handling <P NP>;
     my $handling;
     my $ca = (do given (T.REPR // '') {
@@ -189,13 +209,23 @@ package GLib::Raw::Subs {
          T.^name }"
       }
     });
-    return $ca unless @a.elems;
+
+    my $nv = $ca;
+    return $nv unless @a.elems;
+
     $ca = $ca.new;
     for ^@a.elems {
       my $typed = checkForType(T, @a[$_]);
 
       $ca[$_] = $handling eq P ?? $typed !! cast(Pointer[T], $typed)
     }
+
+    $ca[$ca.elems] = do given T.REPR {
+      when 'P6int' { 0   }
+      when 'P6num' { 0e0 }
+      default      { T   }
+    } if $null;
+
     $ca;
   }
 
