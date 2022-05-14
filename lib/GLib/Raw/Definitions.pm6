@@ -13,9 +13,10 @@ our (%ERROR, %ERRORS) is export;
 our @ERRORS           is export;
 our $ERROR-THROWS     is export;
 our $DEBUG            is export;
+our %typeClass        is export;
 
 # Forced compile count
-my constant forced = 212;
+my constant forced = 220;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
