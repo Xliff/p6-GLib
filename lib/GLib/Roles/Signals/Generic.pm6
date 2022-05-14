@@ -117,7 +117,11 @@ role GLib::Roles::Signals::Generic {
     $signal,
     &handler?
   )
-    is also<connect_string>
+    is also<
+      connect_string
+      connect-str
+      connect_str
+    >
   {
     my $hid;
     %!signals{$signal} //= do {
