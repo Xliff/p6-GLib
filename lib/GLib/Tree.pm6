@@ -16,8 +16,8 @@ use GLib::Raw::Tree;
 # to allow consuming code to retrieve it.
 
 class GLib::Tree {
-  has GTree $!t is implementor handles<p>;
-  has $.type;
+  has GTree $!t     is implementor handles<p>;
+  has       $.type;
 
   submethod BUILD (:$tree, :$type) {
     $!t    = $tree;
@@ -32,9 +32,10 @@ class GLib::Tree {
     is also<GTree>
   { $!t }
 
-  multi method new (GTree $tree, :$type) {
+  multi method new (GTree $tree, :$type, :$ref = True) {
     my $o = self.bless( :$tree, :$type );
-    $o.ref;
+    $o.ref if $ref;
+    $o
   }
 
   # Make multis with default comparison functions. Should handle at least
@@ -47,15 +48,16 @@ class GLib::Tree {
   }
   multi method new (&compare_func, :$type) {
     my $t = g_tree_new(&compare_func);
+
     $t ?? self.bless( tree => $t, :$type ) !! Nil;
   }
 
   multi method new (
-    &compare_func,
-    gpointer $key_compare_data,
-    GDestroyNotify $key_destroy_func   = gpointer,
-    GDestroyNotify $value_destroy_func = gpointer,
-    :$full is required
+                    &compare_func,
+    gpointer        $key_compare_data,
+    GDestroyNotify  $key_destroy_func                = gpointer,
+    GDestroyNotify  $value_destroy_func              = gpointer,
+                   :$full               is required
   ) {
     self.new_full(
       &compare_func,
@@ -65,8 +67,8 @@ class GLib::Tree {
     );
   }
   method new_full (
-    &compare_func,
-    gpointer $key_compare_data,
+                   &compare_func,
+    gpointer       $key_compare_data,
     GDestroyNotify $key_destroy_func   = gpointer,
     GDestroyNotify $value_destroy_func = gpointer
   )
@@ -82,9 +84,9 @@ class GLib::Tree {
   }
 
   multi method new (
-    &compare_func,
-    gpointer $key_compare_data,
-    :$data is required
+              &compare_func,
+    gpointer  $key_compare_data,
+             :$data              is required
   ) {
     self.new_with_data(&compare_func, $key_compare_data);
   }
@@ -116,10 +118,10 @@ class GLib::Tree {
   }
 
   method lookup_extended (
-    gconstpointer $lookup_key,
-    $orig_key is rw,
-    $value    is rw,
-    :$all = False
+    gconstpointer  $lookup_key,
+                   $orig_key    is rw,
+                   $value       is rw,
+                  :$all                = False
   )
     is also<lookup-extended>
   {
@@ -159,7 +161,7 @@ class GLib::Tree {
   method traverse (
                   &traverse_func,
     GTraverseType $traverse_type,
-    gpointer      $user_data = gpointer
+    gpointer      $user_data       = gpointer
   ) {
     my GTraverseType $tt = $traverse_type;
 
