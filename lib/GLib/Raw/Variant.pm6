@@ -435,6 +435,29 @@ sub g_variant_iter_new (GVariant $value)
   is export
 { * }
 
+# cw: This is problematic with FFI, but we can define specific interfaces.
+# sub g_variant_iter_next (
+#   GVariantIter $variant,
+#   Str      $format,
+#   ...
+# )
+#   returns gboolean
+#   is native(glib)
+#   is export
+# { * }
+
+sub g_variant_iter_next_key_value (
+  GVariantIter              $iter,
+  Str                       $format,
+  CArray[uint8]             $key,
+  CArray[Pointer[GVariant]] $value
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_next')
+  is export
+{ * }
+
 sub g_variant_iter_next_value (GVariantIter $iter)
   returns GVariant
   is native(glib)
@@ -442,8 +465,8 @@ sub g_variant_iter_next_value (GVariantIter $iter)
 { * }
 
 sub g_variant_lookup_value (
-  GVariant $dictionary,
-  Str $key,
+  GVariant     $dictionary,
+  Str          $key,
   GVariantType $expected_type
 )
   returns GVariant
@@ -488,10 +511,10 @@ sub g_variant_new_double (gdouble $value)
 { * }
 
 sub g_variant_new_fixed_array (
-  GVariantType $element_type,
+  GVariantType  $element_type,
   gconstpointer $elements,
-  gsize $n_elements,
-  gsize $element_size
+  gsize         $n_elements,
+  gsize         $element_size
 )
   returns GVariant
   is native(glib)
@@ -500,8 +523,8 @@ sub g_variant_new_fixed_array (
 
 sub g_variant_new_from_bytes (
   GVariantType $type,
-  GBytes $bytes,
-  gboolean $trusted
+  GBytes       $bytes,
+  gboolean     $trusted
 )
   returns GVariant
   is native(glib)
@@ -509,12 +532,12 @@ sub g_variant_new_from_bytes (
 { * }
 
 sub g_variant_new_from_data (
-  GVariantType $type,
-  gconstpointer $data,
-  gsize $size,
-  gboolean $trusted,
+  GVariantType   $type,
+  gconstpointer  $data,
+  gsize          $size,
+  gboolean       $trusted,
   GDestroyNotify $notify,
-  gpointer $user_data
+  gpointer       $user_data
 )
   returns GVariant
   is native(glib)
@@ -612,10 +635,10 @@ sub g_variant_new_variant (GVariant $value)
 { * }
 
 sub g_variant_parse (
-  GVariantType $type,
-  Str $text,
-  CArray[uint8] $limit,
-  CArray[Str] $endptr,
+  GVariantType            $type,
+  Str                     $text,
+  CArray[uint8]           $limit,
+  CArray[Str]             $endptr,
   CArray[Pointer[GError]] $error
 )
   returns GVariant
@@ -625,7 +648,7 @@ sub g_variant_parse (
 
 sub g_variant_parse_error_print_context (
   GError $error,  # NOT **GError!
-  Str $source_str
+  Str    $source_str
 )
   returns Str
   is native(glib)
@@ -646,7 +669,7 @@ sub g_variant_print (GVariant $value, gboolean $type_annotate)
 
 sub g_variant_print_string (
   GVariant $value,
-  GString $string,
+  GString  $string,
   gboolean $type_annotate
 )
   returns GString
@@ -679,5 +702,139 @@ sub g_variant_take_ref (GVariant $value)
 
 sub g_variant_unref (GVariant $value)
   is native(glib)
+  is export
+{ * }
+
+# cw: Revisit this! 2022/04/17
+# Would have to use this as a basis for a raku port of g_variant_get_value()
+# Where we assume that va_list *app can be replaced by an array of Pointers.
+sub g_variant_valist_get (
+  CArray[uint8]   $str,
+  GVariant        $value,
+  gboolean        $free,
+  CArray[Pointer] $app
+)
+  is native(glib)
+  is export
+{ * }
+
+# cw: ONLY to be used if the second parameter is "{sv}"!
+sub g_variant_hash_gvariant_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[Pointer[GVariant]]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
+  is export
+{ * }
+
+sub g_variant_hash_str_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[Str]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
+  is export
+{ * }
+
+sub g_variant_hash_uint8_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[CArray[uint8]]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
+  is export
+{ * }
+
+sub g_variant_hash_int16_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[CArray[int16]]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
+  is export
+{ * }
+
+sub g_variant_hash_uint16_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[CArray[uint16]]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
+  is export
+{ * }
+
+sub g_variant_hash_int32_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[CArray[int32]]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
+  is export
+{ * }
+
+sub g_variant_hash_uint32_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[CArray[uint32]]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
+  is export
+{ * }
+
+sub g_variant_hash_int64_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[CArray[int64]]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
+  is export
+{ * }
+
+sub g_variant_hash_uint64_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[CArray[uint64]]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
+  is export
+{ * }
+
+sub g_variant_hash_num64_loop (
+  GVariantIter,
+  Str,
+  CArray[Str],
+  CArray[CArray[num64]]
+)
+  returns gboolean
+  is native(glib)
+  is symbol('g_variant_iter_loop')
   is export
 { * }

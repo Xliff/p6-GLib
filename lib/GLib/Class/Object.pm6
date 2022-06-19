@@ -45,6 +45,8 @@ constant GInitiallyUnownedClass is export := GObjectClass;
 
 use GLib::Roles::TypedBuffer;
 
+my %properties;
+
 class GLib::Class::Object is export {
   has GObjectClass $!c;
 
@@ -91,11 +93,11 @@ class GLib::Class::Object is export {
     samewith($, :$raw)
   }
   multi method list_properties (
-    $n_properties is rw,
-    :$raw = False
+     $n_properties is rw,
+    :$raw                 = False
   ) {
-    my guint $n = 0;
-    my $pl = g_object_class_list_properties($!c, $n);
+    my guint $n  = 0;
+    my       $pl = g_object_class_list_properties($!c, $n);
 
     $n_properties = $n;
     my @properties;
@@ -104,6 +106,17 @@ class GLib::Class::Object is export {
       @properties.push: $raw ?? $e !! GLib::Object::ParamSpec.new($e)
     }
     @properties;
+  }
+
+  # cw: If adding properties to an instance of a GObject, you should
+  #     subclass your GObject, otherwise this will not work for your
+  #     special case.
+  method getProperties ( :$raw = False ) {
+    %properties{ self.^name } //= self.list_properties(:$raw).map({
+      .name => $_
+    }).Hash;
+
+    %properties{ self.^name }
   }
 
   method override_property (Int() $property_id, Str() $property_name)

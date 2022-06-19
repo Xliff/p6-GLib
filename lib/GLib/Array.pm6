@@ -32,9 +32,10 @@ class GLib::Array {
     >
   { $!a }
 
-  method Array {
+  method Array ( :$typed, :$double, :$signed, :$direct ) {
     my @array;
-    @array.push( self[$_] ) for ^self.elems;
+    @array.push: fromPointer($_, :$typed, :$double, :$signed, :$direct)
+      for ^self.elems;
     @array;
   }
 
@@ -157,46 +158,46 @@ class GLib::Array {
   # ↑↑↑↑ PROPERTIES ↑↑↑↑
 
   # ↓↓↓↓ METHODS ↓↓↓↓
-  proto method append_vals (|)
-    is also<append-vals>
-  { * }
+  # proto method append_vals (|)
+  #   is also<append-vals>
+  # { * }
 
-  multi method append_vals (
-          $data where * !~~ gpointer,
-    Int() $len,
-          :$typed,
-          :$double,
-          :$signed,
-          :$direct
-  ) {
+  # multi method append_vals (
+  #         $data where * !~~ gpointer,
+  #   Int() $len,
+  #         :$typed,
+  #         :$double,
+  #         :$signed,
+  #         :$direct
+  # ) {
     # cw: There is no collective for NativeCallTypeObjects so we have to do things
     #     the hard way
-    samewith(gpointer, 1) if $data === int8           ||
-                             $data === int16          ||
-                             $data === int32          ||
-                             $data === int64          ||
-                             $data === uint8          ||
-                             $data === uint16         ||
-                             $data === uint32         ||
-                             $data === uint64         ||
-                             $data === num32          ||
-                             $data === num64          ||
-                             $data === gpointer       ||
-                             $data === Str            ||
-                             $data === str            ||
-                             $data.defined.not && (
-                               $data.REPR eq 'CArray'   ||
-                               $data.REPR eq 'CPointer' ||
-                               $data.REPR eq 'CStruct'  ||
-                               $data.REPR eq 'CUnion'
-                             );
-
-    samewith(
-      toPointer($data, :$typed, :$signed, :$double, :$direct),
-      $len
-    );
-  }
-  multi method append_vals (gpointer $data, Int() $len) {
+    # samewith(gpointer, 1) if $data === int8           ||
+    #                          $data === int16          ||
+    #                          $data === int32          ||
+    #                          $data === int64          ||
+    #                          $data === uint8          ||
+    #                          $data === uint16         ||
+    #                          $data === uint32         ||
+    #                          $data === uint64         ||
+    #                          $data === num32          ||
+    #                          $data === num64          ||
+    #                          $data === gpointer       ||
+    #                          $data === Str            ||
+    #                          $data === str            ||
+    #                          $data.defined.not && (
+    #                            $data.REPR eq 'CArray'   ||
+    #                            $data.REPR eq 'CPointer' ||
+    #                            $data.REPR eq 'CStruct'  ||
+    #                            $data.REPR eq 'CUnion'
+    #                          );
+  #
+  #   samewith(
+  #     toPointer($data, :$typed, :$signed, :$double, :$direct),
+  #     $len
+  #   );
+  # }
+  method append_vals (gpointer $data, Int() $len) {
     my guint $l = $len;
 
     g_array_append_vals($!a, $data, $l);
@@ -281,7 +282,7 @@ class GLib::Array {
 
   method sort_with_data (
     GCompareDataFunc $compare_func,
-    gpointer $user_data = gpointer
+    gpointer         $user_data = gpointer
   )
     is also<sort-with-data>
   {
@@ -296,6 +297,32 @@ class GLib::Array {
 
 }
 
+class GLib::Array::Pointer is GLib::Array {
+
+  method GLib::Raw::Definitions::GPtrArray {
+    cast(GPtrArray, self.GArray)
+  }
+
+  method append_vals (@data, Int() $len) {
+    nextwith( GLib::Roles::TypedBuffer.new(@data).p, @data.elems );
+  }
+
+  method insert_vals (@data, Int() $len) {
+    nextwith( GLib::Roles::TypedBuffer.new(@data).p, @data.elems );
+  }
+
+  method prepend_vals (@data, Int() $len) {
+    nextwith( GLib::Roles::TypedBuffer.new(@data).p, @data.elems );
+  }
+
+  method get_type {
+    state ($n, $t);
+
+    unstable_get_type( self.^name, &g_ptr_array_get_type, $n, $t );
+  }
+
+}
+
 sub value_array_get_type is export {
   state ($n, $t);
 
@@ -305,6 +332,7 @@ sub value-array-get-type is export {
   value_array_get_type;
 }
 
+# cw: This will become GLib::Array::Byte which will accept Blob or CArray[uint8]
 sub byte_array_get_type is export {
   state ($n, $t);
 
@@ -312,13 +340,4 @@ sub byte_array_get_type is export {
 }
 sub byte-array-get-type is export {
   byte_array_get_type;
-}
-
-sub ptr_array_get_type is export {
-  state ($n, $t);
-
-  unstable_get_type( 'PtrArray', &g_ptr_array_get_type, $n, $t );
-}
-sub ptr-array-get-type is export {
-  ptr_array_get_type;
 }

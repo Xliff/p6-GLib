@@ -758,7 +758,7 @@ sub g_error_free(GError $err)
 
 sub clear_error ($error = $ERROR) is export {
   g_error_free($error) if $error.defined;
-  $ERROR = Nil;
+  $ERROR = Nil if $error === $ERROR;
 }
 
 sub get-error ($e) is export {
@@ -769,11 +769,15 @@ sub get-error ($e) is export {
 }
 
 sub set_error(CArray $e) is export {
-  if $e[0].defined {
-    $ERROR = %ERROR{$*PID} = get-error($e);
+  state $lock = Lock.new;
+
+  $lock.protect: {
+    if $e[0].defined {
+      $ERROR = %ERROR{ $*PID } = get-error($e);
+      #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
+      @ERRORS.push: [ $ERROR, $*PID, Backtrace.new ];
+    }
     X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
-    #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
-    @ERRORS.push: [ $ERROR, Backtrace.new ];
   }
 }
 
@@ -1116,4 +1120,62 @@ class GNode                  is repr<CStruct>  does GLib::Roles::Pointers is exp
 
 class GWeakRef               is repr<CStruct>  does GLib::Roles::Pointers is export {
   has Pointer $!priv;
+}
+
+class GHashTableIter         is repr<CStruct>  does GLib::Roles::Pointers is export {
+  has gpointer $!dummy1;
+  has gpointer $!dummy2;
+  has gpointer $!dummy3;
+  has gint     $!dummy4;
+  has gboolean $!dummy5;
+  has gpointer $!dummy6;
+}
+
+class GVariantIter     is repr<CStruct>  does GLib::Roles::Pointers is export {
+  HAS gsize @.x[16] is CArray;
+}
+
+class GVariantTypeInfo is repr<CStruct>  does GLib::Roles::Pointers is export {
+  has gsize $.fixed_size;
+  has uint8 $.alignment;       #= guchar
+  has uint8 $.container_class; #= guchar
+}
+
+class GVariantSerialized is repr<CStruct>
+  does StructSkipsTest['internal struct']
+  does GLib::Roles::Pointers
+  is export
+{
+  has GBytes   $.bytes;
+  has gpointer $.data;
+}
+
+class GVariant is repr<CStruct>  does GLib::Roles::Pointers is export { ... }
+
+class GVariantTree is repr<CStruct>
+  does StructSkipsTest['internal struct']
+  does GLib::Roles::Pointers
+  is export
+{
+  #has CArray[Pointer[GVariant]] $.children;
+  has CArray[Pointer] $.children;
+  has gsize           $.n_children;
+}
+
+class GVariantSerializedTree is repr<CUnion>
+  does StructSkipsTest['internal struct']
+  does GLib::Roles::Pointers
+  is export
+{
+  HAS GVariantSerialized $.serialized;
+  HAS GVariantTree       $.tree;
+}
+
+class GVariant {
+  has GVariantTypeInfo       $.type_info;
+  has gsize                  $.size;
+  HAS GVariantSerializedTree $.contents;
+  has gint                   $.state;
+  has gint                   $.ref_count;   #= gtomicrefcount
+  has gsize                  $.depth;
 }
