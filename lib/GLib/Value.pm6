@@ -517,7 +517,9 @@ sub gv_flag (Int() $f) is export {
 
 sub gv-obj ($o, :$type) is export
   { gv_obj($o, :$type) }
-sub gv_obj ($o, :$type) is export {
+sub gv_obj ($o, :$type is copy) is export {
+  $type = $o.?get_type
+    if ($o ~~ GLib::Roles::Object) && $type.defined.not;
   my $gv = GLib::Value.new( $type // G_TYPE_OBJECT );
   $gv.object = $o;
   $gv;
