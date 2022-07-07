@@ -11,9 +11,9 @@ use GLib::Roles::Implementor;
 class GLib::Value {
   also does GLib::Roles::Implementor;
 
-  has GValue $!v is implementor handles <type p>;
+  has GValue $!v is implementor handles <p>;
 
-  submethod BUILD(:$type, GValue :$value) {
+  submethod BUILD (:$type, GValue :$value) {
     $!v = $value // GValue.new;
 
     die 'Cannot allocate GValue!' unless $!v;
@@ -34,13 +34,10 @@ class GLib::Value {
     my $type = $t.Int;
 
     # Not elegible for a Nil check!
-    self.bless(:$type);
+    self.bless( :$type );
   }
   multi method new (GValue $value) {
     $value ?? self.bless(:$value) !! GValue
-  }
-  multi method new ($v) {
-    die "Invalid value { $v.^name } passed to GLib::Value!"
   }
 
   method GLib::Raw::Structs::GValue
@@ -134,7 +131,7 @@ class GLib::Value {
   }
 
   method value is rw {
-    self.valueFromGType( self.type( :fundamental ) );
+    self.valueFromGType( self.type( :fundamental, :enum ) );
   }
 
   # ↓↓↓↓ ATTRIBUTES ↓↓↓↓
@@ -200,16 +197,21 @@ class GLib::Value {
   }
 
   # Alias back to original name of gtype.
-  # method type is rw {
-  #   Proxy.new(
-  #     FETCH => sub ($) {
-  #       GTypeEnum( g_value_get_gtype($!v) );
-  #     },
-  #     STORE => sub ($, Int() $v_gtype is copy) {
-  #       g_value_set_gtype($!v, self.$v_gtype);
-  #     }
-  #   );
-  # }
+  method type ( :$fundamental = False, :$enum = False ) is rw {
+    Proxy.new(
+      FETCH => sub ($) {
+        my $t = g_value_get_gtype($!v);
+        return $t unless $fundamental;
+        $t = GLib::Object::Type.new($t).fundamental;
+        return $t.Int unless $enum;
+        $t.GTypeEnum;
+      },
+
+      STORE => sub ($, Int() $v_gtype is copy) {
+        g_value_set_gtype($!v, $v_gtype);
+      }
+    );
+  }
 
   method enum is rw {
     Proxy.new(
@@ -283,12 +285,15 @@ class GLib::Value {
         g_value_get_object($!v);
       },
       STORE => sub ($, $obj is copy) {
-        if $obj.^lookup('GObject') -> $gobject {
-          $obj = $gobject($obj);
+        if $obj !~~ GObject {
+          if $obj.^lookup('GObject') -> $gobject {
+            $obj = $gobject($obj);
+          }
+        } elsif $obj.REPR eq <CPointer CStruct>.any {
+          $obj = cast(GObject, $obj);
         }
-        die "\$obj is a { $obj.^name }, not a CPointer or CStruct reference!"
-          unless $obj.REPR eq <CPointer CStruct>.any;
-        g_value_set_object( $!v, nativecast(GObject, $obj) );
+        die "\$obj is a { $obj.^name }, not GObject!" unless $obj ~~ GObject;
+        g_value_set_object( $!v, $obj );
       }
     );
   }
@@ -533,7 +538,7 @@ sub gv_ptr ($p) is export {
   $gv;
 }
 
-sub valuetoGValue (
+sub valueToGValue (
   $_,
   :$signed,
   :$unsigned  is copy,
