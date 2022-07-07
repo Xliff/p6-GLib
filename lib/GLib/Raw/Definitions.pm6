@@ -14,8 +14,10 @@ our @ERRORS           is export;
 our $ERROR-THROWS     is export;
 our $DEBUG            is export;
 
+our (%typeClass, %typeOrigin) is export;
+
 # Forced compile count
-my constant forced = 212;
+my constant forced = 221;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
@@ -93,6 +95,8 @@ constant time_t                         is export := uint64;
 constant uid_t                          is export := uint32;
 constant gid_t                          is export := uint32;
 constant pid_t                          is export := int32;
+constant uint64_t                       is export := uint64;
+constant uint32_t                       is export := uint32;
 
 # Conditionals!
 constant GPid                           is export := realUInt;
