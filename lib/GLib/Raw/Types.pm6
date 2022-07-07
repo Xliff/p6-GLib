@@ -11,7 +11,9 @@ need GLib::Raw::Object;
 need GLib::Raw::Structs;
 need GLib::Raw::Subs;
 need GLib::Raw::Struct_Subs;
+need GLib::Raw::Traits;
 need GLib::Roles::Pointers;
+need GLib::Roles::Implementor;
 
 BEGIN {
   glib-re-export($_) for @GLib::Raw::Exports::glib-exports;
