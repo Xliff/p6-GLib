@@ -1,5 +1,4 @@
 use v6.c;
-
 use Method::Also;
 use NativeCall;
 
@@ -8,8 +7,8 @@ use GLib::Raw::Types;
 use GLib::Raw::Traits;
 
 use GLib::Value;
+use GLib::Signal;
 use GLib::Object::Type;
-
 use GLib::Class::Object;
 
 use GLib::Roles::Bindable;
@@ -770,16 +769,42 @@ role GLib::Roles::Object {
     self!set-data-abstract(@pairs,  Num, gdouble, &g_object_set_double);
   }
 
+  method listSignals ( :$raw = False ) {
+    my $t = GLib::Object::Type.new(self.get_type);
+
+    $t.name.say;
+    $t.Int.say;
+
+    my $ids = GLib::Signal.list_ids($t);
+
+    $ids.gist.say;
+
+    $ids.map({ GLib::Signal.query($_) })
+  }
+
 }
 
 class GLib::Object does GLib::Roles::Object {
 
-  method new (GObject() $object, :$ref = True) {
+  multi method new (
+     $object where $object ~~ GObject || $object.^can('GObject'),
+    :$ref                                                         = True
+  ) {
+    $object .= GObject;
+
     return Nil unless $object;
 
     my $o = self.bless( :$object );
     $o.ref if $ref;
     $o;
+  }
+
+  multi method new (
+    $obj-type where $obj-type ~~ Int || $obj-type.can('Int')
+  ) {
+    my $object = g_object_new($obj-type, Str);
+
+    $object ?? self.bless( :$object ) !! Nil;
   }
 
 }
@@ -826,5 +851,5 @@ augment class GLib::Raw::Object::GObject {
 
     GLib::Object::Type.new($t);
   }
-  
+
 }
