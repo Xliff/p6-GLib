@@ -2,6 +2,7 @@ use v6.c;
 
 use Method::Also;
 
+use GLib::Raw::Traits;
 use GLib::Raw::Types;
 use GLib::Raw::Type;
 
@@ -14,19 +15,22 @@ class GLib::Object::Type {
     $!t = $type;
   }
 
-  method Int
-    is also<GType>
+  method Int is also<GType>
   { $!t }
+
+  method GTypeEnum {
+    GTypeEnum($!t);
+  }
 
   method new (Int() $type) {
     $type ?? self.bless(:$type) !! Nil;
   }
 
   method add_class_cache_func (
-    GLib::Object::Type:U:
     gpointer $cache_data,
-    &cache_func
+             &cache_func
   )
+    is static
     is also<add-class-cache-func>
   {
     g_type_add_class_cache_func($cache_data, &cache_func);
@@ -44,10 +48,10 @@ class GLib::Object::Type {
   # }
 
   method add_interface_check (
-    GLib::Object::Type:U:
     gpointer $check_data,
-    &check_func
+             &check_func
   )
+    is static
     is also<add-interface-check>
   {
     g_type_add_interface_check($check_data, &check_func);
@@ -75,10 +79,11 @@ class GLib::Object::Type {
   }
   multi method children ($n_children is rw, :$raw = False) {
     my guint $n = 0;
-    my $ca = g_type_children($!t, $n);
 
+    my $ca = g_type_children($!t, $n);
     $n_children = $n;
-    CArrayToArray($ca);
+
+    CArrayToArray($ca, $n);
   }
 
   method create_instance is also<create-instance> {
@@ -105,7 +110,8 @@ class GLib::Object::Type {
     g_type_ensure($!t);
   }
 
-  method free_instance (GLib::Object::Type:U: GTypeInstance $instance)
+  method free_instance (GTypeInstance $instance)
+    is static
     is also<free-instance>
   {
     g_type_free_instance($instance);
@@ -113,21 +119,23 @@ class GLib::Object::Type {
 
   method from_name (Str() $name, :$raw = False) is also<from-name> {
     my $t = g_type_from_name($name);
-    return $t unless $raw;
+
+    return $t if $raw;
 
     GLib::Object::Type.new($t);
   }
 
-  method fundamental (:$raw = False) {
+  method fundamental ( :$raw = False ) {
     my $t = g_type_fundamental($!t);
-    return $t unless $raw;
+
+    return $t if $raw;
 
     GLib::Object::Type.new($t);
   }
 
-  method fundamental_next (:$raw = False) is also<fundamental-next> {
+  method fundamental_next ( :$raw = False ) is also<fundamental-next> {
     my $t = g_type_fundamental_next();
-    return $t unless $raw;
+    return $t if $raw;
 
     GLib::Object::Type.new($t);
   }
@@ -168,9 +176,9 @@ class GLib::Object::Type {
     samewith($, :$list, :$raw);
   }
   multi method interfaces (
-    $n_interfaces is rw,
-    :$c-array = False,
-    :$raw     = False
+     $n_interfaces is rw,
+    :$c-array             = False,
+    :$raw                 = False
   ) {
     my guint $n  = 0;
     my       $ia = g_type_interfaces($!t, $n);
@@ -321,15 +329,15 @@ class GObject::Type::Interface {
   }
 
   multi method prerequisites (
-    Int() $interface_type,
-    :$raw = False
+    Int()  $interface_type,
+          :$raw             = False
   ) {
     samewith($interface_type, $, :$raw);
   }
   multi method prerequisites (
-    Int() $interface_type,
-    $n_prerequisites is rw,
-    :$raw = False
+    Int()  $interface_type,
+           $n_prerequisites is rw,
+          :$raw                    = False
   ) {
     my GType $it = $interface_type;
     my guint $n = 0;
@@ -424,61 +432,65 @@ class GLib::Object::Type::Register {
   also does GLib::Roles::StaticClass;
 
   method dynamic (
-    Int() $type;
-    Str $type_name,
+    Int()       $type;
+    Str         $type_name,
     GTypePlugin $plugin,
-    GTypeFlags $flags
+    Int()       $flags
   ) {
-    my GType $t = $type;
+    my GType      $t = $type;
+    my GTypeFlags $f = $flags;
 
     g_type_register_dynamic($t, $type_name, $plugin, $flags);
   }
 
   method fundamental (
-    Int() $type,
-    Str() $type_name,
-    GTypeInfo $info,
+    Int()                $type,
+    Str()                $type_name,
+    GTypeInfo            $info,
     GTypeFundamentalInfo $finfo,
-    GTypeFlags $flags
+    Int()                $flags
   ) {
-    my GType $t = $type;
+    my GType      $t = $type;
+    my GTypeFlags $f = $flags;
 
     g_type_register_fundamental($t, $type_name, $info, $finfo, $flags);
   }
 
   method static (
-    Int() $parent_type,
-    Str() $type_name,
+    Int()     $parent_type,
+    Str()     $type_name,
     GTypeInfo $info,
-    Int() $flags
+    Int()     $flags
   ) {
-    my GType $pt = $parent_type;
-    my GTypeFlags $f = $flags;
+    my GType      $pt = $parent_type;
+    my GTypeFlags $f  = $flags;
 
     g_type_register_static($pt, $type_name, $info, $f);
   }
 
   method static_simple (
-    Int() $parent_type,
-    Str() $type_name,
-    guint $class_size,
-    gpointer $class_init, #= GClassInitFunc
-    guint $instance_size,
-    gpointer $instance_init, #= GInstanceInitFunc
-    GTypeFlags $flags
+    Int()     $parent_type,
+    Str()     $type_name,
+    Int()     $class_size,
+    gpointer  $class_init, #= GClassInitFunc
+    Int()     $instance_size,
+    gpointer  $instance_init, #= GInstanceInitFunc
+    Int()     $flags
   )
     is also<static-simple>
   {
-    my GType $pt = $parent_type;
+    my GType       $pt       =  $parent_type;
+    my guint      ($cs, $is) = ($class_size, $instance_size);
+    my GTypeFlags  $f        =  $flags;
 
     g_type_register_static_simple(
       $pt,
       $type_name,
-      $class_size,
+      $cs,
       $class_init,
-      $instance_size,
+      $is,
       $instance_init,
-      $flags
+      $f
     );
   }
 
