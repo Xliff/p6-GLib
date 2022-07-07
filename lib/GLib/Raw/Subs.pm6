@@ -124,6 +124,34 @@ package GLib::Raw::Subs {
     $a;
   }
 
+  sub updateHash (%h, %ct, :$reverse = True) {
+    state $l = Lock.new;
+
+    $l.protect: {
+      %h.append(
+        $reverse ?? %ct.antipairs.Hash !! %ct
+      );
+    }
+  }
+
+  sub updateTypeClass(%ct, :$reverse = True) is export {
+    updateHash(%typeClass, %ct, :$reverse);
+  }
+
+  sub updateTypeOrigin(%to, :$reverse = False) is export {
+    updateHash(%typeOrigin, %to, :$reverse);
+  }
+
+  sub isGTypeAnInteger ($v) is export {
+    return True if $v == $_ for G_TYPE_INT   ,
+                                G_TYPE_UINT  ,
+                                G_TYPE_LONG  ,
+                                G_TYPE_ULONG ,
+                                G_TYPE_INT64 ,
+                                G_TYPE_UINT64;
+    return False;
+  }
+
   sub resolveNativeType (\T) is export {
     say "Resolving { T.^name } to its Raku equivalent...";
     do given T {
@@ -539,18 +567,52 @@ package GLib::Raw::Subs {
     CArray[uint8].new( |$data[^$s] );
   }
 
-  sub newCArray (\T, $fv?, :$encoding = 'utf8' ) is export {
+  sub newCArray (
+    \T,
+     $fv?,
+    :$size      = 1,
+    :$encoding = 'utf8'
+  )
+    is export
+  {
     # cw: It's almost always better to make Str a CArray[uint8]
     if (T, $fv).all ~~ Str {
       return CArray[uint8].new( $fv.encode($encoding) );
     }
 
     my $s = T.REPR eq 'CStruct' || T ~~ Str;
-    (my $p = ( $s ?? CArray[T] !! CArray[ Pointer[T] ] ).new)[0] =
-      $fv ?? $fv
-          !! ($s ?? T !! Pointer[T]);
-
+    my $p = ( $s ?? CArray[T] !! CArray[ Pointer[T] ] ).allocate($size);
+    $p[0] = $fv ?? $fv
+                !! ($s ?? T !! Pointer[T]);
     $p;
+  }
+
+  # role HashDefault[\T] {
+  #   method AT-KEY (\k) { callwith(k) // T };
+  # }
+  #
+  # sub makeHashDefault ($default) is export {
+  #   Hash.new but HashDefault[$default]
+  # }
+
+  our %DEFAULT-CALLBACKS is default(Callable) is export;
+
+  # Protect potential duplicate of g_free() behind its own anonymous scope.
+  {
+    sub g_free (gpointer)
+      is native(glib)
+    { * }
+
+    %DEFAULT-CALLBACKS<GDestroyNotify> = (
+      GDestroyNotify => sub ($p) { g_free($p) }
+    );
+  }
+
+  our $DEFAULT-GDESTROY-NOTIFY is export = sub (*@a) {
+    %DEFAULT-CALLBACKS<GDestroyNotify>( |@a )
+      if %DEFAULT-CALLBACKS<GDestroyNotify>:exists
+         &&
+         %DEFAULT-CALLBACKS<GDestroyNotify> !=:= (Callable, Nil).any
   }
 
   sub g_destroy_none(Pointer)
