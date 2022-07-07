@@ -8,9 +8,9 @@ unit package GLib::Raw::Signal;
 
 sub g_signal_accumulator_first_wins (
   GSignalInvocationHint $ihint,
-  GValue $return_accu,
-  GValue $handler_return,
-  gpointer $dummy
+  GValue                $return_accu,
+  GValue                $handler_return,
+  gpointer              $dummy
 )
   returns uint32
   is native(gobject)
@@ -19,9 +19,9 @@ sub g_signal_accumulator_first_wins (
 
 sub g_signal_accumulator_true_handled (
   GSignalInvocationHint $ihint,
-  GValue $return_accu,
-  GValue $handler_return,
-  gpointer $dummy
+  GValue                $return_accu,
+  GValue                $handler_return,
+  gpointer              $dummy
 )
   returns uint32
   is native(gobject)
@@ -29,11 +29,11 @@ sub g_signal_accumulator_true_handled (
 { * }
 
 sub g_signal_add_emission_hook (
-  guint $signal_id,
-  GQuark $detail,
+  guint               $signal_id,
+  GQuark              $detail,
   GSignalEmissionHook $hook_func,
-  gpointer $hook_data,
-  GDestroyNotify $data_destroy
+  gpointer            $hook_data,
+  GDestroyNotify      $data_destroy
 )
   returns gulong
   is native(gobject)
@@ -49,8 +49,8 @@ sub g_signal_chain_from_overridden (
 { * }
 
 sub g_signal_connect_closure (
-  GObject $instance,
-  Str $detailed_signal,
+  GObject  $instance,
+  Str      $detailed_signal,
   GClosure $closure,
   gboolean $after
 )
@@ -60,9 +60,9 @@ sub g_signal_connect_closure (
 { * }
 
 sub g_signal_connect_closure_by_id (
-  GObject $instance,
-  guint $signal_id,
-  GQuark $detail,
+  GObject  $instance,
+  guint    $signal_id,
+  GQuark   $detail,
   GClosure $closure,
   gboolean $after
 )
@@ -72,12 +72,12 @@ sub g_signal_connect_closure_by_id (
 { * }
 
 sub g_signal_connect_data (
-  GObject $instance,
-  Str $detailed_signal,
-  &c_handler (Pointer),
-  gpointer $data,
+  GObject        $instance,
+  Str            $detailed_signal,
+                 &c_handler (Pointer),
+  gpointer       $data,
   GClosureNotify $destroy_data,
-  uint32 $connect_flags             # GConnectFlags
+  uint32         $connect_flags             # GConnectFlags
 )
   returns gulong
   is native(gobject)
@@ -85,12 +85,12 @@ sub g_signal_connect_data (
 { * }
 
 sub g_signal_connect_data_ptrptr_ruint32 (
-  GObject $instance,
-  Str $detailed_signal,
-  &c_handler (Pointer),
-  gpointer $data,
+  GObject        $instance,
+  Str            $detailed_signal,
+                 &c_handler (Pointer),
+  gpointer       $data,
   GClosureNotify $destroy_data,
-  uint32 $connect_flags             # GConnectFlags
+  uint32         $connect_flags             # GConnectFlags
 )
   returns gulong
   is native(gobject)
@@ -117,7 +117,7 @@ sub g_signal_connect_data_ptrptr_ruint32 (
 
 sub g_signal_emitv (
   GValue $instance_and_params, # Needs to be an array. Use ctilmes' solution!
-  guint $signal_id,
+  guint  $signal_id,
   GQuark $detail,
   GValue $return_value
 )
@@ -142,10 +142,10 @@ sub g_signal_handler_disconnect (GObject $instance, gulong $handler_id)
 { * }
 
 sub g_signal_handler_find (
-  GObject $instance,
-  guint32 $mask,                # GSignalMatchType
-  guint $signal_id,
-  GQuark $detail,
+  GObject  $instance,
+  guint32  $mask,                # GSignalMatchType
+  guint    $signal_id,
+  GQuark   $detail,
   GClosure $closure,
   gpointer $func,
   gpointer $data
@@ -167,10 +167,10 @@ sub g_signal_handler_unblock (GObject $instance, gulong $handler_id)
 { * }
 
 sub g_signal_handlers_block_matched (
-  GObject $instance,
-  guint $mask,            # GSignalMatchType
-  guint $signal_id,
-  GQuark $detail,
+  GObject  $instance,
+  guint    $mask,            # GSignalMatchType
+  guint    $signal_id,
+  GQuark   $detail,
   GClosure $closure,
   gpointer $func,
   gpointer $data
@@ -186,10 +186,10 @@ sub g_signal_handlers_destroy (GObject $instance)
 { * }
 
 sub g_signal_handlers_disconnect_matched (
-  GObject $instance,
-  guint $mask,            # GSignalMatchType
-  guint $signal_id,
-  GQuark $detail,
+  GObject  $instance,
+  guint    $mask,            # GSignalMatchType
+  guint    $signal_id,
+  GQuark   $detail,
   GClosure $closure,
   gpointer $func,
   gpointer $data
@@ -200,10 +200,10 @@ sub g_signal_handlers_disconnect_matched (
 { * }
 
 sub g_signal_handlers_unblock_matched (
-  GObject $instance,
-  guint $mask,            # GSignalMatchType
-  guint $signal_id,
-  GQuark $detail,
+  GObject  $instance,
+  guint    $mask,            # GSignalMatchType
+  guint    $signal_id,
+  GQuark   $detail,
   GClosure $closure,
   gpointer $func,
   gpointer $data
@@ -214,9 +214,9 @@ sub g_signal_handlers_unblock_matched (
 { * }
 
 sub g_signal_has_handler_pending (
-  GObject $instance,
-  guint $signal_id,
-  GQuark $detail,
+  GObject  $instance,
+  guint    $signal_id,
+  GQuark   $detail,
   gboolean $may_be_blocked
 )
   returns uint32
@@ -224,7 +224,7 @@ sub g_signal_has_handler_pending (
   is export
 { * }
 
-sub g_signal_list_ids (GType $itype, guint $n_ids)
+sub g_signal_list_ids (GType $itype, guint $n_ids is rw)
   returns CArray[uint32]
   is native(gobject)
   is export
@@ -260,16 +260,16 @@ sub g_signal_name (guint $signal_id)
 # { * }
 
 sub g_signal_newv (
-  Str $signal_name,
-  uint64 $itype,
-  uint32 $signal_flags,
-  GClosure $class_closure,
+  Str                $signal_name,
+  uint64             $itype,
+  uint32             $signal_flags,
+  GClosure           $class_closure,
   GSignalAccumulator $accumulator,
-  gpointer $accu_data,
+  gpointer           $accu_data,
   GSignalCMarshaller $c_marshaller,
-  uint64 $return_type,
-  guint $n_params,
-  CArray[uint64] $param_types
+  uint64             $return_type,
+  guint              $n_params,
+  CArray[uint64]     $param_types
 )
   returns guint
   is native(gobject)
@@ -277,8 +277,8 @@ sub g_signal_newv (
 { * }
 
 sub g_signal_override_class_closure (
-  guint $signal_id,
-  GType $instance_type,
+  guint    $signal_id,
+  GType    $instance_type,
   GClosure $class_closure
 )
   is native(gobject)
@@ -286,8 +286,8 @@ sub g_signal_override_class_closure (
 { * }
 
 sub g_signal_override_class_handler (
-  Str $signal_name,
-  GType $instance_type,
+  Str       $signal_name,
+  GType     $instance_type,
   GCallback $class_handler
 )
   is native(gobject)
@@ -295,11 +295,11 @@ sub g_signal_override_class_handler (
 { * }
 
 sub g_signal_parse_name (
-  Str $detailed_signal,
-  GType $itype,
-  uint32 $signal_id_p is rw,
+  Str            $detailed_signal,
+  GType          $itype,
+  uint32         $signal_id_p is rw,
   CArray[uint32] $detail_p,
-  gboolean $force_detail_quark
+  gboolean       $force_detail_quark
 )
   returns uint32
   is native(gobject)
@@ -317,8 +317,8 @@ sub g_signal_remove_emission_hook (guint $signal_id, gulong $hook_id)
 { * }
 
 sub g_signal_set_va_marshaller (
-  guint $signal_id,
-  GType $instance_type,
+  guint                $signal_id,
+  GType                $instance_type,
   GSignalCVaMarshaller $va_marshaller
 )
   is native(gobject)
@@ -327,8 +327,8 @@ sub g_signal_set_va_marshaller (
 
 sub g_signal_stop_emission (
   GObject $instance,
-  guint $signal_id,
-  GQuark $detail
+  guint   $signal_id,
+  GQuark  $detail
 )
   is native(gobject)
   is export

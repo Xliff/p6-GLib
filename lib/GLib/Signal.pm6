@@ -22,16 +22,16 @@ class GLib::Signal {
 
   # NOT A CONSTRUCTOR!!
   method newv (
-    Str() $signal_name,
-    Int() $itype,
-    Int() $signal_flags,
-    GClosure() $class_closure,
+    Str()              $signal_name,
+    Int()              $itype,
+    Int()              $signal_flags,
+    GClosure()         $class_closure,
     GSignalAccumulator $accumulator,
-    gpointer $accu_data,
+    gpointer           $accu_data,
     GSignalCMarshaller $c_marshaller,
-    Int() $return_type,
-    Int() $n_params,
-    CArray[uint64] $param_types
+    Int()              $return_type,
+    Int()              $n_params,
+    CArray[uint64]     $param_types
   ) {
     my guint ($sf, $np) = ($signal_flags, $n_params);
     my uint64 ($it, $rt) = ($itype, $return_type);
@@ -51,9 +51,9 @@ class GLib::Signal {
 
   method accumulator_first_wins (
     GSignalInvocationHint $ihint,
-    GValue() $return_accu,
-    GValue() $handler_return,
-    gpointer $dummy = Pointer
+    GValue()              $return_accu,
+    GValue()              $handler_return,
+    gpointer              $dummy           = Pointer
   )
     is also<accumulator-first-wins>
   {
@@ -67,9 +67,9 @@ class GLib::Signal {
 
   method accumulator_true_handled (
     GSignalInvocationHint $ihint,
-    GValue() $return_accu,
-    GValue() $handler_return,
-    gpointer $dummy = Pointer
+    GValue()              $return_accu,
+    GValue()              $handler_return,
+    gpointer              $dummy           = Pointer
   )
     is also<accumulator-true-handled>
   {
@@ -82,11 +82,11 @@ class GLib::Signal {
   }
 
   method add_emission_hook (
-    Int() $signal_id,
-    GQuark $detail,
+    Int()               $signal_id,
+    GQuark              $detail,
     GSignalEmissionHook $hook_func,
-    gpointer $hook_data          = Pointer,
-    GDestroyNotify $data_destroy = Pointer
+    gpointer            $hook_data    = Pointer,
+                        &data_destroy = %DEFAULT-CALLBACKS<GDestroyNotify>
   )
     is also<add-emission-hook>
   {
@@ -97,7 +97,7 @@ class GLib::Signal {
       $detail,
       $hook_func,
       $hook_data,
-      $data_destroy
+      &data_destroy
     );
   }
 
@@ -111,10 +111,10 @@ class GLib::Signal {
   }
 
   method connect_closure (
-    GObject() $instance,
-    Str() $detailed_signal,
+    GObject()  $instance,
+    Str()      $detailed_signal,
     GClosure() $closure,
-    Int() $after
+    Int()      $after
   )
     is also<connect-closure>
   {
@@ -124,11 +124,11 @@ class GLib::Signal {
   }
 
   method connect_closure_by_id (
-    GObject() $instance,
-    Int() $signal_id,
-    GQuark $detail,
+    GObject()  $instance,
+    Int()      $signal_id,
+    GQuark     $detail,
     GClosure() $closure,
-    Int() $after
+    Int()      $after
   )
     is also<connect-closure-by-id>
   {
@@ -139,12 +139,12 @@ class GLib::Signal {
   }
 
   method connect_data (
-    GObject() $instance,
-    Str() $detailed_signal,
-    &c_handler,
-    gpointer $data               = Pointer,
-    GClosureNotify $destroy_data = Pointer,
-    Int() $connect_flags         = 0
+    GObject()      $instance,
+    Str()          $detailed_signal,
+                   &c_handler,
+    gpointer       $data             = Pointer,
+    GClosureNotify $destroy_data     = Pointer,
+    Int()          $connect_flags    = 0
   )
     is also<
       connect-data
@@ -165,9 +165,9 @@ class GLib::Signal {
 
   method connect_after (
     GObject() $instance,
-    Str() $detailed_signal,
-    &c_handler,
-    gpointer $data = Pointer
+    Str()     $detailed_signal,
+              &c_handler,
+    gpointer  $data             = Pointer
   )
     is also<connect-after>
   {
@@ -183,9 +183,9 @@ class GLib::Signal {
 
   method connect_swapped (
     GObject() $instance,
-    Str() $detailed_signal,
-    &c_handler,
-    gpointer $data = Pointer
+    Str()     $detailed_signal,
+              &c_handler,
+    gpointer  $data             = Pointer
   )
     is also<connect-swapped>
   {
@@ -211,7 +211,7 @@ class GLib::Signal {
   method disconnect_by_func (
     GObject() $instance,
     gpointer $func,
-    gpointer $data = Pointer
+    gpointer $data       = Pointer
   )
     is also<disconnect-by-func>
   {
@@ -225,10 +225,10 @@ class GLib::Signal {
   }
 
   multi method emitv (
-    GValue() $instance_and_params,
-    Int() $signal_id,
-    GQuark $detail,
-    :$raw = False
+    GValue()  $instance_and_params,
+    Int()     $signal_id,
+    GQuark    $detail,
+             :$raw                  = False
   ) {
     my $v = GValue.new;
 
@@ -241,8 +241,8 @@ class GLib::Signal {
   }
   multi method emitv (
     GValue() $instance_and_params,
-    Int() $signal_id,
-    GQuark $detail,
+    Int()    $signal_id,
+    GQuark   $detail,
     GValue() $return_value
   ) {
     my guint $sid = $signal_id;
@@ -273,13 +273,13 @@ class GLib::Signal {
   }
 
   method handler_find (
-    GObject() $instance,
-    Int() $mask,
-    Int() $signal_id,
-    GQuark $detail,
+    GObject()  $instance,
+    Int()      $mask,
+    Int()      $signal_id,
+    GQuark     $detail,
     GClosure() $closure,
-    gpointer $func,
-    gpointer $data
+    gpointer   $func,
+    gpointer   $data
   )
     is also<handler-find>
   {
@@ -311,13 +311,13 @@ class GLib::Signal {
   }
 
   method handlers_block_matched (
-    GObject() $instance,
-    Int() $mask,
-    Int() $signal_id,
-    GQuark $detail,
+    GObject()  $instance,
+    Int()      $mask,
+    Int()      $signal_id,
+    GQuark     $detail,
     GClosure() $closure,
-    gpointer $func,
-    gpointer $data
+    gpointer   $func,
+    gpointer   $data
   )
     is also<handlers-block-matched>
   {
@@ -339,13 +339,13 @@ class GLib::Signal {
   }
 
   method handlers_disconnect_matched (
-    GObject() $instance,
-    Int() $mask,
-    Int() $signal_id,
-    GQuark $detail,
+    GObject()  $instance,
+    Int()      $mask,
+    Int()      $signal_id,
+    GQuark     $detail,
     GClosure() $closure,
-    gpointer $func,
-    gpointer $data
+    gpointer   $func,
+    gpointer   $data
   )
     is also<handlers-disconnect-matched>
   {
@@ -363,13 +363,13 @@ class GLib::Signal {
   }
 
   method handlers_unblock_matched (
-    GObject() $instance,
-    Int() $mask,
-    Int() $signal_id,
-    GQuark $detail,
+    GObject()  $instance,
+    Int()      $mask,
+    Int()      $signal_id,
+    GQuark     $detail,
     GClosure() $closure,
-    gpointer $func,
-    gpointer $data
+    gpointer   $func,
+    gpointer   $data
   )
     is also<handlers-unblock-matched>
   {
@@ -388,23 +388,27 @@ class GLib::Signal {
 
   method has_handler_pending (
     GObject() $instance,
-    Int() $signal_id,
-    GQuark $detail,
-    Int() $may_be_blocked
+    Int()     $signal_id,
+    GQuark    $detail,
+    Int()     $may_be_blocked
   )
     is also<has-handler-pending>
   {
     my guint $sid = $signal_id;
-    my gboolean $m = $may_be_blocked;
+    my gboolean $m = $may_be_blocked.so.Int;;
 
     so g_signal_has_handler_pending($instance, $sid, $detail, $m);
   }
 
-  method list_ids (Int() $itype) is also<list-ids> {
-    my ($n_ids, @ids) = (0);
-    my guint $it = $itype;
+  method list_ids (Int() $itype, :$raw = False) is also<list-ids> {
+    my GType $i    = $itype;
+    my guint $nids = 0;
 
-    CArrayToArray( g_signal_list_ids($it, $n_ids) );
+    my $ids = g_signal_list_ids($i, $nids);
+    return Nil  unless  $ids;
+    return $ids if      $raw;
+
+    CArrayToArray($ids, $nids);
   }
 
   method lookup (Str() $name, Int() $itype) {
@@ -420,8 +424,8 @@ class GLib::Signal {
   }
 
   method override_class_closure (
-    Int() $signal_id,
-    Int() $instance_type,
+    Int()      $signal_id,
+    Int()      $instance_type,
     GClosure() $class_closure
   )
     is also<override-class-closure>
@@ -433,8 +437,8 @@ class GLib::Signal {
   }
 
   method override_class_handler (
-    Str() $signal_name,
-    Int() $instance_type,
+    Str()     $signal_name,
+    Int()     $instance_type,
     GCallback $class_handler
   )
     is also<override-class-handler>
@@ -449,26 +453,27 @@ class GLib::Signal {
   { * }
 
   multi method parse_name (
-    Str() $detailed_signal,
-    Int() $itype,
-    Int() $force_detail_quark,
-    :$all = True
+    Str()  $detailed_signal,
+    Int()  $itype,
+    Int()  $force_detail_quark,
+          :$all                 = True
   ) {
     samewith($detailed_signal, $itype, $, $, $force_detail_quark, :$all);
   }
   multi method parse_name (
-    Str() $detailed_signal,
-    Int() $itype,
-    $signal_id_p is rw,
-    $detail_p    is rw,
-    Int() $force_detail_quark,
-    :$all = False
+    Str()   $detailed_signal,
+    Int()   $itype,
+            $signal_id_p         is rw,
+            $detail_p            is rw,
+    Int()   $force_detail_quark,
+           :$all                        = False
   ) {
-    my gboolean $f = $force_detail_quark;
-    my guint $sidp = 0;
-    my uint64 $it = $itype;
+    my gboolean $f    = $force_detail_quark;
+    my guint    $sidp = 0;
+    my uint64   $it   = $itype;
+
     my $cdp = CArray[uint32].new;
-    my $rc = g_signal_parse_name(
+    my $rc  = g_signal_parse_name(
       $detailed_signal,
       $it,
       $sidp,
@@ -502,8 +507,8 @@ class GLib::Signal {
   }
 
   method set_va_marshaller (
-    Int() $signal_id,
-    Int() $instance_type,
+    Int()                $signal_id,
+    Int()                $instance_type,
     GSignalCVaMarshaller $va_marshaller
   )
     is also<set-va-marshaller>
@@ -516,8 +521,8 @@ class GLib::Signal {
 
   method stop_emission (
     GObject() $instance,
-    Int() $signal_id,
-    GQuark $detail
+    Int()     $signal_id,
+    GQuark    $detail
   )
     is also<stop-emission>
   {
