@@ -69,7 +69,11 @@ class GLib::Object::Supplyish {
         }
       }
 
-      &handler(|@a);
+      my $retVal = &handler(|@a);
+      # my $r = @a.tail;
+      # if $r ~~ ReturnValue && $r.r.defined.not && $retVal.defined {
+      #   $r.r = $retVal;
+      # }
     });
   }
 
