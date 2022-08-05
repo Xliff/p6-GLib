@@ -2,7 +2,7 @@ use v6.c;
 
 use Method::Also;
 use NativeCall;
-use JsonC;
+use JSON::Fast;
 
 use GLib::Raw::Types;
 use GLib::Raw::KeyFile;
