@@ -107,8 +107,8 @@ sub g_array_set_size (GArray $array, guint $length)
 sub g_array_sized_new (
   gboolean $zero_terminated,
   gboolean $clear,
-  guint $element_size,
-  guint $reserved_size
+  guint    $element_size,
+  guint    $reserved_size
 )
   returns GArray
   is native(glib)
