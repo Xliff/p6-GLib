@@ -18,13 +18,19 @@ sub g_value_dup_variant (GValue $value)
   is export
   { * }
 
+sub g_value_get_type ()
+  returns GType
+  is native(gobject)
+  is export
+  { * }
+
 sub g_gtype_get_type ()
   returns GType
   is native(gobject)
   is export
   { * }
 
-sub g_pointer_type_register_static (gchar $name)
+sub g_pointer_type_register_static (Str $name)
   returns GType
   is native(gobject)
   is export
@@ -36,17 +42,17 @@ sub g_strdup_value_contents (GValue $value)
   is export
   { * }
 
-sub g_value_set_static_string (GValue $value, gchar $v_string)
+sub g_value_set_static_string (GValue $value, Str $v_string)
   is native(gobject)
   is export
   { * }
 
-sub g_value_set_string_take_ownership (GValue $value, gchar $v_string)
+sub g_value_set_string_take_ownership (GValue $value, Str $v_string)
   is native(gobject)
   is export
   { * }
 
-sub g_value_take_string (GValue $value, gchar $v_string)
+sub g_value_take_string (GValue $value, Str $v_string)
   is native(gobject)
   is export
   { * }
@@ -183,7 +189,7 @@ sub g_value_set_uchar (GValue $value, guchar $v_uchar)
   is export
   { * }
 
-sub g_value_set_string (GValue $value, gchar $v_string)
+sub g_value_set_string (GValue $value, Str $v_string)
   is native(gobject)
   is export
   { * }
@@ -208,7 +214,7 @@ sub g_value_set_float (GValue $value, gfloat $v_float)
   is export
   { * }
 
-sub g_value_set_char (GValue $value, gchar $v_char)
+sub g_value_set_char (GValue $value, Str $v_char)
   is native(gobject)
   is export
   { * }
