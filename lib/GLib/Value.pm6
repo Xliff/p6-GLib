@@ -376,6 +376,12 @@ class GLib::Value {
   }
   # ↑↑↑↑ ATTRIBUTES ↑↑↑↑
 
+  method get_type {
+    state ($n, $t);
+
+    unstable_get_type( self.^name, &g_value_get_type, $n, $t );
+  }
+
   # Begin static methods
   method g_gtype_get_type {
     g_gtype_get_type();
@@ -524,7 +530,7 @@ sub gv-obj ($o, :$type) is export
   { gv_obj($o, :$type) }
 sub gv_obj ($o, :$type is copy) is export {
   $type = $o.?get_type
-    if ($o ~~ GLib::Roles::Object) && $type.defined.not;
+    if ( $o ~~ ::('GLib::Roles::Object' ) ) && $type.defined.not;
   my $gv = GLib::Value.new( $type // G_TYPE_OBJECT );
   $gv.object = $o;
   $gv;
