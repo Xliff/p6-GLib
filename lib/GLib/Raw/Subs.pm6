@@ -370,6 +370,11 @@ package GLib::Raw::Subs {
           !! Nil
   }
 
+  sub returnFlags ($value, $returnFlags, \FT) is export { 
+    return $value unless $returnFlags;
+    getFlags(FT, $value)
+  }
+
   # The assumption here is "Transfer: Full"
   sub propReturnObject (
     $oo,
