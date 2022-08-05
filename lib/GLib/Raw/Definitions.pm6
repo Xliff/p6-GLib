@@ -12,12 +12,13 @@ our $ERROR            is export;
 our (%ERROR, %ERRORS) is export;
 our @ERRORS           is export;
 our $ERROR-THROWS     is export;
-our $DEBUG            is export;
+
+our $DEBUG            is export  = 0;
 
 our (%typeClass, %typeOrigin) is export;
 
 # Forced compile count
-my constant forced = 221;
+my constant forced = 229;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
@@ -95,8 +96,22 @@ constant time_t                         is export := uint64;
 constant uid_t                          is export := uint32;
 constant gid_t                          is export := uint32;
 constant pid_t                          is export := int32;
-constant uint64_t                       is export := uint64;
+constant int8_t                         is export := int8;
+constant int16_t                        is export := int16;
+constant int32_t                        is export := int32;
+constant int64_t                        is export := int64;
+constant uint8_t                        is export := uint8;
+constant uint16_t                       is export := uint16;
 constant uint32_t                       is export := uint32;
+constant uint64_t                       is export := uint64;
+constant gint8_t                        is export := int8;
+constant gint16_t                       is export := int16;
+constant gint32_t                       is export := int32;
+constant gint64_t                       is export := int64;
+constant guint8_t                       is export := uint8;
+constant guint16_t                      is export := uint16;
+constant guint32_t                      is export := uint32;
+constant guint64_t                      is export := uint64;
 
 # Conditionals!
 constant GPid                           is export := realUInt;
