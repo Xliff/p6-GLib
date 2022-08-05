@@ -57,6 +57,13 @@ package GLib::Raw::Subs {
     nativecast($cast-to, $obj);
   }
 
+  # This is a version of cast() that is ammenable to the .& form.
+  # So:
+  #      $a-poiner.&recast(AnotherType)
+  sub recast ($obj, $cast-to) is export {
+    cast($cast-to, $obj);
+  }
+
   sub real-resolve-uint64($v) is export {
     $v +& 0xffffffffffffffff;
   }
@@ -370,7 +377,7 @@ package GLib::Raw::Subs {
           !! Nil
   }
 
-  sub returnFlags ($value, $returnFlags, \FT) is export { 
+  sub returnFlags ($value, $returnFlags, \FT) is export {
     return $value unless $returnFlags;
     getFlags(FT, $value)
   }
