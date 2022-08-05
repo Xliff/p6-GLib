@@ -17,9 +17,12 @@ class GLib::Object::Supplyish {
   # cw: Act like a supply if an unknown method name is given.
   #     This is SLOW, though. Maybe find a better way?
   #     Maybe use delegation on $!supply?
+  #
+  #     Delegation should do everything but .tap
   method FALLBACK ($name, |c) {
-    if $!supply.^can($name) {
+    do if $!supply.^can($name) {
       $!supply."$name"(|c);
+      self;
     }
   }
 
