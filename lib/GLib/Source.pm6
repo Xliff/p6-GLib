@@ -19,7 +19,9 @@ class GLib::Source {
     self.unref;
   }
 
-  method setSource(GSource $source, :$attach = False) {
+  method setSource(GSource $source, :$attach = False)
+    is also<setGSource>
+  {
     $!gs = $source;
   }
 
