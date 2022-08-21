@@ -112,6 +112,36 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal}[0];
   }
 
+  method connect-rdouble (
+    $obj,
+    $signal,
+    &handler?
+  )
+    is also<connect_rdouble>
+  {
+    my $hid;
+    %!signals{$signal} //= do {
+      my $s = Supplier.new;
+      $hid = g_connect_rdouble($obj, $signal,
+        -> $, $ud --> gdouble {
+          CATCH {
+            default { note($_) }
+          }
+
+          my $r = ReturnedValue.new;
+          $s.emit( [self, $ud, $r] );
+          #die 'Invalid return type' if $r.r ~~ Bool;
+          #$r.r = .Int if $r.r ~~ Bool;
+          $r.r;
+        },
+        Pointer, 0
+      );
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+
   method connect-string (
     $obj,
     $signal,
@@ -775,6 +805,18 @@ sub g_connect_double (
   Pointer $app,
   Str     $name,
           &handler (Pointer, gdouble, Pointer),
+  Pointer $data,
+  uint32  $flags
+)
+  returns uint64
+  is native('gobject-2.0')
+  is symbol('g_signal_connect_object')
+{ * }
+
+sub g_connect_rdouble (
+  Pointer $app,
+  Str     $name,
+          &handler (Pointer, Pointer --> gdouble),
   Pointer $data,
   uint32  $flags
 )
