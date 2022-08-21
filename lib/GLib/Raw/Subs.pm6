@@ -68,8 +68,14 @@ package GLib::Raw::Subs {
     $v +& 0xffffffffffffffff;
   }
 
+  # p = Pointer
   sub p ($p) is export {
     cast(Pointer, $p);
+  }
+
+  # ba = Byte Array
+  sub ba ($o) is export {
+    cast(CArray[uint8], $o);
   }
 
   # Moved from p6-GStreamer
@@ -205,7 +211,7 @@ package GLib::Raw::Subs {
     $v;
   }
 
-  sub ArrayToCArray(\T, @a) is export {
+  sub ArrayToCArray(\T, @a, :$size = @a.elems) is export {
     enum Handling <P NP>;
     my $handling;
     my $ca = (do given (T.REPR // '') {
@@ -225,8 +231,8 @@ package GLib::Raw::Subs {
       }
     });
     return $ca unless @a.elems;
-    $ca = $ca.new;
-    for ^@a.elems {
+    $ca = $ca.allocate($size);
+    for ^$size {
       my $typed = checkForType(T, @a[$_]);
 
       $ca[$_] = $handling eq P ?? $typed !! cast(Pointer[T], $typed)
