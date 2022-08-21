@@ -20,13 +20,13 @@ class GLib::Spawn {
   }
 
   multi method async (
-    Str() $working_directory,
-    $argv, #= CArray[Str]
-    $envp, #= CArray[Str]
-    Int() $flags,
-    &child_setup                   = Callable, #= GSpawnChildSetupFunc
-    gpointer $user_data            = gpointer,
-    CArray[Pointer[GError]] $error = gerror,
+    Str()                   $working_directory,
+                            $argv, #= CArray[Str]
+                            $envp, #= CArray[Str]
+    Int()                   $flags,
+                            &child_setup          = Callable, #= GSpawnChildSetupFunc
+    gpointer                $user_data            = gpointer,
+    CArray[Pointer[GError]] $error                = gerror,
   ) {
     my $rv = samewith(
       $working_directory,
@@ -42,18 +42,18 @@ class GLib::Spawn {
     $rv[0] ?? $rv[1] !! Nil;
   }
   multi method async (
-    Str() $working_directory,
-    $argv is copy, #= CArray[Str]
-    $envp is copy, #= CArray[Str]
-    Int() $flags,
-    &child_setup, #= GSpawnChildSetupFunc
-    gpointer $user_data,
-    $child_pid is rw,
-    CArray[Pointer[GError]] $error = gerror,
+    Str()                   $working_directory,
+                            $argv is copy, #= CArray[Str]
+                            $envp is copy, #= CArray[Str]
+    Int()                   $flags,
+                            &child_setup,  #= GSpawnChildSetupFunc
+    gpointer                $user_data,
+                            $child_pid     is rw,
+    CArray[Pointer[GError]] $error                = gerror,
     :$all = False
   ) {
     my GSpawnFlags $f = $flags;
-    my GPid $c = 0;
+    my GPid        $c = 0;
 
     self!resolve-args($argv, $envp);
     clear_error;
@@ -78,15 +78,15 @@ class GLib::Spawn {
   { * }
 
   multi method async_with_fds (
-    Str() $working_directory,
-    $argv is copy,
-    $envp is copy,
-    Int() $flags,
-    &child_setup,
-    Int() $stdin_fd,
-    Int() $stdout_fd,
-    Int() $stderr_fd,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                   $working_directory,
+                            $argv               is copy,
+                            $envp               is copy,
+    Int()                   $flags,
+                            &child_setup,
+    Int()                   $stdin_fd,
+    Int()                   $stdout_fd,
+    Int()                   $stderr_fd,
+    CArray[Pointer[GError]] $error                       = gerror
   ) {
     samewith(
       $working_directory,
@@ -102,16 +102,16 @@ class GLib::Spawn {
     );
   }
   multi method async_with_fds (
-    Str() $working_directory,
-    $argv is copy,
-    $envp is copy,
-    Int() $flags,
-    &child_setup,
-    gpointer $user_data,
-    Int() $stdin_fd,
-    Int() $stdout_fd,
-    Int() $stderr_fd,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                   $working_directory,
+                            $argv               is copy,
+                            $envp               is copy,
+    Int()                   $flags,
+                            &child_setup,
+    gpointer                $user_data,
+    Int()                   $stdin_fd,
+    Int()                   $stdout_fd,
+    Int()                   $stderr_fd,
+    CArray[Pointer[GError]] $error                      = gerror
   ) {
     my $rv = samewith(
       $working_directory,
@@ -131,22 +131,22 @@ class GLib::Spawn {
     $rv[0] ?? $rv[1] !! Nil;
   }
   multi method async_with_fds (
-    Str() $working_directory,
-    $argv is copy,
-    $envp is copy,
-    Int() $flags,
-    &child_setup,
-    gpointer $user_data,
-    $child_pid is rw,
-    Int() $stdin_fd,
-    Int() $stdout_fd,
-    Int() $stderr_fd,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+    Str()                    $working_directory,
+                             $argv               is copy,
+                             $envp               is copy,
+    Int()                    $flags,
+                             &child_setup,
+    gpointer                 $user_data,
+                             $child_pid          is rw,
+    Int()                    $stdin_fd,
+    Int()                    $stdout_fd,
+    Int()                    $stderr_fd,
+    CArray[Pointer[GError]]  $error                       = gerror,
+                            :$all                         = False
   ) {
     my gint ($si, $so, $se) = ($stdin_fd, $stdout_fd, $stderr_fd);
-    my GPid $c = 0;
-    my GSpawnFlags $f = $flags;
+    my GPid            $c   =  0;
+    my GSpawnFlags     $f   =  $flags;
 
     self!resolve-args($argv, $envp);
     clear_error;
@@ -173,11 +173,11 @@ class GLib::Spawn {
   { * }
 
   multi method async_with_pipes (
-    Str() $working_directory,
-    $argv,
-    $envp,
-    Int() $flags,
-    &child_setup                   = Callable,
+    Str()    $working_directory,
+             $argv,
+             $envp,
+    Int()    $flags,
+             &child_setup          = Callable,
     gpointer $user_data            = gpointer,
     CArray[Pointer[GError]] $error = gerror
   ) {
@@ -199,22 +199,22 @@ class GLib::Spawn {
     $rv[0] ?? $rv.skip(1) !! Nil;
   }
   multi method async_with_pipes (
-    Str() $working_directory,
-    $argv,
-    $envp,
-    Int() $flags,
-    &child_setup,
-    gpointer $user_data,
-    $child_pid       is rw, #= GPid
-    $standard_input  is rw, #= gint
-    $standard_output is rw, #= gint
-    $standard_error  is rw, #= gint
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+    Str()                    $working_directory,
+                             $argv,
+                             $envp,
+    Int()                    $flags,
+                             &child_setup,
+    gpointer                 $user_data,
+                             $child_pid          is rw, #= GPid
+                             $standard_input     is rw, #= gint
+                             $standard_output    is rw, #= gint
+                             $standard_error     is rw, #= gint
+    CArray[Pointer[GError]]  $error                              = gerror,
+                            :$all                                = False
   ) {
-    my GSpawnFlags $f = $flags;
-    my GPid $c = 0;
-    my gint ($si, $so, $se) = 0 xx 3;
+    my GPid         $c             = 0;
+    my GSpawnFlags  $f             = $flags;
+    my gint        ($si, $so, $se) = 0 xx 3;
 
     self!resolve-args($argv, $envp);
     clear_error;
@@ -238,8 +238,8 @@ class GLib::Spawn {
   }
 
   method check_exit_status (
-    Int() $exit_status,
-    CArray[Pointer[GError]] $error = gerror
+    Int()                   $exit_status,
+    CArray[Pointer[GError]] $error        = gerror
   )
     is also<check-exit-status>
   {
@@ -258,8 +258,8 @@ class GLib::Spawn {
   }
 
   method command_line_async (
-    Str() $command_line,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                   $command_line,
+    CArray[Pointer[GError]] $error         = gerror
   )
     is also<command-line-async>
   {
@@ -274,22 +274,21 @@ class GLib::Spawn {
   { * }
 
   multi method command_line_sync (
-    Str() $command_line,
-    CArray[Pointer[GError]] $error = gerror,
+    Str()                   $command_line,
+    CArray[Pointer[GError]] $error         = gerror,
   ) {
     samewith($command_line, $, $, $, $error, :all);
   }
   multi method command_line_sync (
-    Str() $command_line,
-    $standard_output is rw,
-    $standard_error is rw,
-    $exit_status is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+    Str()                    $command_line,
+                             $standard_output is rw,
+                             $standard_error  is rw,
+                             $exit_status     is rw,
+    CArray[Pointer[GError]]  $error                  = gerror,
+                            :$all                    = False
   ) {
-    my gint $e = 0;
-    my ($so, $se) = CArray[Str].new xx 2;
-    ($so[0], $se[0]) = Str xx 2;
+    my gint $e        = 0;
+    my     ($so, $se) = newCArray(Str) xx 2;
 
     clear_error;
     my $rv = g_spawn_command_line_sync(
@@ -300,7 +299,7 @@ class GLib::Spawn {
       $error
     );
     set_error($error);
-    ($standard_output, $standard_error, $exit_status) = ($so[0], $se[0], $e);
+    a($standard_output, $standard_error, $exit_status) = ppr($so, $se, $e);
     $all.not ?? $rv !! ($rv, $standard_output, $standard_error, $exit_status);
   }
 
@@ -313,13 +312,13 @@ class GLib::Spawn {
   }
 
   multi method sync (
-    Str() $working_directory,
-    $argv,
-    $envp,
-    Int() $flags,
-    &child_setup                   = Callable,
-    gpointer $user_data            = gpointer,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                   $working_directory,
+                            $argv,
+                            $envp,
+    Int()                   $flags,
+                            &child_setup         = Callable,
+    gpointer                $user_data           = gpointer,
+    CArray[Pointer[GError]] $error               = gerror
   ) {
     my $rv = samewith(
       $working_directory,
@@ -338,22 +337,21 @@ class GLib::Spawn {
     $rv[0] ?? $rv.skip(1) !! Nil;
   }
   multi method sync (
-    Str() $working_directory,
-    $argv,
-    $envp,
-    Int() $flags,
-    &child_setup,
-    gpointer $user_data,
-    $standard_output is rw,
-    $standard_error  is rw,
-    $exit_status     is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+    Str()                    $working_directory,
+                             $argv,
+                             $envp,
+    Int()                    $flags,
+                             &child_setup,
+    gpointer                 $user_data,
+                             $standard_output     is rw,
+                             $standard_error      is rw,
+                             $exit_status         is rw,
+    CArray[Pointer[GError]]  $error                      = gerror,
+                            :$all                        = False
   ) {
     my GSpawnFlags $f = $flags;
     my gint $e = 0;
-    my ($so, $se) = CArray[Str].new xx 2;
-    ($so[0], $se[0]) = Str xx 2;
+    my ($so, $se) = newCArray(Str) xx 2;
 
     self!resolve-args($argv, $envp);
     clear_error;
@@ -370,7 +368,7 @@ class GLib::Spawn {
       $error
     );
     set_error($error);
-    ($standard_output, $standard_error, $exit_status) = ($so[0], $se[0], $e);
+    ($standard_output, $standard_error, $exit_status) = ppr($so, $se, $e);
     $all.not ?? $rv !! ($rv, $standard_output, $standard_error, $exit_status);
   }
 
