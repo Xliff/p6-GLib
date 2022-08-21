@@ -89,3 +89,18 @@ sub g_object_new_with_properties (
   is native(gobject)
   is export
  { * }
+
+sub g_object_freeze_notify (GObject)
+  is native(gobject)
+  is export
+ { * }
+
+ sub g_object_thaw_notify (GObject)
+   is native(gobject)
+   is export
+  { * }
+
+  sub g_object_notify (GObject, Str)
+    is native(gobject)
+    is export
+   { * }

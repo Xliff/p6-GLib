@@ -26,11 +26,11 @@ class ProvidesData does Associative {
 
   submethod BUILD (:$p) {
     say 'ProvidesData created for ' ~ +($!p = $p)
-      #if $DEBUG > 3;
+      if $DEBUG > 3;
   }
 
   method new ($p) {
-    say "ProvidesData P - $p"; # if $DEBUG > 3;
+    say "ProvidesData P - $p" if $DEBUG // 0 > 3;
     self.bless( :$p );
   }
 
@@ -346,6 +346,35 @@ role GLib::Roles::Object {
 
     self.connect-notify($!o, $sig-name);
   }
+
+  method emit-notify ($prop) {
+    self.emit_notify($prop);
+  }
+  method emit_notify ($prop) {
+    g_object_notify($prop);
+  }
+
+  method freeze-notify {
+    self.freeze_notify;
+  }
+  method freeze_notify {
+    g_object_freeze_notify($!o);
+  }
+
+  method unfreeze_notify {
+    self.thaw_notify;
+  }
+  method unfreeze-notify {
+    self.thaw_notify;
+  }
+  method thaw-notify {
+    self.thaw_notify;
+  }
+  method thaw_notify {
+    g_object_thaw_notify($!o);
+  }
+
+
 
   # We use these for inc/dec ops
   method ref   is also<upref>   {   g_object_ref($!o); self; }
@@ -790,7 +819,7 @@ class GLib::Object does GLib::Roles::Object {
      $object where $object ~~ GObject || $object.^can('GObject'),
     :$ref                                                         = True
   ) {
-    $object .= GObject;
+    $object .= GObject unless $object ~~ GObject;
 
     return Nil unless $object;
 
