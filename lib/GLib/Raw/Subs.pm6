@@ -211,7 +211,7 @@ package GLib::Raw::Subs {
     $v;
   }
 
-  sub ArrayToCArray(\T, @a, :$size = @a.elems) is export {
+  sub ArrayToCArray(\T, @a, :$size = @a.elems, :$null = False) is export {
     enum Handling <P NP>;
     my $handling;
     my $ca = (do given (T.REPR // '') {
@@ -235,8 +235,18 @@ package GLib::Raw::Subs {
     for ^$size {
       my $typed = checkForType(T, @a[$_]);
 
-      $ca[$_] = $handling eq P ?? $typed !! cast(Pointer[T], $typed)
+      $ca[$_] = $handling == P ?? $typed !! cast(Pointer[T], $typed)
     }
+    if $null {
+      $ca[$size] = do given T {
+        when Int             { 0          }
+        when Num             { 0e0        }
+        when Str             { Str        }
+        when $handling == P  { T          }
+        when $handling == NP { Pointer[T] }
+      }
+    }
+
     $ca;
   }
 
