@@ -1,9 +1,34 @@
 use v6.c;
 
+use GLib::Raw::Exceptions;
+
 unit package GLib::Raw::Traits;
 
 role PropertyMethod  is export { }
 role AttributeMethod is export { }
+
+role RangedAttribute[$R] is export {
+  method valid-range { $R }
+
+  method handle-ranged-attribute-set (\v, Bool() :$clamp) {
+    if v ~~ self.valid-range {
+      self = v;
+    } else {
+      if $clamp {
+        self = min(
+          max(v, self.valid-range.min),
+          self.valid-range.max
+        )
+      } else {
+        $*ERR.say: X::GLib::Object::AttributeValueOutOfBounds.new(
+          value     => v,
+          range     => $R,
+          attribute => self.name.substr(2)
+        ).message;
+      }
+    }
+  }
+}
 
 multi sub trait_mod:<is> (Method:D \m, :$a-property!) is export {
   m does PropertyMethod;
@@ -15,6 +40,10 @@ multi sub trait_mod:<is> (Method:D \m, :$g-property!) is export {
 
 multi sub trait_mod:<is> (Method:D \m, :$an-attribute!) is export {
   m does AttributeMethod;
+}
+
+multi sub trait_mod:<is> (Attribute:D \a, :$ranged!) is export {
+  a does RangedAttribute[$ranged];
 }
 
 # Thanks, guifa!
