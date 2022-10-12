@@ -299,7 +299,7 @@ class GLib::Spawn {
       $error
     );
     set_error($error);
-    a($standard_output, $standard_error, $exit_status) = ppr($so, $se, $e);
+    ($standard_output, $standard_error, $exit_status) = ppr($so, $se, $e);
     $all.not ?? $rv !! ($rv, $standard_output, $standard_error, $exit_status);
   }
 
