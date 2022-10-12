@@ -2,10 +2,13 @@ use v6.c;
 
 use Method::Also;
 
+use GLib::Raw::Traits;
 use GLib::Raw::Types;
 use GLib::Raw::Main;
 
 use GLib::MainContext;
+
+use GLib::Roles::Implementor;
 
 class GLib::Source {
   has GSource $!gs is implementor handles<p>;
@@ -151,8 +154,16 @@ class GLib::Source {
     g_source_set_name($!gs, $name);
   }
 
-  method set_name_by_id (Str() $name) is also<set-name-by-id> {
-    g_source_set_name_by_id($!gs, $name);
+  method set_name_by_id (
+    Int() $source-id,
+    Str() $name
+  )
+    is static
+    is also<set-name-by-id>
+  {
+    my guint $s = $source-id;
+
+    g_source_set_name_by_id($s, $name);
   }
 
   method set_priority (Int() $priority) {
@@ -171,57 +182,67 @@ class GLib::Source {
     g_source_unref($!gs);
   }
 
-  method remove (GLib::Source:U: Int() $tag) {
+  method remove (Int() $tag) is static {
     my guint $t = $tag;
 
     g_source_remove($t);
   }
 
   method remove_by_funcs_user_data (
-    GLib::Source:U:
     GSourceFuncs    $funcs,
     gpointer        $user_data
   )
+    is static
     is also<remove-by-funcs-user-data>
   {
     g_source_remove_by_funcs_user_data($funcs, $user_data);
   }
 
   method remove_by_user_data (
-    GLib::Source:U:
     gpointer        $user_data
   )
+    is static
     is also<remove-by-user-data>
   {
     g_source_remove_by_user_data($user_data);
   }
 
   method idle_add (
-    GLib::Source:U:
                     &function,
     gpointer        $data      = gpointer
   )
+    is static
     is also<idle-add>
   {
     g_idle_add(&function, $data);
   }
 
-  method idle_add_full (
-    GLib::Source:U:
-    Int()          $priority,
-                   &function,
-    gpointer       $data      = gpointer,
-    GDestroyNotify $notify    = gpointer
+  multi method idle_add_full (
+              &function,
+    gpointer  $data      = gpointer,
+              &notify    = %DEFAULT-CALLBACKS<GDestroyNotify>,
+    Int()    :$priority  = G_PRIORITY_DEFAULT,
+    Str()    :$name
+  ) {
+    samewith($priority, &function, $data, &notify, :$name);
+  }
+  multi method idle_add_full (
+    Int()     $priority,
+              &function,
+    gpointer  $data      = gpointer,
+              &notify    = %DEFAULT-CALLBACKS<GDestroyNotify>,
+     Str()   :$name
   )
+    is static
     is also<idle-add-full>
   {
-    g_idle_add_full($priority, &function, $data, $notify);
+    my $id = g_idle_add_full($priority, &function, $data, &notify);
+    ::?CLASS.set_name_by_id($id, $name) if $name;
+    $id;
   }
 
-  method idle_remove_by_data (
-    GLib::Source:U:
-    gpointer        $data
-  )
+  method idle_remove_by_data (gpointer $data)
+    is static
     is also<idle-remove-by-data>
   {
     g_idle_remove_by_data($data);
