@@ -11,7 +11,7 @@ use GLib::Signal;
 use GLib::Object::Type;
 use GLib::Class::Object;
 
-use GLib::Roles::Bindable;
+#use GLib::Roles::Bindable;
 use GLib::Roles::TypedBuffer;
 
 use GLib::Roles::Implementor;
@@ -51,6 +51,12 @@ class ProvidesData does Associative {
 # To be rolled into GLib::Roles::Object at some point!
 role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
 
+  method connectMultiple (*@specs) {
+    for @specs.rotor(2) -> ($name, &callback) {
+      self."$name"().tap(&callback);
+    }
+  }
+
   # GObject, GParamSpec, gpointer
   method connect-notify (
     $obj,
@@ -81,7 +87,7 @@ role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
 
 # cw: Time to grow up.
 role GLib::Roles::Object {
-  also does GLib::Roles::Bindable;
+#  also does GLib::Roles::Bindable;
   also does GLib::Roles::Implementor;
   also does GLib::Roles::Signals::GObject;
 
@@ -339,6 +345,7 @@ role GLib::Roles::Object {
   method GObject { $!o }
 
   method equals (GObject() $b) { +self.p == +$b.p }
+  method is     (GObject() $b) { self.equals($b)  }
 
   method notify ($detail?) {
     my $sig-name = 'notify';
@@ -374,13 +381,52 @@ role GLib::Roles::Object {
     g_object_thaw_notify($!o);
   }
 
-
-
   # We use these for inc/dec ops
   method ref   is also<upref>   {   g_object_ref($!o); self; }
   method unref is also<downref> { g_object_unref($!o); }
 
-  method bind (
+  multi method bind (
+    Str()      $source_property,
+    GObject()  $target,
+              :$create,
+              :$dual,
+              :invert(:$not),
+              :$flags             is copy
+  ) {
+    unless $flags {
+      $flags +|= G_BINDING_BIDIRECTIONAL  if $dual;
+      $flags +|= G_BINDING_SYNC_CREATE    if $create;
+      $flags +|= G_BINDING_INVERT_BOOLEAN if $not;
+    }
+
+    samewith($source_property, $target, $source_property, $flags);
+  }
+  multi method bind (
+    Str()      $source_property,
+    GObject()  $target,
+    Str        $target_property,
+              :$create,
+              :$dual,
+              :invert(:$not),
+              :$flags             is copy
+  ) {
+    unless $flags {
+      $flags +|= G_BINDING_BIDIRECTIONAL  if $dual;
+      $flags +|= G_BINDING_SYNC_CREATE    if $create;
+      $flags +|= G_BINDING_INVERT_BOOLEAN if $not;
+    }
+
+    samewith($source_property, $target, $target_property, $flags);
+  }
+  multi method bind (
+    Str()     $source_property,
+    GObject() $target,
+    Int       $flags            is copy = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
+  ) {
+    $flags .= Int unless $flags ~~ Int;
+    samewith($source_property, $target, $source_property, $flags);
+  }
+  multi method bind (
     Str()     $source_property,
     GObject() $target,
     Str()     $target_property,
@@ -395,7 +441,27 @@ role GLib::Roles::Object {
     )
   }
 
-  method bind_full (
+  multi method bind_full (
+    Str()                 $source_property,
+    GObject()             $target,
+    Int()                 $flags,
+                          &transform_to   = Callable,
+                          &transform_from = Callable,
+    gpointer              $user_data      = Pointer,
+                          &notify         = Callable
+  ) {
+    samewith(
+      $source_property,
+      $target,
+      $source_property,
+      $flags,
+      &transform_to,
+      &transform_from,
+      $user_data,
+      &notify
+    );
+  }
+  multi method bind_full (
     Str()                 $source_property,
     GObject()             $target,
     Str()                 $target_property,
@@ -418,7 +484,24 @@ role GLib::Roles::Object {
     );
   }
 
-  method bind_with_closures (
+  multi method bind_with_closures (
+    Str()      $source_property,
+    GObject()  $target,
+    Str()      $target_property,
+    Int()      $flags,
+    GClosure() $transform_to   = GClosure,
+    GClosure() $transform_from = GClosure
+  ) {
+    samewith(
+      $source_property,
+      $target,
+      $source_property,
+      $flags,
+      $transform_to,
+      $transform_from
+    );
+  }
+  multi method bind_with_closures (
     Str()      $source_property,
     GObject()  $target,
     Str()      $target_property,
@@ -799,12 +882,13 @@ role GLib::Roles::Object {
   }
 
   method listSignals ( :$raw = False ) {
-    my $t = GLib::Object::Type.new(self.get_type);
+    my $t = self.objectType;
 
     $t.name.say;
     $t.Int.say;
 
     my $ids = GLib::Signal.list_ids($t);
+    return if $raw;
 
     $ids.gist.say;
 
