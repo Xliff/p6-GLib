@@ -22,8 +22,22 @@ class X::GLib::Object::AttributeNotFound is Exception {
   }
 }
 
+class X::GLib::Object::AttributeValueOutOfBounds is Exception {
+  has $.attribute;
+  has $.value;
+  has $.range;
+
+  method message {
+    "{ $!value     } is outside the valid range of {
+       $!range     } for the '{
+       $!attribute }' attribute";
+  }
+}
+
 class X::GLib::Variant::NotAContainer is Exception {
   method message {
     'Variant is not a container, so cannot serve as a Positional!';
   }
 }
+
+package GLib::Raw::Exceptions { }
