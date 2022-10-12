@@ -615,6 +615,11 @@ package GLib::Raw::Subs {
     $p;
   }
 
+  sub mergeHash ($hash, $defaults) is export {
+    $hash{ .key } //= .value for $defaults.pairs;
+    $hash;
+  }
+
   # role HashDefault[\T] {
   #   method AT-KEY (\k) { callwith(k) // T };
   # }
