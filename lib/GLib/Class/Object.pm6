@@ -145,7 +145,7 @@ class GLib::Class::Object is export {
     samewith(@pspecs.elems, $gpa);
   }
   multi method install_properties (
-    Int() $n_specs,
+    Int()                       $n_specs,
     CArray[Pointer[GParamSpec]] $pspecs
   ) {
     g_object_class_install_properties($!c, $n_specs, $pspecs);

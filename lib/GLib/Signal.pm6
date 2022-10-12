@@ -210,8 +210,8 @@ class GLib::Signal {
 
   method disconnect_by_func (
     GObject() $instance,
-    gpointer $func,
-    gpointer $data       = Pointer
+    gpointer  $func,
+    gpointer  $data       = Pointer
   )
     is also<disconnect-by-func>
   {
