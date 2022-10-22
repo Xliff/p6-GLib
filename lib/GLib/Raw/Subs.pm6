@@ -620,6 +620,25 @@ package GLib::Raw::Subs {
     $hash;
   }
 
+  multi sub tie (@original, $index, $number, @replacement?) {
+    @replacement ?? @original.splice($index, $number)
+                 !! @original.splice($index, $number, @replacement);
+    @original;
+  }
+
+  multi sub tie (@original, $index, $number, @replacement, $extracted is rw) {
+    $extracted = @replacement
+      ?? @original.splice($index, $number)
+      !! @original.splice($index, $number, @replacement);
+
+    @original;
+  }
+
+  multi sub firstObject (@original, $object, :$k = False) is export {
+    $k ?? @original.first({ +$_ == +$object }, :k)
+       !! @original.first({ +$_ == +$object });
+  }
+
   # role HashDefault[\T] {
   #   method AT-KEY (\k) { callwith(k) // T };
   # }
@@ -641,6 +660,7 @@ package GLib::Raw::Subs {
     );
   }
 
+  # cw: Deprecated.
   our $DEFAULT-GDESTROY-NOTIFY is export = sub (*@a) {
     %DEFAULT-CALLBACKS<GDestroyNotify>( |@a )
       if %DEFAULT-CALLBACKS<GDestroyNotify>:exists
