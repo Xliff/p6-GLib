@@ -7,6 +7,14 @@ unit package GLib::Raw::Traits;
 role PropertyMethod  is export { }
 role AttributeMethod is export { }
 
+role Signalling[@Signals] {
+
+  method defined-signals {
+    @Signals;
+  }
+
+}
+
 role RangedAttribute[$R] is export {
   method valid-range { $R }
 
@@ -30,6 +38,9 @@ role RangedAttribute[$R] is export {
   }
 }
 
+role OverridedAttribute[%O] is export {
+}
+
 multi sub trait_mod:<is> (Method:D \m, :$a-property!) is export {
   m does PropertyMethod;
 }
@@ -45,6 +56,14 @@ multi sub trait_mod:<is> (Method:D \m, :$an-attribute!) is export {
 multi sub trait_mod:<is> (Attribute:D \a, :$ranged!) is export {
   a does RangedAttribute[$ranged];
 }
+
+multi sub trait_mod:<is> (
+  Attribute:D \a,
+              :g-override-property(:$g-override) is required
+) is export {
+  a does OverridedAttribute(:$g-override);
+}
+
 
 # Thanks, guifa!
 class X::StaticMethod::CalledWithInvocant is Exception {
