@@ -129,7 +129,6 @@ class tm          is repr<CStruct> is export does GLib::Roles::Pointers {
   has int32 $.tm_isdst   is rw; #= daylight savings flag
   has int64 $.tm_gmtoff  is rw; #= seconds east of UTC
   has Str   $.tm_zone;          #= Timezone abbreviation
-
 }
 
 sub htonl (uint32)
@@ -141,3 +140,9 @@ sub htonl (uint32)
 # cw: Yeah, and now we have to worry about this...
 constant LC_ADDRESS  is export = 9;
 constant LC_MESSAGES is export = 5;
+
+class timeval is repr<CStruct> does GLib::Roles::Pointers is export {
+  # cw: Signed my ass!
+  has uint64 $.tv_sec  is rw;
+  has uint64 $.tv_nsec is rw;
+}
