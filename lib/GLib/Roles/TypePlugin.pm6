@@ -1,5 +1,7 @@
 use v6.c;
 
+use Method::Also;
+
 use GLib::Raw::Types;
 use GLib::Raw::TypePlugin;
 
@@ -35,7 +37,7 @@ role GLib::Roles::TypePlugin {
     g_type_plugin_complete_type_info($!tp, $g, $info, $value_table);
   }
 
-  method get_type {
+  method g_type_plugin_get_type {
     state ($n, $t);
 
     unstable_get_type( self.^name, &g_type_plugin_get_type, $n, $t );
@@ -78,7 +80,8 @@ class GLib::Object::TypePlugin {
     self!setObject($to-parent);
   }
 
-  method Evolution::Raw::Definitions::GTypePlugin
+  method GLib::Raw::Definitions::GTypePlugin
+    is also<GTypePlugin>
   { $!tp }
 
   method new (GTypePluginAncestry $plugin, :$ref = True) {
@@ -87,6 +90,10 @@ class GLib::Object::TypePlugin {
     my $o = self.bless( :$plugin );
     $o.ref if $ref;
     $o;
+  }
+
+  method get_type {
+    self.g_type_plugin_get_type;
   }
 
 }
