@@ -208,13 +208,16 @@ class GLib::Source {
   }
 
   method idle_add (
-                    &function,
-    gpointer        $data      = gpointer
+                     &function,
+    gpointer         $data      = gpointer,
+    Str()           :$name      = Str
   )
     is static
     is also<idle-add>
   {
-    g_idle_add(&function, $data);
+    my $id = g_idle_add(&function, $data);
+    ::?CLASS.set_name_by_id($id, $name) if $name;
+    $id;
   }
 
   multi method idle_add_full (
@@ -222,9 +225,10 @@ class GLib::Source {
     gpointer  $data      = gpointer,
               &notify    = %DEFAULT-CALLBACKS<GDestroyNotify>,
     Int()    :$priority  = G_PRIORITY_DEFAULT,
-    Str()    :$name
+    Str()    :$name      = Str
   ) {
     samewith($priority, &function, $data, &notify, :$name);
+
   }
   multi method idle_add_full (
     Int()     $priority,
