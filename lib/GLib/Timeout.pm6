@@ -13,40 +13,50 @@ class GLib::Timeout {
   also does GLib::Roles::StaticClass;
 
   method add (
-    Int()    $interval,
-             &function,
-    gpointer $data = gpointer;
+    Int()     $interval,
+              &function,
+    gpointer  $data      = gpointer,
+    Str()    :$name      = Str
   ) {
     my guint $i = $interval;
 
-    g_timeout_add($i, &function, $data);
+    my $id = g_timeout_add($i, &function, $data);
+    GLib::Source.set-name-by-id($id, $name) if $name;
+    $id;
   }
 
   method add_full (
-    Int()          $priority,
-    Int()          $interval,
-                   &function,
-    gpointer       $data      = gpointer,
-    GDestroyNotify $notify    = gpointer
+    Int()           $priority,
+    Int()           $interval,
+                    &function,
+    gpointer        $data      = gpointer,
+                    $notify    = %DEFAULT-CALLBACKS<GDestroyNotify>,
+    Str()          :$name      = Str
   )
     is also<add-full>
   {
     my gint  $p = $priority;
     my guint $i = $interval;
 
-    g_timeout_add_full($p, $i, &function, $data, $notify);
+    my $id = g_timeout_add_full($p, $i, &function, $data, $notify);
+    GLib::Source.set-name-by-id($id, $name) if $name;
+    $id;
   }
 
   method add_seconds (
-    Int()    $interval,
-             &function,
-    gpointer $data      = gpointer
+    Int()     $interval,
+              &function,
+    gpointer  $data      = gpointer,
+    Str()    :$name      = Str
+
   )
     is also<add-seconds>
   {
     my guint $i = $interval;
 
-    g_timeout_add_seconds($i, &function, $data);
+    my $id = g_timeout_add_seconds($i, &function, $data);
+    GLib::Source.set-name-by-id($id, $name) if $name;
+    $id;
   }
 
   method add_seconds_full (
@@ -54,14 +64,17 @@ class GLib::Timeout {
     Int()          $interval,
                    &function,
     gpointer       $data      = gpointer,
-    GDestroyNotify $notify    = gpointer
+                   $notify    = %DEFAULT-CALLBACKS<GDestroyNotify>,
+    Str()         :$name      = Str
   )
     is also<add-seconds-full>
   {
     my gint  $p = $priority;
     my guint $i = $interval;
 
-    g_timeout_add_seconds_full($p, $i, &function, $data, $notify);
+    my $id = g_timeout_add_seconds_full($p, $i, &function, $data, $notify);
+    GLib::Source.set-name-by-id($id, $name) if $name;
+    $id;
   }
 
   # Lifted from GTK::Simple. Provided for compatibility.
