@@ -52,7 +52,7 @@ class GLib::Array {
   }
   multi method new (
     @values,
-    :$typed is required,
+    :$typed   is required,
     :$signed,
     :$double,
     :$direct
@@ -70,7 +70,10 @@ class GLib::Array {
     my $num-values = @values.elems;
     for @values.kv -> $k, $v {
       #say "Attempting to append #{ $k + 1 } / { $num-values }: { $v }";
-      $o.append_vals($v, 1, :$typed, :$signed, :$double, :$direct);
+      $o.append_vals(
+        toPointer($v, :$typed, :$signed, :$double, :$direct),
+        1,
+      );
       #exit if $c++ > 20;
     }
     $o;
@@ -323,6 +326,19 @@ class GLib::Array::Pointer is GLib::Array {
 
 }
 
+class GLib::Array::Integer is GLib::Array {
+
+  multi method new (
+    @values,
+    :$signed,
+    :$double,
+    :$direct
+  ) {
+    nextwith(@values, typed => Int, :$signed, :$double, :$direct);
+  }
+
+}
+
 sub value_array_get_type is export {
   state ($n, $t);
 
@@ -340,4 +356,13 @@ sub byte_array_get_type is export {
 }
 sub byte-array-get-type is export {
   byte_array_get_type;
+}
+
+sub returnGArray ($rv, $raw, $garray, $type, $object?) is export {
+  return $rv if $raw && $garray.not;
+  $rv = GLib::Array.new($rv);
+  return $rv if $garray && $raw;
+  my $a = $rv.Array(typed => $type);
+  return $a if $garray.not || $object.not;
+  $a.map({ $object.new($_) });
 }
