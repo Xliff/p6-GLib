@@ -60,8 +60,8 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
-      "O: $obj".say;
-      "S: $signal".say;
+      "O: $obj".say    if $DEBUG;
+      "S: $signal".say if $DEBUG;
       $obj .= p if $obj.^can('p');
 
       $hid = g_connect($obj, $signal,
@@ -71,7 +71,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      "H: $hid".say;
+      "H: $hid".say if $DEBUG;
       [ self.create-signal-supply($signal, $s), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
@@ -79,7 +79,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-ruint (
-    $obj,
+    $obj     is copy,
     $signal,
     &handler?
   )
@@ -92,6 +92,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_rbool($obj, $signal,
         -> $, $ud --> gboolean {
           CATCH {
@@ -113,7 +114,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-rdouble (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -122,6 +123,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_rdouble($obj, $signal,
         -> $, $ud --> gdouble {
           CATCH {
@@ -143,7 +145,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-string (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -152,6 +154,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_string($obj, $signal,
         -> $, $s1, $ud {
           CATCH {
@@ -170,7 +173,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-strstr (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -183,6 +186,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_strstr($obj, $signal,
         -> $, $s1, $s2, $ud {
           CATCH {
@@ -200,7 +204,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-int (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -209,6 +213,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_int($obj, $signal,
         -> $, $i, $ud {
           CATCH {
@@ -227,7 +232,7 @@ role GLib::Roles::Signals::Generic {
 
   # Pointer, guint, guint, gpointer
   method connect-uintuint (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -240,6 +245,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g-connect-uintuint($obj, $signal,
         -> $, $ui1, $ui2, $ud {
           CATCH {
@@ -258,7 +264,7 @@ role GLib::Roles::Signals::Generic {
 
   # Pointer, gint, gint, gpointer
   method connect-intint (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -271,6 +277,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g-connect-intint($obj, $signal,
         -> $, $i1, $i2, $ud {
           CATCH {
@@ -288,7 +295,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-uint (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -301,6 +308,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_uint($obj, $signal,
         -> $, $ui, $ud {
           CATCH {
@@ -318,7 +326,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-double (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -327,6 +335,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_double($obj, $signal,
         -> $, $d, $ud {
           CATCH {
@@ -344,7 +353,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-long (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -353,6 +362,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g-connect-long($obj, $signal,
         -> $, $l, $ud {
           CATCH {
@@ -370,7 +380,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-strint (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -379,6 +389,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g-connect-strint($obj, $signal,
         -> $, $s1, $i1, $ud {
           CATCH {
@@ -396,7 +407,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-uintint (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -405,6 +416,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_uintint($obj, $signal,
         -> $, $ui, $i, $ud {
           CATCH {
@@ -422,7 +434,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-uintintbool (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -431,6 +443,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_uintintbool($obj, $signal,
         -> $, $ui, $i, $b, $ud {
           CATCH {
@@ -448,7 +461,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-str-rbool (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -457,6 +470,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_str_rbool($obj, $signal,
         -> $, $uri, $ud --> gboolean {
           CATCH {
@@ -478,7 +492,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-int-rint (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -487,6 +501,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_int_ruint($obj, $signal,
         -> $, $i, $ud --> gint {
           CATCH {
@@ -507,7 +522,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-int-ruint (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -516,6 +531,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_int_ruint($obj, $signal,
         -> $, $i, $ud --> guint {
           CATCH {
@@ -536,7 +552,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-uint-ruint (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -545,6 +561,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g_connect_uint_ruint($obj, $signal,
         -> $, $ui, $ud --> guint {
           CATCH {
@@ -565,7 +582,7 @@ role GLib::Roles::Signals::Generic {
   }
 
   method connect-gparam (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -578,6 +595,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g-connect-gparam($obj, $signal,
         -> $, $gp, $ud {
           CATCH { default { note($_) } }
@@ -594,7 +612,7 @@ role GLib::Roles::Signals::Generic {
 
   # GSimpleAction, GVariant, gpointer
   method connect-gvariant (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -607,6 +625,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g-connect-variant($obj, $signal,
         -> $, $v, $ud {
           CATCH {
@@ -625,7 +644,7 @@ role GLib::Roles::Signals::Generic {
 
     # GstAppSrc, guint64, gpointer --> gboolean
   method connect-long-ruint32 (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   )
@@ -634,6 +653,7 @@ role GLib::Roles::Signals::Generic {
     my $hid;
     %!signals{$signal} //= do {
       my \𝒮 = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g-connect-long-ruint32($obj, $signal,
         -> $, $gt, $gr, $ud --> gboolean {
           CATCH {
@@ -654,13 +674,14 @@ role GLib::Roles::Signals::Generic {
 
   # GObject, GError, gpointer
   method connect-error (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   ) {
     my $hid;
     %!signals{$signal} //= do {
       my \𝒮 = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g-connect-error($obj, $signal,
         -> $, $e, $ud {
           CATCH {
@@ -679,13 +700,14 @@ role GLib::Roles::Signals::Generic {
 
   # GObject, GError, gpointer
   method connect-pointer (
-    $obj,
+    $obj is copy,
     $signal,
     &handler?
   ) {
     my $hid;
     %!signals{$signal} //= do {
       my \𝒮 = Supplier.new;
+      $obj .= p if $obj.^can('p');
       $hid = g-connect-error($obj, $signal,
         -> $, $p, $ud {
           CATCH {
