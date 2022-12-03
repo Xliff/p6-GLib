@@ -3,6 +3,8 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
+use GLib::Raw::Exceptions;
+use GLib::Raw::Traits;
 use GLib::Raw::Types;
 use GLib::Raw::Value;
 
@@ -36,7 +38,12 @@ class GLib::Value {
     # Not elegible for a Nil check!
     self.bless( :$type );
   }
-  multi method new (GValue $value) {
+  multi method new-enum (\T) {
+    ::?CLASS.new( ::?CLASS.typeFromEnum(T) );
+  }
+  multi method new ($v where { $_ ~~ GValue || .^can('GValue') }) {
+    my $value = $v ~~ GValue ?? $v !! $v.GValue;
+
     $value ?? self.bless(:$value) !! GValue
   }
 
@@ -50,8 +57,14 @@ class GLib::Value {
   # ↓↓↓↓ SIGNALS ↓↓↓↓
   # ↑↑↑↑ SIGNALS ↑↑↑↑
 
-  method init (GLib::Value:U: GValue $value, Int() $type) {
+  method init (GValue $value, Int() $type) is static {
     g_value_init($value, $type);
+  }
+
+  method alloc (Int() $type) is static {
+    my GType $t = $type;
+
+    ::?CLASS.init( GValue.new, $type );
   }
 
   method unref {
@@ -59,7 +72,9 @@ class GLib::Value {
   }
 
   method valueFromType (\T) is also<valueFromEnum> is rw {
-    die 'The parameter to valueFromEnum must be a type object!' if T.defined;
+    X::GLib::InvalidArgument.new(
+      message => 'The parameter to valueFromType must be a type object!'
+    ).throw if T.defined;
 
     do given T {
       when uint32   { self.uint   }
@@ -71,8 +86,20 @@ class GLib::Value {
     }
   }
 
-  method gtypeFromType (GLib::Value:U: \T) is also<gtypeFromEnum> {
-    die 'The parameter to gtypeFromType must be a type object!' if T.defined;
+  method gtypeFromType (GLib::Value:U: \T)
+    is also<
+      gtypeFromEnum
+      typeFromEnum
+    >
+  {
+    # cw: I don't know where this is coming from but it's the best I can do
+    #     for now.
+    return T if T ~~ GTypeEnum;
+
+    X::GLib::InvalidArgument.new(
+      message => "The parameter to gtypeFromType must be a type object, not {
+                  T.^name }"
+    ).throw if T.defined;
 
     do given T {
       when uint32   { G_TYPE_UINT    }
@@ -87,7 +114,9 @@ class GLib::Value {
   }
 
   method typeFromGType (GLib::Value:U: \T) {
-    die 'The parameter to typeFromGType must be a type object!' if T.defined;
+    X::GLib::InvalidArgument.new(
+      message => 'The parameter to typeFromGType must be a type object!'
+    ).throw if T.defined;
 
     do given T {
       when G_TYPE_UINT    { uint32  }
@@ -279,21 +308,14 @@ class GLib::Value {
     );
   }
 
-  method object is rw {
+  method object ( :$type = GObject ) is rw {
     Proxy.new(
-      FETCH => sub ($) {
-        g_value_get_object($!v);
+      FETCH => -> $ {
+        cast( $type, g_value_get_object($!v) )
       },
-      STORE => sub ($, $obj is copy) {
-        if $obj !~~ GObject {
-          if $obj.^lookup('GObject') -> $gobject {
-            $obj = $gobject($obj);
-          }
-        } elsif $obj.REPR eq <CPointer CStruct>.any {
-          $obj = cast(GObject, $obj);
-        }
-        die "\$obj is a { $obj.^name }, not GObject!" unless $obj ~~ GObject;
-        g_value_set_object( $!v, $obj );
+
+      STORE => -> $, $obj is copy where *.^can('p') {
+        g_value_set_object( $!v, $obj.p );
       }
     );
   }
