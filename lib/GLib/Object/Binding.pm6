@@ -10,7 +10,7 @@ use GLib::Object::Raw::Binding;
 use GLib::Roles::Object;
 
 class GLib::Object::Binding {
-  also does GLib::Roles::Object;  
+  also does GLib::Roles::Object;
 
   has GBinding $!b is implementor;
 

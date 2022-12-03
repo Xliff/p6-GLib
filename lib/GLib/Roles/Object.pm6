@@ -5,6 +5,7 @@ use NativeCall;
 use GLib::Object::IsType;
 use GLib::Raw::Types;
 use GLib::Raw::Traits;
+use GLib::Object::Raw::Binding;
 
 use GLib::Value;
 use GLib::Signal;
@@ -15,11 +16,12 @@ use GLib::Class::Object;
 use GLib::Roles::TypedBuffer;
 
 use GLib::Roles::Implementor;
+use GLib::Roles::NewGObject;
 use GLib::Roles::Signals::Generic;
 
 constant gObjectTypeKey = 'p6-GObject-Type';
 
-my %data;
+my (%data, %object-references);
 
 class ProvidesData does Associative {
   has $!p;
@@ -96,15 +98,24 @@ role GLib::Roles::Object {
   has $!data-proxy;
   has $!object-set;
 
-  submethod BUILD (:$object) {
-    self!setObject($object) if $object;
-
-  }
-
-  # This will not work while ::Object is still a role!
-  # method attributes ($key) {
-  #   X::GLib::Object::AttributeNotFound.new(attribute => $key).throw;
+  # cw: A method for proper GObject destruction? Also see: !setObject
+  # submethod DESTROY {
+  #   my $r := %object-references{ +$!o.p };
+  #
+  #   $r--;
+  #   %object-references{ +$!o.p }:delete unless $r;
   # }
+
+  # cw: Must be called using the self.GLib::Roles::Objects.attributes
+  #     form.
+  method attributes ($key) {
+    if self ~~ GLib::Roles::NewGObject {
+      # cw: Search for trait added attributes if this is a pure
+      #     Raku object
+    }
+
+    X::GLib::Object::AttributeNotFound.new(attribute => $key).throw;
+  }
 
   method gist-data {
     %data.gist;
@@ -217,8 +228,7 @@ role GLib::Roles::Object {
                     !! ($attr[0], $attr[1].^name, $attr[2]).join(', ') }"
         if $DEBUG;
 
-        # cw: Will NOT be able to handle ancestor attributes until ::Object
-        #     becomes a class.
+        # Available for GLib::Object descendents
         given $attr {
           my $v = $a.value;
 
@@ -283,6 +293,22 @@ role GLib::Roles::Object {
     self!setObject($o);
   }
 
+  my %signal-object-cache;
+  method Signal {
+    # cw: Cached by class name?
+    my $s = self;
+
+    %signal-object-cache{ $s.^name } = (class :: {
+      also does Associative;
+
+      method AT-KEY (\k) {
+        my $key = k.split(/ <[_\ -]> /).map( *.lc.tc ).join('-');
+        say "Signal: { $key }" if $DEBUG;
+        $s."{ $key }"()
+      }
+    }).new;
+  }
+
   method getClass (:$raw = False) {
     self.ρ-getClass(GObjectClass, ::('GLib::Class::Object'), :$raw);
   }
@@ -332,6 +358,9 @@ role GLib::Roles::Object {
     $!o = $obj ~~ GObject ?? $obj !! cast(GObject, $obj);
     say "ObjectSet ({ self })-+-: { $!o }" if $DEBUG;
     $!data-proxy = ProvidesData.new(+$!o.p);
+
+    # Raku reference count of a GObject
+    #%object-references{ +$!o.p }++
   }
 
   method p { $!o.p }
@@ -388,10 +417,10 @@ role GLib::Roles::Object {
   multi method bind (
     Str()      $source_property,
     GObject()  $target,
-              :$create,
-              :$dual,
-              :invert(:$not),
-              :$flags             is copy
+              :$create                    = True,
+              :$dual                      = False,
+              :invert(:$not)              = False,
+              :$flags            is copy  = 0
   ) {
     unless $flags {
       $flags +|= G_BINDING_BIDIRECTIONAL  if $dual;
@@ -405,10 +434,10 @@ role GLib::Roles::Object {
     Str()      $source_property,
     GObject()  $target,
     Str        $target_property,
-              :$create,
-              :$dual,
-              :invert(:$not),
-              :$flags             is copy
+              :$create                    = True,
+              :$dual                      = False,
+              :invert(:$not)              = False,
+              :$flags            is copy  = 0
   ) {
     unless $flags {
       $flags +|= G_BINDING_BIDIRECTIONAL  if $dual;
@@ -432,8 +461,8 @@ role GLib::Roles::Object {
     Str()     $target_property,
     Int()     $flags            = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
   ) {
-    GLib::Object::Binding.bind(
-      self,
+    g_object_bind_property(
+      self.GObject,
       $source_property,
       $target,
       $target_property,
@@ -471,8 +500,8 @@ role GLib::Roles::Object {
     gpointer              $user_data      = Pointer,
                           &notify         = Callable
   ) {
-    GLib::Object::Binding.bind_full(
-      self,
+    g_object_bind_property_full(
+      self.GObject,
       $source_property,
       $target,
       $target_property,
@@ -487,7 +516,6 @@ role GLib::Roles::Object {
   multi method bind_with_closures (
     Str()      $source_property,
     GObject()  $target,
-    Str()      $target_property,
     Int()      $flags,
     GClosure() $transform_to   = GClosure,
     GClosure() $transform_from = GClosure
@@ -506,11 +534,11 @@ role GLib::Roles::Object {
     GObject()  $target,
     Str()      $target_property,
     Int()      $flags,
-    GClosure() $transform_to   = GClosure,
-    GClosure() $transform_from = GClosure
+    GClosure() $transform_to      = GClosure,
+    GClosure() $transform_from    = GClosure
   ) {
-    GLib::Object::Binding.bind_with_closures(
-      self,
+    g_object_bind_property_with_closures(
+      self.GObject,
       $source_property,
       $target,
       $target_property,
@@ -602,6 +630,12 @@ role GLib::Roles::Object {
 
   method is_type(GObjectOrPointer $t) {
     is_type($t, self);
+  }
+
+  method gobject_get_type {
+    state ($n, $t);
+
+    unstable_get_type( self.^name, &g_object_get_type, $n, $t );
   }
 
 
@@ -840,7 +874,7 @@ role GLib::Roles::Object {
     @pairs .= map({ $_ ~~ Pair ?? |(.key, .value) !! $_ });
 
     die 'Cannot use array with odd number of elements!'
-      unless +@pairs % 2 == 0;
+ +@pairs % 2 == 0;
 
     @pairs = @pairs.rotor(2).map({
       die 'Elements in @pairs must be Str, { T.^name } groups!'
@@ -899,6 +933,24 @@ role GLib::Roles::Object {
 
 class GLib::Object does GLib::Roles::Object {
 
+  submethod BUILD ( :$object, *%a ) {
+    self!setObject($object) if $object;
+
+    # Check if Object type needs to be registered by smartmatching
+    # against NewGObject
+    if self ~~ GLib::Roles::NewGObject {
+      self.GLib::Roles::NewGObject::BUILD( |%a );
+      # Add signals if the object does Signalling
+
+      # Add properties based on traits set on attributes if
+      # said attribute names appear via the RegisteredAttribute class
+      # trait.
+
+      # cw: Check on availability of 'will' trait which might make #3
+      #     more gramatically palatable.
+    }
+  }
+
   multi method new (
      $object where $object ~~ GObject || $object.^can('GObject'),
     :$ref                                                         = True
@@ -913,11 +965,18 @@ class GLib::Object does GLib::Roles::Object {
   }
 
   multi method new (
-    $obj-type where $obj-type ~~ Int || $obj-type.can('Int')
+     $obj-type where $obj-type ~~ Int || $obj-type.can('Int'),
+
+    :$no-bless = False
   ) {
     my $object = g_object_new($obj-type, Str);
+    return $object if $no-bless;
 
     $object ?? self.bless( :$object ) !! Nil;
+  }
+
+  method get_type is also<get-type> {
+    self.gobject_get_type;
   }
 
 }
@@ -943,6 +1002,12 @@ sub g_object_get_property (GObject $o, Str $key, GValue $value)
 sub g_object_set_property (GObject $o, Str $key, GValue $value)
   is native(gobject)
   is export
+{ * }
+
+sub g_object_get_type
+  returns GType
+  is      native(gobject)
+  is      export
 { * }
 
 multi sub infix:<=:=> (

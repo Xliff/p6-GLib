@@ -5,7 +5,6 @@ use NativeCall;
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
 
-
 use GLib::Roles::TypeInstance;
 
 unit package GLib::Raw::Object;
