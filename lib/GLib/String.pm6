@@ -18,6 +18,8 @@ class GLib::String {
     is also<GString>
   { $!s }
 
+  method Str { self.str }
+
   multi method new (GString $string, :$ref) {
     $string ?? self.bless( :$string ) !! Nil;
   }
