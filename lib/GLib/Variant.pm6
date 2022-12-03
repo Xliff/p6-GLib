@@ -177,8 +177,8 @@ class GLib::Variant {
   }
   method new_from_bytes (
     GVariantType() $type,
-    GBytes         $bytes,
-    Int()          $trusted
+    GBytes()       $bytes,
+    Int()          $trusted = False
   )
     is static
     is also<new-from-bytes>
@@ -1092,7 +1092,10 @@ class GLib::Variant {
   multi method print (Int() $type_annotate = True) {
     my gboolean $t = $type_annotate;
 
-    g_variant_print($!v, $t);
+    my $str-from-c = g_variant_print($!v, $t);
+    my $s = $str-from-c.clone;
+    free($str-from-c);
+    $s;
   }
 
   method print_string (GString $string, Int() $type_annotate)
