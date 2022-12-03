@@ -16,7 +16,7 @@ class GLib::Array {
   has        $!ca;
 
   submethod BUILD (:$array, :$typed) {
-    $!a  = $array;
+    $!a  = $array if $array;
     self.setType($typed) unless $typed === Any
   }
 
@@ -51,7 +51,7 @@ class GLib::Array {
     $o;
   }
   multi method new (
-    @values,
+     @values,
     :$typed   is required,
     :$signed,
     :$double,
@@ -91,27 +91,27 @@ class GLib::Array {
   }
 
   multi method new (
-    Int() $zero_terminated,
-    Int() $clear,
-    Int() $element_size,
-    Int() $reserved_size,
-    :$sized is required,
-    :$typed
+    Int()  $zero_terminated,
+    Int()  $clear,
+    Int()  $element_size,
+    Int()  $reserved_size,
+          :$sized            is required,
+          :$typed
   ) {
     self.sized_new(
-      $zero_terminated,
-      $clear,
-      $element_size,
-      $reserved_size,
+       $zero_terminated,
+       $clear,
+       $element_size,
+       $reserved_size,
       :$typed
     );
   }
   method sized_new (
-    Int() $zero_terminated,
-    Int() $clear,
-    Int() $element_size,
-    Int() $reserved_size,
-    :$typed
+    Int()  $zero_terminated,
+    Int()  $clear,
+    Int()  $element_size,
+    Int()  $reserved_size,
+          :$typed
   )
     is also<
       sized-new
@@ -275,21 +275,20 @@ class GLib::Array {
     self;
   }
 
-  method set_clear_func (GDestroyNotify $clear_func) is also<set-clear-func> {
-    g_array_set_clear_func($!a, $clear_func);
+  method set_clear_func (&clear_func)
+    is also<set-clear-func>
+  {
+    g_array_set_clear_func($!a, &clear_func);
   }
 
-  method sort (GCompareFunc $compare_func) {
-    g_array_sort($!a, $compare_func);
+  method sort (&compare_func) {
+    g_array_sort($!a, &compare_func);
   }
 
-  method sort_with_data (
-    GCompareDataFunc $compare_func,
-    gpointer         $user_data = gpointer
-  )
+  method sort_with_data (&compare_func, gpointer $user_data = gpointer)
     is also<sort-with-data>
   {
-    g_array_sort_with_data($!a, $compare_func, $user_data);
+    g_array_sort_with_data($!a, &compare_func, $user_data);
   }
 
   method unref is also<downref> {
@@ -329,7 +328,7 @@ class GLib::Array::Pointer is GLib::Array {
 class GLib::Array::Integer is GLib::Array {
 
   multi method new (
-    @values,
+     @values,
     :$signed,
     :$double,
     :$direct
@@ -338,6 +337,27 @@ class GLib::Array::Integer is GLib::Array {
   }
 
 }
+
+# cw: The intent is for this to be a distinct type, however without the
+#     use of self.bless, this class is really just an alias for GLib::Array.
+#     This should be considered a defect.
+class GLib::Array::String is GLib::Array {
+
+  multi method new (@values) {
+    nextwith(@values, typed => Str);
+  }
+
+}
+
+# cw: See previous note.
+class GLib::Array::Str {
+
+  method new (@values) {
+    return GLib::Array::String.new(@values);
+  }
+
+}
+
 
 sub value_array_get_type is export {
   state ($n, $t);
