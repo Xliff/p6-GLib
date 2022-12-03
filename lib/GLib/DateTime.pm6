@@ -8,11 +8,19 @@ use GLib::Raw::DateTime;
 
 use GLib::TimeZone;
 
+use GLib::Roles::Implementor;
+
 class GLib::DateTime {
+  also does GLib::Roles::Implementor;
+
   has GDateTime $!dt is implementor handles<p>;
 
   submethod BUILD (:$datetime) {
     $!dt = $datetime;
+  }
+
+  method DateTime {
+    DateTime.new( self.to_unix );
   }
 
   method GLib::Raw::Definitions::GDateTime
@@ -27,32 +35,33 @@ class GLib::DateTime {
   }
 
   multi method new (
-    DateTime $pdt,
-    :$utc is required
+    DateTime  $pdt,
+             :$utc is required
   ) {
     ::?CLASS.new_from_unix_utc($pdt.utc.posix);
   }
 
   multi method new (
     GTimeZone() $tz,
-    Int() $year,
-    Int() $month,
-    Int() $day,
-    Int() $hour,
-    Int() $minute,
-    Num() $seconds
+    Int()       $year,
+    Int()       $month,
+    Int()       $day,
+    Int()       $hour,
+    Int()       $minute,
+    Num()       $seconds
   ) {
     my gint ($y, $m, $d, $h, $mn) = ($year, $month, $day, $hour, $minute);
-    my gdouble $s = $seconds;
-    my $datetime = g_date_time_new($tz, $y, $m, $d, $h, $mn, $s);
+
+    my gdouble $s         = $seconds;
+    my         $datetime  = g_date_time_new($tz, $y, $m, $d, $h, $mn, $s);
 
     $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (
-    Str() $text,
-    GTimeZone() $default_tz,
-    :$iso8601 is required
+    Str()        $text,
+    GTimeZone()  $default_tz,
+                :$iso8601     is required
   ) {
     ::?CLASS.new_from_iso8601($text, $default_tz);
   }
@@ -66,6 +75,7 @@ class GLib::DateTime {
 
   multi method new (
     GTimeVal() $tv,
+
     :timeval_local(:$timeval-local) is required
   ) {
     ::?CLASS.new_from_timeval_local($tv);
@@ -80,7 +90,8 @@ class GLib::DateTime {
 
   multi method new (
     GTimeVal() $tv,
-    :timeval_utc(:$timeval-utc) is required,
+
+     :timeval_utc(:$timeval-utc) is required,
   ) {
     ::?CLASS.new_from_timeval_utc($tv);
   }
@@ -92,19 +103,21 @@ class GLib::DateTime {
 
   multi method new (
     Int() $time,
+
     :unix_local(:$unix-local) is required
   ) {
     ::?CLASS.new_from_unix_local($time);
   }
   method new_from_unix_local (Int() $time) is also<new-from-unix-local> {
-    my gint64 $t = $time;
-    my $datetime = g_date_time_new_from_unix_local($t);
+    my gint64 $t        = $time;
+    my        $datetime = g_date_time_new_from_unix_local($t);
 
     $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method new (
     Int() $time,
+
     :unix_utc(:$unix-utc)
   ) {
     ::?CLASS.new_from_unix_utc($time);
@@ -117,13 +130,13 @@ class GLib::DateTime {
   }
 
   multi method new (
-    Int() $year,
-    Int() $month,
-    Int() $day,
-    Int() $hour,
-    Int() $minute,
-    Num() $seconds,
-    :$local is required
+    Int()  $year,
+    Int()  $month,
+    Int()  $day,
+    Int()  $hour,
+    Int()  $minute,
+    Num()  $seconds,
+          :$local    is required
   ) {
     ::?CLASS.new_local($year, $month, $day, $hour, $minute, $seconds);
   }
@@ -138,8 +151,9 @@ class GLib::DateTime {
     is also<new-local>
   {
     my gint ($y, $m, $d, $h, $mn) = ($year, $month, $day, $hour, $minute);
-    my gdouble $s = $seconds;
-    my $datetime = g_date_time_new_local($y, $m, $d, $h, $mn, $s);
+
+    my gdouble $s        = $seconds;
+    my         $datetime = g_date_time_new_local($y, $m, $d, $h, $mn, $s);
 
     $datetime ?? self.bless( :$datetime ) !! Nil;
   }
@@ -183,14 +197,16 @@ class GLib::DateTime {
     is also<new-utc>
   {
     my gint ($y, $m, $d, $h, $mn) = ($year, $month, $day, $hour, $minute);
-    my gdouble $s = $seconds;
-    my $datetime = g_date_time_new_utc($y, $m, $d, $h, $mn, $s);
+
+    my gdouble $s        = $seconds;
+    my         $datetime = g_date_time_new_utc($y, $m, $d, $h, $mn, $s);
 
     $datetime ?? self.bless( :$datetime ) !! Nil;
   }
 
   multi method add (
     Int() $timespan_int,
+
     :ts(:$timespan) is required
   ) {
     my GTimeSpan $t = $timespan_int;
@@ -214,6 +230,7 @@ class GLib::DateTime {
     Int() $hour,
     Int() $minute,
     Num() $seconds,
+
     :f(:$full) is required
   ) {
     self.add_full($year, $month, $day, $hour, $minute, $seconds);
