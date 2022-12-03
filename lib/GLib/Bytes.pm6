@@ -1,15 +1,24 @@
 use v6.c;
 
 use Method::Also;
+use NativeCall;
 
 use GLib::Raw::Types;
 use GLib::Raw::Bytes;
 
+use GLib::Roles::Implementor;
+
 class GLib::Bytes {
+  also does GLib::Roles::Implementor;
+
   has GBytes $!b is implementor handles<p>;
 
   submethod BUILD (GBytes :$bytes) {
     $!b = $bytes;
+  }
+
+  method Str {
+    self.get_data.head;
   }
 
   method GLib::Raw::Definitions::GBytes
@@ -20,7 +29,13 @@ class GLib::Bytes {
     $bytes ?? self.bless( :$bytes ) !! Nil;
   }
 
-  multi method new (Blob() $data, Int() $size) {
+  multi method new (Str $data, :$encoding = 'utf8') {
+    samewith( $data.encode($encoding) );
+  }
+  multi method new (Blob $data) {
+    samewith( CArray[uint8].new($data), $data.bytes );
+  }
+  multi method new (CArray[uint8] $data, Int() $size) {
     my gsize $s = $size;
 
     self.bless( bytes => g_bytes_new($data, $s) );
@@ -34,6 +49,8 @@ class GLib::Bytes {
     self.bless( bytes => g_bytes_new_from_bytes($bytes, $o, $l) );
   }
 
+  # cw: Use of Blob as an argument with new_ is dangerous and should be
+  #     replaced with either CArray[uint8] or Pointer!!!
   method new_static (Blob() $data, Int() $size) is also<new-static> {
     my gsize $s = $size;
 
@@ -77,10 +94,10 @@ class GLib::Bytes {
     samewith($, :all);
   }
   multi method get_data (
-    $size      is rw,
-    :$all      =  False,
-    :$raw      =  False,
-    :$encoding =  'utf8'
+     $size      is rw,
+    :$all              = False,
+    :$raw              = False,
+    :$encoding         = 'utf8'
   ) {
     my gsize $s = 0;
 

@@ -36,7 +36,7 @@ sub g_bytes_hash (GBytes $bytes)
   is export
 { * }
 
-sub g_bytes_new (Blob $data, gsize $size)
+sub g_bytes_new (CArray[uint8] $data, gsize $size)
   returns GBytes
   is native(glib)
   is export
@@ -48,6 +48,7 @@ sub g_bytes_new_from_bytes (GBytes $bytes, gsize $offset, gsize $length)
   is export
 { * }
 
+# cw: Use of Blob is UNSAFE. Please change to either Pointer or CArray[uint8]!
 sub g_bytes_new_static (Blob $data, gsize $size)
   returns GBytes
   is native(glib)
