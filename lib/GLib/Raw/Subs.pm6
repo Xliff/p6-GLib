@@ -192,12 +192,12 @@ package GLib::Raw::Subs {
   sub checkForType(\T, $v is copy) is export {
     if T !=== Nil {
       unless $v ~~ T {
-        say "Attempting to convert a { $v.^name } to { T.^name }...";
+        #say "Attempting to convert a { $v.^name } to { T.^name }...";
         my $resolved-name = resolveNativeType(T).^name;
         $resolved-name ~= "[{ T.of.^name }]" if $resolved-name eq 'CArray';
-        say "RN: { $resolved-name }";
+        #say "RN: { $resolved-name }";
         if $v.^lookup($resolved-name) -> $m {
-          say "Using coercer at { $v.^name }.$resolved-name...";
+          #say "Using coercer at { $v.^name }.$resolved-name...";
           $v = $m($v);
         }
         # Note reversal of usual comparison. This is due to the fact that
@@ -230,8 +230,11 @@ package GLib::Raw::Subs {
          T.^name }"
       }
     });
+
+    say "CA: { $ca.^name } / { $size }" if $DEBUG;
+
     return $ca unless @a.elems;
-    $ca = $ca.allocate($size);
+    $ca = $ca.new;
     for ^$size {
       my $typed = checkForType(T, @a[$_]);
 
@@ -277,6 +280,13 @@ package GLib::Raw::Subs {
       .grep({ $s +& .value })
       .map( *.key )
       .Set
+  }
+
+  sub fromFlagish ($E, $val) is export {
+    $val = [+|]( |$val.map({ $E(.key).value }) )
+      if $val ~~ Set;
+    $val = [+|]( |$val ) if $val ~~ Positional;
+    $val .= Int if $val !~~ Int && $val.^can('Int');
   }
 
   # GLib-level
@@ -404,11 +414,10 @@ package GLib::Raw::Subs {
     $raw,
     \P,
     $C?                    is raw,
-    :$ref                  =  False,
-    :$attempt-real-resolve =  False
+    :$ref                          =  False,
+    :$attempt-real-resolve         =  False
   ) is export {
     my $o = $oo;
-
     return Nil unless $o;
 
     unless $attempt-real-resolve {
@@ -425,7 +434,9 @@ package GLib::Raw::Subs {
 
     $o1.createAsOriginal;
   }
-  our &returnObject is export := &propReturnObject;
+
+  sub returnObject       (|c) is export { propReturnObject( |c ) }
+  sub returnProperObject (|c) is export { propReturnObject( |c ) }
 
   sub subarray ($a, $o) is export {
     my $b = nativecast(Pointer[$a.of], $a);
@@ -655,9 +666,22 @@ package GLib::Raw::Subs {
       is native(glib)
     { * }
 
-    %DEFAULT-CALLBACKS<GDestroyNotify> = (
+    %DEFAULT-CALLBACKS = (
       GDestroyNotify => sub ($p) { g_free($p) }
     );
+  }
+
+  sub propAssignArray (\T, $i is copy) is export {
+    my $typeName = T.^name;
+
+    $i = $i.Array                       if $i.^can($typeName);
+    $i = ArrayToCArray(T, $i, :null)    if $i ~~ T;
+    $i = cast(gpointer, $i)             if $i ~~ CArray[T];
+    X::GLib::UnkownType.new(
+      message => "Value passed to css-class property is not{
+                  '' } { $typeName }-compatible!";
+    ).throw unless $i ~~ gpointer;
+    $i;
   }
 
   # cw: Deprecated.
