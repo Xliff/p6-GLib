@@ -40,4 +40,28 @@ class X::GLib::Variant::NotAContainer is Exception {
   }
 }
 
+class X::GLib::InvalidSize is Exception {
+  has $!message is built;
+
+  method message { $!message // 'Invalid size!' }
+}
+
+class X::GLib::UnknownType is Exception {
+  has $!message is built;
+
+  method message { $!message // 'Invalid or unknown type!' }
+}
+
+class X::GLib::InvalidArgument is Exception {
+  has $!message is built;
+
+  method message { $!message // 'Invalid argument' }
+}
+
+class X::GLib::InvalidNumberOfArguments is Exception {
+  has $!message is built;
+
+  method message { $!message // 'Invalid number of arguments' }
+}
+
 package GLib::Raw::Exceptions { }
