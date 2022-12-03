@@ -147,13 +147,13 @@ sub g_value_get_int64 (GValue $value)
   { * }
 
 sub g_value_get_object (GValue $value)
-  returns Pointer
+  returns gpointer
   is native(gobject)
   is export
   { * }
 
 sub g_value_get_pointer (GValue $value)
-  returns OpaquePointer
+  returns gpointer
   is native(gobject)
   is export
   { * }
@@ -239,7 +239,7 @@ sub g_value_set_pointer (GValue $value, gpointer $v_pointer)
   is export
   { * }
 
-sub g_value_set_object (GValue $value, GObject $v_pointer)
+sub g_value_set_object (GValue $value, gpointer $v_pointer)
   is native(gobject)
   is export
   { * }
