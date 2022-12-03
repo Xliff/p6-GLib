@@ -18,7 +18,8 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
       # *********************************************
       #$!size = malloc_usable_size($!b = $buffer) div nativesizeof(T);
       $!b = $buffer;
-      $!size = $autosize ?? malloc_usable_size($!b) div nativesizeof(T) !! 0;
+      $!size = $autosize ?? malloc_usable_size($!b) div nativesizeof(T)
+                         !! $size;
       if $clear {
         loop (my $i = 0; $i < $!size; $i++) {
           self.bind($i, T.new);
@@ -54,7 +55,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
   }
 
   # Cribbed from MySQL::Native. Thanks, ctilmes!
-  method AT-POS(Int $field) {
+  method AT-POS (Int $field) {
     nativecast(
       T,
       Pointer.new( $!b + $field * nativesizeof(T) )
@@ -107,6 +108,10 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     self.new-typedbuffer-obj(@entries);
   }
 
+  method new-sized (Pointer $buffer, $size) {
+    return Nil unless $buffer;
+    self.bless( :$buffer, :$size, :!autosize );
+  }
   multi method new-typedbuffer-obj (
     $s,
     :$clear        =  True,
@@ -150,4 +155,21 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     $o;
   }
 
+}
+
+sub bufferReturnTypedArray(
+  $b,
+  \T,
+  $O?,
+  :$size   = 0,
+  :$buffer = False,
+  :$raw    = False
+)
+  is export
+{
+  my $ta = $size ?? GLib::Roles::TypedBuffer[T].new-sized($b, $size)
+                 !! GLib::Roles::TypedBuffer.new-typedbuffer-obj($b);
+  return $ta if $buffer;
+  $raw || $O === (Nil, Mu).any ?? $ta.Array
+                               !! $ta.Array.map({ $O.new($_) });
 }
