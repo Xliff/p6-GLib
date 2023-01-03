@@ -6,6 +6,7 @@ unit package GLib::Raw::Traits;
 
 role PropertyMethod  is export { }
 role AttributeMethod is export { }
+role AccessorMethod  is export { }
 
 role Signalling[@Signals] {
 
@@ -41,16 +42,28 @@ role RangedAttribute[$R] is export {
 role OverridedAttribute[%O] is export {
 }
 
-multi sub trait_mod:<is> (Method:D \m, :$a-property!) is export {
+multi sub trait_mod:<is> (Method:D \m, :a_property(:$a-property)! )
+  is export
+{
   m does PropertyMethod;
 }
 
-multi sub trait_mod:<is> (Method:D \m, :$g-property!) is export {
+multi sub trait_mod:<is> (Method:D \m, :g_property(:$g-property)! )
+  is export
+{
   m does PropertyMethod;
 }
 
-multi sub trait_mod:<is> (Method:D \m, :$an-attribute!) is export {
+multi sub trait_mod:<is> (Method:D \m, :an_attribute(:$an-attribute)! )
+  is export
+{
   m does AttributeMethod;
+}
+
+multi sub trait_mod:<is> (Method:D \m, :g_accessor(:$g-accessor)! )
+  is export
+{
+  m does AccessorMethod;
 }
 
 multi sub trait_mod:<is> (Attribute:D \a, :$ranged!) is export {
@@ -59,7 +72,8 @@ multi sub trait_mod:<is> (Attribute:D \a, :$ranged!) is export {
 
 multi sub trait_mod:<is> (
   Attribute:D \a,
-              :g-override-property(:$g-override) is required
+
+  :g-override-property(:g_override_property(:$g-override)) is required
 ) is export {
   a does OverridedAttribute(:$g-override);
 }
