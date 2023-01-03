@@ -418,7 +418,7 @@ role GLib::Roles::Object {
     Str()      $source_property,
     GObject()  $target,
               :$create                    = True,
-              :$dual                      = False,
+              :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
   ) {
@@ -430,12 +430,34 @@ role GLib::Roles::Object {
 
     samewith($source_property, $target, $source_property, $flags);
   }
-  multi method bind (
+
+  # Arity 3 will conflict with another multi
+  method bind-property (
     Str()      $source_property,
     GObject()  $target,
     Str        $target_property,
               :$create                    = True,
-              :$dual                      = False,
+              :bi(:both(:$dual))          = False,
+              :invert(:$not)              = False,
+              :$flags            is copy  = 0
+  ) {
+    self.bind_property(
+       $source_property,
+       $target,
+       $target_property,
+      :$create,
+      :$dual,
+      :$not,
+      :$flags
+    );
+  }
+
+  method bind_property (
+    Str()      $source_property,
+    GObject()  $target,
+    Str        $target_property,
+              :$create                    = True,
+              :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
   ) {
@@ -445,8 +467,10 @@ role GLib::Roles::Object {
       $flags +|= G_BINDING_INVERT_BOOLEAN if $not;
     }
 
-    samewith($source_property, $target, $target_property, $flags);
+    self.bind($source_property, $target, $target_property, $flags);
   }
+
+
   multi method bind (
     Str()     $source_property,
     GObject() $target,
