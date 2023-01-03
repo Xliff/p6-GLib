@@ -260,19 +260,36 @@ package GLib::Raw::Subs {
     CArrayToArray($sa)
   }
 
-  multi sub CArrayToArray(CArray $ca) is export {
+  multi sub CArrayToArray(CArray $ca, :$free = False) is export {
     return Nil unless $ca;
     my ($i, @a) = (0);
     while $ca[$i] {
-      @a.push: $ca[$i++];
+      @a.push: $free ?? $ca[$i].clone !! $ca[$i];
+      $i++;
     }
+    g_strfreev($ca) if $free;
     @a;
   }
-  multi sub CArrayToArray(CArray $ca, Int(Cool) $len) is export {
+  multi sub CArrayToArray(CArray $ca, Int(Cool) $len, :$free = False)
+    is export
+  {
     return Nil unless $ca;
     my @a;
-    @a[$_] = $ca[$_] for ^$len;
+    @a[$_] = $free ?? $ca[$_].clone !! $ca[$_] for ^$len;
+    g_strfreev($ca) if $free;
     @a;
+  }
+  multi sub CArrayToArray(CArray $ca, &code, :$size = ∞, :$free = False)
+    is export
+  {
+    my ($cnt, @ret) = (0);
+
+    repeat {
+      @ret.push: &code( $ca[$cnt].clone );
+    } while $ca[$cnt] && $cnt++ < $size;
+    free( cast(Pointer, $ca) ) if $free && $free ~~ (Bool, Int).any;
+    $free( $ca ) if $free && $free ~~ Callable;
+    @ret;
   }
 
   sub getFlags($t, $s) is export {
@@ -421,6 +438,7 @@ package GLib::Raw::Subs {
     return Nil unless $o;
 
     unless $attempt-real-resolve {
+      # say "Real resolve cast to: { P.^name }...";
       $o = cast(P, $o);
       return $o if $raw || $C === Nil;
 
@@ -430,9 +448,11 @@ package GLib::Raw::Subs {
     my $o1   = GLib::Object.new( cast(GObject, $o) );
     my $type = $o1.objectType.name;
 
+    # say "Attempting to cast to: { $type.^name }...";
+
     return cast( ::($type), $o );
 
-    $o1.createAsOriginal;
+    #$o1.createAsOriginal;
   }
 
   sub returnObject       (|c) is export { propReturnObject( |c ) }
@@ -931,4 +951,8 @@ package GLib::Raw::Subs {
     is export
   { * }
 
+  sub g_strfreev (CArray[Str] $v)
+    is native(glib)
+    is export
+  { * }
 }
