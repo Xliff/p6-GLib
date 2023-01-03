@@ -666,7 +666,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ 𝒮.Supply, $obj, $hid ];
+      [ self.create-signal-supply($signal, 𝒮), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -692,7 +692,7 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ 𝒮.Supply, $obj, $hid ];
+      [ self.create-signal-supply($signal, 𝒮), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -718,6 +718,32 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
+      [ self.create-signal-supply($signal, 𝒮), $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+
+  # GObject, GObject, gpointer
+  method connect-object (
+    $obj is copy,
+    $signal,
+    &handler?
+  ) {
+    my $hid;
+    %!signals{$signal} //= do {
+      my \𝒮 = Supplier.new;
+      $obj .= p if $obj.^can('p');
+      $hid = g-connect-object($obj, $signal,
+        -> $, $o, $ud {
+          CATCH {
+            default { 𝒮.note($_) }
+          }
+
+          𝒮.emit( [self, $o, $ud ] );
+        },
+        Pointer, 0
+      );
       [ 𝒮.Supply, $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
@@ -725,6 +751,9 @@ role GLib::Roles::Signals::Generic {
   }
 
 }
+
+# cw: Note, at the generic level, it's easier to convert the invocant
+#     to Pointer. Note that GObject is basically a Pointer anyways.
 
 sub g_connect (
   Pointer $app,
@@ -1026,6 +1055,19 @@ sub g-connect-pointer(
   Pointer $app,
   Str     $name,
           &handler (Pointer, Pointer, Pointer),
+  Pointer $data,
+  uint32  $flags
+)
+  returns uint64
+  is native(gobject)
+  is symbol('g_signal_connect_object')
+{ * }
+
+# GObject, GObject, gpointer
+sub g-connect-object(
+  Pointer $app,
+  Str     $name,
+          &handler (Pointer, GObject, Pointer),
   Pointer $data,
   uint32  $flags
 )
