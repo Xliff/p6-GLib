@@ -1,9 +1,8 @@
-BuildList
-doc/linecountdata*/
 *.pm6bak
+*#
 LastBuildResults
 LastBuildResults.*
-*.bak
+*.bak*
 *.iml
 *.bump
 *~
@@ -24,4 +23,4 @@ c-helpers/time
 core
 *.imp-bak
 *.ref-bak
-*.ods#
+BuildList
