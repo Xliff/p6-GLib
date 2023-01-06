@@ -744,7 +744,61 @@ role GLib::Roles::Signals::Generic {
         },
         Pointer, 0
       );
-      [ 𝒮.Supply, $obj, $hid ];
+      [ self.create-signal-supply($signal, 𝒮), $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+
+  # GObject, gdouble, gdouble, gpointer
+  method connect-numnum (
+    $obj is copy,
+    $signal,
+    &handler?
+  ) {
+    my $hid;
+    %!signals{$signal} //= do {
+      my \𝒮 = Supplier.new;
+      $obj .= p if $obj.^can('p');
+      $hid = g-connect-numnum($obj, $signal,
+        -> $, $n1, $n2, $ud {
+          CATCH {
+            default { 𝒮.note($_) }
+          }
+
+          𝒮.emit( [self, $n1, $n2, $ud ] );
+        },
+        Pointer, 0
+      );
+      [ self.create-signal-supply($signal, 𝒮), $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+
+  # GObject, gdouble, gdouble, gpointer
+  method connect-numnum-ruint (
+    $obj is copy,
+    $signal,
+    &handler?
+  ) {
+    my $hid;
+    %!signals{$signal} //= do {
+      my \𝒮 = Supplier.new;
+      $obj .= p if $obj.^can('p');
+      $hid = g-connect-numnum-ruint($obj, $signal,
+        -> $, $n1, $n2, $ud {
+          CATCH {
+            default { 𝒮.note($_) }
+          }
+
+          my $r = GLib::Raw::ReturnedValue.new;
+          𝒮.emit( [self, $n1, $n2, $ud, $r ] );
+          $r.r.Int;
+        },
+        Pointer, 0
+      );
+      [ self.create-signal-supply($signal, 𝒮), $obj, $hid ];
     };
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
@@ -1068,6 +1122,32 @@ sub g-connect-object(
   Pointer $app,
   Str     $name,
           &handler (Pointer, GObject, Pointer),
+  Pointer $data,
+  uint32  $flags
+)
+  returns uint64
+  is native(gobject)
+  is symbol('g_signal_connect_object')
+{ * }
+
+# GObject, gdouble, gdouble, gpointer
+sub g-connect-numnum(
+  Pointer $app,
+  Str     $name,
+          &handler (Pointer, gdouble, gdouble, Pointer),
+  Pointer $data,
+  uint32  $flags
+)
+  returns uint64
+  is native(gobject)
+  is symbol('g_signal_connect_object')
+{ * }
+
+# GObject, gdouble, gdouble, gpointer --> guint32
+sub g-connect-numnum-ruint(
+  Pointer $app,
+  Str     $name,
+          &handler (Pointer, gdouble, gdouble, Pointer --> guint32),
   Pointer $data,
   uint32  $flags
 )
