@@ -22,7 +22,7 @@ class GLib::Timeout {
 
     my $id = g_timeout_add($i, &function, $data);
     GLib::Source.set-name-by-id($id, $name) if $name;
-    $id;
+    $id but GIdleId;
   }
 
   method add_full (
@@ -40,7 +40,7 @@ class GLib::Timeout {
 
     my $id = g_timeout_add_full($p, $i, &function, $data, $notify);
     GLib::Source.set-name-by-id($id, $name) if $name;
-    $id;
+    $id but GIdleId;
   }
 
   method add_seconds (
@@ -56,7 +56,7 @@ class GLib::Timeout {
 
     my $id = g_timeout_add_seconds($i, &function, $data);
     GLib::Source.set-name-by-id($id, $name) if $name;
-    $id;
+    $id but GIdleId;
   }
 
   method add_seconds_full (
@@ -74,7 +74,7 @@ class GLib::Timeout {
 
     my $id = g_timeout_add_seconds_full($p, $i, &function, $data, $notify);
     GLib::Source.set-name-by-id($id, $name) if $name;
-    $id;
+    $id but GIdleId;
   }
 
   # Lifted from GTK::Simple. Provided for compatibility.

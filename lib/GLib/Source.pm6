@@ -10,6 +10,8 @@ use GLib::MainContext;
 
 use GLib::Roles::Implementor;
 
+role GIdleId is export { ... }
+
 class GLib::Source {
   has GSource $!gs is implementor handles<p>;
 
@@ -217,7 +219,7 @@ class GLib::Source {
   {
     my $id = g_idle_add(&function, $data);
     ::?CLASS.set_name_by_id($id, $name) if $name;
-    $id;
+    $id but GIdleId;
   }
 
   multi method idle_add_full (
@@ -242,7 +244,7 @@ class GLib::Source {
   {
     my $id = g_idle_add_full($priority, &function, $data, &notify);
     ::?CLASS.set_name_by_id($id, $name) if $name;
-    $id;
+    $id but GIdleId;
   }
 
   method idle_remove_by_data (gpointer $data)
@@ -261,6 +263,15 @@ class GLib::Source::Idle is GLib::Source {
     my $source = g_idle_source_new();
 
     $source ?? self.bless( :$source ) !! Nil;
+  }
+
+}
+
+role GIdleId {
+
+  method cancel ( :$clear = False ) {
+    GLib::Source.remove(self);
+    self = 0 if $clear;
   }
 
 }
