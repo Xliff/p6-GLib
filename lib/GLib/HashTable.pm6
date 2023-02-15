@@ -58,9 +58,15 @@ class GLib::HashTable {
   multi method new (GHashTable $hash-table) {
     $hash-table ?? self.bless( :$hash-table ) !! Nil
   }
+  multi method new (@key-pairs) {
+    samewith( @key-pairs.rotor(2).map( |* ).Hash );
+  }
+  multi method new (Positional $keys, Positional $values) {
+    samewith( ($keys Z $values).map( |* ).Hash )
+  }
 
   # Really, the only thing that's needed.
-  # Look into the diff between %tabe and *%table.
+  # Look into the diff between %table and *%table.
   # multi method new (
   #   %table,
   #   :$key-encoding = 'utf8',
