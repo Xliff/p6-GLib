@@ -91,6 +91,10 @@ package GLib::Raw::Subs {
     $s.subst("\n", "\r\n", :g);
   }
 
+  sub indent ($s, $n) is export {
+    $s.lines.map({ (' ' x $n) ~ $_ }).join("\n");
+  }
+
   proto sub intRange (|) is export
   { * }
 
@@ -292,11 +296,17 @@ package GLib::Raw::Subs {
     @ret;
   }
 
+  role SetIntSemantics[$E] {
+    method Int {
+      self.map({ $E.enums{.key}.Int }).sum;
+    }
+  }
+
   sub getFlags($t, $s) is export {
     $t.pairs
       .grep({ $s +& .value })
       .map( *.key )
-      .Set
+      .Set but SetIntSemantics[$t];
   }
 
   sub fromFlagish ($E, $val) is export {
