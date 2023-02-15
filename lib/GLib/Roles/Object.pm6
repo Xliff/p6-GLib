@@ -114,6 +114,8 @@ role GLib::Roles::Object {
       #     Raku object
     }
 
+    # cw: -XXX- This is obviously incomplete. Please finish!
+
     X::GLib::Object::AttributeNotFound.new(attribute => $key).throw;
   }
 
@@ -211,6 +213,25 @@ role GLib::Roles::Object {
 
     $object ?? ( $raw ?? $object !! self.new( $object, :!ref ) )
             !! Nil;
+  }
+
+  multi method setAttributes (@pairs) {
+    my ($keys, $values);
+
+    for @pairs {
+        $keys.push: .key;
+      $values.push: .value;
+    }
+    samewith($keys, $values);
+  }
+  multi method setAttributes (*%hash) {
+    samewith(%hash);
+  }
+  multi method setAttributes (%hash) {
+    samewith( %hash.keys, %hash.values );
+  }
+  multi method setAttributes ($names, $values) {
+    self."{ .value }"() = $values[ .key ] for $names.pairs;
   }
 
   # Not inherited. Punned directly to the object. So how is that gonna work?
