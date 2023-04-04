@@ -15,10 +15,10 @@ our $ERROR-THROWS     is export;
 
 our $DEBUG            is export  = 0;
 
-our (%typeClass, %typeOrigin) is export;
+our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
 # Forced compile count
-my constant forced = 229;
+my constant forced = 309;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
