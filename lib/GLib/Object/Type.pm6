@@ -15,8 +15,12 @@ class GLib::Object::Type {
     $!t = $type;
   }
 
-  method Int is also<GType>
-  { $!t }
+  method Int is also<GType> {
+    # use nqp;
+    #
+    # nqp::hllize($!t) if $!t;
+    $!t;
+  }
 
   method GTypeEnum {
     GTypeEnum($!t);
@@ -125,10 +129,11 @@ class GLib::Object::Type {
     GLib::Object::Type.new($t);
   }
 
-  method fundamental ( :$raw = False ) {
+  method fundamental ( :$enum = False, :$raw = False ) {
     my $t = g_type_fundamental($!t);
 
-    return $t if $raw;
+    return $t            if $raw;
+    return GTypeEnum($t) if $enum;
 
     GLib::Object::Type.new($t);
   }
