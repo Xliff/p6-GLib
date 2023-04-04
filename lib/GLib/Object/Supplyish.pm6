@@ -8,10 +8,12 @@ class GLib::Object::Supplyish {
   has $!signal;
   has %!taps;
   has @!tap-names;
+  has $.enabled    is rw;
 
   submethod BUILD (:$!supply, :$signals, :$!signal) {
     # %!tapped-signals, not %!signals -- !
     %!signals := $signals;
+    $!enabled  = True;
   }
 
   # cw: Act like a supply if an unknown method name is given.
@@ -52,6 +54,8 @@ class GLib::Object::Supplyish {
     # The CATCH block here means that user-supplied handlers no longer need
     # to specify it. Bonus: It is harmless to existing code that does.
     %!taps{$name} = $!supply.tap(-> *@a {
+      return unless $!enabled;
+
       # cw: TODO - filter out wrapper from exception frames.
       CONTROL {
         when CX::Warn {
