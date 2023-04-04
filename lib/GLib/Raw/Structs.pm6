@@ -508,7 +508,10 @@ class GValue {
   proto method g_type (|)
     is also<
       g-type
-      type
+      value_type
+      value-type
+      val_type
+      val-type
     >
   { * }
 
