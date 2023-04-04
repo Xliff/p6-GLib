@@ -231,7 +231,11 @@ role GLib::Roles::Object {
     samewith( %hash.keys, %hash.values );
   }
   multi method setAttributes ($names, $values) {
-    self."{ .value }"() = $values[ .key ] for $names.pairs;
+    for $names.pairs {
+      say "Setting { .value } to {
+           $values[ .key ].gist } for a { self.^name } object";
+      self."{ .value }"() = $values[ .key ];
+    }
   }
 
   # Not inherited. Punned directly to the object. So how is that gonna work?
@@ -435,6 +439,17 @@ role GLib::Roles::Object {
   method ref   is also<upref>   {   g_object_ref($!o); self; }
   method unref is also<downref> { g_object_unref($!o); }
 
+  method !processFlags ($create, $dual, $not, $flags) {
+    my $f = 0;
+    $f = $flags if $flags;
+    unless $f {
+      $f +|= G_BINDING_BIDIRECTIONAL  if $dual;
+      $f +|= G_BINDING_SYNC_CREATE    if $create;
+      $f +|= G_BINDING_INVERT_BOOLEAN if $not;
+    }
+    $f;
+  }
+
   multi method bind (
     Str()      $source_property,
     GObject()  $target,
@@ -443,13 +458,60 @@ role GLib::Roles::Object {
               :invert(:$not)              = False,
               :$flags            is copy  = 0
   ) {
-    unless $flags {
-      $flags +|= G_BINDING_BIDIRECTIONAL  if $dual;
-      $flags +|= G_BINDING_SYNC_CREATE    if $create;
-      $flags +|= G_BINDING_INVERT_BOOLEAN if $not;
-    }
+    samewith(
+      $source_property,
+      $target,
+      $source_property,
+      self!processFlags($create, $dual, $not, $flags)
+    );
+  }
+  multi method bind (
+    Str()      $source_property,
+    GObject()  $target,
+    Str        $target_property,
+              :$create                    = True,
+              :bi(:both(:$dual))          = False,
+              :invert(:$not)              = False,
+              :$flags            is copy  = 0
+  ) {
+    samewith(
+      $source_property,
+      $target,
+      $target_property,
+      self!processFlags($create, $dual, $not, $flags)
+    );
+  }
 
-    samewith($source_property, $target, $source_property, $flags);
+  multi method bind-swapped (
+    Str()      $source_property,
+    GObject()  $target,
+              :$create                    = True,
+              :bi(:both(:$dual))          = False,
+              :invert(:$not)              = False,
+              :$flags            is copy  = 0
+  ) {
+    samewith(
+      $source_property,
+      $target,
+      $source_property,
+      self!processFlags($create, $dual, $not, $flags)
+    );
+  }
+  multi method bind-swapped (
+    Str()      $source_property,
+    GObject()  $target,
+    Str        $target_property,
+              :$create                    = True,
+              :bi(:both(:$dual))          = False,
+              :invert(:$not)              = False,
+              :$flags            is copy  = 0
+  ) {
+    samewith(
+      $source_property,
+      $target,
+      $target_property,
+      self!processFlags($create, $dual, $not, $flags)
+    );
   }
 
   # Arity 3 will conflict with another multi
@@ -495,7 +557,7 @@ role GLib::Roles::Object {
   multi method bind (
     Str()     $source_property,
     GObject() $target,
-    Int       $flags            is copy = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
+    Int       $flags            is copy
   ) {
     $flags .= Int unless $flags ~~ Int;
     samewith($source_property, $target, $source_property, $flags);
@@ -504,16 +566,37 @@ role GLib::Roles::Object {
     Str()     $source_property,
     GObject() $target,
     Str()     $target_property,
-    Int()     $flags            = 3    # G_BINDING_BIDIRECTIONAL +| G_BINDING_SYNC_CREATE
+    Int()     $flags
   ) {
+    say "Binding { $source_property } of { self } to {
+         $target_property } of { $target } with flags of { $flags }";
+
     g_object_bind_property(
-      self.GObject,
+      $!o,
       $source_property,
       $target,
       $target_property,
       $flags
     )
   }
+
+    multi method bind-swapped (
+      Str()     $source_property,
+      GObject() $target,
+      Str()     $target_property,
+      Int()     $flags
+    ) {
+      say "Binding to { $source_property } of { self } from {
+           $target_property } of { $target } with flags of { $flags }";
+
+      g_object_bind_property(
+        $target,
+        $target_property,
+        $!o,
+        $source_property,
+        $flags
+      )
+    }
 
   multi method bind_full (
     Str()                 $source_property,
@@ -546,7 +629,7 @@ role GLib::Roles::Object {
                           &notify         = Callable
   ) {
     g_object_bind_property_full(
-      self.GObject,
+      $!o,
       $source_property,
       $target,
       $target_property,
@@ -583,7 +666,7 @@ role GLib::Roles::Object {
     GClosure() $transform_from    = GClosure
   ) {
     g_object_bind_property_with_closures(
-      self.GObject,
+      $!o,
       $source_property,
       $target,
       $target_property,
@@ -963,15 +1046,14 @@ role GLib::Roles::Object {
   method listSignals ( :$raw = False ) {
     my $t = self.objectType;
 
-    $t.name.say;
-    $t.Int.say;
+    my $ids = GLib::Signal.list_ids($t.Int);
+    return $ids if $raw;
 
-    my $ids = GLib::Signal.list_ids($t);
-    return if $raw;
+    $ids ?? $ids.map({ GLib::Signal.query($_) }) !! Nil;
+  }
 
-    $ids.gist.say;
-
-    $ids.map({ GLib::Signal.query($_) })
+  method listProperties {
+    self.^methods.grep( * ~~ PropertyMethod ).map( *.name );
   }
 
 }
