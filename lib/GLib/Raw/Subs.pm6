@@ -1,5 +1,6 @@
 use v6.c;
 
+use JSON::Fast;
 use NativeCall;
 use NativeHelpers::Blob;
 
@@ -13,16 +14,18 @@ use GLib::Roles::Pointers;
 
 package GLib::Raw::Subs {
   # Cribbed from https://github.com/CurtTilmes/perl6-dbmysql/blob/master/lib/DB/MySQL/Native.pm6
-  sub malloc         (size_t --> Pointer)                    is export is native { * }
-  sub realloc        (Pointer, size_t --> Pointer)           is export is native { * }
-  sub calloc         (size_t, size_t --> Pointer)            is export is native { * }
-  sub memcpy         (Pointer, Pointer, size_t --> Pointer)  is export is native { * }
-  sub memcmp         (Pointer, Pointer, size_t --> int32)    is export is native { * }
-  sub memset         (Pointer, int32, size_t)                is export is native { * }
-  sub dup2           (int32, int32 --> int32)                is export is native { * }
-  sub isatty         (int32 --> int32)                       is export is native { * }
+  sub malloc         (size_t                    --> Pointer)  is export is native { * }
+  sub realloc        (Pointer, size_t           --> Pointer)  is export is native { * }
+  sub calloc         (size_t,  size_t           --> Pointer)  is export is native { * }
+  sub memcpy         (Pointer, Pointer, size_t  --> Pointer)  is export is native { * }
+  sub memcmp         (Pointer, Pointer, size_t  --> int32)    is export is native { * }
+  sub memset         (Pointer, int32,   size_t)               is export is native { * }
+  sub dup2           (int32,   int32            --> int32)    is export is native { * }
+  sub isatty         (int32                     --> int32)    is export is native { * }
+
   # Needed for minimal I18n
-  sub setlocale      (int32, Str --> Str)                    is export is native { * }
+  sub setlocale      (int32,   Str              --> Str)      is export is native { * }
+  sub ftruncate      (int32,   uint64)                        is export is native { * }
 
   sub native-open    (Str, int32, int32 $m = 0)
     is export
@@ -215,7 +218,9 @@ package GLib::Raw::Subs {
     $v;
   }
 
-  sub ArrayToCArray(\T, @a, :$size = @a.elems, :$null = False) is export {
+  sub ArrayToCArray(\T, Array() $a, :$size = $a.elems, :$null = False)
+    is export
+  {
     enum Handling <P NP>;
     my $handling;
     my $ca = (do given (T.REPR // '') {
@@ -237,10 +242,10 @@ package GLib::Raw::Subs {
 
     say "CA: { $ca.^name } / { $size }" if $DEBUG;
 
-    return $ca unless @a.elems;
+    return $ca unless $a.elems;
     $ca = $ca.new;
     for ^$size {
-      my $typed = checkForType(T, @a[$_]);
+      my $typed = checkForType(T, $a[$_]);
 
       $ca[$_] = $handling == P ?? $typed !! cast(Pointer[T], $typed)
     }
@@ -704,10 +709,10 @@ package GLib::Raw::Subs {
   sub propAssignArray (\T, $i is copy) is export {
     my $typeName = T.^name;
 
-    $i = $i.Array                       if $i.^can($typeName);
+    $i = $i."{ $typeName }"()           if $i.^can($typeName);
     $i = ArrayToCArray(T, $i, :null)    if $i ~~ T;
     $i = cast(gpointer, $i)             if $i ~~ CArray[T];
-    X::GLib::UnkownType.new(
+    X::GLib::UnknownType.new(
       message => "Value passed to css-class property is not{
                   '' } { $typeName }-compatible!";
     ).throw unless $i ~~ gpointer;
@@ -720,6 +725,82 @@ package GLib::Raw::Subs {
       if %DEFAULT-CALLBACKS<GDestroyNotify>:exists
          &&
          %DEFAULT-CALLBACKS<GDestroyNotify> !=:= (Callable, Nil).any
+  }
+
+  sub getCompUnitRoot (\CU) is export {
+    my $ds    = $*SPEC.dir-sep;
+    my $b     = CU.^can('BUILD');
+    my $src   = $b.head.file;
+    my @dirs  = $src.IO.dirname.split($ds);
+    my @nodes = 'lib', |CU.^name.split('::').head( * - 1);
+
+    say "Type:  { CU.^name }";
+    say "Can:   { $b.head.candidates.elems }";
+    say "BSig:  { $b.head.signature.gist }";
+    say "File:  { $src.gist }";
+    say "Dirs:  { @dirs.gist }";
+    say "Nodes: { @nodes.gist }";
+
+    for @nodes {
+      @dirs.pop if @dirs.tail eq @nodes.any;
+    }
+    @dirs.join($ds);
+  }
+
+  sub readTypeManifest ($f) is export {
+    my $type-manifest;
+
+    if $f.IO.r {
+      $type-manifest = from-json($f.slurp);
+      return Nil unless $type-manifest ~~ Hash;
+      %object-type-manifest.append: |$type-manifest;
+    }
+    $type-manifest;
+  }
+
+  sub writeTypeToManifest (
+     \O,
+     $file   = '',
+     $f      = "type-manifest.json",
+    :$prefix = ''
+  )
+    is export
+  {
+    my $object-types;
+
+    my \P    = O.getTypePair;
+    my $root =
+      $file && $file.chars ?? $file.words.head.IO.dirname
+                           !! getCompUnitRoot(O);
+
+    # cw: This is a bug in Raku?
+    if $root eq 'src/Perl6' {
+      say "Will not write manifest since root dir is an artifact {
+           ''}of the build process!";
+
+      return;
+    }
+
+    my $write-file = $root.IO.add(
+      ( $prefix ?? "{ $prefix.lc }-" !! '' ) ~ $f
+    );
+
+    # cw: If we're running into race conditions or dead locking where
+    #     we are reading a stale version of the file, then manifest generation
+    #     may need to become a separate part of the build process where we can
+    #     ensure proper order is maintained.
+    given $write-file.open( :rw ) {
+      .lock;
+      if .slurp -> $j {
+        $object-types = try from-json($j) if +$j.lines;
+      }
+      $object-types{ P.head.^shortname } = P.tail.^name;
+      .seek(0, SeekFromBeginning);
+      my $oj = to-json($object-types);
+      .spurt: $oj;
+      ftruncate( .native-descriptor, $oj.chars );
+      .close;
+    }
   }
 
   sub g_destroy_none(Pointer)
