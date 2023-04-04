@@ -390,7 +390,7 @@ our enum GTypeEnum is export (
   G_TYPE_ULONG     => (9  +< 2),
   G_TYPE_INT64     => (10 +< 2),
   G_TYPE_UINT64    => (11 +< 2),
-  G_TYPE_ENUM      => (12 +< 2),
+
   G_TYPE_FLAGS     => (13 +< 2),
   G_TYPE_FLOAT     => (14 +< 2),
   G_TYPE_DOUBLE    => (15 +< 2),
@@ -405,7 +405,9 @@ our enum GTypeEnum is export (
   G_TYPE_RESERVED_GLIB_LAST  => 31,
   G_TYPE_RESERVED_BSE_FIRST  => 32,
   G_TYPE_RESERVED_BSE_LAST   => 48,
-  G_TYPE_RESERVED_USER_FIRST => 49
+  G_TYPE_RESERVED_USER_FIRST => 49,
+
+  G_TYPE_ENUM      => (12 +< 2)
 );
 
 constant GUnicodeType     is export := guint32;
