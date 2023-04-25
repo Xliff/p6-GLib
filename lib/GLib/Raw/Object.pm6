@@ -11,7 +11,7 @@ unit package GLib::Raw::Object;
 
 # Predeclarations
 class GTypeClass            is repr<CStruct> does GLib::Roles::Pointers is export {
-  has GType $.g_type;
+  has GType $.g_type is rw;
 
   # Lifted from ::Raw::Type, but that compunit cannot be loaded here due to circularity.
   sub g_type_name (GType $type)

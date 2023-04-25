@@ -74,3 +74,17 @@ sub g_type_module_use (GTypeModule $module)
   is native(gobject)
   is export
 { * }
+
+sub  g_type_register_static_simple (
+  GType      $parent_type,
+  Str        $type_name,
+  guint      $class_size,
+             &class_init (gpointer, gpointer),
+  guint      $instance_size,
+             &instance_init (gpointer, gpointer),
+  GTypeFlags $flags
+)
+  returns GType
+  is      native(gobject)
+  is      export
+{ * }

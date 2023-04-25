@@ -8,37 +8,44 @@ use GLib::Object::ParamSpec;
 
 class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is export {
   HAS GTypeClass      $.g_type_class;
+
   # Private
   has GSList          $!construct_properties;
+
   # Public
-  has Pointer         $.constructor;                 #= GObject*   (*constructor)     (GType                  type,
-                                                     #=                                guint                  n_construct_properties,
-                                                     #=                                GObjectConstructParam *construct_properties);
+  has Pointer         $.constructor                 is rw; #= GObject*   (*constructor)     (GType                  type,
+                                                           #=                                guint                  n_construct_properties,
+                                                           #=                                GObjectConstructParam *construct_properties);
   # overridable methods
-  has Pointer         $.set_property;                #= void       (*set_property)            (GObject        *object,
-                                                     #=                                        guint           property_id,
-                                                     #=                                        const GValue   *value,
-                                                     #=                                        GParamSpec     *pspec);
-  has Pointer         $.get_property;                #= void       (*get_property)            (GObject        *object,
-                                                     #=                                        guint           property_id,
-                                                     #=                                        GValue         *value,
-                                                     #=                                        GParamSpec     *pspec);
-  has Pointer         $.dispose;                     #= void       (*dispose)                 (GObject        *object);
-  has Pointer         $.fiinalize;                   #= void       (*finalize)                (GObject        *object);
+  has Pointer         $.set_property                is rw; #= void       (*set_property)            (GObject        *object,
+                                                           #=                                        guint           property_id,
+                                                           #=                                        const GValue   *value,
+                                                           #=                                        GParamSpec     *pspec);
+  has Pointer         $.get_property                is rw; #= void       (*get_property)            (GObject        *object,
+                                                           #=                                        guint           property_id,
+                                                           #=                                        GValue         *value,
+                                                           #=                                        GParamSpec     *pspec);
+  has Pointer         $.dispose                     is rw; #= void       (*dispose)                 (GObject        *object);
+  has Pointer         $.fiinalize                   is rw; #= void       (*finalize)                (GObject        *object);
   # seldom overriden
-  has Pointer         $.dispatch_properties_changed; #= void       (*dispatch_properties_changed) (GObject      *object,
-                                                     #=                                            guint         n_pspecs,
-                                                     #=                                            GParamSpec  **pspecs);
+  has Pointer         $.dispatch_properties_changed is rw; #= void       (*dispatch_properties_changed) (GObject      *object,
+                                                           #=                                            guint         n_pspecs,
+                                                           #=                                            GParamSpec  **pspecs);
   # signals
-  has Pointer         $.notify;                      #= void       (*notify)                  (GObject        *object,
-                                                     #=                                        GParamSpec     *pspec);
+  has Pointer         $.notify                      is rw; #= void       (*notify)                  (GObject        *object,
+                                                           #=                                        GParamSpec     *pspec);
 
   # called when done constructing
-  has Pointer         $.constructed;                 #= void       (*constructed)             (GObject        *object);
+  has Pointer         $.constructed                 is rw; #= void       (*constructed)             (GObject        *object);
 
   # Private
   has gsize           $!flags;
-  HAS gpointer        @!pdummy[6] is CArray;
+  has gsize           $!n_construct_properties;
+
+  has gpointer        $!pspecs;
+  has gsize           $!n_pspecs;
+
+  HAS gpointer        @!pdummy[3] is CArray;
 }
 
 constant GInitiallyUnownedClass is export := GObjectClass;
@@ -207,7 +214,7 @@ sub g_object_class_override_property  (
 sub g_object_class_install_properties (
   GObjectClass                $oclass,
   guint                       $n_pspecs,
-  CArray[Pointer[GParamSpec]] $pspecs # GParamSpec**
+  CArray[Pointer[GParamSpec]] $pspecs    # GParamSpec**
 )
   is native(gobject)
   is export

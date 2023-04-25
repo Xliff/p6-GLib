@@ -24,7 +24,7 @@ class GLib::Object::ParamSpec {
     $!ps = $spec;
   }
 
-  method GLib::Raw::Definitions::GParamSpec
+  method GLib::Raw::Structs::GParamSpec
     is also<GParamSpec>
   { $!ps }
 

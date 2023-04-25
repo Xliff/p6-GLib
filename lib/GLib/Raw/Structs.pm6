@@ -1182,3 +1182,11 @@ class GVariant {
   has gint                   $.ref_count;   #= gtomicrefcount
   has gsize                  $.depth;
 }
+
+sub sprintf-obj-prop ( Blob, Str, & (GObject, Str, GValue) )
+  returns int64
+  is export
+  is native
+  is symbol('sprintf')
+{ * }
+
