@@ -8,6 +8,7 @@ use GLib::Raw::Types;
 use GLib::Class::Structs;
 use GLib::Object::Raw::TypeModule;
 use GLib::Class::Object;
+use GLib::Object::Type;
 
 use GLib::Roles::Object;
 use GLib::Roles::TypePlugin;
@@ -151,7 +152,7 @@ class GLib::Object::TypeModule {
         }
 
         say "Class init: { @a.gist }";
-        standard_class_init($instance-struct, $class-struct.new)
+        standard_class_init($instance-struct, $class-struct, |@a)
       }
 
     );
@@ -232,16 +233,12 @@ class GLib::Object::TypeModule {
 
 }
 
-sub standard_class_init ($instance-struct, $class-struct) is export {
-  for $class-struct.^attributes {
+sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
+  for $cs.^attributes {
     my $name = .name.substr(2);
 
-    $class-struct.parent.g_type_class.g_type = GLib::Object.get_type;
-    
-    say "GType: { $class-struct.parent.g_type_class.g_type }";
-
     given $name {
-      my \sf = $instance-struct.^can($_);
+      my \sf = $is.^can($_);
 
       next unless sf ~~ GObjectVFunc;
       next unless sf.g-v-func eq $name;
@@ -249,49 +246,52 @@ sub standard_class_init ($instance-struct, $class-struct) is export {
       when 'get_property' {
         unless sf {
           sf = sub ($i, $idx, $v, $p) {
-            if $idx !~~ 0 .. $instance-struct.^attributes.elems {
+            if $idx !~~ 0 .. $is.^attributes.elems {
               X::GLib::Object::AttributeNotFound.new(
                 attribute => $p.name
               ).throw
             }
-            $v.value = $instance-struct.^attributes[$idx].get_value($i);
+            $v.value = $is.^attributes[$idx].get_value($i);
           }
         }
 
-        $class-struct.parent.get_property =
+        $cs.parent.get_property =
           set_func_pointer( &(sf), &sprintf-obj-prop)
       }
 
       when 'set_property' {
         unless sf {
           sf = sub ($i, $idx, $v, $p) {
-            if $idx !~~ 0 .. $instance-struct.^attributes.elems {
+            if $idx !~~ 0 .. $is.^attributes.elems {
               X::GLib::Object::AttributeNotFound.new(
                 attribute => $p.name
               ).throw
             }
-            $instance-struct.^attributes[$idx].set_value($i, $v);
+            $is.^attributes[$idx].set_value($i, $v);
           }
         }
 
-        $class-struct.parent.set_property =
+        $cs.parent.set_property =
           set_func_pointer( &(sf), &sprintf-obj-prop)
       }
 
       default {
-        $class-struct.parent."$_"() = sf if sf
+        $cs.parent."$_"() = sf if sf
       }
     }
   }
-}
 
-sub standard_instance_init (\struct, \c_struct, $s is copy, $p) is export {
   constant P = GLib::Object::ParamSpec;
 
-  $s = cast(struct, $s);
+  # We are IN THE WRONG PLACE for this code. Needs to be in _class_init
 
-  my @props;
-  for $s.^attributes {
+  $cc = cast($cs, $cc);
+  my $cct = $cc.parent.g_type_class.g_type;
+  say "CC Type: { $cct }";
+  say "CC Type Name { GLib::Object::Type.new($cct).name }";
+
+  my @props = (GParamSpec);
+  for $is.^attributes {
     my $att = $_;
 
     when GAttribute {
@@ -320,6 +320,22 @@ sub standard_instance_init (\struct, \c_struct, $s is copy, $p) is export {
 
       say "Processing property { $att.name }";
 
+      # cw: Now must handle G_PARAM_READABLE and G_PARAM_WRITABLE
+
+      my $acc = $is.^lookup( $att.name.substr(2) );
+
+      say "Accessor: { $acc.name }" if $acc;
+
+      $flags +|= G_PARAM_READABLE if $att.name.starts-with('$.') || $acc;
+
+      $flags +|= G_PARAM_WRITABLE if $att.rw ||
+                                     ( $acc &&
+                                       $acc.^attributes[2].get_value($acc)
+                                         +& 1
+                                     );
+
+      say "Setting flags { $flags } on { $att.name }.";
+
       @props.push: do given .type {
         my ($raw-typed, $std-typed) = False;
 
@@ -327,13 +343,13 @@ sub standard_instance_init (\struct, \c_struct, $s is copy, $p) is export {
           # cw: These are also manifest based, but in the case of GObject
           #     will fallback to GObject. For <BoxedType> values, if an
           #     object match is not found, it is OK for it to not have one.
-          $s.^add_method("set_{ $att.name }", method (\v) {
-            $att.set_value($s, v);
+          $is.^add_method("set_{ $att.name }", method (\v) {
+            $att.set_value(self, v);
             self.emit("notify::{ $att.name }");
           });
 
-          $s.^add_method("get_{ $att.name }", method ( :$raw = False ) {
-            $att.get_value($s);
+          $is.^add_method("get_{ $att.name }", method ( :$raw = False ) {
+            $att.get_value(self);
             # cw: Return comparable object.
           });
         }
@@ -370,13 +386,13 @@ sub standard_instance_init (\struct, \c_struct, $s is copy, $p) is export {
              Str      |
              Pointer
         {
-          $s.^add_method("set_{ $att.name }", method (\v) {
-            $att.set_value($s, v);
+          $is.^add_method("set_{ $att.name }", method (\v) {
+            $att.set_value(self, v);
             self.emit("notify::{ $att.name }");
           });
 
-          $s.^add_method("get_{ $att.name }", method () {
-            $att.get_value($s);
+          $is.^add_method("get_{ $att.name }", method () {
+            $att.get_value(self);
           });
           proceed;
         }
@@ -517,13 +533,15 @@ sub standard_instance_init (\struct, \c_struct, $s is copy, $p) is export {
     }
   }
 
-  say "Class: { c_struct.^name }";
-
   g_object_class_install_properties(
     # cw: May not always be at .parent. Need's a better mechanism but fine
     #     for now.
-    c_struct,
+    $cc,
     @props.elems,
     ArrayToCArray( GParamSpec, @props )
   );
+}
+
+sub standard_instance_init (\struct, \c_struct, $cc is copy, $p) is export {
+
 }
