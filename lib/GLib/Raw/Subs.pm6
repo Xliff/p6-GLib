@@ -446,6 +446,7 @@ package GLib::Raw::Subs {
     $raw,
     \P,
     $C?                    is raw,
+    :$construct,
     :$ref                          =  False,
     :$attempt-real-resolve         =  False
   ) is export {
@@ -457,7 +458,8 @@ package GLib::Raw::Subs {
       $o = cast(P, $o);
       return $o if $raw || $C === Nil;
 
-      return $C.new($o, :$ref)
+      return $construct ?? $construct($o, :$ref)
+                        !! $C.new($o, :$ref)
     }
 
     my $o1   = GLib::Object.new( cast(GObject, $o) );
