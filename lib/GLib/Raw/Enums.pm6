@@ -999,6 +999,53 @@ our enum GDateWeekdayEnum is export (
   G_DATE_SUNDAY      => 7,
 );
 
+constant GUriError is export := guint32;
+our enum GUriErrorEnum is export <
+  G_URI_ERROR_FAILED
+  G_URI_ERROR_BAD_SCHEME
+  G_URI_ERROR_BAD_USER
+  G_URI_ERROR_BAD_PASSWORD
+  G_URI_ERROR_BAD_AUTH_PARAMS
+  G_URI_ERROR_BAD_HOST
+  G_URI_ERROR_BAD_PORT
+  G_URI_ERROR_BAD_PATH
+  G_URI_ERROR_BAD_QUERY
+  G_URI_ERROR_BAD_FRAGMENT
+>;
+
+constant GUriFlags is export := guint32;
+our enum GUriFlagsEnum is export <
+  G_URI_FLAGS_NONE
+  G_URI_FLAGS_PARSE_RELAXED
+  G_URI_FLAGS_HAS_PASSWORD
+  G_URI_FLAGS_HAS_AUTH_PARAMS
+  G_URI_FLAGS_ENCODED
+  G_URI_FLAGS_NON_DNS
+  G_URI_FLAGS_ENCODED_QUERY
+  G_URI_FLAGS_ENCODED_PATH
+  G_URI_FLAGS_ENCODED_FRAGMENT
+  G_URI_FLAGS_SCHEME_NORMALIZE
+  GLIB_AVAILABLE_ENUMERATOR_IN_2_68
+>;
+
+constant GUriHideFlags is export := guint32;
+our enum GUriHideFlagsEnum is export <
+  G_URI_HIDE_NONE
+  G_URI_HIDE_USERINFO
+  G_URI_HIDE_PASSWORD
+  G_URI_HIDE_AUTH_PARAMS
+  G_URI_HIDE_QUERY
+  G_URI_HIDE_FRAGMENT
+>;
+
+constant GUriParamsFlags is export := guint32;
+our enum GUriParamsFlagsEnum is export <
+  G_URI_PARAMS_NONE
+  G_URI_PARAMS_CASE_INSENSITIVE
+  G_URI_PARAMS_WWW_FORM
+  G_URI_PARAMS_PARSE_RELAXED
+>;
+
 our $g-param-spec-types is export;
 
 sub get_paramspec_types ()

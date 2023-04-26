@@ -1183,10 +1183,16 @@ class GVariant {
   has gsize                  $.depth;
 }
 
+class GUriParamsIter is repr<CStruct> does GLib::Roles::Pointers is export {
+  has gint     $.dummy0;
+  has gpointer $.dummy1;
+  has gpointer $.dummy2;
+  HAS guint8   @.dummy3[256] is CArray;
+}
+
 sub sprintf-obj-prop ( Blob, Str, & (GObject, Str, GValue) )
   returns int64
   is export
   is native
   is symbol('sprintf')
 { * }
-

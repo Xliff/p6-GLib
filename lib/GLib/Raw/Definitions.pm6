@@ -18,7 +18,7 @@ our $DEBUG            is export  = 0;
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
 # Forced compile count
-my constant forced = 309;
+my constant forced = 313;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
@@ -220,6 +220,7 @@ class GVariantBuilder          is repr<CPointer> is export does GLib::Roles::Poi
 class GVariantDict             is repr<CPointer> is export does GLib::Roles::Pointers { }
 #class GVariantIter             is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantType             is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GUri                     is repr<CPointer> is export does GLib::Roles::Pointers { }
 
 # "Exhaustive" maximal...
 multi max (:&by = {$_}, :$all!, *@list) is export {
