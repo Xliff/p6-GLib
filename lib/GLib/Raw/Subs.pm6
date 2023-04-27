@@ -560,8 +560,9 @@ package GLib::Raw::Subs {
     is export
   {
     # Properly handle non-Str Cool data.
-    return $value if $value ~~ Pointer;
-    return ($typed !=== Nil ?? $typed !! Nil) unless $value.defined;
+    return $value  if     $value ~~ Pointer;
+    return Pointer unless $value.defined;
+
     my ($ov, $use-arr, \t, $v) = ( checkForType($typed, $value), False );
     if $ov ~~ Int && $direct {
       $v = Pointer.new($ov);
@@ -657,9 +658,17 @@ package GLib::Raw::Subs {
     }
 
     my $s = T.REPR eq 'CStruct' || T ~~ Str;
-    my $p = ( $s ?? CArray[T] !! CArray[ Pointer[T] ] ).allocate($size);
+
+    my $p = do if T ~~ Str {
+      # cw: The below should work, but doesn't for strings for some reason...
+      #     2023/26/04
+      my $pp = CArray[Pointer].allocate($size);
+      cast(CArray[Str], $pp);
+    } else {
+      ( $s.not ?? CArray[T] !! CArray[ Pointer[T] ] ).allocate($size);
+    }
     $p[0] = $fv ?? $fv
-                !! ($s ?? T !! Pointer[T]);
+                !! ($s.not ?? T !! Pointer[T]);
     $p;
   }
 
