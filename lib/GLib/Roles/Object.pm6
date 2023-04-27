@@ -236,6 +236,7 @@ role GLib::Roles::Object {
            $values[ .key ].gist } for a { self.^name } object";
       self."{ .value }"() = $values[ .key ];
     }
+    self;
   }
 
   # Not inherited. Punned directly to the object. So how is that gonna work?
