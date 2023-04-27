@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::ThreadPool;
 
+### /usr/src/glib2.0-2.68.4/glib/gtypes.h
+
 sub g_thread_pool_free (
   GThreadPool $pool,
   gboolean $immediate,

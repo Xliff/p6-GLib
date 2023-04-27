@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::Bytes;
 
+### /usr/src/glib2.0-2.68.4/glib/gbytes.h
+
 sub g_bytes_compare (GBytes $bytes1, GBytes $bytes2)
   returns gint
   is native(glib)

@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::Tree;
 
+### /usr/src/glib2.0-2.68.4/glib/gtree.h
+
 sub string_compare (Pointer, Pointer --> gint)
   is native
   is symbol('strcmp')

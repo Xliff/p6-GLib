@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::String;
 
+### /usr/src/glib2.0-2.68.4/glib/gstring.h
+
 sub g_string_append (GString $string, Str $val)
   returns GString
   is native(glib)

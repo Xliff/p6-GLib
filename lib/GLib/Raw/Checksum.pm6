@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::Checksum;
 
+### /usr/src/glib2.0-2.68.4/glib/gchecksum.h
+
 sub g_checksum_copy (GChecksum $checksum)
   returns GChecksum
   is native(glib)

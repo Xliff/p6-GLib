@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::HMAC;
 
+### /usr/src/glib2.0-2.68.4/glib/ghmac.h
+
 sub g_hmac_copy (GHmac $hmac)
   returns GHmac
   is native(glib)

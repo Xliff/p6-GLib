@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::GSList;
 
+### /usr/src/glib2.0-2.68.4/glib/gslist.h
+
 sub g_slist_alloc ()
   returns GSList
   is native(glib)

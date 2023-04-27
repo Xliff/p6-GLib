@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::HashTable;
 
+### /usr/src/glib2.0-2.68.4/glib/ghash.h
+
 sub g_hash_table_add (GHashTable $hash_table, gpointer $key)
   returns uint32
   is native(glib)

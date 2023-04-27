@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::Quark;
 
+### /usr/src/glib2.0-2.68.4/glib/gquark.h
+
 sub g_quark_from_static_string (Str $string)
   returns GQuark
   is native(glib)

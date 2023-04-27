@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::Scanner;
 
+### /usr/src/glib2.0-2.68.4/glib/gscanner.h
+
 sub g_scanner_cur_line (GScanner $scanner)
   returns guint
   is native(glib)
