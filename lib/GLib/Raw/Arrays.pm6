@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::ByteArray;
 
+### /usr/src/glib2.0-2.68.4/glib/garray.h
+
 sub g_byte_array_append (GByteArray $array, guint8 $data, guint $len)
   returns GByteArray
   is native(glib)

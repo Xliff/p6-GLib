@@ -6,6 +6,8 @@ use GLib::Raw::Types;
 
 unit package GLib::Raw::Rand;
 
+### /usr/src/glib2.0-2.68.4/glib/grand.h
+
 sub g_rand_copy (GRand $rand)
   returns GRand
   is native(glib)
