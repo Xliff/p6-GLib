@@ -751,9 +751,35 @@ role GLib::Roles::Signals::Generic {
   }
 
   # GObject, gdouble, gdouble, gpointer
-  method connect-numnum (
-    $obj is copy,
+  method connect-num (
+    $obj is      copy,
     $signal,
+    &handler?
+  ) {
+    my $hid;
+    %!signals{$signal} //= do {
+      my \𝒮 = Supplier.new;
+      $obj .= p if $obj.^can('p');
+      $hid = g-connect-num($obj, $signal,
+        -> $, $n1, $ud {
+          CATCH {
+            default { 𝒮.note($_) }
+          }
+
+          𝒮.emit( [self, $n1, $ud ] );
+        },
+        Pointer, 0
+      );
+      [ self.create-signal-supply($signal, 𝒮), $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+
+  # GObject, gdouble, gdouble, gpointer
+  method connect-numnum (
+    $signal,
+    $obj is copy,
     &handler?
   ) {
     my $hid;
@@ -817,8 +843,8 @@ sub g_connect (
   uint32  $connect_flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_rbool (
@@ -829,8 +855,8 @@ sub g_connect_rbool (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_string (
@@ -841,8 +867,8 @@ sub g_connect_string (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_strstr (
@@ -853,8 +879,8 @@ sub g_connect_strstr (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g-connect-intint (
@@ -865,8 +891,8 @@ sub g-connect-intint (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g-connect-uintuint (
@@ -877,8 +903,8 @@ sub g-connect-uintuint (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_int (
@@ -889,8 +915,8 @@ sub g_connect_int (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 # Define for each signal
@@ -902,8 +928,8 @@ sub g_connect_uint (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_double (
@@ -914,8 +940,8 @@ sub g_connect_double (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_rdouble (
@@ -926,8 +952,8 @@ sub g_connect_rdouble (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_pointer (
@@ -938,8 +964,8 @@ sub g_connect_pointer (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_uintint (
@@ -950,8 +976,8 @@ sub g_connect_uintint (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_uintintbool (
@@ -962,8 +988,8 @@ sub g_connect_uintintbool (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_str_rbool (
@@ -974,8 +1000,8 @@ sub g_connect_str_rbool (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_int_ruint (
@@ -986,8 +1012,8 @@ sub g_connect_int_ruint (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_int_rint (
@@ -998,8 +1024,8 @@ sub g_connect_int_rint (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g_connect_uint_ruint (
@@ -1010,8 +1036,8 @@ sub g_connect_uint_ruint (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g-connect-uintint (
@@ -1022,8 +1048,8 @@ sub g-connect-uintint (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 sub g-connect-gparam (
@@ -1034,8 +1060,8 @@ sub g-connect-gparam (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 # Pointer, guint64, gpointer
@@ -1047,8 +1073,8 @@ sub g-connect-long (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 # Pointer, Str, gint, gpointer
@@ -1060,8 +1086,8 @@ sub g-connect-strint (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 # Pointer, GVariant, Pointer
@@ -1073,8 +1099,8 @@ sub g-connect-variant (
   uint32  $flags
 )
   returns uint64
-  is native('gobject-2.0')
-  is symbol('g_signal_connect_object')
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
 { * }
 
 
@@ -1087,8 +1113,8 @@ sub g-connect-long-ruint32 (
   uint32  $flags
 )
   returns uint64
-  is native(gobject)
-  is symbol('g_signal_connect_object')
+  is      native(gobject)
+  is      symbol('g_signal_connect_object')
 { * }
 
 # GObject, GError, gpointer
@@ -1100,8 +1126,8 @@ sub g-connect-error(
   uint32  $flags
 )
   returns uint64
-  is native(gobject)
-  is symbol('g_signal_connect_object')
+  is      native(gobject)
+  is      symbol('g_signal_connect_object')
 { * }
 
 # GObject, gpointer, gpointer
@@ -1113,8 +1139,8 @@ sub g-connect-pointer(
   uint32  $flags
 )
   returns uint64
-  is native(gobject)
-  is symbol('g_signal_connect_object')
+  is      native(gobject)
+  is      symbol('g_signal_connect_object')
 { * }
 
 # GObject, GObject, gpointer
@@ -1126,8 +1152,8 @@ sub g-connect-object(
   uint32  $flags
 )
   returns uint64
-  is native(gobject)
-  is symbol('g_signal_connect_object')
+  is      native(gobject)
+  is      symbol('g_signal_connect_object')
 { * }
 
 # GObject, gdouble, gdouble, gpointer
@@ -1139,8 +1165,21 @@ sub g-connect-numnum(
   uint32  $flags
 )
   returns uint64
-  is native(gobject)
-  is symbol('g_signal_connect_object')
+  is      native(gobject)
+  is      symbol('g_signal_connect_object')
+{ * }
+
+# GObject, gdouble, gdouble, gpointer
+sub g-connect-num(
+  Pointer $app,
+  Str     $name,
+          &handler (Pointer, gdouble, Pointer),
+  Pointer $data,
+  uint32  $flags
+)
+  returns uint64
+  is      native(gobject)
+  is      symbol('g_signal_connect_object')
 { * }
 
 # GObject, gdouble, gdouble, gpointer --> guint32
@@ -1152,6 +1191,6 @@ sub g-connect-numnum-ruint(
   uint32  $flags
 )
   returns uint64
-  is native(gobject)
-  is symbol('g_signal_connect_object')
+  is      native(gobject)
+  is      symbol('g_signal_connect_object')
 { * }
