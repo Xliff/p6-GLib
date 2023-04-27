@@ -9,7 +9,7 @@ unit package gobject::Object::Raw::Closure;
 sub g_closure_add_finalize_notifier (
   GClosure $closure,
   gpointer $notify_data,
-  GClosureNotify $notify_func
+           &notify_func (gpointer)
 )
   is native(gobject)
   is export
@@ -18,7 +18,7 @@ sub g_closure_add_finalize_notifier (
 sub g_closure_add_invalidate_notifier (
   GClosure $closure,
   gpointer $notify_data,
-  GClosureNotify $notify_func
+           &notify_func (gpointer)
 )
   is native(gobject)
   is export
@@ -27,9 +27,9 @@ sub g_closure_add_invalidate_notifier (
 sub g_closure_add_marshal_guards (
   GClosure $closure,
   gpointer $pre_marshal_data,
-  GClosureNotify $pre_marshal_notify,
+           &pre_marshal_notify (gpointer),
   gpointer $post_marshal_data,
-  GClosureNotify $post_marshal_notify
+           &post_marshal_notify (gpointer)
 )
   is native(gobject)
   is export
@@ -37,9 +37,9 @@ sub g_closure_add_marshal_guards (
 
 sub g_cclosure_marshal_generic (
   GClosure $closure,
-  GValue $return_gvalue,
-  guint $n_param_values,
-  GValue $param_values,
+  GValue   $return_gvalue,
+  guint    $n_param_values,
+  GValue   $param_values,
   gpointer $invocation_hint,
   gpointer $marshal_data
 )
@@ -61,9 +61,9 @@ sub g_cclosure_marshal_generic (
 # { * }
 
 sub g_cclosure_new (
-  &callback_func (),
-  gpointer $user_data,
-  GClosureNotify $destroy_data
+                 &callback_func (),
+  gpointer       $user_data,
+                 &destroy_data (gpointer)
 )
   returns GClosure
   is native(gobject)
@@ -71,9 +71,18 @@ sub g_cclosure_new (
 { * }
 
 sub g_cclosure_new_swap (
-  &callback_func (),
+           &callback_func (),
   gpointer $user_data,
-  GClosureNotify $destroy_data
+           &destroy_data (gpointer)
+)
+  returns GClosure
+  is native(gobject)
+  is export
+{ * }
+
+sub g_cclosure_new_object (
+          &callback_func (),
+  GObject $object
 )
   returns GClosure
   is native(gobject)
@@ -106,7 +115,7 @@ sub g_closure_ref (GClosure $closure)
 sub g_closure_remove_finalize_notifier (
   GClosure $closure,
   gpointer $notify_data,
-  GClosureNotify $notify_func
+           &notify_func (gpointer)
 )
   is native(gobject)
   is export
@@ -115,7 +124,7 @@ sub g_closure_remove_finalize_notifier (
 sub g_closure_remove_invalidate_notifier (
   GClosure $closure,
   gpointer $notify_data,
-  GClosureNotify $notify_func
+           &notify_func (gpointer)
 )
   is native(gobject)
   is export
@@ -129,7 +138,7 @@ sub g_closure_set_marshal (GClosure $closure, GClosureMarshal $marshal)
 sub g_closure_set_meta_marshal (
   GClosure $closure,
   gpointer $marshal_data,
-  GClosureMarshal $meta_marshal
+           &meta_marshal (gpointer)
 )
   is native(gobject)
   is export
