@@ -8,6 +8,8 @@ use GLib::Raw::Traits;
 use GLib::Raw::Types;
 use GLib::Raw::Value;
 
+use GLib::Object::Type;
+
 use GLib::Roles::Implementor;
 
 class GLib::Value {
@@ -232,6 +234,7 @@ class GLib::Value {
         my $t = g_value_get_gtype($!v);
         return $t unless $fundamental;
         $t = GLib::Object::Type.new($t).fundamental;
+        return Nil    unless $t.defined;
         return $t.Int unless $enum;
         $t.GTypeEnum;
       },
