@@ -103,7 +103,10 @@ class GError                is repr<CStruct> does GLib::Roles::Pointers is expor
     self.message = $message;
   }
 
-  method new ($domain, $code, $message) {
+  multi method new (:$domain = 0, :$code = 0, :$message = Str) {
+    self.bless(:$domain, :$code, :$message);
+  }
+  multi method new ($domain, $code, $message) {
     self.bless(:$domain, :$code, :$message);
   }
 
@@ -121,6 +124,12 @@ class GError                is repr<CStruct> does GLib::Roles::Pointers is expor
 
     self.^name ~ ".new(domain => { self.domain }, " ~
     "code => { self.code }{ $domain-extra })";
+  }
+
+  method double-star is also<pp> {
+    my $pp = newCArray(GError);
+    $pp[0] = self.p;
+    $pp;
   }
 
 }
@@ -754,7 +763,7 @@ sub gerror is export {
   $cge;
 }
 
-sub g_error_free(GError $err)
+sub g_error_free (GError $err)
   is native(glib)
   is export
 { * }
@@ -771,18 +780,44 @@ sub get-error ($e) is export {
     Nil
 }
 
-sub set_error(CArray $e) is export {
-  state $lock = Lock.new;
+class ErrorProxy {
+  has $!e is built;
+  has $!p is built;
+  has $!b is built;
 
-  $lock.protect: {
+  method error     { $!e }
+  method pid       { $!p }
+  method backtrace { $!b }
+
+  method origin-frame {
+    $!b[* - 2]
+  }
+
+  multi method new ($e, $p, $b) {
+    self.bless( :$e, :$p, :$b );
+  }
+}
+
+my $error-lock = Lock.new;
+
+sub set_error (CArray $e) is export {
+  $error-lock.protect: {
     if $e[0].defined {
       $ERROR = %ERROR{ $*PID } = get-error($e);
       #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
-      @ERRORS.push: [ $ERROR, $*PID, Backtrace.new ];
+      @ERRORS.push: ErrorProxy.new( $ERROR, $*PID, Backtrace.new );
     }
     X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
   }
 }
+
+
+sub clear_error_stack is export {
+  $error-lock.protect: {
+    $ERROR = [];
+  }
+}
+
 
 sub no-error ($e?) is export {
   return True if $e.defined.not && $ERROR.defined.not;
