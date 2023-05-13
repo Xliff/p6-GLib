@@ -16,6 +16,8 @@ use GLib::Roles::TypePlugin;
 our subset GTypeModuleAncestry is export of Mu
   where GTypeModule | GTypePlugin | GObject;
 
+my %checkAtttributes;
+
 class GLib::Object::TypeModule {
   also does GLib::Roles::Object;
   also does GLib::Roles::TypePlugin;
@@ -92,6 +94,10 @@ class GLib::Object::TypeModule {
   }
 
   our %class-defines is export;
+
+  method add-registration-callback($class-name, &callback) {
+    %classAttributes{ $class-name } = &callback;
+  }
 
   method register_static ($instance-struct, Mu :$class-struct is copy)
     is also<register-static>
@@ -234,56 +240,29 @@ class GLib::Object::TypeModule {
 }
 
 sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
-  for $cs.^attributes {
-    my $name = .name.substr(2);
+  say "CC: { +$cc }";
 
-    given $name {
-      my \sf = $is.^can($_);
+  multi sub checkAttributes( $cs where *.defined ) {
+    checkAttributes($cs.?parent);
 
-      next unless sf ~~ GObjectVFunc;
-      next unless sf.g-v-func eq $name;
+    for $cs.^attributes {
+      my \f = $is.^can($_);
 
-      when 'get_property' {
-        unless sf {
-          sf = sub ($i, $idx, $v, $p) {
-            if $idx !~~ 0 .. $is.^attributes.elems {
-              X::GLib::Object::AttributeNotFound.new(
-                attribute => $p.name
-              ).throw
-            }
-            $v.value = $is.^attributes[$idx].get_value($i);
-          }
-        }
-
-        $cs.parent.get_property =
-          set_func_pointer( &(sf), &sprintf-obj-prop)
+      if %checkAttributes{ $cs.^name } -> &cb {
+        my $r = &cb($cc, $_, f, $is);
+        next unless $r;
       }
 
-      when 'set_property' {
-        unless sf {
-          sf = sub ($i, $idx, $v, $p) {
-            if $idx !~~ 0 .. $is.^attributes.elems {
-              X::GLib::Object::AttributeNotFound.new(
-                attribute => $p.name
-              ).throw
-            }
-            $is.^attributes[$idx].set_value($i, $v);
-          }
-        }
-
-        $cs.parent.set_property =
-          set_func_pointer( &(sf), &sprintf-obj-prop)
-      }
-
-      default {
-        $cs.parent."$_"() = sf if sf
-      }
+      my $n = .substr(2);
+      $cs."$n"() = f if f && $cs.^can($n)
     }
   }
+  multi sub checkAttributes( $cs where *.defined.not ) {
+  }
+
+  checkAttributes($cc);
 
   constant P = GLib::Object::ParamSpec;
-
-  # We are IN THE WRONG PLACE for this code. Needs to be in _class_init
 
   $cc = cast($cs, $cc);
   my $cct = $cc.parent.g_type_class.g_type;
@@ -327,12 +306,7 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
       say "Accessor: { $acc.name }" if $acc;
 
       $flags +|= G_PARAM_READABLE if $att.name.starts-with('$.') || $acc;
-
-      $flags +|= G_PARAM_WRITABLE if $att.rw ||
-                                     ( $acc &&
-                                       $acc.^attributes[2].get_value($acc)
-                                         +& 1
-                                     );
+      $flags +|= G_PARAM_WRITABLE if $att.rw  || ( $acc && $acc.rw );
 
       say "Setting flags { $flags } on { $att.name }.";
 
@@ -524,7 +498,6 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
             $flags
           )
         }
-
       }
     }
 
@@ -543,5 +516,59 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
 }
 
 sub standard_instance_init (\struct, \c_struct, $cc is copy, $p) is export {
+
+}
+
+INIT {
+  GLib::Object::TypeModule.add-registration-callback(
+    'GObjectClass',
+    sub ($cc, $_, $is, f) {
+
+      given .name.substr(2) {
+        say "Class Attribute Name: { $name }";
+
+        next unless sf ~~ GObjectVFunc;
+        next unless sf.g-v-func eq $name;
+
+        when 'get_property' {
+          unless f {
+            f = sub ($i, $idx, $v, $p) {
+              if $idx !~~ 0 .. $is.^attributes.elems {
+                X::GLib::Object::AttributeNotFound.new(
+                  attribute => $p.name
+                ).throw
+              }
+              $v.value = $is.^attributes[$idx].get_value($i);
+            }
+          }
+
+          $cc.get_property =
+            set_func_pointer( &(f), &sprintf-obj-prop);
+
+          say "Get Property: { $cc.get_property }";
+        }
+
+        when 'set_property' {
+          unless f {
+            f = sub ($i, $idx, $v, $p) {
+              if $idx !~~ 0 .. $is.^attributes.elems {
+                X::GLib::Object::AttributeNotFound.new(
+                  attribute => $p.name
+                ).throw
+              }
+              $is.^attributes[$idx].set_value($i, $v);
+            }
+          }
+
+          $cc.set_property =
+            set_func_pointer( &(f), &sprintf-obj-prop);
+
+          say "Set Property: { $cc.set_property }";
+        }
+
+        return 1;
+      }
+    }
+  );
 
 }
