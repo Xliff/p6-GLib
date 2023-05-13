@@ -145,6 +145,13 @@ role GLib::Roles::Object {
     g_object_new($t, Str);
   }
 
+  method new-raw {
+    self.new-object-ptr( self.get_type );
+  }
+  method new_raw {
+    self.new-raw
+  }
+
   proto method new_object_with_properties (|)
     is also<new-object-with-properties>
   { * }
