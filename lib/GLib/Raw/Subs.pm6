@@ -37,6 +37,16 @@ package GLib::Raw::Subs {
     method reason { $R }
   }
 
+  role NativeSized[$size] is export {
+
+    method sizeof { $size }
+
+    method alloc {
+      cast( self.WHAT, malloc(self.sizeof) )
+    }
+
+  }
+
   # So as not to collide with the CORE sub.
   sub native-close   (int32 --> int32)
     is export
