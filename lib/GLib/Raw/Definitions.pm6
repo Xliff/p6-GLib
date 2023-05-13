@@ -10,15 +10,14 @@ unit package GLib::Raw::Definitions;
 
 our $ERROR            is export;
 our (%ERROR, %ERRORS) is export;
-our @ERRORS           is export;
 our $ERROR-THROWS     is export;
-
+our @ERRORS           is export;
 our $DEBUG            is export  = 0;
 
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
 # Forced compile count
-my constant forced = 313;
+my constant forced = 314;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
@@ -173,6 +172,7 @@ class GBookmarkFile            is repr<CPointer> is export does GLib::Roles::Poi
 class GBytes                   is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GDateTime                is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GData                    is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GDataset                 is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTree                    is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GChecksum                is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GHashTable               is repr<CPointer> is export does GLib::Roles::Pointers { }
