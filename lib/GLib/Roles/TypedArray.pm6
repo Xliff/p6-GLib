@@ -11,9 +11,10 @@ role GLib::Roles::TypedArray[::T, $raw, ::O = Mu] {
 
     for ^self.elems {
       my $s = self[$_];
+
       say $s.^name;
-      
-      @a[$_] = cast(T, self[$_]);
+
+      @a[$_] = cast( T, self[$_] );
       @a[$_] = O.new( @a[$_] ) unless $raw || O === (Nil, Mu).any
     }
     @a;
