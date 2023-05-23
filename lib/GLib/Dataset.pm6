@@ -11,13 +11,20 @@ class GLib::Dataset {
   has GDataset $!d is implementor;
 
   submethod BUILD ( :$data ) {
-    $!d = $data;
+    $!d = $data ~~ Pointer ;
   }
 
-  method new (Pointer $data) {
+  multi method new (Pointer $data) {
     return Nil unless $data;
 
     self.bless( :$data );
+  }
+  multi method new (GData $data) {
+    return Nil unless $data;
+
+    my $d = newCArray(GData, $data);
+
+    self.bless( data => cast(Pointer, $d) );
   }
 
   method Hash {
