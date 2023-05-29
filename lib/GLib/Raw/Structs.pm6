@@ -756,6 +756,9 @@ class GParamSpecValueArray  is repr<CStruct> does GLib::Roles::Pointers is expor
 sub gerror-blank is export {
   CArray[Pointer[GError]];
 }
+sub no-gerror is export {
+  gerror-blank();
+}
 
 sub gerror is export {
   my $cge = CArray[Pointer[GError]].new;
@@ -806,15 +809,15 @@ sub set_error (CArray $e) is export {
       $ERROR = %ERROR{ $*PID } = get-error($e);
       #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
       @ERRORS.push: ErrorProxy.new( $ERROR, $*PID, Backtrace.new );
+      X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
     }
-    X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
   }
 }
 
 
 sub clear_error_stack is export {
   $error-lock.protect: {
-    $ERROR = [];
+    @ERRORS = ();
   }
 }
 
