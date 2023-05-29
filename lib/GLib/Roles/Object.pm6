@@ -447,10 +447,11 @@ role GLib::Roles::Object {
   method ref   is also<upref>   {   g_object_ref($!o); self; }
   method unref is also<downref> { g_object_unref($!o); }
 
-  method !processFlags ($create, $dual, $not, $flags) {
+  method !processFlags ($default, $create, $dual, $not, $flags) {
     my $f = 0;
     $f = $flags if $flags;
     unless $f {
+      $f +|= G_BINDING_DEFAULT        if $default;
       $f +|= G_BINDING_BIDIRECTIONAL  if $dual;
       $f +|= G_BINDING_SYNC_CREATE    if $create;
       $f +|= G_BINDING_INVERT_BOOLEAN if $not;
@@ -462,6 +463,7 @@ role GLib::Roles::Object {
     Str()      $source_property,
     GObject()  $target,
               :$create                    = True,
+              :$default                   = True,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -470,7 +472,7 @@ role GLib::Roles::Object {
       $source_property,
       $target,
       $source_property,
-      self!processFlags($create, $dual, $not, $flags)
+      self!processFlags($default, $create, $dual, $not, $flags)
     );
   }
   multi method bind (
@@ -478,6 +480,7 @@ role GLib::Roles::Object {
     GObject()  $target,
     Str        $target_property,
               :$create                    = True,
+              :$default                   = True,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -486,7 +489,7 @@ role GLib::Roles::Object {
       $source_property,
       $target,
       $target_property,
-      self!processFlags($create, $dual, $not, $flags)
+      self!processFlags($default, $create, $dual, $not, $flags)
     );
   }
 
@@ -494,6 +497,7 @@ role GLib::Roles::Object {
     Str()      $source_property,
     GObject()  $target,
               :$create                    = True,
+              :$default                   = True,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -502,7 +506,7 @@ role GLib::Roles::Object {
       $source_property,
       $target,
       $source_property,
-      self!processFlags($create, $dual, $not, $flags)
+      self!processFlags($default, $create, $dual, $not, $flags)
     );
   }
   multi method bind-swapped (
@@ -510,6 +514,7 @@ role GLib::Roles::Object {
     GObject()  $target,
     Str        $target_property,
               :$create                    = True,
+              :$default                   = True,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -518,7 +523,7 @@ role GLib::Roles::Object {
       $source_property,
       $target,
       $target_property,
-      self!processFlags($create, $dual, $not, $flags)
+      self!processFlags($default, $create, $dual, $not, $flags)
     );
   }
 
@@ -528,6 +533,7 @@ role GLib::Roles::Object {
     GObject()  $target,
     Str        $target_property,
               :$create                    = True,
+              :$default                   = True,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -537,6 +543,7 @@ role GLib::Roles::Object {
        $target,
        $target_property,
       :$create,
+      :$default,
       :$dual,
       :$not,
       :$flags
@@ -548,17 +555,17 @@ role GLib::Roles::Object {
     GObject()  $target,
     Str        $target_property,
               :$create                    = True,
+              :$default                   = True,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
   ) {
-    unless $flags {
-      $flags +|= G_BINDING_BIDIRECTIONAL  if $dual;
-      $flags +|= G_BINDING_SYNC_CREATE    if $create;
-      $flags +|= G_BINDING_INVERT_BOOLEAN if $not;
-    }
-
-    self.bind($source_property, $target, $target_property, $flags);
+    self.bind(
+      $source_property,
+      $target,
+      $target_property,
+      self!processFlags($default, $create, $dual, $not, $flags)
+    );
   }
 
 
