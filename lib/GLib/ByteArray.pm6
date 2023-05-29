@@ -7,7 +7,11 @@ use GLib::Raw::Arrays;
 
 use GLib::Bytes;
 
+use GLib::Roles::Implementor;
+
 class GLib::ByteArray {
+  also does GLib::Roles::Implementor;
+  
   has GByteArray $!ba is implementor handles<len Blob p>;
 
   submethod BUILD (:$byte-array) {
