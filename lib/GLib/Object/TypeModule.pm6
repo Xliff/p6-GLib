@@ -16,7 +16,7 @@ use GLib::Roles::TypePlugin;
 our subset GTypeModuleAncestry is export of Mu
   where GTypeModule | GTypePlugin | GObject;
 
-my %checkAtttributes;
+my %checkAttributes;
 
 class GLib::Object::TypeModule {
   also does GLib::Roles::Object;
@@ -96,7 +96,7 @@ class GLib::Object::TypeModule {
   our %class-defines is export;
 
   method add-registration-callback($class-name, &callback) {
-    %classAttributes{ $class-name } = &callback;
+    %checkAttributes{ $class-name } = &callback;
   }
 
   method register_static ($instance-struct, Mu :$class-struct is copy)
@@ -522,13 +522,13 @@ sub standard_instance_init (\struct, \c_struct, $cc is copy, $p) is export {
 INIT {
   GLib::Object::TypeModule.add-registration-callback(
     'GObjectClass',
-    sub ($cc, $_, $is, f) {
+    sub ($cc, $_, $is, \f) {
 
       given .name.substr(2) {
-        say "Class Attribute Name: { $name }";
+        say "Class Attribute Name: { $_ }";
 
-        next unless sf ~~ GObjectVFunc;
-        next unless sf.g-v-func eq $name;
+        next unless f ~~ GObjectVFunc;
+        next unless f.g-v-func eq $_;
 
         when 'get_property' {
           unless f {
@@ -570,5 +570,6 @@ INIT {
       }
     }
   );
+
 
 }
