@@ -9,7 +9,7 @@ use GLib::GList;
 
 use GLib::Roles::Implementor;
 
-role GLib::Roles::TypedQueue[$raw, $glist, \T, \O = Nil] {
+role GLib::Roles::TypedQueue0[$raw, $glist, \T, \O = Nil] {
 
   # If GList returns two glists as [head, tail]
   method Array {
