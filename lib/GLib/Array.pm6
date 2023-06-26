@@ -15,7 +15,17 @@ class GLib::Array {
   has GArray $!a is implementor handles<p>;
   has        $!ca;
 
-  submethod BUILD (:$array, :$typed) {
+  has        $.signed;
+  has        $.typed;
+  has        $.direct;
+
+  submethod BUILD (
+    :$array,
+    :$typed,
+    :$!signed,
+    :$!double,
+    :$!direct
+  ) {
     $!a  = $array if $array;
     self.setType($typed) unless $typed === Any
   }
@@ -62,6 +72,8 @@ class GLib::Array {
       True,
       nativeSized($typed, :$double),
       :$typed,
+      :$signed,
+      :$double
     );
 
     #say "V: { @values.gist }";
@@ -96,14 +108,20 @@ class GLib::Array {
     Int()  $element_size,
     Int()  $reserved_size,
           :$sized            is required,
-          :$typed
+          :$typed,
+          :$signed,
+          :$double,
+          :$direct
   ) {
     self.sized_new(
        $zero_terminated,
        $clear,
        $element_size,
        $reserved_size,
-      :$typed
+      :$typed,
+      :$signed,
+      :$double,
+      :$direct
     );
   }
   method sized_new (
@@ -111,7 +129,10 @@ class GLib::Array {
     Int()  $clear,
     Int()  $element_size,
     Int()  $reserved_size,
-          :$typed
+          :$typed,
+          :$signed,
+          :$double,
+          :$direct
   )
     is also<
       sized-new
@@ -123,7 +144,14 @@ class GLib::Array {
       ($zero_terminated, $clear, $element_size, $reserved_size);
     my $a =  g_array_sized_new($zt, $c, $es, $rs);
 
-    $a ?? self.bless( array => $a, :$typed ) !! Nil;
+    $a ?? self.bless(
+            array => $a,
+            :$typed,
+            :$signed,
+            :$double,
+            :$direct
+          )
+       !! Nil;
   }
 
   method setType (\t = Mu) {
@@ -336,6 +364,15 @@ class GLib::Array::Integer is GLib::Array {
     nextwith(@values, typed => Int, :$signed, :$double, :$direct);
   }
 
+  method Array {
+    nextwith(
+      typed  => Int,
+      signed => self.signed,
+      double => self.double,
+      direct => self.direct
+    );
+  }
+
 }
 
 # cw: The intent is for this to be a distinct type, however without the
@@ -347,6 +384,9 @@ class GLib::Array::String is GLib::Array {
     nextwith(@values, typed => Str);
   }
 
+  method Array {
+    nextwith( typed => Str )
+  }
 }
 
 # cw: See previous note.
