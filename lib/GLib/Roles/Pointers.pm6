@@ -10,12 +10,18 @@ import GLib::Roles::Implementor;
 BEGIN re-export-everything('GLib::Roles::Implementor');
 
 # Number of times full project has needed to be compiled
-my constant forced = 153;
+my constant forced = 278;
 
 # Mark
 multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) is export {
   # YYY - Warning if a second attribute is marked?
   attr does Implementor;
+}
+
+multi sub trait_mod:<is>(Attribute:D \attr, :$boxed!) is export {
+  # YYY - Warning if a second attribute is marked?
+  attr does Implementor;
+  attr does Boxed;
 }
 
 constant GRI = GLib::Roles::Implementor;
