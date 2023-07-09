@@ -18,6 +18,7 @@ class GLib::Array {
   has        $.signed;
   has        $.typed;
   has        $.direct;
+  has        $.double;
 
   submethod BUILD (
     :$array,
@@ -42,7 +43,12 @@ class GLib::Array {
     >
   { $!a }
 
-  method Array ( :$typed, :$double, :$signed, :$direct ) {
+  method Array (
+    :$typed  = self.typed,
+    :$double = self.double,
+    :$signed = self.signed,
+    :$direct = self.direct
+  ) {
     my @array;
     @array.push: fromPointer($_, :$typed, :$double, :$signed, :$direct)
       for ^self.elems;
@@ -157,7 +163,8 @@ class GLib::Array {
   method setType (\t = Mu) {
     use NativeCall;
 
-    die 'Cannot use Mu as a type!' unless t !=:= Mu;
+    die X::GLib::InvalidType.new( message => 'Cannot use Mu as a type!' )
+      unless t !=:= Mu;
 
     my \T = t;
     T = Pointer[t] if t.REPR eq 'CStruct';
@@ -176,7 +183,8 @@ class GLib::Array {
     die X::OutOfRange.new( payload => "Index { k } does not exist!" )
       unless k < self.elems;
 
-    $!ca[k];
+    return $!ca[k] if $!ca;
+    Nil;
   }
 
   # ↓↓↓↓ SIGNALS ↓↓↓↓
