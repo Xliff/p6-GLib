@@ -66,7 +66,7 @@ package GLib::Raw::Subs {
     ( $*KERNEL.endian == BigEndian, $*KERNEL.endian == LittleEndian );
   }
 
-  sub cast($cast-to, $obj) is export {
+  sub cast ($cast-to, $obj) is export {
     nativecast($cast-to, $obj);
   }
 
@@ -669,6 +669,19 @@ package GLib::Raw::Subs {
 
     my $s = T.REPR eq 'CStruct' || T ~~ Str;
 
+    sub nilVal {
+      do given T {
+        when uint8 | int8 | uint16 | int16 | uint32 | int32 | uint64 | int64
+          { 0 }
+        when num32 | num64
+          { 0e0 }
+        when $s.not
+          { T }
+        default
+          { Pointer[T] }
+      }
+    }
+
     my $p = do if T ~~ Str {
       # cw: The below should work, but doesn't for strings for some reason...
       #     2023/26/04
@@ -677,8 +690,7 @@ package GLib::Raw::Subs {
     } else {
       ( $s.not ?? CArray[T] !! CArray[ Pointer[T] ] ).allocate($size);
     }
-    $p[0] = $fv ?? $fv
-                !! ($s.not ?? T !! Pointer[T]);
+    $p[0] = $fv ?? $fv !! nilVal();
     $p;
   }
 
