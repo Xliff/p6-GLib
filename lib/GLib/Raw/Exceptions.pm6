@@ -49,7 +49,13 @@ class X::GLib::InvalidSize is Exception {
 class X::GLib::UnknownType is Exception {
   has $!message is built;
 
-  method message { $!message // 'Invalid or unknown type!' }
+  method message { $!message // 'Unknown type!' }
+}
+
+class X::GLib::InvalidType is Exception {
+  has $!message is built;
+
+  method message { $!message // 'Invalid type!' }
 }
 
 class X::GLib::InvalidArgument is Exception {
