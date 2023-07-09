@@ -129,6 +129,30 @@ class tm          is repr<CStruct> is export does GLib::Roles::Pointers {
   has int32 $.tm_isdst   is rw; #= daylight savings flag
   has int64 $.tm_gmtoff  is rw; #= seconds east of UTC
   has Str   $.tm_zone;          #= Timezone abbreviation
+
+  method DateTime {
+    DateTime.new(
+      year   => self.tm_year,
+      month  => self.tm_mon,
+      day    => self.tm_day,
+      hour   => self.tm_hour,
+      minute => self.tm_min,
+      second => self.tm_sec,
+      offset => self.tm_gmtoff
+    )
+  }
+
+  method new (DateTime $d) {
+    self.bless(
+      tm_year   => $d.year,
+      tm_mon    => $d.month,
+      tm_day    => $d.day,
+      tm_hour   => $d.hour,
+      tm_min    => $d.minute,
+      tm_sec    => $d.second.Int,
+      tm_gmtoff => $d.offset
+    );
+  }
 }
 
 sub htonl (uint32)
