@@ -3,6 +3,7 @@ use v6.c;
 # This is required for proper compilation.
 
 our role Implementor is export {}
+our role Boxed       is export {}
 
 multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) {
   attr does Implementor;
