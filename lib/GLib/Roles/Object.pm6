@@ -1067,8 +1067,42 @@ role GLib::Roles::Object {
     $ids ?? $ids.map({ GLib::Signal.query($_) }) !! Nil;
   }
 
+  method getPropertyMethods {
+    self.^methods.grep( * ~~ PropertyMethod )
+  }
+
   method listProperties {
-    self.^methods.grep( * ~~ PropertyMethod ).map( *.name );
+    self.getPropertyMethods.map( *.name );
+  }
+
+  method getProperties {
+    my %dup;
+    self.getPropertyMethods.map({
+      do unless %dup{ .name } {
+        %dup{ .name } = 1;
+        |[ .name, $_(self) ]
+      }
+    }).Hash;
+  }
+
+  method Str {
+    self.^can('debug') ?? self.debug !! nextsame;
+  }
+
+  method debug ($n = 1) {
+    qq:to/RAKU/;
+      { self.^name } -->
+      { self.getProperties.pairs
+                          .map({
+                             my $v = .value;
+                             do if $v {
+                               "{ "\t" x $n }{ .key } = { $v.^can('debug')
+                                   ?? $v.debug($n + 1)
+                                   !! $v.Str }"
+                             }
+                           })
+                          .join("\n") }
+      RAKU
   }
 
 }
