@@ -129,15 +129,19 @@ class GLib::Object::TypeModule {
     # cw: Hold on to our definition, just in case.
     %class-defines{ $class-struct.^name } := $class-struct;
 
-    # cw: Kinda boxed myself into a corner with this. The problem here
-    #     is that our get_type methods are all tied to the raku porcelain
-    #     rather than the plumbing, so we can't solely grab the parent from
-    #     <$instance-struct> and run with it. We'll have to try and resolve
-    #     from <MANIFEST> and fall back to GObject if nothing resolves.
+    # cw: Resolve parent object throw HOW instead of Struct since the
+    #     Class Struct may not exist.
+    my \p = GLib::Object;
+    for self.^mro {
+      if .HOW ~~ Metamodel::ClassHOW {
+        next if $_ === self.WHAT;
+        p := $_;
+        last;
+      }
+    }
 
     self.register_static_simple(
-      # For now, we use GLib::Object.get_type
-      GLib::Object.get_type,
+      P.get_type,
       $instance-struct.^shortname,
       nativesizeof($instance-struct),
 
@@ -242,7 +246,7 @@ class GLib::Object::TypeModule {
 sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
   say "CC: { +$cc }";
 
-  multi sub checkAttributes( $cs where *.defined ) {
+  multi sub checkAttributes( $cs where  *.defined ) {
     checkAttributes($cs.?parent);
 
     for $cs.^attributes {
