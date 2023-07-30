@@ -317,7 +317,21 @@ package GLib::Raw::Subs {
     }
   }
 
-  sub getFlags($t, $s) is export {
+  sub adjustFlag ($v, $f, $s) is export {
+    return $v       unless $s.defined;
+    return $v +| $f if     $s;
+
+    $v +& (+^$f)
+  }
+
+  multi sub getFlags($t, :indexed(:$index) is required) is export {
+    my @f;
+    for $t.base(2).comb.reverse.kv -> $k, $v {
+      @f.push: $k if $v eq '1';
+    }
+    @f.Set;
+  }
+  multi sub getFlags($t, $s) is export {
     $t.pairs
       .grep({ $s +& .value })
       .map( *.key )
@@ -451,7 +465,14 @@ package GLib::Raw::Subs {
   }
 
   # The assumption here is "Transfer: Full"
-  sub propReturnObject (
+  multi sub propReturnObject (
+    $oo,
+    $raw,
+    :$construct is required
+  ) {
+    samewith($oo, $raw, Mu, :$construct);
+  }
+  multi sub propReturnObject (
     $oo,
     $raw,
     \P,
@@ -465,7 +486,7 @@ package GLib::Raw::Subs {
 
     unless $attempt-real-resolve {
       # say "Real resolve cast to: { P.^name }...";
-      $o = cast(P, $o);
+      $o = cast(P, $o) if P.REPR eq <CPointer CStruct CArray>.any;
       return $o if $raw || $C === Nil;
 
       return $construct ?? $construct($o, :$ref)
@@ -642,10 +663,52 @@ package GLib::Raw::Subs {
   	}
   }
 
-  sub nullTerminatedArraySize ($data where $data.REPR eq 'CArray') is export {
+  sub nullTerminatedArraySize (
+    $data where $data.REPR eq 'CArray',
+
+    :$max = 4096
+  )
+    is export
+  {
     my $idx = 0;
-    repeat { } while $data[$idx++];
+    repeat {
+      return $max if $idx > $max - 1
+    } while $data[$idx++];
     $idx;
+  }
+
+  sub resolveBuffer (
+     $s        is copy,
+    :$carray            = True,
+    :$pointer           = $carray.Not,
+    :$encoding          = 'utf8'
+  )
+    is export
+  {
+    $s .= Str   if $s.^can('Str');
+    $s .= Buf   if $s.^can('Buf')   && $s !~~ Str;
+    $s .= Array if $s.^can('Array') && $s !~~ (Str, Buf).any;
+    given $s {
+      when Str           { $_ = .encode($encoding)      ; proceed }
+      when Buf           { $_ = CArray[uint8].new($_)   ; proceed }
+      when Array         { $_ = ArrayToCArray(uint8, $_); proceed }
+
+      when CArray[uint8] {
+        return $_ if $carray;
+        cast(gpointer, $_);
+      }
+
+      when gpointer {
+        return $_;
+      }
+
+      default {
+        X::GLib::InvalidType.new(
+          message => "Could not process input to resolveString! {
+                      '' }. A { $s.^name } is not compatible."
+        ).throw;
+      }
+    }
   }
 
   # cw: Still some concern over the this....
