@@ -10,7 +10,7 @@ multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) {
 }
 
 # Find.
-sub findProperImplementor ( $attrs, :rev(:$reverse) ) is export {
+our sub findProperImplementor ( $attrs, :rev(:$reverse) ) is export {
   # Will need to search the entire attributes list for the
   # proper main variable. Then sort for the one with the largest
   # MRO.
