@@ -338,6 +338,18 @@ package GLib::Raw::Subs {
       .Set but SetIntSemantics[$t];
   }
 
+  sub setFlags($f, *@f) is export {
+    my $nf = $f;
+    $nf = $nf +| $_ for @f;
+    $nf;
+  }
+
+  sub unsetFlags ($f, *@u) is export {
+    my $nf = $f;
+    $nf = $nf +& +^$_ for @u;
+    $nf;
+  }
+
   sub fromFlagish ($E, $val) is export {
     $val = [+|]( |$val.map({ $E(.key).value }) )
       if $val ~~ Set;
@@ -694,8 +706,8 @@ package GLib::Raw::Subs {
       when Array         { $_ = ArrayToCArray(uint8, $_); proceed }
 
       when CArray[uint8] {
-        return $_ if $carray;
-        cast(gpointer, $_);
+        return $_ unless $pointer;
+        return cast(gpointer, $_);
       }
 
       when gpointer {
