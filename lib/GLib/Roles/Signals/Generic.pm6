@@ -8,9 +8,26 @@ use GLib::Raw::ReturnedValue;
 use GLib::Raw::Signal;
 use GLib::Object::Supplyish;
 
+role SignalManager { }
+
+multi sub trait_mod:<is> (Attribute \a, :$signal-manager is required)
+  is export
+{
+  a does SignalManager;
+}
+
 role GLib::Roles::Signals::Generic {
   has %!tapped-sigs;
-  has %!signals;
+  has %!signals      is signal-manager;
+
+  method signal-manager {
+    for self.^attributes.grep(SignalManager) {
+      if .get-value(self) -> $h {
+        return $h;
+      }
+    }
+    Nil;
+  }
 
   method create-signal-supply ($signal, $s) {
     create-signal-supply($s, %!tapped-sigs, $signal);
