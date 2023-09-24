@@ -5,16 +5,20 @@ use NativeCall;
 use GLib::Object::IsType;
 use GLib::Raw::Types;
 use GLib::Raw::Traits;
+use GLib::Raw::Signal;
 use GLib::Object::Raw::Binding;
 
-use GLib::Value;
+use GLib::Array;
+use GLib::Quark;
 use GLib::Signal;
+use GLib::Value;
 use GLib::Object::Type;
 use GLib::Class::Object;
 
 #use GLib::Roles::Bindable;
 use GLib::Roles::TypedBuffer;
 
+use GLib::Roles::Protection;
 use GLib::Roles::Implementor;
 use GLib::Roles::NewGObject;
 use GLib::Roles::Signals::Generic;
@@ -48,6 +52,16 @@ class ProvidesData does Associative {
     %data{$!p}{k}:delete;
   }
 
+}
+
+role GObjectVirtualFunction { }
+role DefinedSignalFunction  { }
+
+multi trait_mod:<is> (Method \m, :$vfunc is required) is export {
+  m does GObjectVirtualFunction;
+}
+multi trait_mod:<is> (Method \m, :$signal is required) is export {
+  m does DefinedSignalFunction;
 }
 
 # To be rolled into GLib::Roles::Object at some point!
@@ -90,6 +104,7 @@ role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
 # cw: Time to grow up.
 role GLib::Roles::Object {
 #  also does GLib::Roles::Bindable;
+  also does GLib::Roles::Protection;
   also does GLib::Roles::Implementor;
   also does GLib::Roles::Signals::GObject;
 
@@ -423,6 +438,66 @@ role GLib::Roles::Object {
     g_object_notify($prop);
   }
 
+  multi method emit (Str() $signal) {
+    g_signal_emit_by_name($!o, $signal, Str);
+  }
+
+  multi method emit ( $signal, *@a, :$detail, :$raw = False ) {
+    my $d = GQuark;
+    $d = GLib::Quark.from-string($detail) if $detail;
+
+    my $signal-id = g_signal_lookup($signal, self.get_type);
+    return unless $signal-id;
+
+    # This should probably be moved to a generic routine.
+    # Check ::Raw::Subs for prior art!
+    @a.unshift: .GObject;
+    my @ap = do gather for @a {
+      if $_ ~~ GValue {
+        take $_;
+        next;
+      }
+
+      if $_ ~~ GLib::Value {
+        take .GValue;
+        next;
+      }
+
+      if $_ ~~ (GObject, GLib::Roles::Object).any {
+        take gv_obj($_);
+        next;
+      }
+
+      if $_ ~~ Array {
+        my $v = do given .tail {
+          when G_TYPE_CHAR     { gv_str($_)    }
+          when G_TYPE_UCHAR    { gv_str($_)    }
+          when G_TYPE_BOOLEAN  { gv_bool($_)   }
+          when G_TYPE_INT      { gv_int($_)    }
+          when G_TYPE_UINT     { gv_uint($_)   }
+          when G_TYPE_LONG     { gv_int64($_)  }
+          when G_TYPE_ULONG    { gv_uint64($_) }
+          when G_TYPE_INT64    { gv_int64($_)  }
+          when G_TYPE_UINT64   { gv_uint64($_) }
+        }
+        take $v if $v;
+
+        X::GLib::Error.new(
+          "A value type of { .tail } is not currently known to
+           the emit type resolution handler for a { .head.^name } value"
+        ).throw;
+      }
+
+      take valueToGValue($_);
+    }
+    my $iAndP = GLib::Array.new(@ap);
+
+    my $r = GValue.new;
+
+    g_signal_emitv($iAndP, $signal-id, $d, $r);
+    propReturnObject($r, $raw, |GLib::Value.getTypePair);
+  }
+
   method freeze-notify {
     self.freeze_notify;
   }
@@ -460,10 +535,34 @@ role GLib::Roles::Object {
   }
 
   multi method bind (
+    Str  $source_property,
+    Str  $target_property,
+        :$create                    = True,
+        :$default                   = True,
+        :bi(:both(:$dual))          = False,
+        :invert(:$not)              = False,
+        :$flags            is copy  = 0
+  ) {
+    samewith(
+      $source_property,
+      self,
+      $target_property,
+
+      flags => self!processFlags($default, $create, $dual, $not, $flags)
+    );
+  }
+  multi method bind (
+    Str()      $source_property,
+    GObject()  $target,
+              *%a where *.elems == 0
+  ) {
+    samewith($source_property, $target, :create);
+  }
+  multi method bind (
     Str()      $source_property,
     GObject()  $target,
               :$create                    = True,
-              :$default                   = True,
+              :$default                   = False,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -480,7 +579,7 @@ role GLib::Roles::Object {
     GObject()  $target,
     Str        $target_property,
               :$create                    = True,
-              :$default                   = True,
+              :$default                   = False,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -497,7 +596,7 @@ role GLib::Roles::Object {
     Str()      $source_property,
     GObject()  $target,
               :$create                    = True,
-              :$default                   = True,
+              :$default                   = False,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -514,7 +613,7 @@ role GLib::Roles::Object {
     GObject()  $target,
     Str        $target_property,
               :$create                    = True,
-              :$default                   = True,
+              :$default                   = False,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -533,7 +632,7 @@ role GLib::Roles::Object {
     GObject()  $target,
     Str        $target_property,
               :$create                    = True,
-              :$default                   = True,
+              :$default                   = False,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -555,7 +654,7 @@ role GLib::Roles::Object {
     GObject()  $target,
     Str        $target_property,
               :$create                    = True,
-              :$default                   = True,
+              :$default                   = False,
               :bi(:both(:$dual))          = False,
               :invert(:$not)              = False,
               :$flags            is copy  = 0
@@ -620,7 +719,7 @@ role GLib::Roles::Object {
                           &transform_to   = Callable,
                           &transform_from = Callable,
     gpointer              $user_data      = Pointer,
-                          &notify         = Callable
+                          &notify         = %DEFAULT-CALLBACKS<GDestroyNotify>
   ) {
     samewith(
       $source_property,
@@ -641,7 +740,7 @@ role GLib::Roles::Object {
                           &transform_to   = Callable,
                           &transform_from = Callable,
     gpointer              $user_data      = Pointer,
-                          &notify         = Callable
+                          &notify         = %DEFAULT-CALLBACKS<GDestroyNotify>
   ) {
     g_object_bind_property_full(
       $!o,
