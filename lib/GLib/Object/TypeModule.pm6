@@ -1,5 +1,7 @@
 use v6.c;
 
+use experimental :rakuast;
+
 use Method::Also;
 use NativeCall;
 
@@ -76,12 +78,14 @@ class GLib::Object::TypeModule {
   }
 
   method register_enum (
-    Str()      $name,
-    GEnumValue $const_static_values
+    Str() $name,
+    Int() $const_static_values
   )
     is also<register-enum>
   {
-    g_type_module_register_enum($!tm, $name, $const_static_values);
+    my GEnumValue $c = $const_static_values;
+
+    g_type_module_register_enum($!tm, $name, $c);
   }
 
   method register_flags (
@@ -99,16 +103,29 @@ class GLib::Object::TypeModule {
     %checkAttributes{ $class-name } = &callback;
   }
 
-  method register_static ($instance-struct, Mu :$class-struct is copy)
+  method register_vfunc ($name) {
+  }
+
+  method register_static (
+        $instance-struct,
+    Mu :$class-struct                   is copy,
+       :class-init(:&class_init)                 = &standard_class_init,
+       :instance-init(:&instance_init)           = &standard_instance_init,
+       :register-vfunc(:&register_vfunc)         = &standard_register_vfunc,
+
+  )
     is also<register-static>
   {
     # cw: If there is no <class-struct> then one must be created based on
     #     GObject.
+    my @vfunc-names;
+
     unless $class-struct.WHERE === Any.WHERE {
       $class-struct = Metamodel::ClassHOW.new_type(
         name => $instance-struct.^shortname ~ 'Class',
         repr => 'CStruct'
       );
+      # cw: Go through instance-struct and look for any vfuncs!
       $class-struct.^add_attribute(
         Attribute.new(
           name         => '$.parent',
@@ -121,9 +138,9 @@ class GLib::Object::TypeModule {
       $class-struct.^compose;
     }
 
-    say "Class struct is: { $class-struct === Any }";
+    say "Class struct is Any: { $class-struct === Any }";
     say "Class struct is called: { $class-struct.^name }";
-    say "Class struct has attributes: { $class-struct.^attributes.gist }";
+    say "Class struct attributes: { $class-struct.^attributes.gist }";
     say "Class Struct is sized: { nativesizeof($class-struct) }";
 
     # cw: Hold on to our definition, just in case.
@@ -131,17 +148,19 @@ class GLib::Object::TypeModule {
 
     # cw: Resolve parent object throw HOW instead of Struct since the
     #     Class Struct may not exist.
-    my \p = GLib::Object;
+    my $p;
     for self.^mro {
       if .HOW ~~ Metamodel::ClassHOW {
         next if $_ === self.WHAT;
-        p := $_;
+        $p := $_;
         last;
       }
     }
+    $p := GLib::Object if $p =:= Any;
 
+    say "P Object: { $p.^name }";
     self.register_static_simple(
-      P.get_type,
+      $p.get_type,
       $instance-struct.^shortname,
       nativesizeof($instance-struct),
 
@@ -153,7 +172,7 @@ class GLib::Object::TypeModule {
         }
 
         say "Instance init: { @a.gist }";
-        standard_instance_init( $instance-struct, $class-struct, |@a )
+        instance_init( $instance-struct, $class-struct, |@a )
       },
 
       class-init => sub (*@a) {
@@ -162,7 +181,10 @@ class GLib::Object::TypeModule {
         }
 
         say "Class init: { @a.gist }";
-        standard_class_init($instance-struct, $class-struct, |@a)
+        class_init($instance-struct, $class-struct, |@a);
+        if +@vfunc-names {
+          register_vfunc($_) for @vfunc-names;
+        }
       }
 
     );
@@ -175,11 +197,11 @@ class GLib::Object::TypeModule {
   multi method register_static_simple (
     Int()       $parent_type,
     Str()       $type_name,
-    Int()       $instance_size                 = 0,
-    Int()      :class-size(:$class_size)       = 0,
-               :class-init(:&class_init)       = &standard_class_init,
-               :instance-init(:&instance_init) = &standard_instance_init,
-    Int()      :$flags                         = 0
+    Int()       $instance_size                   = 0,
+    Int()      :class-size(:$class_size)         = 0,
+               :class-init(:&class_init)         = &standard_class_init,
+               :instance-init(:&instance_init)   = &standard_instance_init,
+    Int()      :$flags                           = 0
   ) {
     samewith(
       $parent_type,
@@ -274,8 +296,45 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
   say "CC Type Name { GLib::Object::Type.new($cct).name }";
 
   my @props = (GParamSpec);
+  my (@prop-get-add, @prop-set-add);
+  my $a-idx = 0;
   for $is.^attributes {
     my $att = $_;
+
+    @prop-set-add.push: RakuAST::Statement::When.new(
+      condition => RakuAST::Literal.from-value($a-idx),
+      body      => RakuAST::Block.new(
+        body => RakuAST::Blockoid.new(
+          RakuAST::StatementList.new(
+            RakuAST::Statement::Expression.new(
+              expression => RakuAST::ApplyPostfix.new(
+                operand => RakuAST::Var::Lexical.new("\$is"),
+                postfix => RakuAST::Call::Method.new(
+                  name => RakuAST::Name.from-identifier("set_attribute"),
+                  args => RakuAST::ArgList.new(
+                    RakuAST::Var::Lexical.new("\$val")
+                  )
+                )
+              )
+            ),
+            # cw: Is wrong! Should be a call to the Raw equivalent!
+            RakuAST::Statement::Expression.new(
+              expression => RakuAST::ApplyPostfix.new(
+                operand => RakuAST::Term::Self.new,
+                postfix => RakuAST::Call::Method.new(
+                  name => RakuAST::Name.from-identifier("emit"),
+                  args => RakuAST::ArgList.new(
+                    RakuAST::StrLiteral.new("notify::{ $is.name }"),
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+
+    # @prop-get-add:
 
     when GAttribute {
       # Create property
@@ -372,6 +431,7 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
           $is.^add_method("get_{ $att.name }", method () {
             $att.get_value(self);
           });
+
           proceed;
         }
 
@@ -508,6 +568,8 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
     when GSignal {
       # Create signal
     }
+
+    $a-idx++;
   }
 
   g_object_class_install_properties(
@@ -520,6 +582,10 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
 }
 
 sub standard_instance_init (\struct, \c_struct, $cc is copy, $p) is export {
+
+}
+
+sub standard_register_vfunc ($name) is export {
 
 }
 
