@@ -587,8 +587,13 @@ sub valueToGValue (
   when Num                           { $double ?? gv_dbl($_) !! gv_flt($_) }
 
   when Int                           {
-    $signed ?? ( $single ?? gv_int($_)  !! gv_int64($_)  )
-            !! ( $single ?? gv_uint($_) !! gv_uint64($_) )
+    # cw: Beware the law of unintended consequences!
+    if $_ < 0 && $signed.not && $single {
+      .abs.log(2) < 32 ?? gv_int($_) !! gv_int64($_);
+    } else {
+      $signed ?? ( $single ?? gv_int($_)  !! gv_int64($_)  )
+              !! ( $single ?? gv_uint($_) !! gv_uint64($_) )
+    }
   }
 
   default {
