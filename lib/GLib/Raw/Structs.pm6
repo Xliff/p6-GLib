@@ -809,7 +809,13 @@ sub set_error (CArray $e) is export {
       $ERROR = %ERROR{ $*PID } = get-error($e);
       #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
       @ERRORS.push: ErrorProxy.new( $ERROR, $*PID, Backtrace.new );
-      X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
+
+      # cw: $*GERROR-EXCEPTIONS -overrides- $ERROR-THROWS!
+      if DYNAMIC::<$*GERROR-EXCEPTIONS> {
+        X::GLib::Error.new($ERROR).throw if $*GERROR_EXCEPTIONS
+      } else {
+        X::GLib::Error.new($ERROR).throw if $ERROR-THROWS;
+      }
     }
   }
 }
