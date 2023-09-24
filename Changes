@@ -1,4 +1,9 @@
 Revision history for GLib
 
-{{$NEXT}}
+0.0.1  2023-09-24T10:16:24-04:00
     - Initial version
+
+{{$NEXT}}
+
+0.0.2  2023-09-24T12:45:27-04:00
+    - Raku-ise META6.json

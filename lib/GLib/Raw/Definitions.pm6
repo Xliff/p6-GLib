@@ -17,7 +17,7 @@ our $DEBUG            is export  = 0;
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
 # Forced compile count
-my constant forced = 388;
+my constant forced = 387;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
