@@ -17,7 +17,7 @@ our $DEBUG            is export  = 0;
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
 # Forced compile count
-my constant forced = 314;
+my constant forced = 388;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
@@ -111,6 +111,7 @@ constant guint8_t                       is export := uint8;
 constant guint16_t                      is export := uint16;
 constant guint32_t                      is export := uint32;
 constant guint64_t                      is export := uint64;
+constant guintptr                       is export := CArray[guint];
 
 # Conditionals!
 constant GPid                           is export := realUInt;
