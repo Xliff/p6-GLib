@@ -338,3 +338,8 @@ sub g_signal_stop_emission_by_name (GObject $instance, Str $detailed_signal)
   is native(gobject)
   is export
 { * }
+
+sub g_signal_emit_by_name (Str $signal, GType $type, Str)
+  is native(gobject)
+  is export
+{ * }
