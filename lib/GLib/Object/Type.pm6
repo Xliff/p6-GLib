@@ -21,13 +21,10 @@ class GLib::Object::Type {
     # nqp::hllize($!t) if $!t;
     $!t;
   }
-
-  method GTypeEnum {
-    GTypeEnum($!t);
-  }
+  method GLib::Raw::Enums::GTypeEnum { GTypeEnum($!t) }
 
   method new (Int() $type) {
-    $type ?? self.bless(:$type) !! Nil;
+    $type.defined ?? self.bless(:$type) !! Nil;
   }
 
   method add_class_cache_func (
