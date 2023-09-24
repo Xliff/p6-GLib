@@ -33,6 +33,7 @@ class GLib::Module {
 
   method build_path (
     GLib::Module:U:
+    
     Str() $directory,
     Str() $module_name
   ) is also<build-path> {
