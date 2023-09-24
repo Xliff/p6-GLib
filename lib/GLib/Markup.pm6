@@ -3,6 +3,7 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
+use GLib::Raw::Traits;
 use GLib::Raw::Types;
 
 use GLib::Raw::Markup;
@@ -19,10 +20,10 @@ class GLib::Markup {
   { $!mp }
 
   method new (
-    GMarkupParser $parser,
-    Int() $flags,
-    gpointer $user_data               = gpointer,
-    GDestroyNotify $user_data_dnotify = gpointer
+    GMarkupParser() $parser,
+    Int()           $flags,
+    gpointer        $user_data         = gpointer,
+    GDestroyNotify  $user_data_dnotify = gpointer
   ) {
     my GMarkupParseFlags $f = $flags;
 
@@ -41,11 +42,11 @@ class GLib::Markup {
   }
 
   method escape_text (
-    GLib::Markup:U:
     Str() $text,
     Int() $length = $text.chars
   )
     is also<escape-text>
+    is static
   {
     my gssize $l = $length;
 
@@ -79,7 +80,9 @@ class GLib::Markup {
     $sl.Array;
   }
 
-  method get_position (Int() $line_number, Int() $char_number) is also<get-position> {
+  method get_position (Int() $line_number, Int() $char_number)
+    is also<get-position>
+  {
     my ($l, $c) = ($line_number, $char_number);
 
     g_markup_parse_context_get_position($!mp, $l, $c);
