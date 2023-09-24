@@ -105,4 +105,10 @@ class X::GLib::OnlyOneOf is X::GLib::Exception {
 
 }
 
+class X::GLib::ProtectedMethod is X::GLib::Exception {
+  method new ( :$message = 'Cannot execute a protected method from here.' ) {
+    self.bless( :$message );
+  }
+}
+
 package GLib::Raw::Exceptions { }
