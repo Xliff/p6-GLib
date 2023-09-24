@@ -3,6 +3,7 @@ use v6.c;
 use Method::Also;
 use NativeCall;
 
+use GLib::Raw::Traits;
 use GLib::Raw::Types;
 use GLib::Raw::Main;
 
@@ -46,16 +47,16 @@ class GLib::MainContext {
 
   multi method check (
     Int() $max_priority,
-    @fds,
+          @fds,
   ) {
     my $f = GLib::Roles::TypedBuffer[GPollFD].new(@fds);
 
     samewith($max_priority, $f.p, @fds.elems);
   }
   multi method check (
-   Int() $max_priority,
+   Int()    $max_priority,
    gpointer $fds,           # Block of GPollFD
-   Int() $n_fds
+   Int()    $n_fds
  ) {
     my gint ($mp, $nf) = ($max_priority, $n_fds);
 
@@ -73,9 +74,9 @@ class GLib::MainContext {
   }
 
   method find_source_by_funcs_user_data (
-    GSourceFuncs $funcs,
-    gpointer $user_data = gpointer,
-    :$raw = False
+    GSourceFuncs  $funcs,
+    gpointer      $user_data = gpointer,
+                 :$raw       = False
   ) {
     my $s = g_main_context_find_source_by_funcs_user_data(
       $!mc,
@@ -90,13 +91,13 @@ class GLib::MainContext {
   }
 
   method find_source_by_id (
-    Int() $source_id,
-    :$raw = False
+    Int()  $source_id,
+          :$raw        = False
   )
     is also<find-source-by-id>
   {
     my guint $sid = $source_id;
-    my $s = g_main_context_find_source_by_id($!mc, $sid);
+    my       $s   = g_main_context_find_source_by_id($!mc, $sid);
 
     $s ??
       ( $raw ?? $s !! ::('GLib::Source').new($s) )
@@ -105,8 +106,8 @@ class GLib::MainContext {
   }
 
   method find_source_by_user_data (
-    gpointer $user_data = gpointer,
-    :$raw = False
+    gpointer  $user_data = gpointer,
+             :$raw       = False
   )
     is also<find-source-by-user-data>
   {
@@ -127,10 +128,10 @@ class GLib::MainContext {
   }
 
   method invoke_full (
-    Int() $priority,
-    &function,
-    gpointer $data         = gpointer,
-    GDestroyNotify $notify = gpointer
+    Int()          $priority,
+                   &function,
+    gpointer       $data      = gpointer,
+    GDestroyNotify $notify    = gpointer
   )
     is also<invoke-full>
   {
@@ -146,18 +147,14 @@ class GLib::MainContext {
   multi method iteration (GLib::MainContext:D: Int() $may_block = True) {
     GLib::MainContext.iteration($!mc, $may_block);
   }
-  multi method iteration (
-    GLib::MainContext:U:
-    Int() $may_block     = True
-  ) {
-    my gboolean $mb = $may_block.so.Int;
-
-    so g_main_context_iteration(GMainContext, $mb);
+  multi method iteration (GLib::MainContext:U: Int() $may_block = True) {
+    samewith(GMainContext, $may_block);
   }
   multi method iteration (
     GLib::MainContext:U:
-    GMainContext         $context,
-    Int()                $may_block      = True
+
+    GMainContext() $context,
+    Int()          $may_block = True
   ) {
     my gboolean $mb = $may_block.so.Int;
 
