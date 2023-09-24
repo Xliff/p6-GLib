@@ -6,7 +6,7 @@ use NativeCall;
 use GLib::Compat::Definitions;
 use GLib::Raw::Subs;
 
-use lib <scripts ../scripts>;
+use lib <release-scripts ../release-scripts>;
 
 use GTKScripts;
 
