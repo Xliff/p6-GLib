@@ -1256,6 +1256,25 @@ class GLib::Object does GLib::Roles::Object {
 
 }
 
+role GLib::Roles::Object::RegisteredType[$gtype] {
+
+  method get_type is also<get-type> { $gtype };
+
+}
+
+
+role GLib::Roles::Object::Registrar[$n] {
+
+  method registers-for { $n }
+
+}
+
+my %object-registrar;
+
+sub add-object-registrar( GLib::Roles::Object::Registrar %r ) {
+  %object-registrar{ %r.registers-for } := %r;
+}
+
 
 sub g_connect_notify (
   GObject $app,
@@ -1292,17 +1311,4 @@ multi sub infix:<=:=> (
   is export
 {
   $a.equals($b);
-}
-
-use MONKEY-TYPING;
-
-augment class GLib::Raw::Object::GObject {
-
-  method objectType  ( :$raw = False ) {
-    my $t = self.g_type_instance.g_class.g_type;
-    return $t if $raw;
-
-    GLib::Object::Type.new($t);
-  }
-
 }

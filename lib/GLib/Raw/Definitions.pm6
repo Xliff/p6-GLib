@@ -17,7 +17,7 @@ our $DEBUG            is export  = 0;
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
 # Forced compile count
-my constant forced = 387;
+my constant forced = 388;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
@@ -55,7 +55,7 @@ sub tree-helper is export {
     my ($arch, $os, $ext) = resources-info;
     my $libkey = "lib/{ $arch }/{ $os }/tree-helper.{ $ext }";
     say "Using '$libkey' as tree support library." if $DEBUG;
-    $libname = %?RESOURCES{$libkey}.absolute;
+    $libname = %?RESOURCES{$libkey};
   }
 
   $libname;
