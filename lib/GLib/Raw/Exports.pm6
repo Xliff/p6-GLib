@@ -5,6 +5,7 @@ unit package GLib::Raw::Exports;
 use CompUnit::Util :re-export;
 
 our @glib-exports is export = <
+  GLib::Raw::Debug
   GLib::Raw::Definitions
   GLib::Raw::Object
   GLib::Raw::Enums

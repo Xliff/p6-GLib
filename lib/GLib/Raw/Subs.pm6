@@ -4,6 +4,7 @@ use JSON::Fast;
 use NativeCall;
 use NativeHelpers::Blob;
 
+use GLib::Raw::Debug;
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
 use GLib::Raw::Object;

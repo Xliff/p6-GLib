@@ -1,13 +1,13 @@
 use v6.c;
 
-use GLib::Raw::Definitions;
+use GLib::Raw::Debug;
 
 unit package GLib::Raw::Distro;
 
 # Change listing to alpha by-key!
 my %glib-adjustments = do {
   (
-    (
+    linux => (
       Ubuntu => (
         DEFAULTS => (
           lib-append => '-2.0'
@@ -43,7 +43,9 @@ my %glib-adjustments = do {
 }
 
 my %unix-library-adjustments = (
-  glib => %glib-adjustments
+  # cw: Adjustments are the same for both!
+  glib    => %glib-adjustments,
+  gobject => %glib-adjustments
 ).Hash;
 
 multi sub version-by-distro ($lib) is export {
@@ -132,4 +134,39 @@ multi sub version-by-distro ($prefix is copy, :$linux is required) is export {
   $version    = getDistroValue('version');
 
   ($lib // $prefix) ~ ($lib-append // ''), ($version // v0);
+}
+
+sub resources-info is export {
+  my $ext = 'dll';
+  my $os = $*DISTRO.is-win ?? 'windows' !! 'unix';
+  if $os eq 'unix' {
+    # Which one?
+    $os = $*KERNEL.name;
+    $ext = 'so';
+  }
+  my $arch = '/.dockerenv'.IO.e ?? qqx{uname -m}.chomp !! $*KERNEL.arch;
+
+  ($arch, $os, $ext);
+}
+
+sub glib-support is export {
+  state $libname = do {
+    my ($arch, $os, $ext) = resources-info;
+    my $libkey = "lib/{ $arch }/{ $os }/glib-support.{ $ext }";
+    say "Using '$libkey' as support library." if $DEBUG;
+    $libname = %?RESOURCES{$libkey}.absolute;
+  }
+
+  $libname;
+}
+
+sub tree-helper is export {
+  state $libname = do {
+    my ($arch, $os, $ext) = resources-info;
+    my $libkey = "lib/{ $arch }/{ $os }/tree-helper.{ $ext }";
+    say "Using '$libkey' as tree support library." if $DEBUG;
+    $libname = %?RESOURCES{$libkey};
+  }
+
+  $libname;
 }

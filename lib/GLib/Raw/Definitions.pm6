@@ -3,7 +3,10 @@ use v6.c;
 use nqp;
 use NativeCall;
 
+use CompUnit::Util;
+
 use GLib::Compat::Definitions;
+use GLib::Raw::Distro;
 use GLib::Roles::Pointers;
 
 unit package GLib::Raw::Definitions;
@@ -12,7 +15,6 @@ our $ERROR            is export;
 our (%ERROR, %ERRORS) is export;
 our $ERROR-THROWS     is export;
 our @ERRORS           is export;
-our $DEBUG            is export  = 0;
 
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
@@ -23,43 +25,8 @@ constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
 
 # Libs
-constant glib         is export  = 'glib-2.0',v0;
-constant gobject      is export  = 'gobject-2.0',v0;
-
-sub resources-info is export {
-  my $ext = 'dll';
-  my $os = $*DISTRO.is-win ?? 'windows' !! 'unix';
-  if $os eq 'unix' {
-    # Which one?
-    $os = $*KERNEL.name;
-    $ext = 'so';
-  }
-  my $arch = '/.dockerenv'.IO.e ?? qqx{uname -m}.chomp !! $*KERNEL.arch;
-
-  ($arch, $os, $ext);
-}
-
-sub glib-support is export {
-  state $libname = do {
-    my ($arch, $os, $ext) = resources-info;
-    my $libkey = "lib/{ $arch }/{ $os }/glib-support.{ $ext }";
-    say "Using '$libkey' as support library." if $DEBUG;
-    $libname = %?RESOURCES{$libkey}.absolute;
-  }
-
-  $libname;
-}
-
-sub tree-helper is export {
-  state $libname = do {
-    my ($arch, $os, $ext) = resources-info;
-    my $libkey = "lib/{ $arch }/{ $os }/tree-helper.{ $ext }";
-    say "Using '$libkey' as tree support library." if $DEBUG;
-    $libname = %?RESOURCES{$libkey};
-  }
-
-  $libname;
-}
+constant glib         is export  = version-by-distro('glib');
+constant gobject      is export  = version-by-distro('gobject');
 
 constant realUInt is export = $*KERNEL.bits == 32 ?? uint32 !! uint64;
 constant realInt  is export = $*KERNEL.bits == 32 ?? int32  !! int64;
@@ -229,21 +196,7 @@ multi max (:&by = {$_}, :$all!, *@list) is export {
   my $max = max my @values = @list.map: &by;
 
   # Extract and return all values matching the maximal...
-  @list[ @values.kv.map: {$^index unless $^value cmp $max} ];
+  @list[ @values.kv.map: { $^index unless $^value cmp $max } ];
 }
 
 our $ERRNO is export := cglobal('libc.so.6', 'errno', int32);
-
-INIT {
-
-  if %*ENV<P6_GLIB_DEBUG> {
-    print '»————————————> setting debug';
-    if %*ENV<P6_GLIB_DEBUG>.Int -> \v {
-      $DEBUG = v unless v ~~ Failure;
-    }
-    $DEBUG //= 1;
-
-    say " ({ $DEBUG })";
-  }
-
-}

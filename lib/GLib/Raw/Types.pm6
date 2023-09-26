@@ -4,6 +4,7 @@ use GLib::Raw::Exports;
 
 unit package GLib::Raw::Types;
 
+need GLib::Raw::Debug;
 need GLib::Raw::Definitions;
 need GLib::Raw::Enums;
 need GLib::Raw::Exceptions;
