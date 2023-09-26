@@ -1,0 +1,12 @@
+- Remember to add GOption -- https://developer.gnome.org/glib/stable/glib-Commandline-option-parser.html
+- use 'git log --name-only -n' to extract version and associated stats file to generate compile times SVG
+
+- Implement "is protected" trait. Yes, this has been done before but a better implementation would involve
+  the use of .^mro. Basically, allow the method to run if:
+    <Actual class object> ~~ self.^mro.any
+
+ note that you CANNOT use self, as that would be a tautology. You must use the class object of 
+ class implementing the protected method! This means that "is protected" trait must capture this in some
+ way, shape or form.
+
+- Refine GLib::Object::Closure!
