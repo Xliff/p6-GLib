@@ -374,6 +374,22 @@ package GLib::Raw::Subs {
     };
   }
 
+  sub typeFromGType (\T) is export {
+    do given T {
+      when G_TYPE_UINT         { uint32  }
+      when G_TYPE_INT          { int32   }
+      when G_TYPE_UINT64       { uint64  }
+      when G_TYPE_INT64        { int64   }
+      when G_TYPE_FLOAT        { num32   }
+      when G_TYPE_DOUBLE       { num64   }
+      when G_TYPE_STRING       { Str     }
+      when G_TYPE_POINTER      { Pointer }
+      when G_TYPE_OBJECT       { GObject }
+
+      when $_ > G_TYPE_VARIANT { $_ }
+    }
+  }
+
   sub resolve-gtype($gt) is export {
     die "{ $gt } is not a valid GType value"
       unless $gt ∈ GTypeEnum.enums.values;
@@ -546,9 +562,9 @@ package GLib::Raw::Subs {
   sub fromPointer (
     $v,
     $typed,
-    :$signed   = False,
-    :$double   = False,
-    :$encoding = 'utf8',
+    :$signed   is copy = False,
+    :$double   is copy = False,
+    :$encoding         = 'utf8',
   )
     is export
   {
@@ -556,9 +572,36 @@ package GLib::Raw::Subs {
 
     do given $typed {
       when Int {
-        $_ = $double ?? ( $signed ?? int64 !! uint64 )
-                     !! ( $signed ?? int32 !! uint32 );
-        proceed;
+        when .defined {
+          my $t = typeFromGType($_);
+
+          if $t {
+            $_ = $t;
+            proceed;
+          }
+
+          GLib::Object::Type.new($t);
+          {
+            when $t.fundamental == G_TYPE_OBJECT {
+              $_ = GObject;
+              proceed;
+            }
+
+            when $t.is_a(G_TYPE_ENUM) {
+              $_ = $t.fundamental;
+              proceed;
+            }
+
+            # ... ?
+          }
+        }
+
+        when .defined.not {
+          $_ = $double ?? ( $signed ?? int64 !! uint64 )
+                       !! ( $signed ?? int32 !! uint32 );
+          proceed;
+        }
+
       }
 
       when Num {
@@ -644,6 +687,9 @@ package GLib::Raw::Subs {
       $v = cast(Pointer, $v) unless $v ~~ Pointer;
     }
     $all.not ?? $v !! ($v, \t);
+  }
+
+  sub searchManifestForTypePair (\t) is export {
   }
 
   # Add Role to redefine name of method (guifa++)

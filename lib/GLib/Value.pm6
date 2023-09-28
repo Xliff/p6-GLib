@@ -120,16 +120,7 @@ class GLib::Value {
       message => 'The parameter to typeFromGType must be a type object!'
     ).throw if T.defined;
 
-    do given T {
-      when G_TYPE_UINT    { uint32  }
-      when G_TYPE_INT     { int32   }
-      when G_TYPE_UINT64  { uint64  }
-      when G_TYPE_INT64   { int64   }
-      when G_TYPE_FLOAT   { num32   }
-      when G_TYPE_DOUBLE  { num64   }
-      when G_TYPE_STRING  { Str     }
-      when G_TYPE_POINTER { Pointer }
-    }
+    typeFromGType(T);
   }
 
   method valueFromGType (GTypeEnum $_) is rw {
