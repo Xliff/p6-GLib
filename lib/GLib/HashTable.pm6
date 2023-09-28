@@ -9,6 +9,7 @@ use GLib::Raw::Types;
 use GLib::Raw::HashTable;
 
 use GLib::GList;
+use GLib::Value;
 
 use GLib::Roles::Implementor;
 
@@ -43,8 +44,62 @@ class GLib::HashTable {
   has &!hash_func;
   has %!dict;
 
-  submethod BUILD (:$hash-table, :$!type) {
-    $!h = $hash-table;
+  submethod BUILD (:$hash-table, :$!type, :$dict) {
+    $!h    = $hash-table;
+    %!dict<DICT> = $dict;
+
+    self!make-dictionary-adjustments;
+  }
+
+  # cw: Must have a mechanism to reset the dictionary!
+
+  method !make-dictionary-adjustments {
+    for %!dict<DICT>.pairs {
+      if %!dict<GET>{ .key }{ .value } {
+        next;
+      } else {
+        %!dict<GET>{ .key }:delete;
+      }
+
+      unless %!dict<GET>{ .key } {
+        my ($typed-ptr, $type-pair);
+        my \t = typeFromGType( .value );
+        if t.fundamental == G_TYPE_OBJECT {
+          # cw: Search manifest for proper type pair for <t>
+          $type-pair = searchManifestForTypePair(t);
+        }
+        %!dict<GET>{ .key }{ .value } = sub {
+          my $typed-ptr = fromPointer(
+            type    => t,
+            signed  => t == (G_TYPE_INT, G_TYPE_INT64).any,
+            double  => t == (G_TYPE_DOUBLE, G_TYPE_INT64, G_TYPE_UINT64).any
+          );
+          return propReturnObject($typed-ptr, False, |$type-pair)
+            if $type-pair;
+          $typed-ptr;
+        };
+      }
+
+      if %!dict<SET>{ .key }{ .value } {
+        next;
+      } else {
+        %!dict<SET>{ .key }:delete;
+      }
+
+      unless %!dict<SET>{ .key } {
+        my \t = typeFromGType( .value );
+        t = Nil unless t.defined.not;
+        %!dict<GET>{ .key }{ .value } = -> $v is rw {
+          $v .= getImplementorValue if $v ~~ GLib::Roles::Implementor;
+          my %tpo = (
+            signed  => t == (G_TYPE_INT, G_TYPE_INT64).any,
+            double  => t == (G_TYPE_UINT64, G_TYPE_INT64, G_TYPE_DOUBLE).any
+          );
+          %tpo<typed> = t unless t === Nil;
+          toPointer($v, |%tpo)
+        };
+      }
+    }
   }
 
   submethod DESTROY {
@@ -56,13 +111,42 @@ class GLib::HashTable {
   { $!h }
 
   multi method new (GHashTable $hash-table) {
-    $hash-table ?? self.bless( :$hash-table ) !! Nil
+      $hash-table ?? self.bless( :$hash-table ) !! Nil
   }
   multi method new (@key-pairs) {
     samewith( @key-pairs.rotor(2).map( |* ).Hash );
   }
   multi method new (Positional $keys, Positional $values) {
     samewith( ($keys Z $values).map( |* ).Hash )
+  }
+
+  multi method new ( :$dict is required, :$key-type = 'Str' ) {
+    my $ht = do given $key-type {
+      when 'Str' {
+        g_hash_table_new( &g_str_hash, &g_str_equal );
+      }
+
+      default {
+        X::GLib::Hash::UnknownKeyType.new( .^name ).throw;
+      }
+    }
+
+    my $o = samewith($ht);
+    my $d = GLib::HashTable::Str.new($dict, type => G_TYPE_UINT64);
+    # cw: We are using a type dictionary, so communicate that to C using a
+    #     key value that is likely not to be repeated by callers.
+    $o.insert('__«DICT»__', $d.GHashTable, :no-warn);
+    $o;
+  }
+  multi method new (
+     %table where *.elems,
+    :$dict                 is required,
+    :$key-type                          = 'Str'
+  ) {
+    my $o = samewith(:$dict, :$key-type);
+    return unless $o;
+    $o{ .key } = .value for %table.pairs;
+    $o;
   }
 
   # Really, the only thing that's needed.
@@ -77,7 +161,7 @@ class GLib::HashTable {
   #   :$val-signed   = False,
   #   :$variant      = False
   # ) {
-  #   my $o = GLib::HashTable::String.new(&g_str_hash, &g_str_equal);
+  #   my $o = GLib::HashTable.new(&g_str_hash, &g_str_equal);
   #   for %table.keys {
   #     my $v = %table{$_};
   #
@@ -326,11 +410,23 @@ class GLib::HashTable {
   # Must provide a mechanism for setting this dictionary for when the
   # GHashTable is created by C.
   multi method insert (gpointer $key, gpointer $value) {
-    so g_hash_table_insert($!h, $key, $value);
+    my $v;
+    $v = do if %!dict{ cast(Str, $key) }<SET> -> $sh {
+      $sh.values.head($value);
+    } else {
+      $value;
+    }
+    g_hash_table_insert($!h, $key, $v);
   }
 
   method lookup (gpointer $key) {
-    g_hash_table_lookup($!h, $key);
+    my $p = g_hash_table_lookup($!h, $key);
+
+    do if %!dict{ cast(Str, $key) }<GET> -> $gh {
+      $gh.values.head($p);
+    } else {
+      $p;
+    }
   }
 
   method lookup_extended (gpointer $lookup_key) {
@@ -361,7 +457,14 @@ class GLib::HashTable {
   }
 
   method replace (gpointer $key, gpointer $value) {
-    g_hash_table_replace($!h, $key, $value);
+    my $v;
+    $v = do if %!dict{ cast(Str, $key) }<SET> -> $sh {
+      $sh.values.head($value);
+    } else {
+      $value;
+    }
+
+    g_hash_table_replace($!h, $key, $v);
   }
 
   method size {
@@ -462,7 +565,7 @@ class GLib::HashTable::String is GLib::HashTable {
       returns uint32
       is native(glib)
       is symbol('g_hash_table_insert')
-      { * }
+    { * }
 
     so g_hash_table_insert_str(self.GHashTable,
       newCArray(Str, $key),
@@ -475,7 +578,7 @@ class GLib::HashTable::String is GLib::HashTable {
       returns CArray[uint8]
       is native(glib)
       is symbol('g_hash_table_lookup')
-      { * }
+    { * }
 
     Buf.new(
       nullTerminatedBuffer(
@@ -499,9 +602,9 @@ class GLib::HashTable::String is GLib::HashTable {
       CArray[uint8] $value
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_lookup_extended')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_lookup_extended')
+    { * }
 
 
     my $rv = g_hash_table_lookup_extended_str(
@@ -517,9 +620,9 @@ class GLib::HashTable::String is GLib::HashTable {
   method remove (Str() $key) {
     sub g_hash_table_remove_str (GHashTable, CArray[uint8] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_remove')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_remove')
+    { * }
 
     so g_hash_table_remove_str( self.GHashTable, newCArray(Str, $key) );
   }
@@ -531,9 +634,9 @@ class GLib::HashTable::String is GLib::HashTable {
       CArray[uint8] $v
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_replace')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_replace')
+    { * }
 
     so g_hash_table_replace_str(
       self.GHashTable,
@@ -545,9 +648,9 @@ class GLib::HashTable::String is GLib::HashTable {
   method steal (Str() $key) {
     sub g_hash_table_steal_str(GHashTable, CArray[uint8] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_steal')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_steal')
+    { * }
 
     g_hash_table_steal_str( self.GHashTable, newCArray(Str, $key) );
   }
@@ -566,9 +669,9 @@ class GLib::HashTable::Integer is GLib::HashTable {
   method add (Int() $key) {
     sub g_hash_table_add_int(GHashTable, CArray[gint] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_add')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_add')
+    { * }
 
     so g_hash_table_add_int(
       self.GHashtTable,
@@ -579,9 +682,9 @@ class GLib::HashTable::Integer is GLib::HashTable {
   method contains (Int() $key) {
     sub g_hash_table_contains_int (GHashTable, CArray[gint] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_contains')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_contains')
+    { * }
 
     so g_hash_table_contains_int( self.GHashTable, $key);
   }
@@ -589,9 +692,9 @@ class GLib::HashTable::Integer is GLib::HashTable {
   multi method insert (Int() $key, Int() $value) {
     sub g_hash_table_insert_int(GHashTable, CArray[gint] $k, CArray[gint] $v)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_insert')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_insert')
+    { * }
 
     so g_hash_table_insert_int(
       self.GHashTable,
@@ -603,9 +706,9 @@ class GLib::HashTable::Integer is GLib::HashTable {
   method lookup (Int() $key) {
     sub g_hash_table_lookup_int(GHashTable, CArray[gint] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_lookup')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_lookup')
+    { * }
 
     my $l = g_hash_table_lookup_int(self.GHashTable, $key);
     $l ?? $l[0] !! Nil;
@@ -626,9 +729,9 @@ class GLib::HashTable::Integer is GLib::HashTable {
       CArray[gint] $value
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_lookup_extended')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_lookup_extended')
+    { * }
 
 
     my $rv = g_hash_table_lookup_extended_int(
@@ -644,9 +747,9 @@ class GLib::HashTable::Integer is GLib::HashTable {
   method remove (Int() $key) {
     sub g_hash_table_remove_int(GHashTable, CArray[gint] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_remove')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_remove')
+    { * }
 
     so g_hash_table_remove_int(
       self.GHashTable,
@@ -661,9 +764,9 @@ class GLib::HashTable::Integer is GLib::HashTable {
       CArray[gint] $v
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_replace')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_replace')
+    { * }
 
     so g_hash_table_replace_int(
       self.GHashTable,
@@ -675,11 +778,145 @@ class GLib::HashTable::Integer is GLib::HashTable {
   method steal (Int() $key) {
     sub g_hash_table_steal_int(GHashTable, CArray[gint] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_steal')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_steal')
+    { * }
 
     g_hash_table_steal_int(self.GHashTable, $key);
+  }
+
+}
+
+class GLib::HashTable::UInt64 is GLib::HashTable {
+  method new {
+    nextwith(&g_int_hash, &g_int_equal);
+  }
+
+  method getTypePair {
+    GHashTable, GLib::HashTable::UInt64
+  }
+
+  method add (Int() $key) {
+    sub g_hash_table_add_uint64(GHashTable, CArray[guint64] $k)
+      returns uint32
+      is      native(glib)
+      is      symbol('g_hash_table_add')
+    { * }
+
+    so g_hash_table_add_uint64(
+      self.GHashtTable,
+      $key
+    );
+  }
+
+  method contains (Int() $key) {
+    sub g_hash_table_contains_uint64 (GHashTable, CArray[guint64] $k)
+      returns uint32
+      is      native(glib)
+      is      symbol('g_hash_table_contains')
+    { * }
+
+    so g_hash_table_contains_uint64( self.GHashTable, $key);
+  }
+
+  multi method insert (Int() $key, Int() $value) {
+    sub g_hash_table_insert_uint64(
+      GHashTable,
+      CArray[guint64] $k,
+      CArray[guint64] $v
+    )
+      returns uint32
+      is      native(glib)
+      is      symbol('g_hash_table_insert')
+    { * }
+
+    so g_hash_table_insert_uint64(
+      self.GHashTable,
+      newCArray(uint64, $key),
+      newCArray(uint64, $value)
+    );
+  }
+
+  method lookup (Int() $key) {
+    sub g_hash_table_lookup_int64(GHashTable, CArray[guint64] $k)
+      returns uint32
+      is      native(glib)
+      is      symbol('g_hash_table_lookup')
+    { * }
+
+    my $l = g_hash_table_lookup_int64(self.GHashTable, $key);
+    $l ?? $l[0] !! Nil;
+  }
+
+  proto method lookup_extended (|)
+    is also<lookup-extended>
+  { * }
+
+  multi method lookup_extended (Int() $lookup_key, :$all = False) {
+    my @return-pointers;
+    @return-pointers[0, 1] = newCArray(CArray[guint64]) xx 2;
+
+    sub g_hash_table_lookup_extended_uint64 (
+      GHashTable    $hash_table,
+      CArray[guint64] $lookup_key,
+      CArray[guint64] $orig_key,
+      CArray[guint64] $value
+    )
+      returns uint32
+      is      native(glib)
+      is      symbol('g_hash_table_lookup_extended')
+    { * }
+
+
+    my $rv = g_hash_table_lookup_extended_uint64(
+      self.GHashTable,
+      newCArray(CArray[guint64], $lookup_key),
+      @return-pointers[0],
+      @return-pointers[1]
+    );
+
+    $all ?? $rv !! ($rv, |@return-pointers);
+  }
+
+  method remove (Int() $key) {
+    sub g_hash_table_remove_uint64(GHashTable, CArray[guint64] $k)
+      returns uint32
+      is      native(glib)
+      is      symbol('g_hash_table_remove')
+    { * }
+
+    so g_hash_table_remove_uint64(
+      self.GHashTable,
+      newCArray(CArray[guint64], $key )
+    );
+  }
+
+  method replace (Int() $key, Int() $value) {
+    sub g_hash_table_replace_uint64(
+      GHashTable,
+      CArray[guint64] $k,
+      CArray[guint64] $v
+    )
+      returns uint32
+      is      native(glib)
+      is      symbol('g_hash_table_replace')
+    { * }
+
+    so g_hash_table_replace_uint64(
+      self.GHashTable,
+      newCArray(CArray[guint64], $key),
+      newCArray(CArray[guint64], $value)
+    );
+  }
+
+  method steal (Int() $key) {
+    sub g_hash_table_steal_int64(GHashTable, CArray[guint64] $k)
+      returns uint32
+      is      native(glib)
+      is      symbol('g_hash_table_steal')
+    { * }
+
+    g_hash_table_steal_int64(self.GHashTable, $key);
   }
 
 }
@@ -696,9 +933,9 @@ class GLib::HashTable::Int64 is GLib::HashTable {
   method add (Int() $key) {
     sub g_hash_table_add_int64(GHashTable, CArray[gint64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_add')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_add')
+    { * }
 
     so g_hash_table_add_int64(
       self.GHashtTable,
@@ -709,9 +946,9 @@ class GLib::HashTable::Int64 is GLib::HashTable {
   method contains (Int() $key) {
     sub g_hash_table_contains_int64 (GHashTable, CArray[gint64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_contains')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_contains')
+    { * }
 
     so g_hash_table_contains_int64( self.GHashTable, $key);
   }
@@ -719,9 +956,9 @@ class GLib::HashTable::Int64 is GLib::HashTable {
   multi method insert (Int() $key, Int() $value) {
     sub g_hash_table_insert_int64(GHashTable, CArray[gint64] $k, CArray[gint64] $v)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_insert')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_insert')
+    { * }
 
     so g_hash_table_insert_int64(
       self.GHashTable,
@@ -733,9 +970,9 @@ class GLib::HashTable::Int64 is GLib::HashTable {
   method lookup (Int() $key) {
     sub g_hash_table_lookup_int64(GHashTable, CArray[gint64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_lookup')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_lookup')
+    { * }
 
     my $l = g_hash_table_lookup_int64(self.GHashTable, $key);
     $l ?? $l[0] !! Nil;
@@ -756,9 +993,9 @@ class GLib::HashTable::Int64 is GLib::HashTable {
       CArray[gint64] $value
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_lookup_extended')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_lookup_extended')
+    { * }
 
 
     my $rv = g_hash_table_lookup_extended_int64(
@@ -774,9 +1011,9 @@ class GLib::HashTable::Int64 is GLib::HashTable {
   method remove (Int() $key) {
     sub g_hash_table_remove_int64(GHashTable, CArray[gint64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_remove')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_remove')
+    { * }
 
     so g_hash_table_remove_int64(
       self.GHashTable,
@@ -791,9 +1028,9 @@ class GLib::HashTable::Int64 is GLib::HashTable {
       CArray[gint64] $v
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_replace')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_replace')
+    { * }
 
     so g_hash_table_replace_int64(
       self.GHashTable,
@@ -805,9 +1042,9 @@ class GLib::HashTable::Int64 is GLib::HashTable {
   method steal (Int() $key) {
     sub g_hash_table_steal_int64(GHashTable, CArray[gint64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_steal')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_steal')
+    { * }
 
     g_hash_table_steal_int64(self.GHashTable, $key);
   }
@@ -826,9 +1063,9 @@ class GLib::HashTable::Float is GLib::HashTable {
   method add (Num() $key) {
     sub g_hash_table_add_float(GHashTable, CArray[num32] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_add')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_add')
+    { * }
 
     so g_hash_table_add_float(
       self.GHashtTable,
@@ -839,9 +1076,9 @@ class GLib::HashTable::Float is GLib::HashTable {
   method contains (Num() $key) {
     sub g_hash_table_contains_float (GHashTable, CArray[num32] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_contains')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_contains')
+    { * }
 
     so g_hash_table_contains_float( self.GHashTable, $key);
   }
@@ -849,9 +1086,9 @@ class GLib::HashTable::Float is GLib::HashTable {
   multi method insert (Num() $key, Num() $value) {
     sub g_hash_table_insert_float(GHashTable, CArray[num32] $k, CArray[num32] $v)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_insert')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_insert')
+    { * }
 
     so g_hash_table_insert_float(
       self.GHashTable,
@@ -863,9 +1100,9 @@ class GLib::HashTable::Float is GLib::HashTable {
   method lookup (Num() $key) {
     sub g_hash_table_lookup_float(GHashTable, CArray[num32] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_lookup')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_lookup')
+    { * }
 
     my $l = g_hash_table_lookup_float(self.GHashTable, $key);
     $l ?? $l[0] !! Nil;
@@ -886,9 +1123,9 @@ class GLib::HashTable::Float is GLib::HashTable {
       CArray[num32] $value
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_lookup_extended')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_lookup_extended')
+    { * }
 
 
     my $rv = g_hash_table_lookup_extended_float(
@@ -904,9 +1141,9 @@ class GLib::HashTable::Float is GLib::HashTable {
   method remove (Num() $key) {
     sub g_hash_table_remove_float(GHashTable, CArray[num32] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_remove')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_remove')
+    { * }
 
     so g_hash_table_remove_float(
       self.GHashTable,
@@ -921,9 +1158,9 @@ class GLib::HashTable::Float is GLib::HashTable {
       CArray[num32] $v
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_replace')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_replace')
+    { * }
 
     so g_hash_table_replace_float(
       self.GHashTable,
@@ -935,9 +1172,9 @@ class GLib::HashTable::Float is GLib::HashTable {
   method steal (Num() $key) {
     sub g_hash_table_steal_float(GHashTable, CArray[num32] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_steal')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_steal')
+    { * }
 
     g_hash_table_steal_float(self.GHashTable, $key);
   }
@@ -956,9 +1193,9 @@ class GLib::HashTable::Double is GLib::HashTable {
   method add (Num() $key) {
     sub g_hash_table_add_double(GHashTable, CArray[num64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_add')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_add')
+    { * }
 
     so g_hash_table_add_double(
       self.GHashtTable,
@@ -969,9 +1206,9 @@ class GLib::HashTable::Double is GLib::HashTable {
   method contains (Num() $key) {
     sub g_hash_table_contains_double (GHashTable, CArray[num64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_contains')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_contains')
+    { * }
 
     so g_hash_table_contains_double( self.GHashTable, $key);
   }
@@ -979,9 +1216,9 @@ class GLib::HashTable::Double is GLib::HashTable {
   multi method insert (Num() $key, Num() $value) {
     sub g_hash_table_insert_double(GHashTable, CArray[num64] $k, CArray[num64] $v)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_insert')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_insert')
+    { * }
 
     so g_hash_table_insert_double(
       self.GHashTable,
@@ -993,9 +1230,9 @@ class GLib::HashTable::Double is GLib::HashTable {
   method lookup (Num() $key) {
     sub g_hash_table_lookup_double(GHashTable, CArray[num64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_lookup')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_lookup')
+    { * }
 
     my $l = g_hash_table_lookup_double(self.GHashTable, $key);
     $l ?? $l[0] !! Nil;
@@ -1016,9 +1253,9 @@ class GLib::HashTable::Double is GLib::HashTable {
       CArray[num64] $value
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_lookup_extended')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_lookup_extended')
+    { * }
 
 
     my $rv = g_hash_table_lookup_extended_double(
@@ -1034,9 +1271,9 @@ class GLib::HashTable::Double is GLib::HashTable {
   method remove (Num() $key) {
     sub g_hash_table_remove_double(GHashTable, CArray[num64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_remove')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_remove')
+    { * }
 
     so g_hash_table_remove_double(
       self.GHashTable,
@@ -1051,9 +1288,9 @@ class GLib::HashTable::Double is GLib::HashTable {
       CArray[num64] $v
     )
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_replace')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_replace')
+    { * }
 
     so g_hash_table_replace_double(
       self.GHashTable,
@@ -1065,9 +1302,9 @@ class GLib::HashTable::Double is GLib::HashTable {
   method steal (Num() $key) {
     sub g_hash_table_steal_double(GHashTable, CArray[num64] $k)
       returns uint32
-      is native(glib)
-      is symbol('g_hash_table_steal')
-      { * }
+      is      native(glib)
+      is      symbol('g_hash_table_steal')
+    { * }
 
     g_hash_table_steal_double(self.GHashTable, $key);
   }
