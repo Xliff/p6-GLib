@@ -47,6 +47,10 @@ our role GLib::Roles::Implementor {
     findProperImplementor(self.^attributes);
   }
 
+  method getImplementorValue {
+    self.getProperImplementor.get_value(self);
+  }
+
   method getTypePair {
     my \ft = self.getImplementor.type;
 
