@@ -2,7 +2,9 @@ use v6.c;
 
 use NativeCall;
 
-use GLib::Raw::Types;
+use GLib::Raw::Distro;
+use GLib::Raw::Definitions;
+use GLib::Raw::Enums;
 
 unit package GLib::Raw::Tree;
 
