@@ -338,7 +338,7 @@ class GLib::HashTable {
 
   # cw: Provided for role Associative. It is best not to alias get_keys()
   method keys {
-    self.get_keys
+    self.get_keys_as_array[ ^self.size ];
   }
 
   method elems {
@@ -364,10 +364,14 @@ class GLib::HashTable {
     samewith($, :$type, :$object);
   }
   multi method get_keys_as_array ($length is rw, :$type = Str, :$object) {
-    my guint $l = $length;
+    my guint $l = 0;
 
-    my $ar = g_hash_table_get_keys_as_array($!h, $l)
-      but GLib::Roles::TypedBuffer[$type];
+    my $ar = g_hash_table_get_keys_as_array($!h, $l);
+    if $type === Str {
+      $ar = cast( CArray[Str], $ar );
+      return CArrayToArray($ar);
+    }
+    $ar = $ar but GLib::Roles::TypedBuffer[$type];
     $length = $l;
     $object === Nil ?? $ar.Array !! $ar.Array.map({ $object.new($_) });
   }
@@ -498,7 +502,7 @@ class GLib::HashTable {
 
 
   method pairs (:$reversed = False) {
-    my ($k, $v) = (self.get_keys, self.get_values);
+    my ($k, $v) = (self.get_keys_as_array, self.get_values);
 
     do for ^self.elems {
       $reversed.not ?? Pair.new( $k[$_], $v[$_] )
@@ -574,17 +578,15 @@ class GLib::HashTable::String is GLib::HashTable {
   }
 
   method lookup (Str() $key, :$encoding = 'utf8') {
-    sub g_hash_table_lookup_str(GHashTable, CArray[uint8] $k)
+    sub g_hash_table_lookup_str(GHashTable, gpointer $k)
       returns CArray[uint8]
-      is native(glib)
-      is symbol('g_hash_table_lookup')
+      is      native(glib)
+      is      symbol('g_hash_table_lookup')
     { * }
 
-    Buf.new(
-      nullTerminatedBuffer(
-        g_hash_table_lookup_str( self.GHashTable, newCArray(Str, $key) )
-      )
-    ).decode($encoding);
+    my $lr = g_hash_table_lookup_str( self.GHashTable, toPointer($key) );
+
+    Buf.new( nullTerminatedBuffer($lr) ).decode($encoding);
   }
 
   proto method lookup_extended (|)
