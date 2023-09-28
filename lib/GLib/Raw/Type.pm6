@@ -32,15 +32,15 @@ sub g_type_add_instance_private (GType $class_type, gsize $private_size)
 
 sub g_type_add_interface_check (
   gpointer $check_data,
-  &check_func (Pointer, Pointer)
+           &check_func (Pointer, Pointer)
 )
   is native(gobject)
   is export
 { * }
 
 sub g_type_add_interface_dynamic (
-  GType $instance_type,
-  GType $interface_type,
+  GType       $instance_type,
+  GType       $interface_type,
   GTypePlugin $plugin
 )
   is native(gobject)
@@ -48,8 +48,8 @@ sub g_type_add_interface_dynamic (
 { * }
 
 sub g_type_add_interface_static (
-  GType $instance_type,
-  GType $interface_type,
+  GType          $instance_type,
+  GType          $interface_type,
   GInterfaceInfo $info
 )
   is native(gobject)
@@ -85,7 +85,7 @@ sub g_type_instance_is_a (
 
 sub g_type_check_instance_is_fundamentally_a (
   GTypeInstance $instance,
-  GType $fundamental_type
+  GType         $fundamental_type
 )
   returns uint32
   is native(gobject)
@@ -123,7 +123,7 @@ sub g_type_class_add_private (gpointer $g_class, gsize $private_size)
 
 sub g_type_class_adjust_private_offset (
   gpointer $g_class,
-  gint $private_size_or_offset
+  gint     $private_size_or_offset
 )
   is native(gobject)
   is export
