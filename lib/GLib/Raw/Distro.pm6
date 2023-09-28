@@ -42,11 +42,19 @@ my %glib-adjustments = do {
   ).Hash;
 }
 
-my %unix-library-adjustments = (
+my %library-adjustments = (
   # cw: Adjustments are the same for both!
   glib    => %glib-adjustments,
   gobject => %glib-adjustments
 ).Hash;
+
+sub add-distro-adjustments (%adj) is export {
+  %library-adjustments.append: %adj;
+}
+
+sub library-adjustments is export {
+  %library-adjustments.Map;
+}
 
 multi sub version-by-distro ($lib) is export {
   state %cache;
@@ -86,25 +94,25 @@ multi sub version-by-distro ($lib, :$windows is required) is export {
   # NYI! This is probably going to need a Cygwin and an MSVC check!
 }
 
-sub adjustments is export {
-  %unix-library-adjustments
+sub glib-adjustments is export {
+  %glib-adjustments.Map;
 }
 
 multi sub version-by-distro ($prefix is copy, :$linux is required) is export {
   state %cache;
 
   my $lr = qqx{which lsb_release}.chomp;
-  say "PREFIX: $prefix\nLSB_RELEASE: $lr" if $DEBUG;
+  say "PREFIX: $prefix\nLSB_RELEASE: $lr"; # if $DEBUG;
   my ($distro, $codename) =
     ( qqx{$lr -d -s}.split(/\s/)[0], qqx{$lr -c -s} )».chomp;
 
-  say "DISTRO: $distro\nCODENAME: $codename" if $DEBUG;
+  say "DISTRO: $distro\nCODENAME: $codename"; # if $DEBUG;
 
   say 'LIBRARY SETTING: ' ~
-      %unix-library-adjustments{$prefix}<linux>.gist if $DEBUG;
+      %library-adjustments{$prefix}<linux>.gist; # if $DEBUG;
 
   say 'DISTRO SETTING: ' ~
-      %unix-library-adjustments{$prefix}<linux>{$distro}.gist if $DEBUG;
+      %library-adjustments{$prefix}<linux>{$distro}.gist;# if $DEBUG;
 
   my ($lib, $lib-append, $version);
 
@@ -113,7 +121,7 @@ multi sub version-by-distro ($prefix is copy, :$linux is required) is export {
   sub getDistroValue ($part) {
     my $value;
 
-    given %unix-library-adjustments {
+    given %library-adjustments {
       $value = .{$prefix}<linux><DEFAULTS>{$part}
         if .{$prefix}<linux><DEFAULTS>{$part};
       $value = .{$prefix}<linux>{$distro}<DEFAULTS>{$part}
