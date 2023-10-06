@@ -129,8 +129,11 @@ package GLib::Raw::Subs {
   }
 
   # cw: Coerces the value of $a to a value within $r.
-  sub clamp($a, Range() $r) is export {
-    max( $r.min, min($a, $r.max) )
+  multi sub clamp($a, $l, $h) is export {
+    max( $l, min($a, $h) )
+  }
+  multi sub clamp($a, Range() $r) is export {
+    samewith($a, $r.min, $r.max);
   }
 
   sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
@@ -773,7 +776,13 @@ package GLib::Raw::Subs {
   # cw: Still some concern over the this....
   sub nullTerminatedBuffer (CArray[uint8] $data) is export {
     my $s = nullTerminatedArraySize($data);
-    CArray[uint8].new( |$data[^$s] );
+    my $c = CArray[uint8].new;
+    my $i = 0;
+    for $data[^$s] {
+      say "NTB: { $_ }/{ .chr }" if $DEBUG;
+      $c[$i++] =  $_ if .defined;
+    }
+    $c;
   }
 
   sub newCArray (
