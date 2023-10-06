@@ -265,7 +265,3 @@ sub returnGSList (
 {
   returnGenericList(GLib::GSList, $gl, $glist, $raw, $T, $O, :$seq, :$ref);
 }
-
-BEGIN {
-  say "»» Please use GLib::GList if possible, since it is binary compatible! ««"
-}
