@@ -198,6 +198,6 @@
       "DOM::Tiny"
     ],
     "support": {"source": null},
-    "auth": "github:Xliff",
+    "auth": "cpan:CBWOOD",
     "authors": ["clifton.wood@gmail.com"]
 }
