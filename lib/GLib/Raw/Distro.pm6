@@ -102,17 +102,17 @@ multi sub version-by-distro ($prefix is copy, :$linux is required) is export {
   state %cache;
 
   my $lr = qqx{which lsb_release}.chomp;
-  say "PREFIX: $prefix\nLSB_RELEASE: $lr"; # if $DEBUG;
+  say "PREFIX: $prefix\nLSB_RELEASE: $lr" if $DEBUG;
   my ($distro, $codename) =
     ( qqx{$lr -d -s}.split(/\s/)[0], qqx{$lr -c -s} )».chomp;
 
-  say "DISTRO: $distro\nCODENAME: $codename"; # if $DEBUG;
+  say "DISTRO: $distro\nCODENAME: $codename" if $DEBUG;
 
   say 'LIBRARY SETTING: ' ~
-      %library-adjustments{$prefix}<linux>.gist; # if $DEBUG;
+      %library-adjustments{$prefix}<linux>.gist if $DEBUG;
 
   say 'DISTRO SETTING: ' ~
-      %library-adjustments{$prefix}<linux>{$distro}.gist;# if $DEBUG;
+      %library-adjustments{$prefix}<linux>{$distro}.gist if $DEBUG;
 
   my ($lib, $lib-append, $version);
 
