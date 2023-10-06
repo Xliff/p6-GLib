@@ -12,6 +12,6 @@ say "There are { $hash.size } keys in the hash table";
 say "Jazzy likes { $hash<Jazzy> }";
 say "Mr Darcy gives out { $hash{'Mr Darcy'} }";
 
-say $hash.get-keys;
+say $hash.get-keys-as-array;
 say $hash.get-values;
 say $hash.pairs;

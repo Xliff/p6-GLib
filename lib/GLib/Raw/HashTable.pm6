@@ -154,9 +154,9 @@ sub g_hash_table_get_keys (GHashTable $hash_table)
 
 sub g_hash_table_get_keys_as_array (
   GHashTable $hash_table,
-  guint $length is rw
+  guint      $length      is rw
 )
-  returns Pointer
+  returns CArray[Pointer]
   is native(glib)
   is export
 { * }

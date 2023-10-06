@@ -579,14 +579,19 @@ class GLib::HashTable::String is GLib::HashTable {
 
   method lookup (Str() $key, :$encoding = 'utf8') {
     sub g_hash_table_lookup_str(GHashTable, gpointer $k)
-      returns CArray[uint8]
+      #returns CArray[uint8]
+      returns Pointer
       is      native(glib)
       is      symbol('g_hash_table_lookup')
     { * }
 
     my $lr = g_hash_table_lookup_str( self.GHashTable, toPointer($key) );
 
-    Buf.new( nullTerminatedBuffer($lr) ).decode($encoding);
+    return Nil unless +$lr.&p;
+
+    Buf.new(
+      nullTerminatedBuffer( cast(CArray[uint8], $lr) )
+    ).decode($encoding);
   }
 
   proto method lookup_extended (|)

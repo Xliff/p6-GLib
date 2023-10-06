@@ -1271,8 +1271,8 @@ role GLib::Roles::Object::Registrar[$n] {
 
 my %object-registrar;
 
-sub add-object-registrar( GLib::Roles::Object::Registrar %r ) {
-  %object-registrar{ %r.registers-for } := %r;
+sub add-object-registrar( GLib::Roles::Object::Registrar $r ) is export {
+  %object-registrar{ $r.registers-for } := $r;
 }
 
 
