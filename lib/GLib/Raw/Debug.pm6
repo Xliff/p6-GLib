@@ -1,5 +1,9 @@
 our $DEBUG            is export  = 0;
 
+sub checkDEBUG ($d = 1) is export {
+  $DEBUG >= $d;
+}
+
 INIT {
 
   if %*ENV<P6_GLIB_DEBUG> {
