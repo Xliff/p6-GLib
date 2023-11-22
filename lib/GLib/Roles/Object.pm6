@@ -6,6 +6,7 @@ use GLib::Object::IsType;
 use GLib::Raw::Types;
 use GLib::Raw::Traits;
 use GLib::Raw::Signal;
+use GLib::Raw::Debug;
 use GLib::Object::Raw::Binding;
 
 use GLib::Array;
@@ -179,7 +180,7 @@ role GLib::Roles::Object {
     :$TYPE,
     :pairs(:$p) is required
   ) {
-    if $DEBUG {
+    if checkDEBUG() {
       say "P: \@args";
       say "\tK: { .key } / V: { .value // '<<NIL!>' }" for @args;
     }
@@ -191,7 +192,7 @@ role GLib::Roles::Object {
   multi method new_object_with_properties (:$RAW = False, :$TYPE, *%props) {
     my (@names, @values);
 
-    if $DEBUG {
+    if checkDEBUG() {
       say "P: \%props";
       say "\tK: { .key } / V: { .value // '<<NIL!>>' }" for %props.pairs;
     }
@@ -220,8 +221,8 @@ role GLib::Roles::Object {
     my guint $n = $num-props;
     my GType $t = $type // ::?CLASS.get_type;
 
-    say "T: { GLib::Object::Type.new($t).name }" if $DEBUG;
-    say "CLASS = { ::?CLASS.^name }";
+    say "T: { GLib::Object::Type.new($t).name }" if checkDEBUG(2);
+    say "CLASS = { ::?CLASS.^name }"             if checkDEBUG(2);
 
     my $object = g_object_new_with_properties(
       $t,
@@ -230,8 +231,8 @@ role GLib::Roles::Object {
       $values
     );
 
-    say "Object name: { ::?CLASS.^name }";
-    say "Object value: { $$object }";
+    say "Object name: { ::?CLASS.^name }" if checkDEBUG(2);
+    say "Object value: { $$object }"      if checkDEBUG(2);
 
     $object ?? ( $raw ?? $object !! self.new( $object, :!ref ) )
             !! Nil;
@@ -255,8 +256,14 @@ role GLib::Roles::Object {
   multi method setAttributes ($names, $values) {
     for $names.pairs {
       say "Setting { .value } to {
-           $values[ .key ].gist } for a { self.^name } object";
-      self."{ .value }"() = $values[ .key ];
+           $values[ .key ].gist } for a { self.^name } object"
+      if checkDEBUG(2);
+      if self.^can( .value ) {
+        self."{ .value }"() = $values[ .key ];
+      } else {
+        warn "Unknown key '{ .value }' used in .setAttributes!";
+        Backtrace.new.concise.say;
+      }
     }
     self;
   }
@@ -265,16 +272,16 @@ role GLib::Roles::Object {
   method resolveCreationOptions (*%options) {
     my (%new-opts, %not-found);
 
-    say "O: { %options.keys }" if $DEBUG;
+    say "O: { %options.keys }" if checkDEBUG(3);
     for %options.pairs -> $a {
-      say "K: { $a.key }" if $DEBUG;
+      say "K: { $a.key }" if checkDEBUG(3);
 
       next if $a.value ~~ (GValue, GLib::Value).any;
       if self.attributes( $a.key ) -> $attr {
         say "V: { $attr !~~ Array
                     ?? $attr
                     !! ($attr[0], $attr[1].^name, $attr[2]).join(', ') }"
-        if $DEBUG;
+        if checkDEBUG(3);
 
         # Available for GLib::Object descendents
         given $attr {
@@ -351,7 +358,7 @@ role GLib::Roles::Object {
 
       method AT-KEY (\k) {
         my $key = k.split(/ <[_\ -]> /).map( *.lc.tc ).join('-');
-        say "Signal: { $key }" if $DEBUG;
+        say "Signal: { $key }" if checkDEBUG();
         $s."{ $key }"()
       }
     }).new;
@@ -402,9 +409,9 @@ role GLib::Roles::Object {
   # }
 
   method !setObject ($obj) {
-    say "SetObject ({ self }): { $obj }" if $DEBUG;
+    say "SetObject ({ self }): { $obj }" if checkDEBUG;
     $!o = $obj ~~ GObject ?? $obj !! cast(GObject, $obj);
-    say "ObjectSet ({ self })-+-: { $!o }" if $DEBUG;
+    say "ObjectSet ({ self })-+-: { $!o }" if checkDEBUG;
     $!data-proxy = ProvidesData.new(+$!o.p);
 
     # Raku reference count of a GObject
@@ -423,6 +430,7 @@ role GLib::Roles::Object {
 
   method equals (GObject() $b) { +self.p == +$b.p }
   method is     (GObject() $b) { self.equals($b)  }
+  method eq     (GObject() $b) { self.equals($b)  }
 
   method notify ($detail?) {
     my $sig-name = 'notify';
@@ -559,6 +567,22 @@ role GLib::Roles::Object {
     samewith($source_property, $target, :create);
   }
   multi method bind (
+    *%args,
+    :$create                    = True,
+    :$default                   = False,
+    :bi(:both(:$dual))          = False,
+    :invert(:$not)              = False,
+    :$flags            is copy  = 0
+  ) {
+    for %args.pairs {
+      samewith(
+        .key,
+        .value,
+        flags => self!processFlags($default, $create, $dual, $not, $flags)
+      );
+    }
+  }
+  multi method bind (
     Str()      $source_property,
     GObject()  $target,
               :$create                    = True,
@@ -683,7 +707,8 @@ role GLib::Roles::Object {
     Int()     $flags
   ) {
     say "Binding { $source_property } of { self } to {
-         $target_property } of { $target } with flags of { $flags }";
+         $target_property } of { $target } with flags of { $flags }"
+    if checkDEBUG;
 
     g_object_bind_property(
       $!o,
