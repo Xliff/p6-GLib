@@ -34,6 +34,19 @@ package GLib::Raw::Subs {
     is native
   { * }
 
+  # cw: Because using "-> *@a { ... } for callbacks was pissing me off...
+  #     ... so pick your poison...
+  sub SUB  (&block, :b(:$block) = False) is export {
+    my $p = &block.signature.params.elems;
+
+    $block
+      ??  ->   *@a   { $p ?? &block( |@a[ ^$p ] ) !! &block() }
+      !! sub ( *@a ) { $p ?? &block( |@a[ ^$p ] ) !! &block() }
+  }
+  sub CB   (&block, :b(:$block) = False) is export { SUB(&block) }
+  sub DEF  (&block, :b(:$block) = False) is export { SUB(&block) }
+  sub FUNC (&block, :b(:$block) = False) is export { SUB(&block) }
+
   role StructSkipsTest[Str $R] is export {
     method reason { $R }
   }
@@ -134,6 +147,34 @@ package GLib::Raw::Subs {
   }
   multi sub clamp($a, Range() $r) is export {
     samewith($a, $r.min, $r.max);
+  }
+
+  sub lcfirst ($s is copy) is export {
+    my $a := $s.substr-rw(0, 1);
+    $a .= lc;
+    $s;
+  }
+
+  sub ucfirst ($s is copy) is export {
+    my $a := $s.substr-rw(0, 1);
+    $a .= uc;
+    $s;
+  }
+
+  my token lc-word is export { <:lower>+ };
+  my token uc-word is export { <:upper> <:lower>+ };
+
+  sub un-camel ($w, $s = '-', :$lc = True, :$uc = $lc.not) is export {
+    return Nil unless $w ~~ / <lc-word> <uc-word>+ /;
+
+    my &case = $uc ?? &uc !! &lc;
+
+    ( $/<lc-word>, |$/<uc-word> )».Str».&case.join($s);
+  }
+  sub deCamelCase ($w) is export { un-camel($w) }
+
+  sub under-to-dash ($w) is export {
+    $w.subst('_', '-', :g);
   }
 
   sub unstable_get_type($name, &sub, $n is rw, $t is rw) is export {
@@ -845,8 +886,25 @@ package GLib::Raw::Subs {
   }
 
   multi sub firstObject (@original, $object, :$k = False) is export {
-    $k ?? @original.first({ +$_ == +$object }, :k)
-       !! @original.first({ +$_ == +$object });
+    my &c = do given $object {
+      when    ::('GLib::Roles::Object') { -> $_ { $object.is($_)   }        }
+      when    GLib::Roles::Pointers     { -> $_ { +$object === +$_ }        }
+      default                           { -> $_ { $object.WHERE == .WHERE } }
+    }
+
+    $k ?? @original.first(&c, :k) !! @original.first(&c);
+  }
+
+  sub uniqueObjects (*@a) is export {
+    my %h;
+    do gather for @a {
+      take $_ unless %h{ .WHERE };
+      %h{ .WHERE } = True;
+    }
+  }
+
+  sub remove (@list, $object) is export {
+    @list.splice( @list.&firstObject($object, :k), 1 );
   }
 
   # role HashDefault[\T] {
