@@ -82,11 +82,11 @@ class GLib::GList {
   }
   multi method new (
     @list,
-    :$signed   = False,
-    :$double   = False,
-    :$direct   = False,
-    :$encoding = 'utf8',
-    :$typed
+    :$signed       = False,
+    :$double       = False,
+    :$direct       = False,
+    :$encoding     = 'utf8',
+    :type(:$typed)
   ) {
     my $l = GLib::GList.new;
 
