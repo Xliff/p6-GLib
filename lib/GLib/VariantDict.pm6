@@ -5,15 +5,12 @@ use Method::Also;
 use GLib::Raw::Types;
 use GLib::Raw::Variant;
 
-use GLib::Roles::Object;
-
 class GLib::VariantDict {
-  also does GLib::Roles::Object;
 
   has GVariantDict $!vd is implementor handles<p>;
 
   submethod BUILD (:$dict) {
-    self!setObject($!vd = $dict);
+    $!vd = $dict;
   }
 
   method GLib::Raw::Definitions::GVariantDict
