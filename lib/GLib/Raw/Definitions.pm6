@@ -19,7 +19,7 @@ our @ERRORS           is export;
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
 # Forced compile count
-my constant forced = 392;
+my constant forced = 399;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
@@ -131,7 +131,7 @@ constant GLIB_SYSDEF_MSG_DONTROUTE is export = 4;
 
 constant G_PARAM_USER_SHIFT        is export = 8;
 constant G_LOG_DOMAIN              is export = "\0";
-
+constant G_TIME_SPAN_DAY           is export = 86400000000;
 constant G_MAXSIZE                 is export = 2 ** 64 - 1;
 
 class GAsyncQueue              is repr<CPointer> is export does GLib::Roles::Pointers { }
