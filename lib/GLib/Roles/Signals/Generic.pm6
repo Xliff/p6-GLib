@@ -29,12 +29,14 @@ role GLib::Roles::Signals::Generic {
     Nil;
   }
 
-  method create-signal-supply ($signal, $s) {
-    create-signal-supply($s, %!tapped-sigs, $signal);
+  method get-signal-id ($name) {
+    if $.signal-manager{$name} -> $S {
+      $S ~~ GLib::Object::Supplyish ?? $S.signal !! $S.tail;
+    }
   }
 
-  method get-signal-id ($name) {
-    %!signals{$name}[2];
+  method create-signal-supply ($signal, $s) {
+    create-signal-supply($s, %!tapped-sigs, $signal);
   }
 
   # Has this supply been created yet? If True, this is a good indication that
