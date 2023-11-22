@@ -5,7 +5,7 @@ use Method::Also;
 class GLib::Object::Supplyish {
   has $!supply;
   has %!signals;
-  has $!signal;
+  has $.signal;
   has %!taps;
   has @!tap-names;
   has $.enabled    is rw;
@@ -53,7 +53,7 @@ class GLib::Object::Supplyish {
 
     # The CATCH block here means that user-supplied handlers no longer need
     # to specify it. Bonus: It is harmless to existing code that does.
-    %!taps{$name} = $!supply.tap(-> *@a {
+    %!taps{$name} = $!supply.tap( sub (*@a) {
       return unless $!enabled;
 
       # cw: TODO - filter out wrapper from exception frames.
@@ -76,19 +76,27 @@ class GLib::Object::Supplyish {
         }
       }
 
-      my $retVal = &handler(|@a);
+      my $retVal = &handler( |@a );
       # my $r = @a.tail;
       # if $r ~~ ReturnValue && $r.r.defined.not && $retVal.defined {
       #   $r.r = $retVal;
       # }
     });
+    $name;
   }
 
   method list {
     @!tap-names.List;
   }
 
-  method untap (:$name is copy) is also<disconnect> {
+  proto method untap (|)
+    is also<disconnect>
+  { * }
+
+  multi method untap ( :$all is required ) {
+    $.untap( name => $_ ) for $.list;
+  }
+  multi method untap (:$name is copy) {
     $name //= @!tap-names.tail;
     @!tap-names.pop;
     %!taps{$name}.close;
