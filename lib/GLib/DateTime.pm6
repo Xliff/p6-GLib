@@ -108,7 +108,9 @@ class GLib::DateTime {
   ) {
     ::?CLASS.new_from_unix_local($time);
   }
-  method new_from_unix_local (Int() $time) is also<new-from-unix-local> {
+  method new_from_unix_local (Int() $time = 0)
+    is also<new-from-unix-local>
+  {
     my gint64 $t        = $time;
     my        $datetime = g_date_time_new_from_unix_local($t);
 
@@ -116,9 +118,9 @@ class GLib::DateTime {
   }
 
   multi method new (
-    Int() $time,
+    Int() $time  = 0,
 
-    :unix_utc(:$unix-utc)
+    :unix_utc(:$unix-utc) is required
   ) {
     ::?CLASS.new_from_unix_utc($time);
   }
