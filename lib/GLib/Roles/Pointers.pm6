@@ -10,7 +10,7 @@ import GLib::Roles::Implementor;
 BEGIN re-export-everything('GLib::Roles::Implementor');
 
 # Number of times full project has needed to be compiled
-my constant forced = 333;
+my constant forced = 340;
 
 # Mark
 multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) is export {
