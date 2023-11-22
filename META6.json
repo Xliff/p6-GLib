@@ -16,7 +16,7 @@
       "lib/x86_64/linux/tree-helper.so",
       "lib/x86_64/linux/glib-support.so"
     ],
-                                                            "provides": {
+                                                                "provides": {
     "GLib::Roles::Implementor": "lib/GLib/Roles/Implementor.pm6",
     "GLib::Roles::Pointers": "lib/GLib/Roles/Pointers.pm6",
     "GLib::Compat::Definitions": "lib/GLib/Compat/Definitions.pm6",
@@ -66,6 +66,7 @@
     "GLib::Unicode": "lib/GLib/Unicode.pm6",
     "GLib::Uri": "lib/GLib/Uri.pm6",
     "GLib::Utils": "lib/GLib/Utils.pm6",
+    "GLib::VariantDict": "lib/GLib/VariantDict.pm6",
     "GLib::VariantType": "lib/GLib/VariantType.pm6",
     "GLib::Class::Structs": "lib/GLib/Class/Structs.pm6",
     "GLib::Cond": "lib/GLib/Cond.pm6",
@@ -178,7 +179,6 @@
     "GLib::Roles::Object": "lib/GLib/Roles/Object.pm6",
     "GLib::Roles::TypePlugin": "lib/GLib/Roles/TypePlugin.pm6",
     "GLib::Roles::Value": "lib/GLib/Roles/Value.pm6",
-    "GLib::VariantDict": "lib/GLib/VariantDict.pm6",
     "GLib": "lib/GLib.pm6",
     "GLib::Object::Binding": "lib/GLib/Object/Binding.pm6",
     "GLib::Object::Closure": "lib/GLib/Object/Closure.pm6"
