@@ -10,11 +10,11 @@ role GLib::Roles::PointerBasedList {
   method addToList (
     $l,
     @list,
-    :$signed   = False,
-    :$double   = False,
-    :$direct   = False,
-    :$encoding = 'utf8',
-    :$typed
+    :$signed        = False,
+    :$double        = False,
+    :$direct        = False,
+    :$encoding      = 'utf8',
+    :type(:$typed)
   ) {
     my $firstElement = True;
     for @list -> $_ is copy {
