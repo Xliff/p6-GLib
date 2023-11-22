@@ -184,9 +184,10 @@ class GLib::Source {
     g_source_unref($!gs);
   }
 
-  method remove (Int() $tag) is static {
+  method remove (Int() $tag is rw, :$reset = True) is static {
     my guint $t = $tag;
 
+    $tag = 0 if $reset;
     g_source_remove($t);
   }
 
@@ -270,8 +271,12 @@ class GLib::Source::Idle is GLib::Source {
 role GIdleId {
 
   method cancel ( :$clear = False ) {
+    return unless self;
     GLib::Source.remove(self);
     self = 0 if $clear;
+  }
+  method clear  {
+    self.cancel( :clear );
   }
 
 }
