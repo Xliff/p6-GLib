@@ -82,6 +82,16 @@ class GLib::Timeout {
     $id;
   }
 
+  method get_monotonic_time
+    is also<
+      get-monotonic-time
+      monotonic_time
+      monotonic-time
+    >
+  {
+    g_get_monotonic_time();
+  }
+
   # Lifted from GTK::Simple. Provided for compatibility.
   method simple_timeout(Cool $msecs) is also<simple-timeout> {
     use nqp;
