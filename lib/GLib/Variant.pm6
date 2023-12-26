@@ -483,6 +483,8 @@ class GLib::Variant {
   }
 
   multi method parse (
+    GLib::Variant:U:
+
     Str()  $text,
           :$all = False,
           :$raw = False
@@ -490,26 +492,28 @@ class GLib::Variant {
     samewith(GVariantType, $text, Str, $, :$all);
   }
   multi method parse (
+    GLib::Variant:U:
+
     Str()                    $type,
     Str()                    $text,
     Str()                    $limit = Str,
     CArray[Pointer[GError]]  $error = gerror,
                             :$all   = False,
                             :$raw   = False;
-  )
-    is static
-  {
+  ) {
     samewith(
-      GLib::VariantType.check($type),
-      $text,
-      $limit,
-      Str,
-      $error,
+       GLib::VariantType.check($type),
+       $text,
+       $limit,
+       $,
+       $error,
       :$all,
       :$raw
     );
   }
   multi method parse (
+    GLib::Variant:U:
+
     GVariantType()           $type,
     Str()                    $text,
     Str()                    $limit,
@@ -524,6 +528,10 @@ class GLib::Variant {
     # my $pt = CArray[uint8].new( $text.encode );
     # $pt[$text.chars] = 0;
 
+    my $t = $text ?? CArray[uint8].new( $text.encode )
+                  !! CArray[uint8].new;;
+    $t[ ($text // '' ).chars ] = 0;
+
     my $pl = $limit ?? CArray[uint8].new( $limit.encode )
                     !! CArray[uint8].new;;
     $pl[ ($limit // '').chars ] = 0;
@@ -532,13 +540,16 @@ class GLib::Variant {
     # try using explicitly-manage on $text?
     my $v = g_variant_parse(
       $type // GVariantType,
-      explicitly-manage($text),
+      $t,
       $pl,
       $ep,
       $error
     );
     set_error($error);
-    $endptr = ppr($ep);
+
+    # cw: -XXX- Raku will always try to decode as UTF8 if using ppr()
+    #     ...please circle back!
+    $endptr = $ep;
 
     my $retVal = $v ??
       ( $raw ?? $v !! GLib::Variant.new($v) )
@@ -1094,7 +1105,10 @@ class GLib::Variant {
 
     my $str-from-c = g_variant_print($!v, $t);
     my $s = $str-from-c.clone;
-    free($str-from-c);
+
+    # cw: -XXX- SEGV!
+    #free( cast(Pointer, $str-from-c) );
+
     $s;
   }
 

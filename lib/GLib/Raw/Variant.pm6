@@ -638,7 +638,7 @@ sub g_variant_new_variant (GVariant $value)
 
 sub g_variant_parse (
   GVariantType            $type,
-  Str                     $text,
+  CArray[uint8]           $text,
   CArray[uint8]           $limit,
   CArray[Str]             $endptr,
   CArray[Pointer[GError]] $error
@@ -664,7 +664,7 @@ sub g_variant_parse_error_quark ()
 { * }
 
 sub g_variant_print (GVariant $value, gboolean $type_annotate)
-  returns Str
+  returns str
   is native(glib)
   is export
 { * }

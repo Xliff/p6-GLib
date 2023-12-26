@@ -32,6 +32,9 @@ class GLib::Value {
   proto method new (|)
   { * }
 
+  multi method new (GTypeEnum $t) {
+    samewith($t.Int);
+  }
   multi method new (Int $t = G_TYPE_NONE) {
     die "Invalid type passed to GLib::Value.new - { $t.^name }"
       unless $t ~~ Int || $t.^can('Int').elems;
@@ -222,7 +225,7 @@ class GLib::Value {
   method type ( :$fundamental = False, :$enum = False ) is rw {
     Proxy.new(
       FETCH => sub ($) {
-        my $t = g_value_get_gtype($!v);
+        my $t = $!v.g_type;
         return $t unless $fundamental;
         $t = GLib::Object::Type.new($t).fundamental;
         return Nil    unless $t.defined;
@@ -231,7 +234,7 @@ class GLib::Value {
       },
 
       STORE => sub ($, Int() $v_gtype is copy) {
-        g_value_set_gtype($!v, $v_gtype);
+        $!v.g_type = $v_gtype;
       }
     );
   }
