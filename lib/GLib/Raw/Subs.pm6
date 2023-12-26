@@ -903,9 +903,13 @@ package GLib::Raw::Subs {
     }
   }
 
-  sub remove (@list, $object) is export {
+  sub remove (@list, $value) is export {
+    @list.splice( @list.first($value, :k), 1 );
+  }
+  sub removeObject (@list, $object) is export {
     @list.splice( @list.&firstObject($object, :k), 1 );
   }
+
 
   # role HashDefault[\T] {
   #   method AT-KEY (\k) { callwith(k) // T };
