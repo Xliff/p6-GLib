@@ -21,7 +21,14 @@ class GLib::Object::Type {
     # nqp::hllize($!t) if $!t;
     $!t;
   }
-  method GLib::Raw::Enums::GTypeEnum { GTypeEnum($!t) }
+
+  method GLib::Raw::Enums::GTypeEnum
+    is also<GTypeEnum>
+  {
+    $!t == GTypeEnum.enums.values.any
+      ?? GTypeEnum($!t)
+      !! $!t
+  }
 
   method new (Int() $type) {
     $type.defined ?? self.bless(:$type) !! Nil;
