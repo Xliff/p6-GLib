@@ -8,7 +8,7 @@ my $mods = $dist<provides>;
 
 plan $mods.elems;
 
-for $mods.keys {
+for $mods.keys.sort {
 	my $m = try require ::("$_");
 
 	ok $m !=:= Nil, "$_";
