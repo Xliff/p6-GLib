@@ -162,7 +162,7 @@ sub glib-support is export {
     my ($arch, $os, $ext) = resources-info;
     my $libkey = "lib/{ $arch }/{ $os }/glib-support.{ $ext }";
     say "Using '$libkey' as support library." if $DEBUG;
-    $libname = %?RESOURCES{$libkey}.absolute;
+    $libname = %?RESOURCES{$libkey};
   }
 
   $libname;
