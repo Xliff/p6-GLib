@@ -1082,8 +1082,14 @@ BEGIN {
   });
 }
 
-INIT {
-  CATCH { .message.say; .backtrace.concise.say }
-
-  $g-param-spec-types = get_paramspec_types;
-}
+# INIT {
+#   CATCH { .message.say; .backtrace.concise.say }
+#
+#   $g-param-spec-types = get_paramspec_types
+#     unless
+#       ( %*ENV<RAKU_GLIB_DISABLE_AUTOLOAD> // 0) == (1, True).any
+#       ||
+#       ( %*ENV<RAKU_GLIB_DISABLE_AUTOLOAD> // '').lc eq 'true'
+#       ||
+#       ( %*ENV<RAKU_GLIB_DISABLE_AUTOLOAD> // '').lc.contains('paramspec');
+# }
