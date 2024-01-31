@@ -19,7 +19,7 @@ class GLib::GList {
   #also does Positional;
   #also does Iterator;
 
-  has GList $!list is implementor handles<p>;
+  has GList $!list is implementor handles<p data>;
   has GList $!cur;
 
   submethod BUILD(:$list) {
@@ -89,6 +89,8 @@ class GLib::GList {
     :type(:$typed)
   ) {
     my $l = GLib::GList.new;
+    $l = $l but GLib::Roles::ListData[$typed]
+      if $typed !=== Any && $l !~~ GLib::Roles::ListData;
 
     # We already start with a List with 1 NULL data element. We must
     # fill THAT first, before we start appending, so we need to distinguish
