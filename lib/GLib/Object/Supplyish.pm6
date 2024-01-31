@@ -10,6 +10,16 @@ class GLib::Object::Supplyish {
   has @!tap-names;
   has $.enabled    is rw;
 
+  role Untappable[$supplyish] {
+
+    # cw: If this is used with :$clear, you will be converting
+    #     it's punned object back to a regular Str.
+    method untap ( :$clear = False ) {
+      $supplyish.untap( name => self, :$clear );
+    }
+
+  }
+
   submethod BUILD (:$!supply, :$signals, :$!signal) {
     # %!tapped-signals, not %!signals -- !
     %!signals := $signals;
@@ -23,7 +33,7 @@ class GLib::Object::Supplyish {
   #     Delegation should do everything but .tap
   method FALLBACK ($name, |c) {
     do if $!supply.^can($name) {
-      $!supply."$name"(|c);
+      $!supply."$name"( |c );
       self;
     }
   }
@@ -76,13 +86,15 @@ class GLib::Object::Supplyish {
         }
       }
 
+      #say "Arguments: { @a».gist.join(', ') }" if checkDEBUG(2);
+
       my $retVal = &handler( |@a );
       # my $r = @a.tail;
       # if $r ~~ ReturnValue && $r.r.defined.not && $retVal.defined {
       #   $r.r = $retVal;
       # }
     });
-    $name;
+    $name but Untappable[self];
   }
 
   method list {
@@ -96,11 +108,16 @@ class GLib::Object::Supplyish {
   multi method untap ( :$all is required ) {
     $.untap( name => $_ ) for $.list;
   }
-  multi method untap (:$name is copy) {
-    $name //= @!tap-names.tail;
+  multi method untap ($name is rw, :$clear = False) {
+    samewith( name => $name );
+    $name = Nil if $clear;
+  }
+  multi method untap ( :$name ) {
+    my $n = $name // @!tap-names.tail;
+
     @!tap-names.pop;
-    %!taps{$name}.close;
-    %!taps{$name}:delete;
+    %!taps{$n}.close;
+    %!taps{$n}:delete;
     %!signals{$!signal} = %!taps.elems.so;
   }
 }
