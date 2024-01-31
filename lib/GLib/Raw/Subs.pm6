@@ -7,6 +7,7 @@ use NativeHelpers::Blob;
 use GLib::Raw::Debug;
 use GLib::Raw::Definitions;
 use GLib::Raw::Enums;
+use GLib::Raw::Exceptions;
 use GLib::Raw::Object;
 
 use GLib::Object::Supplyish;
@@ -358,7 +359,7 @@ package GLib::Raw::Subs {
 
   role SetIntSemantics[$E] {
     method Int {
-      self.map({ $E.enums{.key}.Int }).sum;
+      self.map({ $E.enums{ .key }.Int }).sum;
     }
   }
 
@@ -783,18 +784,22 @@ package GLib::Raw::Subs {
   sub resolveBuffer (
      $s        is copy,
     :$carray            = True,
-    :$pointer           = $carray.Not,
+    :$pointer           = $carray.not,
     :$encoding          = 'utf8'
   )
     is export
   {
-    $s .= Str   if $s.^can('Str');
-    $s .= Buf   if $s.^can('Buf')   && $s !~~ Str;
-    $s .= Array if $s.^can('Array') && $s !~~ (Str, Buf).any;
+    if $s !~~ ( utf8, Str, Buf, Array, CArray[uint8] ) {
+      $s .= Str   if $s.^can('Str');
+      $s .= Buf   if $s.^can('Buf')   && $s !~~ Str;
+      $s .= Blob  if $s.^can('Blob')  && $s !~~ (Str, Buf);
+      $s .= Array if $s.^can('Array') && $s !~~ (Str, Buf, Blob).any;
+    }
+
     given $s {
-      when Str           { $_ = .encode($encoding)      ; proceed }
-      when Buf           { $_ = CArray[uint8].new($_)   ; proceed }
-      when Array         { $_ = ArrayToCArray(uint8, $_); proceed }
+      when Str                 {  $_ = .encode($encoding)     ; proceed }
+      when Buf   | utf8 | Blob { $_ = CArray[uint8].new($_)   ; proceed }
+      when Array               { $_ = ArrayToCArray(uint8, $_); proceed }
 
       when CArray[uint8] {
         return $_ unless $pointer;
@@ -808,7 +813,7 @@ package GLib::Raw::Subs {
       default {
         X::GLib::InvalidType.new(
           message => "Could not process input to resolveString! {
-                      '' }. A { $s.^name } is not compatible."
+                      '' } A { $s.^name } is not compatible."
         ).throw;
       }
     }
