@@ -8,6 +8,13 @@ class X::GLib::Exception is Exception {
   }
 }
 
+class X::GLib::InvalidState is X::GLib::Exception {
+
+  multi method new ( :$message = 'Invalid State' ) {
+    self.bless(:$message);
+  }
+}
+
 class X::GLib::GError is X::GLib::Exception {
   has $!gerror handles <domain code>;
 
