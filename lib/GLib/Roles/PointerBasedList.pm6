@@ -26,7 +26,7 @@ role GLib::Roles::PointerBasedList {
         :$encoding,
         :$typed
       );
-      say "atl - V: { $v }";
+      say "atl - V: { $v }" if checkDEBUG(2);
       if $firstElement {
         $l.data       = $v;
         $firstElement = False;
