@@ -4,7 +4,11 @@ Revision history for GLib
 0.0.4  2023-11-22T17:12:59-05:00
     - Initial version
 
-{{$NEXT}}
-
 0.0.5  2023-12-26T05:17:07-05:00
     - Updated code for the forthcoming JSON-GLib project.
+
+{{$NEXT}}
+
+0.0.6  2024-03-26T13:54:03-04:00
+    - Point release with minor updates.
+
