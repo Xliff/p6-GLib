@@ -8,6 +8,17 @@ unit package GLib::Raw::Distro;
 my %glib-adjustments = do {
   (
     linux => (
+      Linuxmint => (
+        DEFAULTS => (
+          lib-append => '-2.0'
+        ),
+
+        virginia => my $lmlatest = (
+          version => v0
+        ).Hash,
+
+        latest => $lmlatest
+      ).Hash,
       Ubuntu => (
         DEFAULTS => (
           lib-append => '-2.0'
@@ -30,7 +41,7 @@ my %glib-adjustments = do {
       Debian => (
         DEFAULTS => (
           lib-append => '-2.0'
-        ),
+        )#,
         #
         # buster => my $dlatest = (
         #   version    => v19
