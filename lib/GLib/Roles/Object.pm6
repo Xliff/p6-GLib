@@ -168,16 +168,28 @@ role GLib::Roles::Object {
     self.new-raw
   }
 
-  proto method new_object_with_properties (|)
+  proto method new_object_with_properties (|c)
     is also<new-object-with-properties>
-  { * }
+  {
+    say "{ '-' x 20 }";
+
+    for |c.list.kv -> $k, $v {
+      say "Positional Param #{ $k.succ }: { $v.^name }";
+    }
+
+    for |c.hash.pairs {
+      say "Named Param { .key }: { .value.^name }";
+    }
+
+    {*}
+  }
 
   # RAW capitalized to prevent conflict with a potential GObject's "raw"
   # property
   multi method new_object_with_properties (
     *@args,
-    :$RAW       =  False,
     :$TYPE,
+    :$RAW                   =  False,
     :pairs(:$p) is required
   ) {
     if checkDEBUG() {
@@ -212,11 +224,11 @@ role GLib::Roles::Object {
     );
   }
   multi method new_object_with_properties (
-    Int()       $num-props,
-    CArray[Str] $names,
-    Pointer     $values,
-                :$raw       = False,
-    Int()       :$type      = Int,
+    Int()        $num-props,
+    CArray[Str]  $names,
+    Pointer      $values,
+                :$raw        = False,
+    Int()       :$type       = Int,
   ) {
     my guint $n = $num-props;
     my GType $t = $type // ::?CLASS.get_type;
