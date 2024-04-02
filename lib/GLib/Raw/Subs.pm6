@@ -30,6 +30,7 @@ package GLib::Raw::Subs {
   sub ftruncate      (int32,   uint64)                        is export is native { * }
 
   sub native-open    (Str, int32, int32 $m = 0)
+
     is export
     is symbol('open')
     is native
@@ -339,10 +340,10 @@ package GLib::Raw::Subs {
     is export
   {
     return Nil unless $ca;
-    my @a;
-    @a[$_] = $free ?? $ca[$_].clone !! $ca[$_] for ^$len;
+    my $a = [];
+    $a[$_] = $free ?? $ca[$_].clone !! $ca[$_] for ^$len;
     g_strfreev($ca) if $free;
-    @a;
+    $a;
   }
   multi sub CArrayToArray(CArray $ca, &code, :$size = ∞, :$free = False)
     is export
@@ -538,6 +539,10 @@ package GLib::Raw::Subs {
     getFlags(FT, $value)
   }
 
+  sub findObjectInManifest ($pointer-type) is export {
+    False
+  }
+
   # The assumption here is "Transfer: Full"
   multi sub propReturnObject (
     $oo,
@@ -552,29 +557,33 @@ package GLib::Raw::Subs {
     \P,
     $C?                    is raw,
     :$construct,
-    :$ref                          =  False,
-    :$attempt-real-resolve         =  False
+    :$ref                            =  False,
+    :attempt(:$attempt-real-resolve) =  False
   ) is export {
     my $o = $oo;
     return Nil unless $o;
 
-    unless $attempt-real-resolve {
-      # say "Real resolve cast to: { P.^name }...";
-      $o = cast(P, $o) if P.REPR eq <CPointer CStruct CArray>.any;
-      return $o if $raw || $C === Nil;
+    $o = cast(P, $o) if P.REPR eq <CPointer CStruct CArray>.any;
 
-      return $construct ?? $construct($o, :$ref)
-                        !! $C.new($o, :$ref)
-    }
+    return $o if $C === Nil;
 
+    return $construct ?? $construct($o, :$ref)
+                      !! $C.new($o, :$ref)
+    unless $attempt-real-resolve;
+
+    # cw: To attempt a real resolve means you MUST be GObject descendant.
+    my $objType := $C;
     my $o1   = GLib::Object.new( cast(GObject, $o) );
     my $type = $o1.objectType.name;
 
-    # say "Attempting to cast to: { $type.^name }...";
+    # Recast type if not exact.
+    $o1 = cast( ::($type), $o ) unless $o1 ~~ ::($type);
 
-    return cast( ::($type), $o );
+    if findObjectInManifest($o.WHAT) -> $mt {
+      $objType := $mt;
+    }
 
-    #$o1.createAsOriginal;
+    $objType.new($o1, :$ref)
   }
 
   sub returnObject       (|c) is export { propReturnObject( |c ) }
@@ -719,7 +728,7 @@ package GLib::Raw::Subs {
           $ov = ~$ov unless $ov ~~ Str;
           t := Str;
           # Better to use CArray[uint8] as it is less volatile than Str;
-          my $ca = CArray[uint8].new( $ov.encode($encoding) );
+          my $ca = CArray[uint8].new( |$ov.encode($encoding), 0 );
           $ov = pointer-to($ca);
         }
       }
@@ -785,7 +794,8 @@ package GLib::Raw::Subs {
      $s        is copy,
     :$carray            = True,
     :$pointer           = $carray.not,
-    :$encoding          = 'utf8'
+    :$encoding          = 'utf8',
+    :$hash              = False
   )
     is export
   {
@@ -796,18 +806,32 @@ package GLib::Raw::Subs {
       $s .= Array if $s.^can('Array') && $s !~~ (Str, Buf, Blob).any;
     }
 
-    given $s {
-      when Str                 {  $_ = .encode($encoding)     ; proceed }
-      when Buf   | utf8 | Blob { $_ = CArray[uint8].new($_)   ; proceed }
-      when Array               { $_ = ArrayToCArray(uint8, $_); proceed }
+    my $l;
+    my $b = do given $s {
+      when Str                 {
+        $l //= .chars;
+        $_ = .encode($encoding);
+        proceed
+      }
+
+      when Buf | utf8 | Blob {
+        $l //= .bytes;
+        $_ = CArray[uint8].new( |$_, 0 );
+        proceed
+      }
+
+      when Array {
+        $l //= .elems;
+        $_ = ArrayToCArray(uint8, $_);
+        proceed
+      }
 
       when CArray[uint8] {
-        return $_ unless $pointer;
-        return cast(gpointer, $_);
+        $pointer ?? cast(gpointer, $_) !! $_
       }
 
       when gpointer {
-        return $_;
+        $_;
       }
 
       default {
@@ -817,6 +841,8 @@ package GLib::Raw::Subs {
         ).throw;
       }
     }
+
+    $hash ?? { buffer => $b, size => $l } !! $b;
   }
 
   # cw: Still some concern over the this....
@@ -841,7 +867,7 @@ package GLib::Raw::Subs {
   {
     # cw: It's almost always better to make Str a CArray[uint8]
     if (T, $fv).all ~~ Str {
-      return CArray[uint8].new( $fv.encode($encoding) );
+      return CArray[uint8].new( |$fv.encode($encoding), 0 );
     }
 
     my $s = T.REPR eq 'CStruct' || T ~~ Str;
@@ -915,6 +941,11 @@ package GLib::Raw::Subs {
     @list.splice( @list.&firstObject($object, :k), 1 );
   }
 
+  sub BufToStrArray ($b, :$null = True) is export {
+    my $ca = CArray[uint8].new($b);
+    $ca[$ca.elems] = 0 if $null;
+    $ca;
+  }
 
   # role HashDefault[\T] {
   #   method AT-KEY (\k) { callwith(k) // T };
