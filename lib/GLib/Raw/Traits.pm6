@@ -25,9 +25,10 @@ role GObjectVFunc[$vfn?] is export {
   method g-vfunc-name { $vfn }
 }
 
-role PropertyMethod  is export { }
-role AttributeMethod is export { }
-role AccessorMethod  is export { }
+role PropertyMethod       is export { }
+role PseudoPropertyMethod is export { }
+role AttributeMethod      is export { }
+role AccessorMethod       is export { }
 
 role BoxedType[$type?] is export {
 
@@ -92,6 +93,24 @@ multi sub trait_mod:<is> (Method:D \m, :g_property(:$g-property)! )
   is export
 {
   m does PropertyMethod;
+}
+
+multi sub trait_mod:<is> (
+  Method:D \m,
+           :g_pseudo_property(:$g-pseudo-property)! )
+  is export
+{
+  m does PropertyMethod;
+  m does PseudoPropertyMethod;
+}
+
+multi sub trait_mod:<is> (
+  Method:D \m,
+           :a_pseudo_property(:$a-pseudo-property)! )
+  is export
+{
+  m does PropertyMethod;
+  m does PseudoPropertyMethod;
 }
 
 multi sub trait_mod:<is> (Method:D \m, :an_attribute(:$an-attribute)! )
