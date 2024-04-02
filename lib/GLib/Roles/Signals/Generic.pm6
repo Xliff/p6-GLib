@@ -375,6 +375,33 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal}[0];
   }
 
+  method connect-pdouble (
+    $obj is copy,
+    $signal,
+    &handler?
+  )
+    is also<connect_pdouble>
+  {
+    my $hid;
+    %!signals{$signal} //= do {
+      my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
+      $hid = g_connect_pdouble($obj, $signal,
+        -> $, $d is rw, $ud {
+          CATCH {
+            default { note($_) }
+          }
+
+          $s.emit( [self, $d, $ud] );
+        },
+        Pointer, 0
+      );
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+
   method connect-long (
     $obj is copy,
     $signal,
@@ -959,6 +986,18 @@ sub g_connect_double (
   Pointer $app,
   Str     $name,
           &handler (Pointer, gdouble, Pointer),
+  Pointer $data,
+  uint32  $flags
+)
+  returns uint64
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
+{ * }
+
+sub g_connect_pdouble (
+  Pointer $app,
+  Str     $name,
+          &handler (Pointer, gdouble is rw, Pointer),
   Pointer $data,
   uint32  $flags
 )
