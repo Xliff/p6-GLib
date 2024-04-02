@@ -27,7 +27,7 @@
   "meta-version": "0",
   "name": "GLib",
   "perl": "6.c",
-                          "provides": {
+      "provides": {
       "GLib::Roles::Implementor"      :  "lib/GLib/Roles/Implementor.pm6"      ,
       "GLib::Roles::Pointers"         :  "lib/GLib/Roles/Pointers.pm6"         ,
       "GLib::Compat::Definitions"     :  "lib/GLib/Compat/Definitions.pm6"     ,
@@ -207,5 +207,5 @@
   "test-depends": [
     "Test::META"
   ],
-  "version": "0.0.5"
+  "version": "0.0.6"
 }
