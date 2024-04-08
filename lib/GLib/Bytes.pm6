@@ -17,9 +17,9 @@ class GLib::Bytes {
     $!b = $bytes;
   }
 
-  method Str {
-    self.get_data.head;
-  }
+  # method Str {
+  #   self.get_data.head;
+  # }
 
   method GLib::Raw::Definitions::GBytes
     is also<GBytes>
@@ -49,24 +49,22 @@ class GLib::Bytes {
     self.bless( bytes => g_bytes_new_from_bytes($bytes, $o, $l) );
   }
 
-  # cw: Use of Blob as an argument with new_ is dangerous and should be
-  #     replaced with either CArray[uint8] or Pointer!!!
-  method new_static (Blob() $data, Int() $size) is also<new-static> {
+  method new_static (gpointer $data, Int() $size) is also<new-static> {
     my gsize $s = $size;
 
     self.bless( bytes => g_bytes_new_static($data, $s) );
   }
 
-  method new_take (Blob() $data, Int() $size) is also<new-take> {
+  method new_take (gpointer $data, Int() $size) is also<new-take> {
     my gsize $s = $size;
 
     self.bless( bytes => g_bytes_new_take($data, $s) );
   }
 
   method new_with_free_func (
-    Blob()   $data,
+    gpointer $data,
     Int()    $size,
-             &free_func,
+             &free_func = %DEFAULT-CALLBACKS<GDestroyNotify>,
     gpointer $user_data = gpointer
   )
     is also<new-with-free-func>
@@ -111,6 +109,12 @@ class GLib::Bytes {
 
   method get_size is also<get-size> {
     g_bytes_get_size($!b);
+  }
+
+  method get_type {
+    state ($n, $t);
+
+    unstable_get_type( self.^name, &g_bytes_get_type, $n, $t );
   }
 
   method hash {
