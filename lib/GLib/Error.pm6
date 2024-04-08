@@ -12,7 +12,7 @@ use GLib::Roles::TypedBuffer;
 
 class GLib::Error {
   also does GLib::Roles::Implementor;
-  
+
   has GError $!e is implementor handles<domain code message p>;
 
   submethod BUILD (:$error) {
@@ -66,6 +66,12 @@ class GLib::Error {
   #   $!e = $ea[0];
   #   Nil;
   # }
+
+  method get_type {
+    state ($n, $t);
+
+    unstable_get_type( self.^name, &g_error_get_type, $n, $t );
+  }
 
   method set_error_literal (GQuark $domain, Int() $code, Str() $message)
     is also<set-error-literal>

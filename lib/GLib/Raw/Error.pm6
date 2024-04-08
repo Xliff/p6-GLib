@@ -6,8 +6,8 @@ use GLib::Raw::Types;
 
 sub g_error_copy (GError $error)
   returns GError
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 # sub g_error_free (GError $error)
@@ -27,9 +27,9 @@ sub g_propagate_error (CArray[Pointer[GError]] $dest, GError $src)
 
 sub g_set_error_literal (
   CArray[Pointer[GError]] $err,
-  GQuark $domain,
-  gint $code,
-  Str $message
+  GQuark                  $domain,
+  gint                    $code,
+  Str                     $message
 )
   is native(glib)
   is export
@@ -37,12 +37,18 @@ sub g_set_error_literal (
 
 sub g_error_matches (GError $error, GQuark $domain, gint $code)
   returns uint32
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_error_new_literal (GQuark $domain, gint $code, Str $message)
   returns GError
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
+{ * }
+
+sub g_error_get_type
+  returns GType
+  is      native(gobject)
+  is      export
 { * }
