@@ -1,5 +1,6 @@
 use v6.c;
 
+
 use Method::Also;
 use NativeCall;
 
@@ -45,17 +46,17 @@ class GLib::IOChannel {
   }
 
   multi method new (
-    Str() $filename,
-    Str() $mode,
-    CArray[Pointer[GError]] $error = gerror,
-    :$file is required
+    Str()                    $filename,
+    Str()                    $mode,
+    CArray[Pointer[GError]]  $error                  = gerror,
+                            :$file      is required
   ) {
     self.new_file($filename, $mode, $error);
   }
   method new_file (
-    Str() $filename,
-    Str() $mode,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                   $filename,
+    Str()                   $mode,
+    CArray[Pointer[GError]] $error      = gerror
   )
     is also<new-file>
   {
@@ -119,35 +120,38 @@ class GLib::IOChannel {
 
   method flags is rw {
     Proxy.new:
-      FETCH => sub ($)               { self.get_flags },
+      FETCH => sub ($)            { self.get_flags },
       STORE => -> $, Int() $flags { self.set_flags($flags) };
   }
 
   method line_term is rw is also<line-term> {
     Proxy.new:
-      FETCH => sub ($)            { self.get_line_term( :!all ) },
+      FETCH => sub ($)         { self.get_line_term( :!all ) },
       STORE => -> $, Str() $lt { self.set_line_term($lt, $lt.chars) };
   }
 
-  method error_from_errno is also<error-from-errno> {
-    GIOChannelErrorEnum( g_io_channel_error_from_errno($!gio) );
+  method error_from_errno ( :$enum = True ) is also<error-from-errno> {
+    my $rv = g_io_channel_error_from_errno($!gio);
+    $rv = GIOChannelErrorEnum($rv) if $enum;
+    $rv;
   }
 
   method error_quark ( GLib::IOChannel:U: )is also<error-quark> {
     g_io_channel_error_quark();
   }
 
-  method flush (CArray[Pointer[GError]] $error = gerror) {
+  method flush (CArray[Pointer[GError]] $error = gerror, :$enum = True) {
     clear_error;
-    my $rv = GIOStatusEnum( g_io_channel_flush($!gio, $error) );
+    my $rv = g_io_channel_flush($!gio, $error);
+    $rv = GIOStatusEnum($rv);
     set_error($error);
     $rv;
   }
 
   method add_watch (
-    Int() $condition,
-    &func,
-    gpointer $user_data = gpointer
+    Int()    $condition,
+             &func,
+    gpointer $user_data  = gpointer
   )
     is also<add-watch>
   {
@@ -157,10 +161,10 @@ class GLib::IOChannel {
   }
 
   method add_watch_full (
-    Int() $priority,
-    Int() $condition,
-    &func,
-    gpointer $user_data    = gpointer,
+    Int()          $priority,
+    Int()          $condition,
+                   &func,
+    gpointer       $user_data    = gpointer,
     GDestroyNotify $notify = gpointer
   )
     is also<add-watch-full>
@@ -188,10 +192,10 @@ class GLib::IOChannel {
       Nil;
   }
 
-  method get_buffer_condition is also<get-buffer-condition> {
-    GIOConditionEnum(
-      g_io_channel_get_buffer_condition($!gio)
-    );
+  method get_buffer_condition ( :$enum = True ) is also<get-buffer-condition> {
+    my $c = g_io_channel_get_buffer_condition($!gio);
+    $c = GIOConditionEnum($c) if $enum;
+    $c;
   }
 
   method get_encoding is also<get-encoding> {
@@ -233,28 +237,35 @@ class GLib::IOChannel {
   { * }
 
   multi method read_chars (
-    Str() $buf,
-    Int() $count,
-    CArray[Pointer[GError]] $error = gerror
+    Int()                    $count,
+    CArray[Pointer[GError]]  $error = gerror,
+                            :$buf   = True,
+                            :$all   = False
   ) {
-    samewith($buf, $count, $, $error, :all);
+    my $ca = CArray[uint8].allocate($count);
+    samewith($ca, $count, $, $error, :all, :$buf);
   }
   multi method read_chars (
-    Str() $buf,
-    Int() $count,
-    $bytes_read is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+    CArray[uint8]            $b,
+    Int()                    $count,
+                             $bytes_read is rw,
+    CArray[Pointer[GError]]  $error             = gerror,
+                            :$buf               = True,
+                            :$enum              = True,
+                            :$all               = False
   ) {
     my gsize ($c, $br) = ($count, 0);
 
     clear_error;
-    my $rs = GIOStatusEnum(
-      g_io_channel_read_chars($!gio, $buf, $count, $bytes_read, $error)
-    );
+    my $rs = g_io_channel_read_chars($!gio, $b, $count, $bytes_read, $error);
+    $rs = GIOStatusEnum($rs);
     set_error($error);
     $bytes_read = $br;
-    $all.not ?? $rs !! ($rs, $bytes_read);
+
+    my $b-ret = $b;
+    $b-ret = Buf.new($br) if $buf;
+
+    $all.not ?? $rs !! ($rs, $br, $bytes_read);
   }
 
   proto method read_line (|)
@@ -267,18 +278,20 @@ class GLib::IOChannel {
     samewith($, $, $, $error, :all);
   }
   multi method read_line (
-    $str_return     is rw,
-    $length         is rw,
-    $terminator_pos is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+                             $str_return     is rw,
+                             $length         is rw,
+                             $terminator_pos is rw,
+    CArray[Pointer[GError]]  $error                 = gerror,
+                            :$enum                  = True,
+                            :$all                   = False
   ) {
     my gsize ($l, $tp) = 0 xx 2;
     my $sa = CArray[Str].new;
 
     $sa[0] = Str;
     clear_error;
-    my $rs = GIOStatusEnum( g_io_channel_read_line($!gio, $sa, $l, $tp, $error) );
+    my $rs = g_io_channel_read_line($!gio, $sa, $l, $tp, $error);
+    $rs = GIOStatusEnum($rs) if $enum;
     set_error($error);
 
     ($str_return, $length, $terminator_pos) = ($sa[0], $l, $tp);
@@ -290,16 +303,17 @@ class GLib::IOChannel {
   { * }
 
   multi method read_line_string (
-    GString() $buffer,
-    CArray[Pointer[GError]] $error = gerror
+    GString()               $buffer,
+    CArray[Pointer[GError]] $error   = gerror
   ) {
     samewith($buffer, $, $error, :all);
   }
   multi method read_line_string (
-    GString() $buffer,
-    $terminator_pos is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+    GString()                $buffer,
+                             $terminator_pos is rw,
+    CArray[Pointer[GError]]  $error                  = gerror,
+                            :$enum                   = True,
+                            :$all                    = False
   ) {
     my gsize $t = 0;
 
@@ -317,31 +331,39 @@ class GLib::IOChannel {
   { * }
 
   multi method read_to_end (
-    CArray[Pointer[GError]] $error = gerror
+    CArray[Pointer[GError]]  $error = gerror,
+                            :$buf   = True,
+                            :$all   = False
   ) {
-    samewith($, $, $error, :all);
+    my $ret  = samewith($, $, $error, :all);
+    my $ca  := $ret[1];
+
+    $ca = Buf.new($ca) if $buf;
+
+    $ret;
   }
   multi method read_to_end (
-    $str_return is rw,
-    $length     is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+                             $str_return is rw,
+                             $length     is rw,
+    CArray[Pointer[GError]]  $error             = gerror,
+                            :$enum              = True,
+                            :$all               = False
   ) {
     my gsize $l = 0;
-    my $sr = CArray[Str];
+    my $sr      = CArray[Str];
+
     $sr[0] = Str;
 
     clear_error;
-    my $rs = GIOStatusEnum(
-      g_io_channel_read_to_end($!gio, $sr, $l, $error)
-    );
+    my $rs = g_io_channel_read_to_end($!gio, $sr, $l, $error);
+    $rs = GIOStatusEnum($rs) if $enum;
     set_error($error);
     ($str_return, $length) = ($sr[0], $l);
     $all.not ?? $rs !! ($rs, $str_return, $length);
   }
 
   proto method read_unichar (|)
-      is also<read-unichar>
+    is also<read-unichar>
   { * }
 
   multi method read_unichar (
@@ -350,16 +372,16 @@ class GLib::IOChannel {
     samewith($, $error, :all);
   }
   multi method read_unichar (
-    $thechar is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+                             $thechar is rw,
+    CArray[Pointer[GError]]  $error          = gerror,
+                            :$enum           = True,
+                            :$all            = False
   ) {
     my guint $t = 0;
 
     clear_error;
-    my $rc = GIOStatusEnum(
-      g_io_channel_read_unichar($!gio, $t, $error)
-    );
+    my $rc = g_io_channel_read_unichar($!gio, $t, $error);
+    $rc = GIOStatusEnum($rc) if $enum;
     set_error($error);
     $thechar = $t;
     $all.not ?? $rc !! ($rc, $thechar);
@@ -371,45 +393,49 @@ class GLib::IOChannel {
   }
 
   method seek_position (
-    Int() $offset,
-    Int() $type,
-    CArray[Pointer[GError]] $error = gerror
+    Int()                    $offset,
+    Int()                    $type,
+    CArray[Pointer[GError]]  $error   = gerror,
+                            :$enum    = True
   )
     is also<seek-position>
   {
-    my gint64 $o = $offset;
+    my gint64    $o = $offset;
     my GSeekType $t = $type,
 
     clear_error;
-    my $rc = GIOStatus( g_io_channel_seek_position($!gio, $o, $t, $error) );
+    my $rc = g_io_channel_seek_position($!gio, $o, $t, $error);
+    $rc = GIOStatus($rc) if $enum;
     set_error($error);
     $rc;
   }
 
   method set_encoding (
-    Str() $encoding,
-    CArray[Pointer[GError]] $error = gerror
+    Str()                    $encoding,
+    CArray[Pointer[GError]]  $error     = gerror,
+                            :$enum      = True
   )
     is also<set-encoding>
   {
     clear_error;
-    my $rv = GIOStatusEnum(
-      g_io_channel_set_encoding($!gio, $encoding, $error)
-    );
+    my $rv = g_io_channel_set_encoding($!gio, $encoding, $error);
+    $rv = GIOStatusEnum($rv) if $enum;
     set_error($error);
     $rv;
   }
 
   method set_flags (
-    Int() $flags,
-    CArray[Pointer[GError]] $error = gerror
+    Int()                    $flags,
+    CArray[Pointer[GError]]  $error = gerror,
+                            :$enum  = True
   )
     is also<set-flags>
   {
     my GIOFlags $f = $flags;
 
     clear_error;
-    my $rc = GIOStatusEnum( g_io_channel_set_flags($!gio, $flags, $error) );
+    my $rc = g_io_channel_set_flags($!gio, $flags, $error);
+    $rc = GIOStatusEnum($rc) if $enum;;
     set_error($error);
     $rc;
   }
@@ -423,13 +449,15 @@ class GLib::IOChannel {
   }
 
   method shutdown (
-    Int() $flush,
-    CArray[Pointer[GError]] $error = gerror
+    Int()                    $flush,
+    CArray[Pointer[GError]]  $error  = gerror,
+                            :$enum   = True
   ) {
-    my gboolean $f = (so $flush).Int;
+    my gboolean $f = $flush.so.Int;
 
     clear_error;
-    my $rc = GIOStatusEnum( g_io_channel_shutdown($!gio, $f, $error) );
+    my $rc = g_io_channel_shutdown($!gio, $f, $error);
+    $rc = GIOStatusEnum($rc) if $enum;
     set_error($error);
     $rc;
   }
@@ -469,9 +497,10 @@ class GLib::IOChannel {
   }
   multi method win32_poll (
     GLib::IOChannel:U:
+
     Pointer $fds,
-    Int() $n_fds,
-    Int() $timeout
+    Int()   $n_fds,
+    Int()   $timeout
   ) {
     die 'This call only allowed on windows' unless $*DISTRO.is-win;
 
@@ -494,42 +523,46 @@ class GLib::IOChannel {
   { * }
 
   multi method write_chars (
-    Str() $buf,
-    Int() $count,
-    CArray[Pointer[GError]] $error = gerror,
+    Str()                    $buf,
+    Int()                    $count,
+    CArray[Pointer[GError]]  $error  = gerror,
+                            :$enum   = True
   ) {
     samewith($buf, $count, $, $error, :all);
   }
   multi method write_chars (
-    Str() $buf,
-    Int() $count,
-    $bytes_written is rw,
-    CArray[Pointer[GError]] $error = gerror,
-    :$all = False
+    Str()                    $buf,
+    Int()                    $count,
+                             $bytes_written is rw,
+    CArray[Pointer[GError]]  $error                = gerror,
+                            :$enum                 = True,
+                            :$all                  = False
   ) {
     my gssize $c = $count;
     my gsize $bw = 0;
 
     clear_error;
-    my $rv = GIOStatusEnum(
-      g_io_channel_write_chars($!gio, $buf, $count, $bw, $error)
-    );
+    my $rv = g_io_channel_write_chars($!gio, $buf, $count, $bw, $error);
+    $rv = GIOStatusEnum($rv) if $enum;
     set_error($error);
     $bytes_written = $bw;
     $all.not ?? $rv !! ($rv, $bytes_written)
   }
 
   method write_unichar (
-    Int() $thechar,
-    CArray[Pointer[GError]] $error = gerror
+    Int()                    $thechar,
+    CArray[Pointer[GError]]  $error    = gerror,
+                            :$enum     = True
   )
     is also<write-unichar>
   {
     my gunichar $t = $thechar;
 
     clear_error;
-    GIOStatusEnum( g_io_channel_write_unichar($!gio, $t, $error) );
+    my $rv = g_io_channel_write_unichar($!gio, $t, $error);
+    $rv = GIOStatusEnum($rv) if $enum;
     set_error($error);
+    $rv;
   }
 
 }
