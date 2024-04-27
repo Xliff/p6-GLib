@@ -118,4 +118,17 @@ class X::GLib::ProtectedMethod is X::GLib::Exception {
   }
 }
 
+class X::GLib::DynamicObjectFailure is X::GLib::Exception {
+
+  method new ($type, :$any = False) {
+    self.bless(
+      message => "Dynamic module loading of { $type.^name } " ~ (
+        $any ?? "resulted in an object with no type!"
+             !! "failed!"
+      )
+    );
+  }
+
+}
+
 package GLib::Raw::Exceptions { }
