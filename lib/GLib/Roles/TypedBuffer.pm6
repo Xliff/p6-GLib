@@ -100,6 +100,9 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     $!size;
   }
 
+  proto method new (|)
+  { * }
+
   # cw: These to be dropped for .new-typedbuffer-obj
   multi method new (Pointer $buffer, :$autosize = True, :$clear = False) {
     self.new-typedbuffer-obj($buffer, :$autosize, :$clear);
