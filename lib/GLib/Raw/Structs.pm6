@@ -481,11 +481,11 @@ class GString               is repr<CStruct> does GLib::Roles::Pointers is expor
 }
 
 class GTimeVal              is repr<CStruct> does GLib::Roles::Pointers is export {
-  has glong $.tv_sec;
-  has glong $.tv_usec;
+  has glong $.tv_sec  is rw;
+  has glong $.tv_usec is rw;
 
-  method tv_sec  { $!tv_sec  }
-  method tv_usec { $!tv_usec }
+  method tv-sec  is rw { $!tv_sec  }
+  method tv-usec is rw { $!tv_usec }
 };
 
 class GTypeValueList        is repr('CUnion')  does GLib::Roles::Pointers is export {
