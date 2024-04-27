@@ -187,8 +187,9 @@ class GTokenValue              is repr<CPointer> is export does GLib::Roles::Poi
 class GVariantBuilder          is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantDict             is repr<CPointer> is export does GLib::Roles::Pointers { }
 #class GVariantIter             is repr<CPointer> is export does GLib::Roles::Pointers { }
-class GVariantType             is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GUri                     is repr<CPointer> is export does GLib::Roles::Pointers { }
+
+constant GVariantType is export := CArray[uint8];
 
 # "Exhaustive" maximal...
 multi max (:&by = {$_}, :$all!, *@list) is export {
