@@ -20,13 +20,16 @@ use GLib::Roles::Implementor;
 # --- START -- For Role Associative
 role AssociativeLike does Associative {
   method ASSIGN-KEY (\k, \v) {
-    self.contains(k) ?? self.replace(k, v) !! self.insert(k, v);
+    my $k = cast(Pointer, k);
+
+    self.contains($k) ?? self.replace($k, v) !! self.insert($k, v);
   }
 
   method AT-KEY (\k) is rw {
+    my $k = toPointer(k);
     Proxy.new:
-      FETCH => -> $     { self.lookup(k) },
-      STORE => -> $, \v { self.ASSIGN-KEY(k, v) }
+      FETCH => -> $     { self.lookup($k) },
+      STORE => -> $, \v { self.ASSIGN-KEY($k, v) }
   }
 
   method EXISTS-KEY (\k) {
