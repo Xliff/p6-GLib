@@ -809,15 +809,17 @@ class GLib::Variant {
     $raw ?? $sa !! CStringArrayToArray($sa, $l);
   }
 
-  # This is GLib, not a GLib descendant, so it means what you'd think it means!
-  # That is: no unstable_get_type needed, here!
-  method get_type
+
+  method get_variant_type
     is also<
-      get-type
-      type
+      get_vtype
+      get-vtype
+      variant-type
+      variant_type
+      vtype
     >
   {
-    GTypeEnum( g_variant_get_type($!v) );
+    g_variant_get_type($!v);
   }
 
   method get_type_string
