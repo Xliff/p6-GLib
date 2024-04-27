@@ -8,6 +8,8 @@ use GLib::Raw::Type;
 
 use GLib::Roles::StaticClass;
 
+my (%TYPE-MANIFEST, %RESOLVED-TYPES);
+
 class GLib::Object::Type {
   has GType $!t;
 
@@ -503,4 +505,37 @@ class GLib::Object::Type::Register {
     );
   }
 
+}
+
+sub LOADED-MANIFEST is export {
+  %TYPE-MANIFEST.Map;
+}
+
+sub REGISTER-GOBJECT-TYPES (%m) is export {
+  unless TYPE-IN-MANIFEST(%m.keys.head) {
+    %TYPE-MANIFEST.append: %m;
+  }
+}
+
+sub TYPE-IN-MANIFEST ($it) is export {
+  %TYPE-MANIFEST{$it}:exists;
+}
+
+sub RESOLVE-TO-OBJECT ($tn) is export {
+  my $ot = %TYPE-MANIFEST{$tn};
+  return Nil unless $ot !=== Any;
+
+  my $o;
+
+  return %RESOLVED-TYPES{$tn} if %RESOLVED-TYPES{$tn}:exists;
+  $o = ::( $ot );
+  if $o ~~ Failure {
+    try require ::( $ot );
+    $o = ::( $ot );
+    X::GLib::DynamicObjectFailure.new($ot).throw       if $o ~~ Failure;
+    X::GLib::DynamicObjectFailure.new($ot, :any).throw if $o === Any;
+    say "Object loaded: { $o.^name } from { $ot }";
+  }
+  say "Resolved Object: { $o.^name }";
+  %RESOLVED-TYPES{$tn} = $o;
 }
