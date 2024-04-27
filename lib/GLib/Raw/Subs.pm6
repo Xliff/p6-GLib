@@ -563,13 +563,17 @@ package GLib::Raw::Subs {
     my $o = $oo;
     return Nil unless $o;
 
+    say "pro Class: { $C.^name }";
+
+    say "pro O0: { $o // '»noO«' }";
+
     $o = cast(P, $o) if P.REPR eq <CPointer CStruct CArray>.any;
 
-    return $o if $C === Nil;
+    say "pro O1: { $o // '»noO«' }";
 
-    return $construct ?? $construct($o, :$ref)
-                      !! $C.new($o, :$ref)
-    unless $attempt-real-resolve;
+    return $construct($o, :$raw, :$ref) if     $construct;
+    return $o                           if     $C === Nil || $raw;
+    return $C.new($o, :$ref)            unless $attempt-real-resolve;
 
     # cw: To attempt a real resolve means you MUST be GObject descendant.
     my $objType := $C;
@@ -1072,8 +1076,8 @@ package GLib::Raw::Subs {
 
   sub g_object_new (uint64 $object_type, Str)
     returns GObject
-    is native(gobject)
-    is export
+    is      native(gobject)
+    is      export
   { * }
 
   sub g_object_ref (GObject $p)
@@ -1094,8 +1098,8 @@ package GLib::Raw::Subs {
 
   sub _g_object_get_string_data (GObject $o, Str $key)
     returns CArray[uint8]
-    is native(gobject)
-    is symbol('g_object_get_data')
+    is      native(gobject)
+    is      symbol('g_object_get_data')
   { * }
 
   sub g_object_get_string_data (GObject $o, Str $key) is export {
@@ -1153,9 +1157,9 @@ package GLib::Raw::Subs {
     Str     $name,
   )
     returns CArray[gint]
-    is native(gobject)
-    is symbol('g_object_get_data')
-    is export
+    is      native(gobject)
+    is      symbol('g_object_get_data')
+    is      export
   { * }
 
   sub g_object_set_int_data (
@@ -1173,9 +1177,9 @@ package GLib::Raw::Subs {
     Str     $name
   )
     returns CArray[guint]
-    is native(gobject)
-    is symbol('g_object_get_data')
-    is export
+    is      native(gobject)
+    is      symbol('g_object_get_data')
+    is      export
   { * }
 
   sub g_object_set_uint_data (
