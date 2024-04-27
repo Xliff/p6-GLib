@@ -528,7 +528,7 @@ class GLib::IOChannel {
     CArray[Pointer[GError]]  $error  = gerror,
                             :$enum   = True
   ) {
-    samewith($buf, $count, $, $error, :all);
+    samewith($buf, $count, $, $error, :all, :$enum);
   }
   multi method write_chars (
     Str()                    $buf,
