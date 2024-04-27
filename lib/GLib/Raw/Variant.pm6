@@ -10,7 +10,7 @@ unit package GLib::Raw::Variant;
 
 sub g_variant_builder_add (
   GVariantBuilder $builder,
-  Str $spec,
+  Str             $spec,
   Str
 )
   is native(glib)
@@ -19,7 +19,7 @@ sub g_variant_builder_add (
 
 sub g_variant_builder_add_parsed (
   GVariantBuilder $builder,
-  Str $spec,
+  Str             $spec,
   Str
 )
   is native(glib)
@@ -43,8 +43,8 @@ sub g_variant_builder_close (GVariantBuilder $builder)
 
 sub g_variant_builder_end (GVariantBuilder $builder)
   returns GVariant
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_builder_init (GVariantBuilder $builder, GVariantType $type)
@@ -54,8 +54,8 @@ sub g_variant_builder_init (GVariantBuilder $builder, GVariantType $type)
 
 sub g_variant_builder_new (GVariantType $type)
   returns GVariantBuilder
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_builder_open (GVariantBuilder $builder, GVariantType $type)
@@ -76,18 +76,18 @@ sub g_variant_builder_unref (GVariantBuilder $builder)
 
 sub g_variant_byteswap (GVariant $value)
   returns GVariant
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_check_format_string (
   GVariant $value,
-  Str $format_string,
+  Str      $format_string,
   gboolean $copy_only
 )
   returns uint32
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 # sub g_variant_classify (GVariant $value)
@@ -98,8 +98,8 @@ sub g_variant_check_format_string (
 
 sub g_variant_compare (GVariant $one, GVariant $two)
   returns gint
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dict_clear (GVariantDict $dict)
@@ -109,14 +109,14 @@ sub g_variant_dict_clear (GVariantDict $dict)
 
 sub g_variant_dict_contains (GVariantDict $dict, Str $key)
   returns uint32
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dict_end (GVariantDict $dict)
   returns GVariant
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dict_init (GVariantDict $dict, GVariant $from_asv)
@@ -126,8 +126,8 @@ sub g_variant_dict_init (GVariantDict $dict, GVariant $from_asv)
 
 sub g_variant_dict_insert_value (
   GVariantDict $dict,
-  Str $key,
-  GVariant $value
+  Str          $key,
+  GVariant     $value
 )
   is native(glib)
   is export
@@ -135,24 +135,24 @@ sub g_variant_dict_insert_value (
 
 sub g_variant_dict_lookup_value (
   GVariantDict $dict,
-  Str $key,
+  Str          $key,
   GVariantType $expected_type
 )
   returns GVariant
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dict_new (GVariant $from_asv)
   returns GVariantDict
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dict_ref (GVariantDict $dict)
   returns GVariantDict
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dict_remove (GVariantDict $dict, Str $key)
@@ -168,38 +168,38 @@ sub g_variant_dict_unref (GVariantDict $dict)
 
 sub g_variant_dup_bytestring (GVariant $value, gsize $length is rw)
   returns Str
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dup_bytestring_array (GVariant $value, gsize $length is rw)
   returns CArray[Str]
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dup_objv (GVariant $value, gsize $length is rw)
   returns CArray[Str]
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dup_string (GVariant $value, gsize $length is rw)
   returns Str
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_dup_strv (GVariant $value, gsize $length is rw)
   returns CArray[Str]
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_equal (GVariant $one, GVariant $two)
   returns uint32
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_boolean (GVariant $value)
@@ -210,96 +210,96 @@ sub g_variant_get_boolean (GVariant $value)
 
 sub g_variant_get_byte (GVariant $value)
   returns guint8
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_bytestring (GVariant $value)
   returns Str
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_bytestring_array (GVariant $value, gsize $length is rw)
   returns CArray[Str]
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_child_value (GVariant $value, gsize $index)
   returns GVariant
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_data (GVariant $value)
   returns gconstpointer
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_data_as_bytes (GVariant $value)
   returns GBytes
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_double (GVariant $value)
   returns gdouble
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_fixed_array (
   GVariant $value,
-  gsize $n_elements,
-  gsize $element_size
+  gsize    $n_elements,
+  gsize    $element_size
 )
   returns Pointer
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_handle (GVariant $value)
   returns gint32
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_int16 (GVariant $value)
   returns gint16
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_int32 (GVariant $value)
   returns gint32
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_int64 (GVariant $value)
   returns gint64
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_maybe (GVariant $value)
   returns GVariant
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_normal_form (GVariant $value)
   returns GVariant
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_objv (GVariant $value, gsize $length is rw)
   returns CArray[Str]
-  is native(glib)
-  is export
+  is      native(glib)
+  is      export
 { * }
 
 sub g_variant_get_size (GVariant $value)
