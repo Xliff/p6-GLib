@@ -196,3 +196,6 @@ multi sub trait_mod:<is> (Method:D \meth, Bool :$static!) is export {
     callsame
   }
 }
+
+role TypeManifest  is export { }
+role NotInManifest is export { }
