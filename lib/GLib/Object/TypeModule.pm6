@@ -293,7 +293,7 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
   $cc = cast($cs, $cc);
   my $cct = $cc.parent.g_type_class.g_type;
   say "CC Type: { $cct }";
-  say "CC Type Name { GLib::Object::Type.new($cct).name }";
+  say "CC Type Name: { GLib::Object::Type.new($cct).name }";
 
   my @props = (GParamSpec);
   my (@prop-get-add, @prop-set-add);
@@ -324,7 +324,7 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
                 postfix => RakuAST::Call::Method.new(
                   name => RakuAST::Name.from-identifier("emit"),
                   args => RakuAST::ArgList.new(
-                    RakuAST::StrLiteral.new("notify::{ $is.name }"),
+                    RakuAST::StrLiteral.new("notify::{ .name.substr(2) }"),
                   )
                 )
               )
