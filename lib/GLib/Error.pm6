@@ -27,7 +27,7 @@ class GLib::Error {
     self.bless( :$error );
   }
   multi method new (*@a) {
-    GError.new(|@a);
+    self.bless( error => GError.new(|@a) );
   }
 
   method new_literal (GQuark() $domain, Int() $code, Str() $message)
