@@ -563,14 +563,7 @@ package GLib::Raw::Subs {
     my $o = $oo;
     return Nil unless $o;
 
-    say "pro Class: { $C.^name }";
-
-    say "pro O0: { $o // '»noO«' }";
-
     $o = cast(P, $o) if P.REPR eq <CPointer CStruct CArray>.any;
-
-    say "pro O1: { $o // '»noO«' }";
-
     return $construct($o, :$raw, :$ref) if     $construct;
     return $o                           if     $C === Nil || $raw;
     return $C.new($o, :$ref)            unless $attempt-real-resolve;
