@@ -18,6 +18,16 @@ role GLib::Roles::TypedArray[::T, $raw, ::O = Mu] {
       @a[$_] = O.new( @a[$_] ) unless $raw || O === (Nil, Mu).any
     }
     @a;
+
+
+  }
+
+}
+
+role GLib::Roles::NewTypedArray[ $raw, ::T, ::O ] {
+
+  method Array {
+    do propReturnObject( self[$_], $raw, T, O ) for ^self.elems;
   }
 
 }
