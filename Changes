@@ -11,6 +11,8 @@ Revision history for GLib
     - Point release with minor updates.
 
 {{$NEXT}}
+
+0.0.7  2024-05-13T10:59:37-04:00
     - Adds details for Linux Mint 'virginia'
     - Updated ::Raw::Types
     - Updated linecount and milestone tracking

@@ -51,7 +51,6 @@ need GLib::TimeZone;
 need GLib::Tree;
 need GLib::Unicode;
 need GLib::Uri;
-need GLib::URI;
 need GLib::Utils;
 need GLib::UUID;
 need GLib::Value;

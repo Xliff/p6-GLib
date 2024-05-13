@@ -8,9 +8,7 @@ use GLib::Raw::Subs;
 
 use lib <release-scripts ../release-scripts>;
 
-use GTKScripts;
-
-parse-file($CONFIG-NAME);
+use ScriptConfig;
 
 #require ::($_ = "GLib::Raw::Structs");
 my $prefix  = %config<prefix>.subst('::', '');
