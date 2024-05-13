@@ -548,39 +548,59 @@ package GLib::Raw::Subs {
     $oo,
     $raw,
     :$construct is required
-  ) {
+  )
+    is export
+  {
     samewith($oo, $raw, Mu, :$construct);
   }
   multi sub propReturnObject (
-    $oo,
-    $raw,
-    \P,
-    $C?                    is raw,
+     $oo,
+     $raw,
+     \P,
+     $C?                   is raw,
+    :$role,
     :$construct,
-    :$ref                            =  False,
-    :attempt(:$attempt-real-resolve) =  False
-  ) is export {
+    :$ref                  is copy   = False,
+    :attempt(:$attempt-real-resolve) = False
+  )
+    is export
+  {
     my $o = $oo;
     return Nil unless $o;
 
     $o = cast(P, $o) if P.REPR eq <CPointer CStruct CArray>.any;
     return $construct($o, :$raw, :$ref) if     $construct;
-    return $o                           if     $C === Nil || $raw;
-    return $C.new($o, :$ref)            unless $attempt-real-resolve;
+    return $o                           if     $C === (Nil, Any).any || $raw;
+
+    my $CLASS;
+    # cw: Refactor needed. A new variable $CCLASS must be used to determined
+    #     the type returned. If $attempt-real-resolve is set this is done
+    #     via TypeManifest, otherwise $CLASS := $C;
+    #
+    #     So, for now...
+    $CLASS := $C;
+
+    $ref = False unless $C.^can('ref');
+    my $object = $C.new($o, :$ref);
+    $object does $role unless $role === (Nil, Any).any;
+
+    return $object unless $attempt-real-resolve;
 
     # cw: To attempt a real resolve means you MUST be GObject descendant.
-    my $objType := $C;
-    my $o1   = GLib::Object.new( cast(GObject, $o) );
-    my $type = $o1.objectType.name;
-
-    # Recast type if not exact.
-    $o1 = cast( ::($type), $o ) unless $o1 ~~ ::($type);
-
-    if findObjectInManifest($o.WHAT) -> $mt {
-      $objType := $mt;
-    }
-
-    $objType.new($o1, :$ref)
+    # my $objType := $C;
+    # my $o1   = GLib::Object.new( cast(GObject, $o) );
+    # my $type = $o1.objectType.name;
+    #
+    # # Recast type if not exact.
+    # $o1 = cast( ::($type), $o ) unless $o1 ~~ ::($type);
+    #
+    # if findObjectInManifest($o.WHAT) -> $mt {
+    #   $objType := $mt;
+    # }
+    #
+    # $object = $objType.new($o1, :$ref);
+    # $object does $role unless $role === (Nil, Any).any;
+    # $object;
   }
 
   sub returnObject       (|c) is export { propReturnObject( |c ) }
@@ -1060,6 +1080,19 @@ package GLib::Raw::Subs {
       ftruncate( .native-descriptor, $oj.chars );
       .close;
     }
+  }
+
+  # "Exhaustive" maximal...
+  multi max (:&by = {$_}, :$all!, *@list) is export {
+      # Find the maximal value...
+      my $max = max my @values = @list.map: &by;
+
+      # Extract and return all values matching the maximal...
+      @list[ @values.kv.map: {$^index unless $^value cmp $max} ];
+  }
+
+  sub get-longest-prefix (@words) is export {
+    max :all, :by{.chars}, keys [∩] @words».match(/^.+/, :ex)».Str;
   }
 
   sub g_destroy_none(Pointer)
