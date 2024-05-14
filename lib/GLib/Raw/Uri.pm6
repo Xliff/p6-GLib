@@ -17,9 +17,10 @@ our constant G_URI_RESERVED_CHARS_ALLOWED_IN_PATH_ELEMENT is export =
 
 our constant G_URI_RESERVED_CHARS_ALLOWED_IN_PATH         is export =
   G_URI_RESERVED_CHARS_ALLOWED_IN_PATH_ELEMENT ~ '/';
-  
+
 our constant G_URI_RESERVED_CHARS_ALLOWED_IN_USERINFO     is export =
   G_URI_RESERVED_CHARS_SUBCOMPONENT_DELIMITERS ~ ':';
+
 
 ### /usr/src/glib2.0-2.68.4/glib/guri.h
 
