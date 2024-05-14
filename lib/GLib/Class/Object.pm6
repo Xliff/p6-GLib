@@ -17,11 +17,11 @@ class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is expor
                                                            #=                                guint                  n_construct_properties,
                                                            #=                                GObjectConstructParam *construct_properties);
   # overridable methods
-  has Pointer         $.set_property                is rw; #= void       (*set_property)            (GObject        *object,
+  has Pointer         $!set_property                     ; #= void       (*set_property)            (GObject        *object,
                                                            #=                                        guint           property_id,
                                                            #=                                        const GValue   *value,
                                                            #=                                        GParamSpec     *pspec);
-  has Pointer         $.get_property                is rw; #= void       (*get_property)            (GObject        *object,
+  has Pointer         $!get_property                     ; #= void       (*get_property)            (GObject        *object,
                                                            #=                                        guint           property_id,
                                                            #=                                        GValue         *value,
                                                            #=                                        GParamSpec     *pspec);
@@ -46,6 +46,43 @@ class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is expor
   has gsize           $!n_pspecs;
 
   HAS gpointer        @!pdummy[3] is CArray;
+
+  method set_property is rw is also<set-property> {
+    Proxy.new:
+      FETCH => sub ($) {
+        my &sp := cast(
+          &(GObject, guint, GValue, GParamSpec),
+          $!set_property
+        );
+
+        sub (GObject() $o, Int() $i, GValue() $v, GParamSpec() $p) {
+          my $ri = $i;
+
+          sp($o, $ri, $v, $p);
+        }
+      }
+      STORE => -> $, \func {
+        $!set_property := set_func_pointer( &(func), &sprintf-GiVP);
+      };
+  }
+
+  method get_property is rw is also<get-property> {
+    Proxy.new:
+      FETCH => sub ($) {
+        my &gp := cast( &(GObject, guint, GValue), $!get_property );
+
+        sub (GObject() $o, Int() $i, GValue() $v) {
+          my $ri = $i;
+
+          gp($o, $ri, $v);
+          my $vo = GLib::Value.new($v);
+          $v.value;
+        }
+      },
+      STORE => -> $, \func {
+        $!get_property := set_func_pointer( &(func), &sprintf-GiV);
+      }
+  }
 }
 
 constant GInitiallyUnownedClass is export := GObjectClass;
@@ -244,4 +281,28 @@ sub g_object_interface_list_properties (
   returns CArray[Pointer[GParamSpec]]
   is native(gobject)
   is export
+{ * }
+
+sub sprintf-GiV (
+  Blob,
+  Str,
+  & (GObject, gint, GValue),
+  gpointer
+)
+  returns int64
+  is export
+  is native
+  is symbol('sprintf')
+{ * }
+
+sub sprintf-GiVP (
+  Blob,
+  Str,
+  & (GObject, gint, GValue, GParamSpec),
+  gpointer
+)
+  returns int64
+  is export
+  is native
+  is symbol('sprintf')
 { * }
