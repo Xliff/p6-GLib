@@ -521,6 +521,10 @@ sub TYPE-IN-MANIFEST ($it) is export {
   %TYPE-MANIFEST{$it}:exists;
 }
 
+sub TYPE-TO-OBJECT ($tn) is export {
+  %TYPE-MANIFEST{$tn};
+}
+
 sub RESOLVE-TO-OBJECT ($tn) is export {
   my $ot = %TYPE-MANIFEST{$tn};
   return Nil unless $ot !=== Any;
