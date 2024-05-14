@@ -382,13 +382,26 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
           #     object match is not found, it is OK for it to not have one.
           $is.^add_method("set_{ $att.name }", method (\v) {
             $att.set_value(self, v);
+            # Get paramspec matching $att.name
+            # if attribute is GObject or GBoxed, then increment the reference
+            #   count. The reference count can be unref'd in the objects
+            #   DESTROY.
             self.emit("notify::{ $att.name }");
           });
 
-          $is.^add_method("get_{ $att.name }", method ( :$raw = False ) {
-            $att.get_value(self);
-            # cw: Return comparable object.
-          });
+          $is.^add_method(
+            "get_{ $att.name }",
+            method ( :$raw = False, :$value = False ) {
+              # Get paramspec matching $att.name
+              # Get type from paramspec
+              # Initialize a GValue from that type
+              self.get_property($name, $v);
+              $attr.set_value(self, $v.value);
+              return $v if $raw;
+              my $o = propReturnObject($v, $raw, |GLib::Value);
+              $value ?? $o !! $o.value;
+            }
+          );
         }
 
         when BoxedType {
@@ -613,7 +626,7 @@ INIT {
           }
 
           $cc.get_property =
-            set_func_pointer( &(f), &sprintf-obj-prop);
+            set_func_pointer( &(f), &sprintf-GiV);
 
           say "Get Property: { $cc.get_property }";
         }
@@ -631,7 +644,7 @@ INIT {
           }
 
           $cc.set_property =
-            set_func_pointer( &(f), &sprintf-obj-prop);
+            set_func_pointer( &(f), &sprintf-GiV);
 
           say "Set Property: { $cc.set_property }";
         }
