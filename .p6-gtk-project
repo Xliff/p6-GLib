@@ -3,6 +3,6 @@ struct-prefix=G
 modules=GLib::Raw::Types,
 backups=backup,bitbucket,hut,google-backup,azure-backup
 build_exclude=GLib::Roles::TreeData
-include-directory=/usr/src/glib2.0-2.68.4/glib
+include-directory=/usr/src/glib/glib
 lib=glib
 exec=p6gtkexec
