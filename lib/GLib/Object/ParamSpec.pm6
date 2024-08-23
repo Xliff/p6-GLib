@@ -63,92 +63,122 @@ class GLib::Object::ParamSpec {
     g_type_name($!ps.owner_type);
   }
 
+  my %typed-paramspecs = (
+    GParamString => sub ($o) {
+      GLib::Object::ParamSpec::String.new(
+        cast(GParamSpecString, $o.GParamSpec)
+      );
+    },
+
+    GParamChar => sub ($o) {
+      GLib::Object::ParamSpec::Char.new(
+        cast(GParamSpecChar, $o.GParamSpec)
+      );
+    },
+
+    GParamUChar => sub ($o) {
+      GLib::Object::ParamSpec::UChar.new(
+        cast(GParamSpecUChar, $o.GParamSpec)
+      )
+    },
+
+    GParamBoolean => sub ($o) {
+      GLib::Object::ParamSpec::Boolean.new(
+        cast(GParamSpecBoolean, $o.GParamSpec)
+      );
+    },
+
+    GParamInt => sub ($o) {
+      GLib::Object::ParamSpec::Int.new(
+        cast(GParamSpecInt, $o.GParamSpec)
+      );
+    },
+
+    GParamUInt => sub ($o) {
+      GLib::Object::ParamSpec::UInt.new(
+        cast(GParamSpecUInt, $o.GParamSpec)
+      )
+    },
+
+    GParamLong => sub ($o) {
+      GLib::Object::ParamSpec::Long.new(
+        cast(GParamSpecLong, $o.GParamSpec)
+      );
+    },
+
+    GParamULong => sub ($o) {
+      GLib::Object::ParamSpec::ULong.new(
+        cast(GParamSpecULong, $o.GParamSpec)
+      );
+    },
+
+    GParamInt64 => sub ($o) {
+      GLib::Object::ParamSpec::Int64.new(
+        cast(GParamSpecInt64, $o.GParamSpec)
+      )
+    },
+
+    GParamUInt64 => sub ($o) {
+      GLib::Object::ParamSpec::UInt64.new(
+        cast(GParamSpecUInt64, $o.GParamSpec)
+      );
+    },
+
+    GParamUnichar => sub ($o) {
+      GLib::Object::ParamSpec::Unichar.new(
+        cast(GParamSpecUnichar, $o.GParamSpec)
+      )
+    },
+
+    GParamEnum => sub ($o) {
+      GLib::Object::ParamSpec::Enum.new(
+        cast(GParamSpecEnum, $o.GParamSpec)
+      );
+    },
+
+    GParamFlags => sub ($o) {
+      GLib::Object::ParamSpec::Flags.new(
+        cast(GParamSpecFlags, $o.GParamSpec)
+      );
+    },
+
+    GParamFloat => sub ($o) {
+      GLib::Object::ParamSpec::Unichar.new(
+        cast(GParamSpecUnichar, $o.GParamSpec);
+      )
+    },
+
+    GParamDouble => sub ($o) {
+      GLib::Object::ParamSpec::Double.new(
+        cast(GParamSpecDouble, $o.GParamSpec)
+      )
+    }
+  );
+
+  multi method registerParamSpec ( *%pspecs ) is static {
+    samewith( .key, .value ) for %pspecs.pairs;
+  }
+  multi method registerParamSpec ($name, &refinery) is static {
+    if &refinery.signature.arity != 1 || &refinery.signature.count != 1 {
+      $*ERR.say: "Param spec sub type block must be a callable with only 1 {
+                  ''}parameter.";
+      return;
+    }
+
+    %typed-paramspecs{ $name } = &refinery;
+  }
+
   method new (GParamSpec $spec, :$ref = True) {
     return Nil unless $spec;
 
     my $o = self.bless( :$spec );
     $o.ref if $ref;
 
-    do given $o.getTypeName {
+    do with %typed-paramspecs{ $o.getTypeName } {
       say "ParamSpec Type Name: { $_ }" if checkDEBUG(3);
-
-      when 'GParamString'    {
-        GLib::Object::ParamSpec::String.new(
-          cast(GParamSpecString, $o.GParamSpec)
-        );
-      }
-      when 'GParamChar'    {
-        GLib::Object::ParamSpec::Char.new(
-          cast(GParamSpecChar, $o.GParamSpec)
-        );
-      }
-      when 'GParamUChar'   {
-        GLib::Object::ParamSpec::UChar.new(
-          cast(GParamSpecUChar, $o.GParamSpec)
-        )
-      }
-      when 'GParamBoolean' {
-        GLib::Object::ParamSpec::Boolean.new(
-          cast(GParamSpecBoolean, $o.GParamSpec)
-        );
-      }
-      when 'GParamInt'     {
-        GLib::Object::ParamSpec::Int.new(
-          cast(GParamSpecInt, $o.GParamSpec)
-        );
-      }
-      when 'GParamUInt'    {
-        GLib::Object::ParamSpec::UInt.new(
-          cast(GParamSpecUInt, $o.GParamSpec)
-        )
-      }
-      when 'GParamLong'    {
-        GLib::Object::ParamSpec::Long.new(
-          cast(GParamSpecLong, $o.GParamSpec)
-        );
-      }
-      when 'GParamULong'   {
-        GLib::Object::ParamSpec::ULong.new(
-          cast(GParamSpecULong, $o.GParamSpec)
-        );
-      }
-      when 'GParamInt64'   {
-        GLib::Object::ParamSpec::Int64.new(
-          cast(GParamSpecInt64, $o.GParamSpec)
-        )
-      }
-      when 'GParamUInt64'  {
-        GLib::Object::ParamSpec::UInt64.new(
-          cast(GParamSpecUInt64, $o.GParamSpec)
-        );
-      }
-      when 'GParamUnichar' {
-        GLib::Object::ParamSpec::Unichar.new(
-          cast(GParamSpecUnichar, $o.GParamSpec)
-        )
-      }
-      when 'GParamEnum'    {
-        GLib::Object::ParamSpec::Enum.new(
-          cast(GParamSpecEnum, $o.GParamSpec)
-        );
-      }
-      when 'GParamFlags'   {
-        GLib::Object::ParamSpec::Flags.new(
-          cast(GParamSpecFlags, $o.GParamSpec)
-        );
-      }
-      when 'GParamFloat'   {
-        GLib::Object::ParamSpec::Unichar.new(
-          cast(GParamSpecUnichar, $o.GParamSpec);
-        )
-      }
-      when 'GParamDouble'  {
-        GLib::Object::ParamSpec::Double.new(
-          cast(GParamSpecDouble, $o.GParamSpec)
-        )
-      }
-
-      default { $o }
+      .($o);
+    } else {
+      $o
     }
   }
 
