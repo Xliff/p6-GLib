@@ -8,6 +8,7 @@ use GLib::Raw::Traits;
 use GLib::Raw::Signal;
 use GLib::Raw::Debug;
 use GLib::Object::Raw::Binding;
+use GLib::Object::Raw::ParamSpec;
 
 use GLib::Array;
 use GLib::Quark;
@@ -134,6 +135,27 @@ role GLib::Roles::Object {
 
     X::GLib::Object::AttributeNotFound.new(attribute => $key).throw;
   }
+
+  # method get_property is vfunc {
+  #   # cw: Better, except where are you going to get self from when this
+  #   #     needs to be set BEFORE an instance can be created.
+  #   my $s = self;
+  #   my $c = ::?CLASS;
+  #   sub ($, $idx, $v is copy, $p is copy) {
+  #     $v = GLib::Value.new($v);
+  #     $p = GLib::Object::ParamSpec.new($p);
+  #
+  #     if $idx !~~ 0 .. $c.^attributes.elems {
+  #         X::GLib::Object::AttributeNotFound.new(
+  #           attribute => $p.name
+  #         ).throw
+  #       }
+  #       # cw: This CANNOT be done. The value needs to come from the
+  #       #     paramspec and then passed to Raku.
+  #       $v.value = $c.^attributes[$idx].get_value($s);
+  #     }
+  #   }
+  # }
 
   method gist-data {
     %data.gist;
@@ -270,12 +292,22 @@ role GLib::Roles::Object {
       say "Setting { .value } to {
            $values[ .key ].gist } for a { self.^name } object"
       if checkDEBUG(2);
+
       if self.^can( .value ) {
         self."{ .value }"() = $values[ .key ];
-      } else {
-        warn "Unknown key '{ .value }' used in .setAttributes!";
-        Backtrace.new.concise.say;
+        next;
       }
+
+      if .value.contains('-') || .value.contains('_') {
+        my $fallback = .value.&switch-dash;
+        if self.^can($fallback) {
+          self."{ $fallback }"() = $values[ .key ];
+          next;
+        }
+      }
+
+      warn "Unknown key '{ .value }' used in .setAttributes!";
+      Backtrace.new.concise.say;
     }
     self;
   }
@@ -376,8 +408,11 @@ role GLib::Roles::Object {
     }).new;
   }
 
-  method getClass (:$raw = False) {
+  multi method getClass (:$raw = False) {
     self.ρ-getClass(GObjectClass, ::('GLib::Class::Object'), :$raw);
+  }
+  multi method getClass ( ::?CLASS:U: :$raw = False) {
+    self.ρ-getClass(self.class_ref, ::('GLib::Class::Object'), :$raw);
   }
   method ρ-getClass ($CS is raw, $C is raw, :$raw = True) {
     my $p := cast(Pointer.^parameterize($CS), $!o.g_type_instance.g_class);
@@ -394,12 +429,40 @@ role GLib::Roles::Object {
   multi method objectType (::?CLASS:D: :$raw = False) {
     ::?CLASS.objectType($!o, :$raw);
   }
+  multi method objectType (::?CLASS:U: :$raw = False ) {
+    say "S: { self.^name }";
+    my $t = self.get_type;
+    say "T:  { $t }";
+    GLib::Object::Type.new($t);
+  }
   multi method objectType (::?CLASS:U: $o where *.defined, :$raw = False) {
     my $t = $o.g_type_instance.g_class.g_type;
     return $t if $raw;
 
     GLib::Object::Type.new($t);
   }
+
+  method list_properties {
+    # flat do for self.^mro -> \o {
+    #   last if     o === Any;
+    #   next unless o ~~  GLib::Roles::Object;
+    #
+      my $cr = self.class_ref;
+      say "CR: { $cr.gist }";
+
+      my guint $np = 0;
+      my $a = CArrayToArray(
+        g_object_class_list_properties(
+          cast( gpointer, $cr ),
+          $np
+        ),
+        |GLib::Object::ParamSpec.getTypePair
+      );
+      say "{ self.^name } - {$a.elems }";
+      $a;
+    # }
+  }
+
 
   method isType (Int() $type) {
     my GType $t  = $type;
@@ -440,9 +503,9 @@ role GLib::Roles::Object {
   # Remove when Method::Also is fixed!
   method GObject { $!o }
 
-  method equals (GObject() $b) { +self.p == +$b.p }
-  method is     (GObject() $b) { self.equals($b)  }
-  method eq     (GObject() $b) { self.equals($b)  }
+  method equals (GObject() $b) { self.p.equals($b) }
+  method is     (GObject() $b) { self.equals($b)   }
+  method eq     (GObject() $b) { self.equals($b)   }
 
   method notify ($detail?) {
     my $sig-name = 'notify';
@@ -749,14 +812,38 @@ role GLib::Roles::Object {
       )
     }
 
+  multi method bind_full(
+    Str()      $source_property,
+    GObject()  $target,
+               &transform_to               = Callable,
+               &transform_from             = Callable,
+    gpointer   $user_data                  = Pointer,
+               &notify                     = %DEFAULT-CALLBACKS<GDestroyNotify>,
+              :$create                     = True,
+              :$default                    = False,
+              :bi(:both(:$dual))           = False,
+              :invert(:$not)               = False,
+              :$flags            is copy   = 0
+  ) {
+    samewith(
+      $source_property,
+      $target,
+      $source_property,
+      self!processFlags($default, $create, $dual, $not, $flags),
+      &transform_to,
+      &transform_from,
+      $user_data,
+      &notify
+    );
+  }
   multi method bind_full (
-    Str()                 $source_property,
-    GObject()             $target,
-    Int()                 $flags,
-                          &transform_to   = Callable,
-                          &transform_from = Callable,
-    gpointer              $user_data      = Pointer,
-                          &notify         = %DEFAULT-CALLBACKS<GDestroyNotify>
+    Str()     $source_property,
+    GObject() $target,
+    Int()     $flags,
+              &transform_to   = Callable,
+              &transform_from = Callable,
+    gpointer  $user_data      = Pointer,
+              &notify         = %DEFAULT-CALLBACKS<GDestroyNotify>
   ) {
     samewith(
       $source_property,
@@ -1241,6 +1328,23 @@ role GLib::Roles::Object {
       RAKU
   }
 
+  method registerClasses {
+    say 'NYI - Class registration!'
+  }
+
+  # cw: Find a better interface for this. I am very wary of having anything
+  #     starting with "class_" in an object. However, this being GType
+  #     I'm willing to make an exception for the following:
+  method class_ref is also<class-ref> {
+    g_type_class_ref(self.get_type);
+  }
+
+  method class_unref (GLib::Object::Type:U: gpointer $c)
+    is also<class-unref>
+  {
+    g_type_class_unref($c);
+  }
+
 }
 
 class GLib::Object does GLib::Roles::Object {
@@ -1299,6 +1403,12 @@ role GLib::Roles::Object::RegisteredType[$gtype] {
 
 }
 
+my @classes-to-register;
+
+role GLib::Object::RegisterClass {
+  INIT
+  @classes-to-register.push: ::?CLASS;
+}
 
 role GLib::Roles::Object::Registrar[$n] {
 
@@ -1337,6 +1447,17 @@ sub g_object_set_property (GObject $o, Str $key, GValue $value)
 
 sub g_object_get_type
   returns GType
+  is      native(gobject)
+  is      export
+{ * }
+
+sub g_type_class_ref (GType $type)
+  returns Pointer
+  is      native(gobject)
+  is      export
+{ * }
+
+sub g_type_class_unref (gpointer $g_class)
   is      native(gobject)
   is      export
 { * }

@@ -1,3 +1,4 @@
+
 use v6.c;
 
 use Method::Also;
@@ -11,17 +12,43 @@ use GLib::Object::Raw::ParamSpec;
 use GLib::Value;
 use GLib::Object::Type;
 
-class GLib::Object::ParamSpec {
-  has GParamSpec $!ps handles <
-    name
-    flags
-    checkType
-    getType
-    getTypeName
-  >;
+use GLib::Roles::Implementor;
 
-  submethod BUILD (:$spec) {
-    $!ps = $spec;
+class GLib::Object::ParamSpec::Boolean    { ... }
+class GLib::Object::ParamSpec::Char       { ... }
+class GLib::Object::ParamSpec::Double     { ... }
+class GLib::Object::ParamSpec::Enum       { ... }
+class GLib::Object::ParamSpec::Flags      { ... }
+class GLib::Object::ParamSpec::Flags      { ... }
+class GLib::Object::ParamSpec::Int        { ... }
+class GLib::Object::ParamSpec::Int64      { ... }
+class GLib::Object::ParamSpec::Long       { ... }
+class GLib::Object::ParamSpec::Pool       { ... }
+class GLib::Object::ParamSpec::String     { ... }
+class GLib::Object::ParamSpec::UChar      { ... }
+class GLib::Object::ParamSpec::UInt       { ... }
+class GLib::Object::ParamSpec::UInt64     { ... }
+class GLib::Object::ParamSpec::ULong      { ... }
+class GLib::Object::ParamSpec::Unichar    { ... }
+class GLib::Object::ParamSpec::ValueArray { ... }
+
+class GLib::Object::ParamSpec {
+  also does GLib::Roles::Implementor;
+
+  has GParamSpec $!ps is implementor handles<getTypeName>;
+
+  method name  is g-pseudo-property { $!ps.name  }
+  method flags is g-pseudo-property { $!ps.flags }
+
+  submethod BUILD ( :$spec is copy ) {
+    return unless $spec;
+
+    self.setGParamSpec($spec) if $spec;
+  }
+
+  method setGParamSpec (GParamSpec $_ ) {
+    say "GParamSpec is not defined!" unless $_;
+    $!ps = $_;
   }
 
   method GLib::Raw::Structs::GParamSpec
@@ -41,7 +68,88 @@ class GLib::Object::ParamSpec {
 
     my $o = self.bless( :$spec );
     $o.ref if $ref;
-    $o
+
+    do given $o.getTypeName {
+      say "ParamSpec Type Name: { $_ }" if checkDEBUG(3);
+
+      when 'GParamString'    {
+        GLib::Object::ParamSpec::String.new(
+          cast(GParamSpecString, $o.GParamSpec)
+        );
+      }
+      when 'GParamChar'    {
+        GLib::Object::ParamSpec::Char.new(
+          cast(GParamSpecChar, $o.GParamSpec)
+        );
+      }
+      when 'GParamUChar'   {
+        GLib::Object::ParamSpec::UChar.new(
+          cast(GParamSpecUChar, $o.GParamSpec)
+        )
+      }
+      when 'GParamBoolean' {
+        GLib::Object::ParamSpec::Boolean.new(
+          cast(GParamSpecBoolean, $o.GParamSpec)
+        );
+      }
+      when 'GParamInt'     {
+        GLib::Object::ParamSpec::Int.new(
+          cast(GParamSpecInt, $o.GParamSpec)
+        );
+      }
+      when 'GParamUInt'    {
+        GLib::Object::ParamSpec::UInt.new(
+          cast(GParamSpecUInt, $o.GParamSpec)
+        )
+      }
+      when 'GParamLong'    {
+        GLib::Object::ParamSpec::Long.new(
+          cast(GParamSpecLong, $o.GParamSpec)
+        );
+      }
+      when 'GParamULong'   {
+        GLib::Object::ParamSpec::ULong.new(
+          cast(GParamSpecULong, $o.GParamSpec)
+        );
+      }
+      when 'GParamInt64'   {
+        GLib::Object::ParamSpec::Int64.new(
+          cast(GParamSpecInt64, $o.GParamSpec)
+        )
+      }
+      when 'GParamUInt64'  {
+        GLib::Object::ParamSpec::UInt64.new(
+          cast(GParamSpecUInt64, $o.GParamSpec)
+        );
+      }
+      when 'GParamUnichar' {
+        GLib::Object::ParamSpec::Unichar.new(
+          cast(GParamSpecUnichar, $o.GParamSpec)
+        )
+      }
+      when 'GParamEnum'    {
+        GLib::Object::ParamSpec::Enum.new(
+          cast(GParamSpecEnum, $o.GParamSpec)
+        );
+      }
+      when 'GParamFlags'   {
+        GLib::Object::ParamSpec::Flags.new(
+          cast(GParamSpecFlags, $o.GParamSpec)
+        );
+      }
+      when 'GParamFloat'   {
+        GLib::Object::ParamSpec::Unichar.new(
+          cast(GParamSpecUnichar, $o.GParamSpec);
+        )
+      }
+      when 'GParamDouble'  {
+        GLib::Object::ParamSpec::Double.new(
+          cast(GParamSpecDouble, $o.GParamSpec)
+        )
+      }
+
+      default { $o }
+    }
   }
 
   method new_boolean (
@@ -642,6 +750,14 @@ class GLib::Object::ParamSpec {
     $obj ?? GLib::Object::Type.new( $!ps.owner_type ) !! $!ps.owner_type;
   }
 
+  method gist {
+    "{ self.^name }.new({
+      self.^methods.grep( * ~~ PseudoPropertyMethod ).map({
+        "{ .name } => { .(self) }"
+      }).join(', ')
+    })";
+  }
+
 }
 
 
@@ -732,5 +848,357 @@ class GLib::Object::ParamSpec::Pool {
   method remove (GParamSpec() $pspec) {
     g_param_spec_pool_remove($!psp, $pspec);
   }
+}
+
+class GLib::Object::ParamSpec::Char is GLib::Object::ParamSpec {
+  has GParamSpecChar $!gpsst is implementor;
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecChar
+    is also<GParamSpecChar>
+  { $!gpsst }
+
+  method new (GParamSpecChar $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
 
 }
+
+class GLib::Object::ParamSpec::UChar is GLib::Object::ParamSpec {
+  has GParamSpecUChar $!gpsst is implementor;
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecUChar
+    is also<GParamSpecUChar>
+  { $!gpsst }
+
+  method new (GParamSpecUChar $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::Boolean is GLib::Object::ParamSpec {
+  has GParamSpecBoolean $!gpsst is implementor;
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecBoolean
+    is also<GParamSpecBoolean>
+  { $!gpsst }
+
+  method new (GParamSpecBoolean $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::Int is GLib::Object::ParamSpec {
+  has GParamSpecInt $!gpsst is implementor;
+
+  method minimum       is g-pseudo-property { $!gpsst.minimum       }
+  method maximum       is g-pseudo-property { $!gpsst.maximum       }
+  method default-value is g-pseudo-property { $!gpsst.default_value }
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecInt
+    is also<GParamSpecInt>
+  { $!gpsst }
+
+  method new (GParamSpecInt $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::UInt is GLib::Object::ParamSpec {
+  has GParamSpecUInt $!gpsst is implementor;
+
+  method minimum       is g-pseudo-property { $!gpsst.minimum       }
+  method maximum       is g-pseudo-property { $!gpsst.maximum       }
+  method default-value is g-pseudo-property { $!gpsst.default_value }
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecUInt
+    is also<GParamSpecUInt>
+  { $!gpsst }
+
+  method new (GParamSpecUInt $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::Long is GLib::Object::ParamSpec {
+  has GParamSpecLong $!gpsst is implementor;
+
+  method minimum       is g-pseudo-property { $!gpsst.minimum       }
+  method maximum       is g-pseudo-property { $!gpsst.maximum       }
+  method default-value is g-pseudo-property { $!gpsst.default_value }
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecLong
+    is also<GParamSpecLong>
+  { $!gpsst }
+
+  method new (GParamSpecLong $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::ULong is GLib::Object::ParamSpec {
+  has GParamSpecULong $!gpsst is implementor;
+
+  method minimum       is g-pseudo-property { $!gpsst.minimum       }
+  method maximum       is g-pseudo-property { $!gpsst.maximum       }
+  method default-value is g-pseudo-property { $!gpsst.default_value }
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec($!gpsst = $sub-spec)
+  }
+
+  method GLib::Raw::Structs::GParamSpecULong
+    is also<GParamSpecULong>
+  { $!gpsst }
+
+  method new (GParamSpecULong $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::Int64 is GLib::Object::ParamSpec {
+  has GParamSpecInt64 $!gpsst is implementor;
+
+  method minimum       is g-pseudo-property { $!gpsst.minimum       }
+  method maximum       is g-pseudo-property { $!gpsst.maximum       }
+  method default-value is g-pseudo-property { $!gpsst.default_value }
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecInt64
+    is also<GParamSpecInt64>
+  { $!gpsst }
+
+  method new (GParamSpecInt64 $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::UInt64 is GLib::Object::ParamSpec {
+  has GParamSpecUInt64 $!gpsst is implementor;
+
+  method minimum       is g-pseudo-property { $!gpsst.minimum       }
+  method maximum       is g-pseudo-property { $!gpsst.maximum       }
+  method default-value is g-pseudo-property { $!gpsst.default_value }
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecUInt64
+    is also<GParamSpecUInt64>
+  { $!gpsst }
+
+  method new (GParamSpecUInt64 $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::Unichar is GLib::Object::ParamSpec {
+  has GParamSpecUnichar $!gpsst is implementor;
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecUnichar
+    is also<GParamSpecUnichar>
+  { $!gpsst }
+
+  method new (GParamSpecUnichar $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::Enum is GLib::Object::ParamSpec {
+  has GParamSpecEnum $!gpsst is implementor;
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecEnum
+    is also<GParamSpecEnum>
+  { $!gpsst }
+
+  method new (GParamSpecEnum $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::String is GLib::Object::ParamSpec {
+  has GParamSpecString $!gpsst is implementor;
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecString
+    is also<GParamSpecString>
+  { $!gpsst }
+
+  method new (GParamSpecString $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::Flags is GLib::Object::ParamSpec {
+  has GParamSpecFloat $!gpsst is implementor;
+
+  method minimum       is g-pseudo-property { $!gpsst.minimum       }
+  method maximum       is g-pseudo-property { $!gpsst.maximum       }
+  method default-value is g-pseudo-property { $!gpsst.default_value }
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecFloat
+    is also<GParamSpecFloat>
+  { $!gpsst }
+
+  method new (GParamSpecFloat $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::Double is GLib::Object::ParamSpec {
+  has GParamSpecDouble $!gpsst is implementor;
+
+  method minimum       is g-pseudo-property { $!gpsst.minimum       }
+  method maximum       is g-pseudo-property { $!gpsst.maximum       }
+  method default-value is g-pseudo-property { $!gpsst.default_value }
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecDouble
+    is also<GParamSpecDouble>
+  { $!gpsst }
+
+  method new (GParamSpecDouble $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+}
+
+class GLib::Object::ParamSpec::ValueArray is GLib::Object::ParamSpec {
+  has GParamSpecValueArray $!gpsst is implementor;
+
+  submethod BUILD ( :$sub-spec ) {
+    self.setGParamSpec( cast(GParamSpec, $!gpsst = $sub-spec) ) if $sub-spec
+  }
+
+  method GLib::Raw::Structs::GParamSpecValueArray
+    is also<GParamSpecValueArray>
+  { $!gpsst }
+
+  method new (GParamSpecValueArray $sub-spec, :$ref = True) {
+    return Nil unless $sub-spec;
+
+    my $o = self.bless( :$sub-spec );
+    $o.ref if $ref;
+    $o;
+  }
+
+}
+# class GLib::Object::ParamSpec::Object is GLib::Object::ParamSpec {
+#   has GParamSpecObject $!gpsst is implementor;
+#
+#   submethod BUILD ( :$sub-spec ) {
+#     self.setGParamSpec($!gpsst = $sub-spec)
+#   }
+#
+#   method GLib::Raw::Structs::GParamSpecObject
+#     is also<GParamSpecObject>
+#   { $!gpsst }
+#
+#   method new (GParamSpecObject $sub-spec, :$ref = True) {
+#     return Nil unless $sub-spec;
+#
+#     my $o = self.bless( :$sub-spec );
+#     $o.ref if $ref;
+#     $o;
+#   }
+# }

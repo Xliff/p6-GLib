@@ -4,6 +4,7 @@ use NativeCall;
 use Method::Also;
 
 use GLib::Raw::Types;
+use GLib::Object::Raw::ParamSpec;
 use GLib::Object::ParamSpec;
 
 class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is export {
@@ -141,7 +142,7 @@ class GLib::Class::Object is export {
     :$raw                 = False
   ) {
     my guint $n  = 0;
-    my       $pl = g_object_class_list_properties($!c, $n);
+    my       $pl = g_object_class_list_properties($!c.p, $n);
 
     $n_properties = $n;
     my @properties;
@@ -226,15 +227,6 @@ sub g_object_class_find_property (
   Str          $property_name
 )
   returns GParamSpec
-  is native(gobject)
-  is export
-{ * }
-
-sub g_object_class_list_properties (
-  GObjectClass $oclass,
-  guint        $n_properties is rw
-)
-  returns CArray[Pointer[GParamSpec]]
   is native(gobject)
   is export
 { * }

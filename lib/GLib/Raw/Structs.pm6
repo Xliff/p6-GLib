@@ -563,9 +563,9 @@ class GValue {
 }
 
 class GValueArray           is repr<CStruct> does GLib::Roles::Pointers is export {
-  has guint    $.n_values;
-  has gpointer $.values;          # GValue *
-  has guint    $.n_preallocated;
+  has guint   $.n_values;
+  has Pointer $.values;          #= GValue[]
+  has guint   $.n_preallocated;
 
   method n-values       { $!n_values       }
   method n-preallocated { $!n_preallocated }
@@ -592,8 +592,6 @@ class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
   }
 
   method g_type_instance { $!g_type_instance }
-  method value_type      { $!value_type      }
-  method owner_type      { $!owner_type      }
   method ref_count       { $!ref_count       }
   method param_id        { $!param_id        }
 }
@@ -607,6 +605,18 @@ class GParamSpecChar      is repr<CStruct> does GLib::Roles::Pointers is export 
   method parent-instance { $!parent_instance }
   method default-value   { $!default_value   }
 }
+
+class GParamSpecString is repr<CStruct> does GLib::Roles::Pointers is export {
+  HAS GParamSpec $.parent_instance;
+  has Str        $.default_value;
+  has Str        $.cset_first;
+  has Str        $.cset_nth;
+  has uint8      $.substitutor;
+
+  # has guint      $.null_fold_if_empty : 1;
+  # has guint      $.ensure_non_null : 1;
+  has guint32    $.fields;
+};
 
 class GParamSpecUChar     is repr<CStruct> does GLib::Roles::Pointers is export {
   HAS GParamSpec    $.parent_instance;

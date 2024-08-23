@@ -2,7 +2,9 @@ use v6.c;
 
 use NativeCall;
 
-use GLib::Raw::Types;
+use GLib::Raw::Definitions;
+use GLib::Raw::Structs;
+use GLib::Raw::Enums;
 
 unit package GLib::Object::Raw::ParamSpec;
 
@@ -482,6 +484,15 @@ sub g_param_value_validate (GParamSpec $pspec, GValue $value)
 
 sub g_param_values_cmp (GParamSpec $pspec, GValue $value1, GValue $value2)
   returns gint
+  is native(gobject)
+  is export
+{ * }
+
+sub g_object_class_list_properties (
+  gpointer $oclass,
+  guint    $n_properties is rw
+)
+  returns CArray[Pointer[GParamSpec]]
   is native(gobject)
   is export
 { * }
