@@ -5,15 +5,15 @@ sub checkDEBUG ($d = 1) is export {
 }
 
 INIT {
-
-  if %*ENV<P6_GLIB_DEBUG> {
+  my $v = %*ENV<P6_GLIB_DEBUG> // $*ENV<RAKU_GLIB_DEBUG>;
+  if $v {
     print '»————————————> setting debug';
-    if %*ENV<P6_GLIB_DEBUG>.Int -> \v {
+    if $v.Int -> \v {
       $DEBUG = v unless v ~~ Failure;
     }
     $DEBUG //= 1;
 
-    say " ({ $DEBUG })";
+    say "Setting DEBUG level to { $DEBUG }" if $DEBUG;
   }
 
 }
