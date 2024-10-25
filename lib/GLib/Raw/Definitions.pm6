@@ -18,8 +18,21 @@ our @ERRORS           is export;
 
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
+role RakuDistributionProvider is export { }
+
+multi sub trait_mod:<is>(Sub \s, :$DistributionProvider is required)
+  is export
+{
+  s does RakuDistributionProvider;
+}
+
+sub GLib-Distribution is export is DistributionProvider {
+  $?DISTRIBUTION;
+}
+
+
 # Forced compile count
-my constant forced = 410;
+my constant forced = 420;
 
 constant GDOUBLE_MAX is export = 1.7976931348623157e308;
 constant INVALID_IDX is export = 2 ** 16 - 1;
@@ -131,8 +144,13 @@ constant GLIB_SYSDEF_MSG_DONTROUTE is export = 4;
 
 constant G_PARAM_USER_SHIFT        is export = 8;
 constant G_LOG_DOMAIN              is export = "\0";
-constant G_TIME_SPAN_DAY           is export = 86400000000;
 constant G_MAXSIZE                 is export = 2 ** 64 - 1;
+
+constant G_TIME_SPAN_DAY           is export = 86400000000;
+constant G_TIME_SPAN_HOUR          is export = 3600000000;
+constant G_TIME_SPAN_MINUTE        is export = 60000000;
+constant G_TIME_SPAN_SECOND        is export = 1000000;
+constant G_TIME_SPAN_MILLISECOND   is export = 1000;
 
 class GAsyncQueue              is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GBinding                 is repr<CPointer> is export does GLib::Roles::Pointers { }
@@ -191,13 +209,16 @@ class GUri                     is repr<CPointer> is export does GLib::Roles::Poi
 
 constant GVariantType is export := CArray[uint8];
 
-# "Exhaustive" maximal...
-multi max (:&by = {$_}, :$all!, *@list) is export {
-  # Find the maximal value...
-  my $max = max my @values = @list.map: &by;
+constant G_LITTLE_ENDIAN is export = 1234;
+constant G_BIG_ENDIAN    is export = 4321;
 
-  # Extract and return all values matching the maximal...
-  @list[ @values.kv.map: { $^index unless $^value cmp $max } ];
-}
-
-our $ERRNO is export := cglobal('libc.so.6', 'errno', int32);
+# # "Exhaustive" maximal...
+# multi max (:&by = {$_}, :$all!, *@list) is export {
+#   # Find the maximal value...
+#   my $max = max my @values = @list.map: &by;
+#
+#   # Extract and return all values matching the maximal...
+#   @list[ @values.kv.map: { $^index unless $^value cmp $max } ];
+# }
+#
+# our $ERRNO is export := cglobal('libc.so.6', 'errno', int32);
