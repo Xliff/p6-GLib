@@ -2,6 +2,8 @@ use v6.c;
 
 use Method::Also;
 
+use GLib::Raw::Signal;
+
 class GLib::Object::Supplyish {
   has $!supply;
   has %!signals;
@@ -16,6 +18,28 @@ class GLib::Object::Supplyish {
     #     it's punned object back to a regular Str.
     method untap ( :$clear = False ) {
       $supplyish.untap( name => self, :$clear );
+    }
+
+    method enable {
+      $supplyish.enabled = True;
+    }
+
+    method disable {
+      $supplyish.enabled = False;
+    }
+
+    method block_signal_handler {
+      self.disable;
+    }
+    method block-signal-handler {
+      self.block_signal_handler;
+    }
+
+    method unblock_signal_handler {
+      self.enable;
+    }
+    method unblock-signal-handler {
+      self.unblock_signal_handler;
     }
 
   }
@@ -119,6 +143,8 @@ class GLib::Object::Supplyish {
     %!taps{$n}.close;
     %!taps{$n}:delete;
     %!signals{$!signal} = %!taps.elems.so;
+    # cw: Remember to disconnect the actual GLib signal
+    g_signal_handler_disconnect( |%!signals{$!signal}.skip(1) )
   }
 }
 
