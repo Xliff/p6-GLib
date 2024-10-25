@@ -11,6 +11,7 @@ use GLib::Raw::Value;
 use GLib::Object::Type;
 
 use GLib::Roles::Implementor;
+use GLib::Roles::TypedBuffer;
 
 class GLib::Value {
   also does GLib::Roles::Implementor;
@@ -29,7 +30,7 @@ class GLib::Value {
     #self.unref
   }
 
-  proto method new (|)
+  proto method new (|c)
   { * }
 
   multi method new (GTypeEnum $t) {
@@ -226,6 +227,7 @@ class GLib::Value {
     Proxy.new(
       FETCH => sub ($) {
         my $t = $!v.g_type;
+        return $t if     $t == GTypeEnum.enums.values.any;
         return $t unless $fundamental;
         $t = GLib::Object::Type.new($t).fundamental;
         return Nil    unless $t.defined;
@@ -549,7 +551,7 @@ sub gv-obj ($o, :$type) is export
   { gv_obj($o, :$type) }
 sub gv_obj ($o, :$type is copy) is export {
   $type = $o.?get_type
-    if ( $o ~~ ::('GLib::Roles::Object' ) ) && $type.defined.not;
+    if ( $o ~~ ::('GLib::Object') ) && $type.defined.not;
   my $gv = GLib::Value.new( $type // G_TYPE_OBJECT );
   $gv.object = $o;
   $gv;
@@ -595,4 +597,40 @@ sub valueToGValue (
          .^name } in update!"
 
   }
+}
+
+class GLib::Value::Array {
+  has GValueArray $!ga  is implementor;
+  has             $!raw is built;
+
+  submethod BUILD ( :$glib-value-array ) {
+    $!ga = $glib-value-array if $glib-value-array;
+  }
+
+  method new (GValueArray $glib-value-array, :$raw) {
+    return Nil unless $glib-value-array;
+
+    $glib-value-array ?? self.bless( :$glib-value-array, :$raw ) !! Nil;
+  }
+
+  method GLib::Raw::Structs::GValueArray
+    is also<GValueArray>
+  { $!ga }
+
+  method values ( :$raw = False ) {
+    say "VA values: { $!ga.values }" if checkDEBUG(3);
+
+    bufferReturnTypedArray(
+      $!ga.values,
+      |GLib::Value.getTypePair,
+
+      size => $!ga.n_values,
+      raw  => $raw
+    );
+  }
+
+  method Array ( :$raw = False ) {
+    self.values( :$raw ).Array
+  }
+
 }
