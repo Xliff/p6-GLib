@@ -107,11 +107,11 @@ class GLib::Object::TypeModule {
   }
 
   method register_static (
-        $instance-struct,
-    Mu :$class-struct                   is copy,
-       :class-init(:&class_init)                 = &standard_class_init,
-       :instance-init(:&instance_init)           = &standard_instance_init,
-       :register-vfunc(:&register_vfunc)         = &standard_register_vfunc,
+        $instance-tp,
+    Mu :$class-struct                    is copy,
+       :class-init(:&class_init)                  = &standard_class_init,
+       :instance-init(:&instance_init)            = &standard_instance_init,
+       :register-vfunc(:&register_vfunc)          = &standard_register_vfunc,
 
   )
     is also<register-static>
@@ -122,7 +122,7 @@ class GLib::Object::TypeModule {
 
     unless $class-struct.WHERE === Any.WHERE {
       $class-struct = Metamodel::ClassHOW.new_type(
-        name => $instance-struct.^shortname ~ 'Class',
+        name => $instance-tp.head.^shortname ~ 'Class',
         repr => 'CStruct'
       );
       # cw: Go through instance-struct and look for any vfuncs!
@@ -161,8 +161,8 @@ class GLib::Object::TypeModule {
     say "P Object: { $p.^name }";
     self.register_static_simple(
       $p.get_type,
-      $instance-struct.^shortname,
-      nativesizeof($instance-struct),
+      $instance-tp.head.^shortname,
+      nativesizeof($instance-tp.head),
 
       class-size => nativesizeof($class-struct),
 
@@ -172,16 +172,16 @@ class GLib::Object::TypeModule {
         }
 
         say "Instance init: { @a.gist }";
-        instance_init( $instance-struct, $class-struct, |@a )
+        instance_init( $instance-tp.head, $class-struct, |@a )
       },
 
-      class-init => sub (*@a) {
+      class-init => sub ( *@a ) {
         CATCH {
           default { .message.say; .backtrace.concise.say }
         }
 
         say "Class init: { @a.gist }";
-        class_init($instance-struct, $class-struct, |@a);
+        class_init($instance-tp.head, $class-struct, |@a);
         if +@vfunc-names {
           register_vfunc($_) for @vfunc-names;
         }
@@ -265,17 +265,18 @@ class GLib::Object::TypeModule {
 
 }
 
-sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
+sub standard_class_init ($itp, $cs, $cc is copy, $p) is export {
   say "CC: { +$cc }";
 
   multi sub checkAttributes( $cs where  *.defined ) {
+    say "CS: { $cs }";
     checkAttributes($cs.?parent);
 
     for $cs.^attributes {
-      my \f = $is.^can($_);
+      my \f = $itp.tail,.^can($_);
 
       if %checkAttributes{ $cs.^name } -> &cb {
-        my $r = &cb($cc, $_, f, $is);
+        my $r = &cb($cc, $_, f);
         next unless $r;
       }
 
@@ -286,20 +287,27 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
   multi sub checkAttributes( $cs where *.defined.not ) {
   }
 
-  checkAttributes($cc);
+  #checkAttributes($cc);
 
   constant P = GLib::Object::ParamSpec;
 
   $cc = cast($cs, $cc);
   my $cct = $cc.parent.g_type_class.g_type;
-  say "CC Type: { $cct }";
-  say "CC Type Name: { GLib::Object::Type.new($cct).name }";
+  my $ncn = GLib::Object::Type.new($cct).name;
 
+  say "CC Type: { $cct }";
+  say "CC Type Name: { $ncn }";
+
+  # cw: @props list starts with NULL
   my @props = (GParamSpec);
+
   my (@prop-get-add, @prop-set-add);
   my $a-idx = 0;
-  for $is.^attributes {
+
+  for $itp.^attributes {
     my $att = $_;
+
+    say "Attribute: { .gist }";
 
     @prop-set-add.push: RakuAST::Statement::When.new(
       condition => RakuAST::Literal.from-value($a-idx),
@@ -337,6 +345,8 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
     # @prop-get-add:
 
     when GAttribute {
+      say "Attribute...";
+
       # Create property
       my (
         $name,
@@ -364,7 +374,7 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
 
       # cw: Now must handle G_PARAM_READABLE and G_PARAM_WRITABLE
 
-      my $acc = $is.^lookup( $att.name.substr(2) );
+      my $acc = $itp.^can( $att.name.substr(2) ).head;
 
       say "Accessor: { $acc.name }" if $acc;
 
@@ -373,14 +383,14 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
 
       say "Setting flags { $flags } on { $att.name }.";
 
-      @props.push: do given .type {
+      my $p = do given .type {
         my ($raw-typed, $std-typed) = False;
 
         when BoxedType | GObjectDerived {
           # cw: These are also manifest based, but in the case of GObject
           #     will fallback to GObject. For <BoxedType> values, if an
           #     object match is not found, it is OK for it to not have one.
-          $is.^add_method("set_{ $att.name }", method (\v) {
+          $cs.^add_method("set_{ $att.name }", method (\v) {
             $att.set_value(self, v);
             # Get paramspec matching $att.name
             # if attribute is GObject or GBoxed, then increment the reference
@@ -389,12 +399,14 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
             self.emit("notify::{ $att.name }");
           });
 
-          $is.^add_method(
+          $cs.^add_method(
             "get_{ $att.name }",
             method ( :$raw = False, :$value = False ) {
               # Get paramspec matching $att.name
+              my $attr;
               # Get type from paramspec
               # Initialize a GValue from that type
+              my $v;
               self.get_property($name, $v);
               $attr.set_value(self, $v.value);
               return $v if $raw;
@@ -402,6 +414,8 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
               $value ?? $o !! $o.value;
             }
           );
+
+          proceed;
         }
 
         when BoxedType {
@@ -415,7 +429,7 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
         }
 
         when GObjectDerived {
-          P.new_object(
+          P.new_object(  #
             $name,
             $nick,
             $blurb,
@@ -436,12 +450,12 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
              Str      |
              Pointer
         {
-          $is.^add_method("set_{ $att.name }", method (\v) {
+          $cs.^add_method("set_{ $att.name }", method (\v) {
             $att.set_value(self, v);
             self.emit("notify::{ $att.name }");
           });
 
-          $is.^add_method("get_{ $att.name }", method () {
+          $cs.^add_method("get_{ $att.name }", method () {
             $att.get_value(self);
           });
 
@@ -576,6 +590,8 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
           )
         }
       }
+      say "ParamSpec: { $p // '»NOP«' }";
+      @props.push: $p if $p;
     }
 
     when GSignal {
@@ -583,6 +599,61 @@ sub standard_class_init ($is, $cs, $cc is copy, $p) is export {
     }
 
     $a-idx++;
+  }
+
+  CONTROL {
+    when CX::Warn { .message.say; .backtrace.concise.say }
+  }
+
+  # cw: NEVERMIND!
+  # This HAS to be done locally for each class in the ancestry chain!
+  # Note that $idx IS PROBABLY local enough.
+  my $lc = $cs;
+  while $lc !=:= Any {
+    say "CS: { $lc.^name }";
+    for $lc.^attributes -> $f {
+      # my &f;
+    #
+    #   next unless $_ ~~ GObjectVFunc;
+    #
+      my $fn = $f.?name // '';
+      $fn .= substr(2) if $fn;
+      say "VFName: { $fn }";
+    #
+      # next unless [||](
+      #   $_ eq $fn,
+      #   $_ eq $fn.&switch-dash
+      # );
+    #
+    #   when 'get_property' {
+    #
+    #     $rcc.get_property =
+    #       set_func_pointer( , &sprintf-GiV );
+    #
+    #     say "Get Property: { $cc.get_property }";
+    #   }
+    #
+      when 'set_property' {
+        # &f = sub ($i, $idx, $v, $p) {
+        #   if $idx !~~ 0 .. $i.^attributes.elems {
+        #     X::GLib::Object::AttributeNotFound.new(
+        #       attribute => $p.name
+        #     ).throw
+        #   }
+        #   $i.^attributes[$idx].set_value($i, $v);
+        # }
+      }
+
+      # $cc.set_property =
+      #   set_func_pointer( &f, &sprintf-GiV);
+
+      # say "Set Property: { $cc.set_property }";
+    }
+
+    say "Props: { @props.gist }";
+    say "LC: { $lc.^name }";
+    last if $lc ~~ GTypeClass;
+    $lc = $lc.^attributes.head.type;
   }
 
   g_object_class_install_properties(
@@ -598,61 +669,48 @@ sub standard_instance_init (\struct, \c_struct, $cc is copy, $p) is export {
 
 }
 
-sub standard_register_vfunc ($name) is export {
+sub register-class-callbacks ($class) {
+  say "Registering callbacks for { $class }";
 
-}
-
-INIT {
   GLib::Object::TypeModule.add-registration-callback(
-    'GObjectClass',
-    sub ($cc, $_, $is, \f) {
+    $class,
+    # sub ($cc, $_, $is, \f) {
+    sub ($cc, $_, \f) {
 
-      given .name.substr(2) {
+      my $rcc = cast( ::("{ $class }::Class"), $cc);
+      given .gname.substr(2) {
         say "Class Attribute Name: { $_ }";
-
-        next unless f ~~ GObjectVFunc;
-        next unless f.g-v-func eq $_;
-
-        when 'get_property' {
-          unless f {
-            f = sub ($i, $idx, $v, $p) {
-              if $idx !~~ 0 .. $is.^attributes.elems {
-                X::GLib::Object::AttributeNotFound.new(
-                  attribute => $p.name
-                ).throw
-              }
-              $v.value = $is.^attributes[$idx].get_value($i);
-            }
-          }
-
-          $cc.get_property =
-            set_func_pointer( &(f), &sprintf-GiV);
-
-          say "Get Property: { $cc.get_property }";
-        }
-
-        when 'set_property' {
-          unless f {
-            f = sub ($i, $idx, $v, $p) {
-              if $idx !~~ 0 .. $is.^attributes.elems {
-                X::GLib::Object::AttributeNotFound.new(
-                  attribute => $p.name
-                ).throw
-              }
-              $is.^attributes[$idx].set_value($i, $v);
-            }
-          }
-
-          $cc.set_property =
-            set_func_pointer( &(f), &sprintf-GiV);
-
-          say "Set Property: { $cc.set_property }";
-        }
 
         return 1;
       }
     }
-  );
+  )
+}
+
+sub standard_register_vfunc ($name) is export {
+
+}
 
 
+sub resolveToStr ($_ is copy) is export {
+  do {
+    when GValue {
+      my $v = GLib::Value.new($_);
+
+      $v.gtype == G_TYPE_STRING
+        ?? $v.string
+        !! warn (
+             "Cannot resolve GValue to stirng since it says it's a {
+             $v.gtype }"
+           );
+    }
+
+    when gpointer {
+      $_ = cast(CArray[uint8], $_); proceed;
+    }
+
+    when CArray[uint8] {
+      $_ = cast(Str, $_);
+    }
+  }
 }
