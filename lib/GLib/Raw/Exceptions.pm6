@@ -1,6 +1,6 @@
 use v6.c;
 
-class X::GLib::Exception is Exception {
+role X::GLib::Roles::Message {
   has $!message is built;
 
   method message {
@@ -8,20 +8,26 @@ class X::GLib::Exception is Exception {
   }
 }
 
+class X::GLib::Exception is Exception does X::GLib::Roles::Message { }
+
+class X::GLib::NYI is X::NYI does X::GLib::Roles::Message {
+
+  multi method new (
+    :$item  is required,
+    :$class
+  ) {
+    my $message = $item;
+    $message ~= " in { $class.^name }" unless $class === Any;
+
+    self.bless( message => "{ $message } NYI!" )
+  }
+
+}
+
 class X::GLib::InvalidState is X::GLib::Exception {
 
   multi method new ( :$message = 'Invalid State' ) {
     self.bless(:$message);
-  }
-}
-
-class X::GLib::GError is X::GLib::Exception {
-  has $!gerror handles <domain code>;
-
-  submethod BUILD (:$!gerror) { }
-
-  method new ($gerror) {
-    self.bless( :$gerror, message => $gerror.message );
   }
 }
 
@@ -93,6 +99,9 @@ class X::GLib::InvalidNumberOfArguments is X::GLib::Exception {
   method new ( :$message = 'Invalid number of arguments' ) {
     self.bless( :$message );
   }
+}
+
+class X::GLib::InvalidIndex is X::GLib::Exception {
 }
 
 class X::GLib::OnlyOneOf is X::GLib::Exception {
