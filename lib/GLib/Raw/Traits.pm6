@@ -29,6 +29,8 @@ role PropertyMethod       is export { }
 role PseudoPropertyMethod is export { }
 role AttributeMethod      is export { }
 role AccessorMethod       is export { }
+role TypeManifest         is export { }
+role NotInManifest        is export { }
 
 role BoxedType[$type?] is export {
 
@@ -49,16 +51,16 @@ role GDefault[$value] is export {
 
 role GSignal         is export { }
 role NoReturn        is export { }
+role ReturnsPromise  is export { }
 
 role Signalling[@Signals] {
   method defined-signals { @Signals }
 }
 
 role RangedAttribute[$R] is export {
-  method valid-range { $R }
-
-  method range-max { $R.max }
-  method range-min { $R.min }
+  method valid-range { $R     }
+  method range-max   { $R.max }
+  method range-min   { $R.min }
 
   method handle-ranged-attribute-set (\v, Bool() :$clamp) {
     if v ~~ self.valid-range {
@@ -181,6 +183,9 @@ multi sub trait_mod:<is> ( Attribute $a, :default_value(:$default-value)! ) {
   trait_mod:<is>($a, assigned-default-value => $default-value);
 }
 
+multi sub trait_mod:<is> ( Attribute:D $a, :async(:$asynchronoous)! ) {
+  $a does ReturnsPromise;
+}
 
 # Thanks, guifa!
 class X::StaticMethod::CalledWithInvocant is Exception {
@@ -196,6 +201,3 @@ multi sub trait_mod:<is> (Method:D \meth, Bool :$static!) is export {
     callsame
   }
 }
-
-role TypeManifest  is export { }
-role NotInManifest is export { }
