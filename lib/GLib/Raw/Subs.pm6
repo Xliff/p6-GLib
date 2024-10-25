@@ -10,8 +10,6 @@ use GLib::Raw::Enums;
 use GLib::Raw::Exceptions;
 use GLib::Raw::Object;
 
-use GLib::Object::Supplyish;
-
 use GLib::Roles::Pointers;
 
 package GLib::Raw::Subs {
@@ -30,7 +28,6 @@ package GLib::Raw::Subs {
   sub ftruncate      (int32,   uint64)                        is export is native { * }
 
   sub native-open    (Str, int32, int32 $m = 0)
-
     is export
     is symbol('open')
     is native
@@ -42,8 +39,8 @@ package GLib::Raw::Subs {
     my $p = &block.signature.params.elems;
 
     $block
-      ??  ->   *@a   { $p ?? &block( |@a[ ^$p ] ) !! &block() }
-      !! sub ( *@a ) { $p ?? &block( |@a[ ^$p ] ) !! &block() }
+      ??  ->   *@a   { my $*A = @a; $p ?? &block( |@a[ ^$p ] ) !! &block() }
+      !! sub ( *@a ) { my $*A = @a; $p ?? &block( |@a[ ^$p ] ) !! &block() }
   }
   sub CB   (&block, :b(:$block) = False) is export { SUB(&block) }
   sub DEF  (&block, :b(:$block) = False) is export { SUB(&block) }
@@ -345,7 +342,12 @@ package GLib::Raw::Subs {
     g_strfreev($ca) if $free;
     $a;
   }
-  multi sub CArrayToArray(CArray $ca, &code, :$size = ∞, :$free = False)
+  multi sub CArrayToArray (CArray $ca, $p, \O, :$raw = False, :$free = False) {
+    CArrayToArray($ca, :$free).map({
+      propReturnObject($ca, $raw, $p, O);
+    });
+  }
+  multi sub CArrayToArray (CArray $ca, &code, :$size = ∞, :$free = False)
     is export
   {
     my ($cnt, @ret) = (0);
@@ -361,6 +363,10 @@ package GLib::Raw::Subs {
   role SetIntSemantics[$E] {
     method Int {
       self.map({ $E.enums{ .key }.Int }).sum;
+    }
+
+    method includes ($f) {
+      $f ∈ self
     }
   }
 
@@ -509,16 +515,21 @@ package GLib::Raw::Subs {
             .[0]
           } else {
             my $p = .[0];
-            $p.defined ?? ( .[0] !~~ Pointer ?? .[0]
-                                             !! do {
-                                                 say "PPR0: { .[0].of.^name }";
-                                                 say "PPR1: { .[0].of.REPR }";
-                                                 .[0].of.REPR eq 'CStruct'
-                                                    ?? .[0].deref
-                                                    !! .[0]
-                                                }
-                          )
-                       !! Nil;
+            $p.defined
+              ?? (
+                .[0] !~~ Pointer
+                  ?? .[0]
+                  !! do {
+                     if checkDEBUG(3) {
+                       say "PPR0: { .[0].of.^name }";
+                       say "PPR1: { .[0].of.REPR }";
+                     }
+                     .[0].of.REPR eq 'CStruct'
+                        ?? .[0].deref
+                        !! .[0]
+                  }
+              )
+              !! Nil;
           }
         } else {
           Nil;
@@ -760,6 +771,11 @@ package GLib::Raw::Subs {
     $all.not ?? $v !! ($v, \t);
   }
 
+  sub switch-dash ($s) is export {
+    $s ~~ tr/-_/_-/;
+    $s;
+  }
+
   sub searchManifestForTypePair (\t) is export {
   }
 
@@ -807,6 +823,25 @@ package GLib::Raw::Subs {
     $idx;
   }
 
+  sub resolveCArray (\T, $v) is export {
+    return $v if $v ~~ CArray[T];
+    do given $v {
+      when Array {
+        $_ = newCArray(T, $_);
+      }
+
+      when Pointer {
+        $_ = cast(CArray[T], $_);
+      }
+
+      default {
+        X::GLib::InvalidType.new(
+          message => "Value must be compatible to a CArray[{ T.^name }]!"
+        ).throw;
+      }
+    }
+  }
+
   sub resolveBuffer (
      $s        is copy,
     :$carray            = True,
@@ -825,7 +860,7 @@ package GLib::Raw::Subs {
 
     my $l;
     my $b = do given $s {
-      when Str                 {
+      when Str {
         $l //= .chars;
         $_ = .encode($encoding);
         proceed
@@ -954,8 +989,12 @@ package GLib::Raw::Subs {
   sub remove (@list, $value) is export {
     @list.splice( @list.first($value, :k), 1 );
   }
-  sub removeObject (@list, $object) is export {
-    @list.splice( @list.&firstObject($object, :k), 1 );
+  sub removeObject (@list, $object, &xform = Callable) is export {
+    my $i = &xform
+      ?? @list.map({ &xform($_) }).&firstObject($object, :k)
+      !! @list.&firstObject($object, :k);
+
+    @list.splice($i, 1);
   }
 
   sub BufToStrArray ($b, :$null = True) is export {
@@ -1093,6 +1132,18 @@ package GLib::Raw::Subs {
 
   sub get-longest-prefix (@words) is export {
     max :all, :by{.chars}, keys [∩] @words».match(/^.+/, :ex)».Str;
+  }
+
+  sub generate-iterator ($self, &elems, &get) is export {
+    (
+      class :: does Iterator {
+        has $.index is rw = 0;
+
+        method pull-one {
+          &elems() > $!index ?? &get( $!index++ ) !! IterationEnd;
+        }
+      }
+    ).new;
   }
 
   sub g_destroy_none(Pointer)
@@ -1338,4 +1389,5 @@ package GLib::Raw::Subs {
     is native(glib)
     is export
   { * }
+
 }
