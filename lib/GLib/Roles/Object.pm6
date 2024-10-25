@@ -43,7 +43,7 @@ class ProvidesData does Associative {
   }
 
   method AT-KEY (\k) is rw {
-    %data{$!p}{k}
+    %data{$!p // ''}{k // ''}
   }
 
   method EXISTS-KEY (\k) {
@@ -52,6 +52,18 @@ class ProvidesData does Associative {
 
   method clear (\k) {
     %data{$!p}{k}:delete;
+  }
+
+  method clear-all {
+    self.clear($_) for self.keys;
+  }
+
+  method keys {
+    %data{$!p // ''}.keys;
+  }
+
+  method pairs {
+    %data{$!p // '' }.pairs;
   }
 
 }
@@ -104,6 +116,16 @@ role GLib::Roles::Signals::GObject does GLib::Roles::Signals::Generic {
 }
 
 # cw: Time to grow up.
+my %cleanup-classes;
+
+sub register-gobject-cleanup-class ($c, &callback) is export {
+  %cleanup-classes{ $c } = &callback;
+}
+
+role GLib::Roles::Object::Cleanup[$class] {
+  method cleanup-classes { callsame(), $class }
+}
+
 role GLib::Roles::Object {
 #  also does GLib::Roles::Bindable;
   also does GLib::Roles::Protection;
@@ -112,8 +134,28 @@ role GLib::Roles::Object {
 
   has GObject $!o;
 
+  has         $!run-cleanup = True;
+
   has $!data-proxy;
   has $!object-set;
+
+  submethod DESTROY {
+    $!data-proxy.clear-all;
+
+    return unless $!run-cleanup;
+
+    if self.?cleanup-classes -> $c {
+      for $c.Array {
+        if %cleanup-classes{ $_ } -> &f {
+          &f(self)
+        }
+      }
+    }
+  }
+
+  method unregister-cleanup {
+    $!run-cleanup = False;
+  }
 
   # cw: A method for proper GObject destruction? Also see: !setObject
   # submethod DESTROY {
@@ -493,8 +535,7 @@ role GLib::Roles::Object {
     #%object-references{ +$!o.p }++
   }
 
-  method p { $!o.p }
-
+        method p       { $!o.p }
   multi method Numeric { +self.p }
 
   method GLib::Raw::Object::GObject
@@ -954,6 +995,7 @@ role GLib::Roles::Object {
   # cw: Provides a hash-like interface at this method.
   #     Will To replace the above 3 methods.
   method data {
+    $!data-proxy = ProvidesData.new($!o) unless $!data-proxy;
     $!data-proxy;
   }
 
