@@ -135,6 +135,24 @@ class GError                is repr<CStruct> does GLib::Roles::Pointers is expor
 
 }
 
+class X::GLib::GError is X::GLib::Exception {
+  has $!gerror handles <domain code>;
+
+  submethod BUILD (:$!gerror) { }
+
+  method new ($gerror) {
+    self.bless( :$gerror, message => $gerror.message );
+  }
+
+  method ACCEPTS (GError() $e) {
+    [&&](
+      $e ~~ self.WHAT,
+      $e.code == self.code
+    )
+  }
+}
+
+
 class GList                 is repr<CStruct> does GLib::Roles::Pointers is export {
   has Pointer $!data;
   has GList   $.next;
