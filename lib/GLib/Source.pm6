@@ -268,11 +268,11 @@ class GLib::Source::Idle is GLib::Source {
 
 }
 
-role GIdleId {
+role GIdleId[&cancel = sub ($i) { GLib::Source.remove($i) }] {
 
   method cancel ( :$clear = False ) {
     return unless self;
-    GLib::Source.remove(self);
+    &cancel.(self);
     self = 0 if $clear;
   }
   method clear  {
