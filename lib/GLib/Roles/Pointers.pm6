@@ -10,7 +10,7 @@ import GLib::Roles::Implementor;
 BEGIN re-export-everything('GLib::Roles::Implementor');
 
 # Number of times full project has needed to be compiled
-my constant forced = 361;
+my constant forced = 371;
 
 # Mark
 multi sub trait_mod:<is>(Attribute:D \attr, :$implementor!) is export {
@@ -27,6 +27,8 @@ multi sub trait_mod:<is>(Attribute:D \attr, :$boxed!) is export {
 constant GRI = GLib::Roles::Implementor;
 
 role GLib::Roles::Pointers {
+
+  method equals (Pointer $b) { +self.p == +$b.p }
 
   method p {
     if self.REPR eq <CStruct CPointer>.any {
