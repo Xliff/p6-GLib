@@ -27,7 +27,7 @@ class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is expor
                                                            #=                                        GValue         *value,
                                                            #=                                        GParamSpec     *pspec);
   has Pointer         $.dispose                     is rw; #= void       (*dispose)                 (GObject        *object);
-  has Pointer         $.fiinalize                   is rw; #= void       (*finalize)                (GObject        *object);
+  has Pointer         $.finalize                    is rw; #= void       (*finalize)                (GObject        *object);
   # seldom overriden
   has Pointer         $.dispatch_properties_changed is rw; #= void       (*dispatch_properties_changed) (GObject      *object,
                                                            #=                                            guint         n_pspecs,
