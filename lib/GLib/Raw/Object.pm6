@@ -99,7 +99,7 @@ sub g_object_freeze_notify (GObject)
    is export
   { * }
 
-  sub g_object_notify (GObject, Str)
-    is native(gobject)
-    is export
-   { * }
+sub g_object_notify (GObject, Str)
+  is native(gobject)
+  is export
+ { * }
