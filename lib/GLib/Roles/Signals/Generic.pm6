@@ -253,6 +253,33 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal}[0];
   }
 
+  method connect-intuint (
+    $obj is copy,
+    $signal,
+    &handler?
+  )
+    is also<connect_intuint>
+  {
+    my $hid;
+    %!signals{$signal} //= do {
+      my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
+      $hid = g_connect_intuint($obj, $signal,
+        -> $, $i, $ui, $ud {
+          CATCH {
+            default { note($_) }
+          }
+
+          $s.emit( [self, $i, $ui, $ud] );
+        },
+        Pointer, 0
+      );
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+
   # Pointer, guint, guint, gpointer
   method connect-uintuint (
     $obj is copy,
@@ -406,9 +433,7 @@ role GLib::Roles::Signals::Generic {
     $obj is copy,
     $signal,
     &handler?
-  )
-    is also<connect_long>
-  {
+  ) {
     my $hid;
     %!signals{$signal} //= do {
       my $s = Supplier.new;
@@ -428,6 +453,11 @@ role GLib::Roles::Signals::Generic {
     %!signals{$signal}[0].tap(&handler) with &handler;
     %!signals{$signal}[0];
   }
+
+  # cw: OG Aliasing.
+  method connect_long  (|c) { self.connect-long(|c) }
+  method connect_ulong (|c) { self.connect-long(|c) }
+  method connect-ulong (|c) { self.connect-long(|c) }
 
   method connect-strint (
     $obj is copy,
@@ -961,6 +991,18 @@ sub g_connect_int (
   Pointer $app,
   Str     $name,
           &handler (Pointer, gint, Pointer),
+  Pointer $data,
+  uint32  $flags
+)
+  returns uint64
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
+{ * }
+
+sub g_connect_intuint (
+  Pointer $app,
+  Str     $name,
+          &handler (Pointer, gint, guint, Pointer),
   Pointer $data,
   uint32  $flags
 )
