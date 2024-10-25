@@ -321,7 +321,7 @@ sub g_variant_get_strv (GVariant $value, gsize $length is rw)
 { * }
 
 sub g_variant_get_type (GVariant $value)
-  returns GVariantType
+  returns Str # GVariantType
   is native(glib)
   is export
 { * }
