@@ -36,8 +36,8 @@ class GLib::Variant {
   }
 
   multi method new (
-    Int() $bool,
-         :bool(:$boolean) is required
+    Int()  $bool,
+          :b(:bool(:$boolean)) is required
   )
     is static
   {
@@ -57,7 +57,7 @@ class GLib::Variant {
 
   multi method new (
     Int() $byte_val,
-         :$byte      is required
+         :y(:$byte)      is required
   )
     is static
   {
@@ -117,7 +117,7 @@ class GLib::Variant {
 
   multi method new (
     Num()  $double_val,
-          :$double      is required
+          :d(:$double)      is required
   )
     is static
   {
@@ -229,7 +229,7 @@ class GLib::Variant {
 
   multi method new (
     Int()  $handle_int,
-          :$handle      is required
+          :h(:$handle)      is required
   )
     is static
   {
@@ -249,7 +249,7 @@ class GLib::Variant {
 
   multi method new (
     Int()  $value,
-          :$int16 is required
+          :n(:$int16) is required
   )
     is static
   {
@@ -269,7 +269,7 @@ class GLib::Variant {
 
   multi method new (
     Int()  $value,
-          :$int32 is required
+          :i(:$int32) is required
   )
     is static
   {
@@ -289,7 +289,7 @@ class GLib::Variant {
 
   multi method new (
     Int()  $value,
-          :$int64 is required
+          :x(:$int64) is required
   )
     is static
   {
@@ -330,7 +330,8 @@ class GLib::Variant {
 
   multi method new (
     Str()  $value,
-          :object_path(:object-path(:obj_path(:obj-path(:$path)))) is required
+          :o(:object_path(:object-path(:obj_path(:obj-path(:$path)))))
+            is required
   )
     is static
   {
@@ -353,7 +354,7 @@ class GLib::Variant {
 
   multi method new (
     Str()  $value,
-          :$signature is required
+          :g(:$signature) is required
   )
     is static
   {
@@ -372,7 +373,7 @@ class GLib::Variant {
 
   multi method new (
     Str()  $value,
-          :$string is required
+          :s($string) is required
   )
     is static
   {
@@ -401,7 +402,7 @@ class GLib::Variant {
 
   multi method new (
     Int()  $value,
-          :$uint16 is required
+          :q(:$uint16) is required
   )
     is static
   {
@@ -421,7 +422,7 @@ class GLib::Variant {
 
   multi method new (
     Int()  $value,
-          :$uint32 is required
+          :u(:$uint32) is required
   )
     is static
   {
@@ -441,7 +442,7 @@ class GLib::Variant {
 
   multi method new (
     Int()  $value,
-          :$uint64 is required
+          :t(:$uint64) is required
   )
     is static
   {
@@ -465,7 +466,7 @@ class GLib::Variant {
 
   multi method new (
     GVariant() $value,
-              :$variant is required
+              :v($variant) is required
   )
     is static
   {
@@ -525,11 +526,13 @@ class GLib::Variant {
     my $ep = CArray[Str].new;
     $ep[0] = Str;
 
+    say "PARSE";
+
     # my $pt = CArray[uint8].new( $text.encode );
     # $pt[$text.chars] = 0;
 
     my $t = $text ?? CArray[uint8].new( $text.encode )
-                  !! CArray[uint8].new;;
+                  !! CArray[uint8].new;
     $t[ ($text // '' ).chars ] = 0;
 
     my $pl = $limit ?? CArray[uint8].new( $limit.encode )
@@ -551,10 +554,9 @@ class GLib::Variant {
     #     ...please circle back!
     $endptr = $ep;
 
-    my $retVal = $v ??
-      ( $raw ?? $v !! GLib::Variant.new($v) )
-      !!
-      Nil;
+    say "V: { $v }";
+
+    my $retVal = propReturnObject($v, $raw, |GLib::Variant.getTypePair);
 
     $all.not ?? $retVal !! ($retVal, $endptr);
   }
