@@ -173,6 +173,8 @@ sub bufferReturnTypedArray(
   my $ta = $size ?? GLib::Roles::TypedBuffer[T].new-sized($b, $size)
                  !! GLib::Roles::TypedBuffer.new-typedbuffer-obj($b);
   return $ta if $buffer;
-  $raw || $O === (Nil, Mu).any ?? $ta.Array
-                               !! $ta.Array.map({ $O.new($_) });
+
+  [||]( $raw, $O === Any, $O =:= Mu )
+    ?? $ta.Array
+    !! $ta.Array.map({ $O.new($_) });
 }
