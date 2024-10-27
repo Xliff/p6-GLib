@@ -381,7 +381,8 @@ sub standard_class_init ($itp, $cs, $cc is copy, $p) is export {
       $flags +|= G_PARAM_READABLE if $att.name.starts-with('$.') || $acc;
       $flags +|= G_PARAM_WRITABLE if $att.rw  || ( $acc && $acc.rw );
 
-      say "Setting flags { $flags } on { $att.name }.";
+      say "Setting flags { $flags } on { $att.name } of type {
+           .type.^name }.";
 
       my $p = do given .type {
         my ($raw-typed, $std-typed) = False;
@@ -572,6 +573,7 @@ sub standard_class_init ($itp, $cs, $cc is copy, $p) is export {
         }
 
         when Str {
+          say "New paramspec { $name } is a Str";
           P.new_string(
             $name,
             $nick,
@@ -608,9 +610,9 @@ sub standard_class_init ($itp, $cs, $cc is copy, $p) is export {
   # cw: NEVERMIND!
   # This HAS to be done locally for each class in the ancestry chain!
   # Note that $idx IS PROBABLY local enough.
-  my $lc = $cs;
-  while $lc !=:= Any {
-    say "CS: { $lc.^name }";
+  my $lc = $cc;
+  while ($lc === Any).not {
+    say "CC: { $lc.^name }";
     for $lc.^attributes -> $f {
       # my &f;
     #
@@ -624,36 +626,47 @@ sub standard_class_init ($itp, $cs, $cc is copy, $p) is export {
       #   $_ eq $fn,
       #   $_ eq $fn.&switch-dash
       # );
-    #
-    #   when 'get_property' {
-    #
-    #     $rcc.get_property =
-    #       set_func_pointer( , &sprintf-GiV );
-    #
-    #     say "Get Property: { $cc.get_property }";
-    #   }
-    #
-      when 'set_property' {
-        # &f = sub ($i, $idx, $v, $p) {
-        #   if $idx !~~ 0 .. $i.^attributes.elems {
-        #     X::GLib::Object::AttributeNotFound.new(
-        #       attribute => $p.name
-        #     ).throw
-        #   }
-        #   $i.^attributes[$idx].set_value($i, $v);
-        # }
+      given $fn {
+        when 'get_property' {
+          my &f = sub ($i, $id, $v is copy, $p) {
+            if $id !~~ 0 .. $i.^attributes.elems {
+              X::GLib::Object::AttributeNotFound.new(
+                attribute => $p.name
+              ).throw
+            }
+            $v = GLib::Value.new($v);
+            $v.value;
+          }
+
+          $lc.get_property = &f;
+
+          say "Get Property: { $lc.get_property }";
+        }
+
+        when 'set_property' {
+          my &f = sub ($i, $id, $v is copy, $p) {
+            say "Setting { $id } to $v.value ({ $v.type }}...";
+            $v = GLib::Value.new($v);
+            if $id !~~ 0 .. $i.^attributes.elems {
+              X::GLib::Object::AttributeNotFound.new(
+                attribute => $p.name
+              ).throw
+            }
+            $i.^attributes[$id].set_value($i, $v.value);
+          }
+
+          say "Set Property0: { $lc.set_property // '»Null«' }";
+          $lc.set_property = &f;
+          say "Set Property1: { $lc.set_property }";
+        }
       }
-
-      # $cc.set_property =
-      #   set_func_pointer( &f, &sprintf-GiV);
-
-      # say "Set Property: { $cc.set_property }";
     }
 
     say "Props: { @props.gist }";
-    say "LC: { $lc.^name }";
-    last if $lc ~~ GTypeClass;
-    $lc = $lc.^attributes.head.type;
+    say "LC0: { $lc.^name }";
+    $lc = $lc.?parent;
+    say "LC1: { $lc.^name }";
+    last if $lc =:= Any;
   }
 
   g_object_class_install_properties(

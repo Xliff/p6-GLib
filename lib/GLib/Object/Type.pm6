@@ -5,6 +5,7 @@ use Method::Also;
 use GLib::Raw::Traits;
 use GLib::Raw::Types;
 use GLib::Raw::Type;
+use GLib::Object::Raw::ParamSpec;
 
 use GLib::Roles::StaticClass;
 
@@ -294,19 +295,6 @@ class GLib::Object::Type {
     g_type_value_table_peek($!t);
   }
 
-  # cw: Find a better interface for this. I am very wary of having anything
-  #     starting with "class_" in an object. However, this being GType
-  #     I'm willing to make an exception for the following:
-  method class_ref is also<class-ref> {
-    g_type_class_ref($!t);
-  }
-
-  method class_unref (GLib::Object::Type:U: gpointer $c)
-    is also<class-unref>
-  {
-    g_type_class_unref($c);
-  }
-
 }
 
 class GObject::Type::Interface {
@@ -511,10 +499,16 @@ sub LOADED-MANIFEST is export {
   %TYPE-MANIFEST.Map;
 }
 
-sub REGISTER-GOBJECT-TYPES (%m) is export {
+proto sub REGISTER-GOBJECT-TYPES (|) is export
+{ * }
+
+multi sub REGISTER-GOBJECT-TYPES (%m) {
   unless TYPE-IN-MANIFEST(%m.keys.head) {
     %TYPE-MANIFEST.append: %m;
   }
+}
+multi sub REGISTER-GOBJECT-TYPES (Mu $m) {
+  samewith($m.manifest) if $m.^can('manifest');
 }
 
 sub TYPE-IN-MANIFEST ($it) is export {

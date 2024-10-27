@@ -7,6 +7,8 @@ use GLib::Raw::Types;
 use GLib::Object::Raw::ParamSpec;
 use GLib::Object::ParamSpec;
 
+unit package GLib::Class::Object;
+
 class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is export {
   HAS GTypeClass      $.g_type_class;
 
@@ -18,11 +20,11 @@ class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is expor
                                                            #=                                guint                  n_construct_properties,
                                                            #=                                GObjectConstructParam *construct_properties);
   # overridable methods
-  has Pointer         $!set_property                     ; #= void       (*set_property)            (GObject        *object,
+  has Pointer         $!set_property;                #= void       (*set_property)            (GObject        *object,
                                                            #=                                        guint           property_id,
                                                            #=                                        const GValue   *value,
                                                            #=                                        GParamSpec     *pspec);
-  has Pointer         $!get_property                     ; #= void       (*get_property)            (GObject        *object,
+  has Pointer         $.get_property                     is rw; #= void       (*get_property)            (GObject        *object,
                                                            #=                                        guint           property_id,
                                                            #=                                        GValue         *value,
                                                            #=                                        GParamSpec     *pspec);
@@ -51,42 +53,48 @@ class GObjectClass          is repr<CStruct> does GLib::Roles::Pointers is expor
   method set_property is rw is also<set-property> {
     Proxy.new:
       FETCH => sub ($) {
-        my &sp := cast(
-          &(GObject, guint, GValue, GParamSpec),
-          $!set_property
-        );
-
-        sub (GObject() $o, Int() $i, GValue() $v, GParamSpec() $p) {
-          my $ri = $i;
-
-          sp($o, $ri, $v, $p);
-        }
-      }
+        # my &sp := cast(
+        #   &(GObject, guint, GValue, GParamSpec),
+        #   $!set_property
+        # );
+        #
+        # sub (GObject() $o, Int() $i, GValue() $v, GParamSpec() $p) {
+        #   my $ri = $i;
+        #
+        #   sp($o, $ri, $v, $p);
+        # }
+        $!set_property
+      },
       STORE => -> $, \func {
-        $!set_property := set_func_pointer( &(func), &sprintf-GiVP);
+        # cw: Yes, we hate the hardcode...
+        self.^attributes[3].set_value(
+          self,
+          set_func_pointer( func, &sprintf-GiVP)
+        );
       };
   }
 
   method get_property is rw is also<get-property> {
     Proxy.new:
       FETCH => sub ($) {
-        my &gp := cast( &(GObject, guint, GValue), $!get_property );
-
-        sub (GObject() $o, Int() $i, GValue() $v) {
-          my $ri = $i;
-
-          gp($o, $ri, $v);
-          my $vo = GLib::Value.new($v);
-          $v.value;
-        }
+        # my &gp := cast( &(GObject, guint, GValue), $!get_property );
+        #
+        # sub (GObject() $o, Int() $i, GValue() $v) {
+        #   my $ri = $i;
+        #
+        #   gp($o, $ri, $v);
+        #   my $vo = GLib::Value.new($v);
+        #   $v.value;
+        # }
+        $!get_property;
       },
       STORE => -> $, \func {
-        $!get_property := set_func_pointer( &(func), &sprintf-GiV);
+        $!get_property := set_func_pointer( func, &sprintf-GiV);
       }
   }
 }
 
-constant GInitiallyUnownedClass is export := GObjectClass;
+#constant GInitiallyUnownedClass is export := GObjectClass;
 
 use GLib::Roles::TypedBuffer;
 

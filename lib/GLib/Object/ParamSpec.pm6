@@ -174,8 +174,9 @@ class GLib::Object::ParamSpec {
     my $o = self.bless( :$spec );
     $o.ref if $ref;
 
-    do with %typed-paramspecs{ $o.getTypeName } {
-      say "ParamSpec Type Name: { $_ }" if checkDEBUG(3);
+    my $tn = $o.getTypeName;
+    say "ParamSpec Type Name: { $tn }" if checkDEBUG(3);
+    do with %typed-paramspecs{ $tn } {
       .($o);
     } else {
       $o
