@@ -127,7 +127,7 @@ class GLib::Log {
   }
 
   method set_default_handler (
-    &log_func,
+             &log_func,
     gpointer $user_data = gpointer
   ) {
     my $oh = g_log_set_default_handler(&log_func, $user_data);
@@ -142,10 +142,10 @@ class GLib::Log {
   }
 
   method set_handler (
-    Str() $log_domain,
-    Int() $log_levels,
-    &log_func,
-    gpointer $user_data = gpointer
+    Str()    $log_domain,
+    Int()    $log_levels,
+             &log_func,
+    gpointer $user_data   = gpointer
   ) {
     my guint $ll = $log_levels;
 
@@ -155,11 +155,11 @@ class GLib::Log {
   }
 
   method set_handler_full (
-    Str() $log_domain,
-    Int() $log_levels,
-    &log_func,
-    gpointer $user_data     = gpointer,
-    GDestroyNotify $destroy = gpointer
+    Str()          $log_domain,
+    Int()          $log_levels,
+                   &log_func,
+    gpointer       $user_data   = gpointer,
+    GDestroyNotify $destroy     = gpointer
   ) {
     my guint $ll = $log_levels;
 
@@ -179,12 +179,12 @@ class GLib::Log {
   }
 
   method set_writer_func (
-    &func,
-    gpointer $user_data            = gpointer,
-    GDestroyNotify $user_data_free = gpointer
+             &func,
+    gpointer $user_data      = gpointer,
+             &user_data_free = %DEFAULT-CALLBACKS<GDestroyNotify>
   ) {
     &writer-func = &func;
-    g_log_set_writer_func(&func, $user_data, $user_data_free);
+    g_log_set_writer_func(&func, $user_data, &user_data_free);
   }
 
   proto method log_structured_array (|)
@@ -192,7 +192,7 @@ class GLib::Log {
 
   multi method log_structured_array (
     Int() $log_level,
-    @fields
+          @fields
   ) {
     samewith(
       $log_level,
@@ -201,9 +201,9 @@ class GLib::Log {
     )
   }
   multi method log_structured_array (
-    Int() $log_level,
+    Int()    $log_level,
     gpointer $fields,
-    Int() $n_fields
+    Int()    $n_fields
   ) {
     my guint $ll = $log_level;
     my uint64 $nf = $n_fields;
@@ -221,9 +221,9 @@ class GLib::Log {
   { * }
 
   multi method writer_default (
-    Int() $log_level,
-    @fields,
-    gpointer $user_data = gpointer
+    Int()    $log_level,
+             @fields,
+    gpointer $user_data   = gpointer
   ) {
     samewith(
       $log_level,
@@ -233,12 +233,12 @@ class GLib::Log {
     );
   }
   multi method writer_default (
-    Int() $log_level,
+    Int()    $log_level,
     gpointer $fields,
-    Int() $n_fields,
+    Int()    $n_fields,
     gpointer $user_data = gpointer
   ) {
-    my guint $ll = $log_level;
+    my guint  $ll = $log_level;
     my uint64 $nf = $n_fields;
 
     g_log_writer_default($ll, $fields, $nf, $user_data);
@@ -249,7 +249,7 @@ class GLib::Log {
 
   multi method writer_format_fields (
     Int() $log_level,
-    @fields,
+          @fields,
     Int() $use_color
   ) {
     samewith(
@@ -260,10 +260,10 @@ class GLib::Log {
     );
   }
   multi method writer_format_fields (
-    Int() $log_level,
+    Int()    $log_level,
     gpointer $fields,
-    Int() $n_fields,
-    Int() $use_color
+    Int()    $n_fields,
+    Int()    $use_color
   ) {
     my guint $ll = $log_level;
     my uint64 $nf = $n_fields;
@@ -284,7 +284,7 @@ class GLib::Log {
 
   multi method writer_journald (
     Int() $log_level,
-    @fields,
+          @fields,
     Int() $user_data = gpointer
   ) {
     samewith(
@@ -295,12 +295,12 @@ class GLib::Log {
     );
   }
   multi method writer_journald (
-    Int() $log_level,
+    Int()    $log_level,
     gpointer $fields,
-    Int() $n_fields,
-    Int() $user_data = gpointer
+    Int()    $n_fields,
+    Int()    $user_data = gpointer
   ) {
-    my guint $ll = $log_level;
+    my guint  $ll = $log_level;
     my uint64 $nf = $n_fields;
 
     g_log_writer_journald($ll, $fields, $nf, $user_data);
@@ -311,7 +311,7 @@ class GLib::Log {
 
   multi method writer_standard_streams (
     Int() $log_level,
-    @fields,
+          @fields,
     Int() $user_data = gpointer
   ) {
     samewith(
@@ -322,12 +322,12 @@ class GLib::Log {
     );
   }
   multi method writer_standard_streams (
-    Int() $log_level,
+    Int()    $log_level,
     gpointer $fields,
-    Int() $n_fields,
-    Int() $user_data = gpointer
+    Int()    $n_fields,
+    Int()    $user_data = gpointer
   ) {
-    my guint $ll = $log_level;
+    my guint  $ll = $log_level;
     my uint64 $nf = $n_fields;
 
     g_log_writer_standard_streams($ll, $fields, $nf, $user_data);
