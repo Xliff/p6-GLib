@@ -6,7 +6,7 @@ use NativeCall;
 use GLib::Compat::Definitions;
 use GLib::Raw::Subs;
 
-use lib <release-scripts ../release-scripts>;
+use lib <scripts ../scripts release-scripts ../release-scripts>;
 
 use ScriptConfig;
 
