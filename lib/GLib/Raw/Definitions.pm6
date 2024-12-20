@@ -192,6 +192,7 @@ class GScanner                 is repr<CPointer> is export does GLib::Roles::Poi
 class GSequence                is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GSequenceIter            is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GSource                  is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GStringChunk             is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTestCase                is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GTestSuite               is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GThread                  is repr<CPointer> is export does GLib::Roles::Pointers { }
