@@ -152,11 +152,13 @@ class GLib::Class::Object is export {
     my guint $n  = 0;
     my       $pl = g_object_class_list_properties($!c.p, $n);
 
+    # cw: Figure out the best way to free the list at the soonest time possible!
+    #     Does this mean we have to clone the individual GParamSpec pointers?
     $n_properties = $n;
     my @properties;
-    for ^$n {
-      my $e = $pl[$_].deref;
-      @properties.push: $raw ?? $e !! GLib::Object::ParamSpec.new($e)
+    for $pl[^$n] {
+      # my $e = $pl[$_].deref;
+      @properties.push: $raw ?? $_ !! GLib::Object::ParamSpec.new( .deref )
     }
     @properties;
   }

@@ -450,7 +450,8 @@ role GLib::Roles::Object {
     }).new;
   }
 
-  multi method getClass (:$raw = False) {
+  # cw: This one is is NOT overridable
+  multi method getClass ( :$base is required where *.so, :$raw = False ) {
     self.ρ-getClass(GObjectClass, ::('GLib::Class::Object'), :$raw);
   }
   multi method getClass ( ::?CLASS:U: :$raw = False) {
@@ -459,6 +460,8 @@ role GLib::Roles::Object {
   method ρ-getClass ($CS is raw, $C is raw, :$raw = True) {
     my $p := cast(Pointer.^parameterize($CS), $!o.g_type_instance.g_class);
     my $c := $CS.REPR eq 'CStruct' ?? $p.deref !! $p;
+
+    #say "ρ-getClass: { $CS.^name }, { $C.^name }, { $raw }";
 
     $c ??
       ( $raw ?? $c !! $C.new($c) )
@@ -488,23 +491,22 @@ role GLib::Roles::Object {
     # flat do for self.^mro -> \o {
     #   last if     o === Any;
     #   next unless o ~~  GLib::Roles::Object;
-    #
-      my $cr = self.class_ref;
-      say "CR: { $cr.gist }";
 
-      my guint $np = 0;
-      my $a = CArrayToArray(
-        g_object_class_list_properties(
-          cast( gpointer, $cr ),
-          $np
-        ),
-        |GLib::Object::ParamSpec.getTypePair
-      );
-      say "{ self.^name } - {$a.elems }";
-      $a;
+    my guint $np = 0;
+    my $a = CArrayToArray(
+      g_object_class_list_properties(
+        self.GObject.p,
+        $np
+      ),
+      |GLib::Object::ParamSpec.getTypePair
+    );
+    say "{ self.^name } - {$a.elems }";
+    $a;
     # }
   }
-
+  method list-properties {
+    self.list_properties;
+  }
 
   method isType (Int() $type) {
     my GType $t  = $type;
@@ -1351,7 +1353,9 @@ role GLib::Roles::Object {
   }
 
   method Str {
-    self.^can('debug') ?? self.debug !! nextsame;
+    self.defined.not
+      ?? "({ self.^name })"
+      !! ( self.^can('debug') ?? self.debug !! nextsame )
   }
 
   method debug ($n = 1) {
@@ -1407,6 +1411,10 @@ class GLib::Object does GLib::Roles::Object {
       # cw: Check on availability of 'will' trait which might make #3
       #     more gramatically palatable.
     }
+  }
+
+  method setGObject (GObject $_) {
+    self!setObject($_);
   }
 
   multi method new (
