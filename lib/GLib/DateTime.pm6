@@ -15,8 +15,8 @@ class GLib::DateTime {
 
   has GDateTime $!dt is implementor handles<p>;
 
-  submethod BUILD (:$datetime) {
-    $!dt = $datetime;
+  submethod BUILD ( :$datetime ) {
+    $!dt = $datetime if $datetime;
   }
 
   method DateTime {
