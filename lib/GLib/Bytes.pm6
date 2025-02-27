@@ -88,8 +88,12 @@ class GLib::Bytes {
     is also<get-data>
   { * }
 
-  multi method get_data {
-    samewith($, :all);
+  method Str {
+    $.get_data( :!all );
+  }
+
+  multi method get_data ( :$all = True ){
+    samewith($, :$all);
   }
   multi method get_data (
      $size      is rw,
