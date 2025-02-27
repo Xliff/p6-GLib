@@ -30,6 +30,7 @@ sub GLib-Distribution is export is DistributionProvider {
   $?DISTRIBUTION;
 }
 
+our subset SeqPos is export where Seq | Positional;
 
 # Forced compile count
 my constant forced = 420;
