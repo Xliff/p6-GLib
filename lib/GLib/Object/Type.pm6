@@ -405,9 +405,7 @@ class GObject::Type::Interface {
 #     g_type_check_instance_cast($!t, $iface_type);
 #   }
 #
-#   method instance_is_a (GType $iface_type) {
-#     g_type_check_instance_is_a($!t, $iface_type);
-#   }
+
 #
 #   method instance_is_fundamentally_a (GType $fundamental_type) {
 #     g_type_check_instance_is_fundamentally_a($!t, $fundamental_type);
@@ -426,6 +424,29 @@ class GObject::Type::Interface {
 #   }
 #
 # }
+
+#   method instance_is_a (GType $iface_type) {
+#     g_type_check_instance_is_a($!t, $iface_type);
+#   }
+
+# cw: For now, exposed as a general purpose sub.
+sub instance_is_a ($p is copy, Int() $iface_type) is export {
+  my GType $i = $iface_type;
+
+  say "P: { $p // '»NOP«' }";
+
+  # cw: Poor man's multi coercion.
+  $p .= GParamSpec if $p.^can('GParamSpec');
+  $p .= GValue     if $p.^can('GValue');
+  $p .= GObject    if $p.^can('GObject');
+  $p .= p          if $p.^can('p');
+
+  return False if $p ~~ gpointer;
+  g_type_check_instance_is_a($p, $i);
+}
+sub instance-is-a ($p, $iface_type) is export {
+  instance_is_a($p, $iface_type);
+}
 
 class GLib::Object::Type::Register {
   also does GLib::Roles::StaticClass;
@@ -499,6 +520,10 @@ sub LOADED-MANIFEST is export {
   %TYPE-MANIFEST.Map;
 }
 
+sub DEBUG-MANIFEST is export {
+  .gist.say for LOADED-MANIFEST.pairs
+}
+
 proto sub REGISTER-GOBJECT-TYPES (|) is export
 { * }
 
@@ -509,6 +534,7 @@ multi sub REGISTER-GOBJECT-TYPES (%m) {
 }
 multi sub REGISTER-GOBJECT-TYPES (Mu $m) {
   samewith($m.manifest) if $m.^can('manifest');
+  samewith($m.aliases)  if $m.^can('aliases');
 }
 
 sub TYPE-IN-MANIFEST ($it) is export {
@@ -521,11 +547,16 @@ sub TYPE-TO-OBJECT ($tn) is export {
 
 sub RESOLVE-TO-OBJECT ($tn) is export {
   my $ot = %TYPE-MANIFEST{$tn};
+
+  say "OT: { $ot // '»NOT-IN-TM«' }";
+
   return Nil unless $ot !=== Any;
 
   my $o;
 
+  say "RTO: { $tn }";
   return %RESOLVED-TYPES{$tn} if %RESOLVED-TYPES{$tn}:exists;
+
   $o = ::( $ot );
   if $o ~~ Failure {
     try require ::( $ot );
