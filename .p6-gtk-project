@@ -6,3 +6,4 @@ build_exclude=GLib::Roles::TreeData
 include-directory=/usr/src/glib/glib
 lib=glib
 exec=p6gtkexec
+extension=.h
