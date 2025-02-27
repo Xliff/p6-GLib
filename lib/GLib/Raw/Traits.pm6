@@ -159,8 +159,13 @@ multi sub trait_mod:<is> (Attribute $a, :$gattribute!) is export {
   $a does GAttribute;
 }
 
-multi sub trait_mod:<is> (Attribute $a, :$gsignal!) is export {
-  $a does GSignal;
+multi sub trait_mod:<is> (
+  Method  $m,
+         :g_signal(:g-signal(:$gsignal)) is required
+)
+  is export
+{
+  $m does GSignal;
 }
 
 multi sub trait_mod:<is> (Attribute $a, :$no-return!) is export {
