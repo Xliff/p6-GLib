@@ -20,6 +20,10 @@ class GLib::Object::Supplyish {
       $supplyish.untap( name => self, :$clear );
     }
 
+    method clear {
+      self.untap( :clear )
+    }
+
     method enable {
       $supplyish.enabled = True;
     }
