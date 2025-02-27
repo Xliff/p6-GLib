@@ -59,10 +59,10 @@ our enum GBindingFlagsEnum  is export (
 
 constant GChecksumType      is export := guint32;
 our enum GChecksumTypeEnum  is export <
-  G_CHECKSUM_MD5,
-  G_CHECKSUM_SHA1,
-  G_CHECKSUM_SHA256,
-  G_CHECKSUM_SHA512,
+  G_CHECKSUM_MD5
+  G_CHECKSUM_SHA1
+  G_CHECKSUM_SHA256
+  G_CHECKSUM_SHA512
   G_CHECKSUM_SHA384
 >;
 
