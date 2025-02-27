@@ -22,11 +22,13 @@ our $ERROR-REPLACEMENT is export = sub { %ERROR{$*PID} };
 class GValue                is repr<CStruct> does GLib::Roles::Pointers is export { ... }
 
 # CArray replacement for sized classes
-class SizedCArray is CArray is export does Positional {
-  has               $!size;
+class SizedCArray is export does Positional does Iterable {
+  has $!size;
 
   # Delegate everything but 'elems'
   has CArray[uint8] $!native handles *.grep({ ( .name // '' ) ne 'elems' });
+
+  method CArray { $!native }
 
   method size is rw {
     Proxy.new:
@@ -34,13 +36,24 @@ class SizedCArray is CArray is export does Positional {
       STORE => -> $, \s { $!size = s }
   }
 
-  method AT-POS (\k) {
-    $!native[k];
-  }
-
-  method elems { $!size.defined ?? $!size !! nextsame }
+  method elems       { $!size.defined ?? $!size !! nextsame }
+  method AT-POS (\k) { $!native[k] }
+  method List        { $!native[ ^$!size ] }
+  method Array       { self.List.Array }
 
   submethod BUILD ( :$!native, :$!size ) { }
+
+  method iterator {
+    generate-iterator(
+      self,
+      SUB      { self.elems     },
+      sub (\k) { self.AT-POS(k) }
+    );
+  }
+
+  method map (&f) {
+    $!native[ ^$!size ].map({ &f($_) })
+  }
 
   method new ($native, $size) {
     self.bless( :$native, :$size );
@@ -604,6 +617,8 @@ class GParamSpec is repr<CStruct> does GLib::Roles::Pointers is export {
   has GData         $!qdata;
   has guint         $!ref_count;
   has guint         $!param_id;
+
+  method value-type { $!value_type }
 
   method getTypeName {
     self.g_type_instance.getTypeName;
