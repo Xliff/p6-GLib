@@ -89,6 +89,13 @@ class GLib::Value {
       when int64    { self.int64  }
       when num32    { self.float  }
       when num64    { self.double }
+
+      default {
+        X::GLib::InvalidType.new(
+          message => ".valueFromType does not recognize the {
+                      .^name } type!"
+        ).throw;
+      }
     }
   }
 
