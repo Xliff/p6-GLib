@@ -36,15 +36,39 @@ package GLib::Raw::Subs {
   # cw: Because using "-> *@a { ... } for callbacks was pissing me off...
   #     ... so pick your poison...
   sub SUB  (&block, :b(:$block) = False) is export {
+    # cw: -YYY- You sure you want to limit by # of BLOCK params?
     my $p = &block.signature.params.elems;
 
     $block
-      ??  ->   *@a   { my $*A = @a; $p ?? &block( |@a[ ^$p ] ) !! &block() }
-      !! sub ( *@a ) { my $*A = @a; $p ?? &block( |@a[ ^$p ] ) !! &block() }
+      ??  ->   *@a {
+        my ($*A, @*A, $*ARGS, @*ARGS) = @a xx 4;
+        $p ?? &block( |@a[ ^$p ] ) !! &block()
+      }
+      !! sub ( *@a ) {
+        my ($*A, @*A, $*ARGS, @*ARGS) = @a xx 4;
+        $p ?? &block( |@a[ ^$p ] ) !! &block()
+      }
   }
   sub CB   (&block, :b(:$block) = False) is export { SUB(&block) }
   sub DEF  (&block, :b(:$block) = False) is export { SUB(&block) }
   sub FUNC (&block, :b(:$block) = False) is export { SUB(&block) }
+
+  sub new-pointer (\T = Pointer) is export {
+    my $p = malloc( $*KERNEL.bits / 8 );
+    nativecast( Pointer[T], $p ) if T !== Pointer;
+    $p;
+  }
+
+  sub marquee ($s) is export {
+    say "{ $s }\n{ $s x $s.elems }";
+  }
+  sub mq ($s) is export {
+    $s.&marquee;
+  }
+
+  role StructActualName[Str $N] is export {
+    method actual-name { $N }
+  }
 
   role StructSkipsTest[Str $R] is export {
     method reason { $R }
@@ -909,7 +933,10 @@ package GLib::Raw::Subs {
     $c;
   }
 
-  sub newCArray (
+  multi sub newCArray (\T, @values is copy) {
+    ArrayToCArray(T, @values);
+  }
+  multi sub newCArray (
     \T,
      $fv?,
     :$size      = 1,
