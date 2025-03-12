@@ -456,8 +456,32 @@ role GLib::Roles::Signals::Generic {
 
   # cw: OG Aliasing.
   method connect_long  (|c) { self.connect-long(|c) }
-  method connect_ulong (|c) { self.connect-long(|c) }
-  method connect-ulong (|c) { self.connect-long(|c) }
+
+  method connect-ulong (
+    $obj is copy,
+    $signal,
+    &handler?
+  ) {
+    my $hid;
+    %!signals{$signal} //= do {
+      my $s = Supplier.new;
+      $obj .= p if $obj.^can('p');
+      $hid = g-connect-ulong($obj, $signal,
+        -> $, $l, $ud {
+          CATCH {
+            default { $s.quit($_) }
+          }
+
+          $s.emit( [self, $l, $ud] );
+        },
+        Pointer, 0
+      );
+      [ self.create-signal-supply($signal, $s), $obj, $hid ];
+    };
+    %!signals{$signal}[0].tap(&handler) with &handler;
+    %!signals{$signal}[0];
+  }
+  method connect_ulong (|c) { self.connect-ulong(|c) }
 
   method connect-strint (
     $obj is copy,
@@ -1170,6 +1194,18 @@ sub g-connect-gparam (
 
 # Pointer, guint64, gpointer
 sub g-connect-long (
+  Pointer $app,
+  Str     $name,
+          &handler (Pointer, gint64, Pointer),
+  Pointer $data,
+  uint32  $flags
+)
+  returns uint64
+  is      native('gobject-2.0')
+  is      symbol('g_signal_connect_object')
+{ * }
+
+sub g-connect-ulong (
   Pointer $app,
   Str     $name,
           &handler (Pointer, guint64, Pointer),
