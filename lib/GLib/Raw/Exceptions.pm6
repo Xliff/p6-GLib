@@ -74,6 +74,12 @@ class X::GLib::InvalidSize is X::GLib::Exception {
   }
 }
 
+class X::GLib::CArrayUnknownSize is X::GLib::InvalidSize {
+  method message {
+    "CArray came from C and therefore, its size is unknown!";
+  }
+}
+
 class X::GLib::UnknownType is X::GLib::Exception {
   multi method new ( :$message = 'Unknown type!' ) {
     self.bless( :$message );
