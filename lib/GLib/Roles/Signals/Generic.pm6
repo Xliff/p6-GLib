@@ -85,8 +85,8 @@ role GLib::Roles::Signals::Generic {
 
       $hid = g_connect($obj, $signal,
         -> $, $ud {
-            $s.emit( [self, $ud] );
-            CATCH { default { note($_) } }
+          $s.emit( [self, $ud] );
+          CATCH { default { note($_) } }
         },
         Pointer, 0
       );
