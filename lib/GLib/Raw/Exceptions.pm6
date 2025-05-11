@@ -2,9 +2,14 @@ use v6.c;
 
 role X::GLib::Roles::Message {
   has $!message is built;
+  has $!routine is built;
 
   method message {
-    "[{ self.^name }] " ~ $!message
+    (
+      $!routine
+        ?? "[{ $!routine } - { self.^name }]"
+        !! "[{ self.^name }] "
+    ) ~ $!message
   }
 }
 
@@ -22,6 +27,14 @@ class X::GLib::NYI is X::NYI does X::GLib::Roles::Message {
     self.bless( message => "{ $message } NYI!" )
   }
 
+}
+
+class X::GLib::WTF is X::GLib::Roles::Message {
+  method new {
+    self.bless(
+      message => 'WTF?!? This was not supposed to happen!'
+    )
+  }
 }
 
 class X::GLib::InvalidState is X::GLib::Exception {
@@ -98,8 +111,8 @@ class X::GLib::InvalidArgument is X::GLib::Exception {
   }
 }
 
-class X::GLib::InvalidArguments is X::GLib::InvalidArgument {
-}
+class X::GLib::InvalidArguments is X::GLib::InvalidArgument { }
+class X::GLib::InvalidValue     is X::GLib::Exception       { }
 
 class X::GLib::InvalidNumberOfArguments is X::GLib::Exception {
   method new ( :$message = 'Invalid number of arguments' ) {
