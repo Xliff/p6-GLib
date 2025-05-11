@@ -46,8 +46,8 @@ class SizedCArray is export does Positional does Iterable {
   method iterator {
     generate-iterator(
       self,
-      SUB      { self.elems     },
-      sub (\k) { self.AT-POS(k) }
+      sub (*@a) { self.elems     },
+      sub (\k)  { self.AT-POS(k) }
     );
   }
 
@@ -829,19 +829,28 @@ sub get-error ($e) is export {
 
 class ErrorProxy {
   has $!e is built;
-  has $!p is built;
+  has $!t is built;
   has $!b is built;
+  has $!m is built;
 
-  method error     { $!e }
-  method pid       { $!p }
-  method backtrace { $!b }
+  has $!when;
+
+  submethod TWEAK {
+    $!when = DateTime.now;
+  }
+
+  method error     { $!e    }
+  method thread    { $!t    }
+  method backtrace { $!b    }
+  method mark      { $!m    }
+  method when      { $!when }
 
   method origin-frame {
     $!b[* - 2]
   }
 
-  multi method new ($e, $p, $b) {
-    self.bless( :$e, :$p, :$b );
+  multi method new ($e, $t, $b, $m?) {
+    self.bless( :$e, :$t, :$b, :$m );
   }
 }
 
@@ -850,9 +859,14 @@ my $error-lock = Lock.new;
 sub set_error (CArray $e) is export {
   $error-lock.protect: {
     if $e[0].defined {
-      $ERROR = %ERROR{ $*PID } = get-error($e);
+      # cw: Is this thread safe?
+      $ERROR = %ERROR{ $*THREAD.id } = get-error($e);
+
       #%ERRROS{$*PID}.push: [ $ERROR-REPLACEMENT(), Backtrace.new ];
-      @ERRORS.push: ErrorProxy.new( $ERROR, $*PID, Backtrace.new );
+      my @ea = ($ERROR, $*THREAD.id, Backtrace.new);
+      @ea.push(DYNAMIC::<$*ERROR-MARK>) if DYNAMIC::<$*ERROR-MARK>;
+
+      @ERRORS.push: ErrorProxy.new( |@ea );
 
       # cw: $*GERROR-EXCEPTIONS -overrides- $ERROR-THROWS!
       if DYNAMIC::<$*GERROR-EXCEPTIONS> {
@@ -864,6 +878,20 @@ sub set_error (CArray $e) is export {
   }
 }
 
+# cw: $ERROR shall be deprecated for the below!
+# cw: It's still not perfect, but it's better than a single scalar value.
+sub LAST-GLIB-ERROR ( :$when ) is export {
+  $error-lock.protect: {
+    my $le = @ERRORS.first(
+      SUB {
+        my $w = $when ?? (.when >= $when) !! True;
+
+        .thread == $*THREAD.id && $w
+      },
+      :end
+    );
+  }
+}
 
 sub clear_error_stack is export {
   $error-lock.protect: {
