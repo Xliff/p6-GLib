@@ -15,12 +15,15 @@ sub returnGenericList (
   $T      =  Str,
   $O      =  Any,
   :$seq   =  True,
-  :$ref   =  False
+  :$ref   =  False,
+  :$free
 )
   is export
 {
   return Nil unless $gl;
   return $gl if     $glist && $raw;
+
+  my $ol = $gl;
 
   #say '-- pre return gL';
 
@@ -42,6 +45,7 @@ sub returnGenericList (
   return $list if $seq;
 
   #say '-- pre Array';
+  $free($ol) if $free;
 
   $list.Array;
 }
