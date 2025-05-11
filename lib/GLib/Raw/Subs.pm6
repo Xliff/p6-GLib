@@ -40,14 +40,16 @@ package GLib::Raw::Subs {
     my $p = &block.signature.params.elems;
 
     $block
-      ??  ->   *@a {
-        my ($*A, @*A, $*ARGS, @*ARGS) = @a xx 4;
-        $p ?? &block( |@a[ ^$p ] ) !! &block()
-      }
-      !! sub ( *@a ) {
-        my ($*A, @*A, $*ARGS, @*ARGS) = @a xx 4;
-        $p ?? &block( |@a[ ^$p ] ) !! &block()
-      }
+      ??
+        -> *@a {
+          my ($*A, @*A, $*ARGS, @*ARGS) := @a xx 4;
+          $p ?? &block( |@a[ ^$p ] ) !! &block()
+        }
+      !!
+        sub ( *@a ) {
+          my ($*A, @*A, $*ARGS, @*ARGS) := @a xx 4;
+          $p ?? &block( |@a[ ^$p ] ) !! &block()
+        }
   }
   sub CB   (&block, :b(:$block) = False) is export { SUB(&block) }
   sub DEF  (&block, :b(:$block) = False) is export { SUB(&block) }
@@ -251,7 +253,9 @@ package GLib::Raw::Subs {
   }
 
   sub resolveNativeType (\T) is export {
-    say "Resolving { T.^name } to its Raku equivalent...";
+    say "Resolving { T.^name } to its Raku equivalent..."
+      if checkDEBUG(2);
+
     do given T {
       when num32 | num64     { Num }
 
@@ -267,8 +271,10 @@ package GLib::Raw::Subs {
         do if T.REPR eq <CPointer CStruct>.any {
           T
         } else {
-          # cw: I don't know if this is the best way to handle this.
-          die "Do not know how to handle a type of { .^name }!";
+          X::GLib::InvalidValue.new(
+            routine => &?ROUTINE.name,
+            message => "Do not know how to handle a type of { .^name }!"
+          ).throw
         }
       }
     }
@@ -903,7 +909,12 @@ package GLib::Raw::Subs {
       }
 
       when CArray[uint8] {
-        $pointer ?? cast(gpointer, $_) !! $_
+        do if $pointer {
+          $_ = cast(gpointer, $_);
+          proceed;
+        } else {
+          $_;
+        }
       }
 
       when gpointer {

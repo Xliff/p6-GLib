@@ -25,7 +25,8 @@ use GLib::Roles::Implementor;
 use GLib::Roles::NewGObject;
 use GLib::Roles::Signals::Generic;
 
-constant gObjectTypeKey = 'p6-GObject-Type';
+constant gObjectTypeKey   = 'p6-GObject-Type';
+constant gObjectTypeClass = 'raku-GObject-Class';
 
 my (%data, %object-references);
 
@@ -349,7 +350,7 @@ role GLib::Roles::Object {
       }
 
       warn "Unknown key '{ .value }' used in .setAttributes!";
-      Backtrace.new.concise.say;
+      Backtrace.new.concise.say if checkDEBUG;
     }
     self;
   }
@@ -532,7 +533,7 @@ role GLib::Roles::Object {
     $!o = $obj ~~ GObject ?? $obj !! cast(GObject, $obj);
     say "ObjectSet ({ self })-+-: { $!o }" if checkDEBUG;
     $!data-proxy = ProvidesData.new(+$!o.p);
-
+    self.setObjectClass;
     # Raku reference count of a GObject
     #%object-references{ +$!o.p }++
   }
@@ -968,6 +969,10 @@ role GLib::Roles::Object {
     self.prop_get_string(gObjectTypeKey);
   }
 
+  method getObjectClass {
+    self.prop_get_string(gObjectTypeClass);
+  }
+
   method setType ($typeName) {
     my $oldType = self.getType;
     self.prop_set_string(gObjectTypeKey, $typeName) unless $oldType.defined;
@@ -977,6 +982,11 @@ role GLib::Roles::Object {
         $oldType.defined.not,
         $oldType eq $typeName
       );
+  }
+
+  method setObjectClass {
+    self.prop_set_string(gObjectTypeClass, self.^name) unless
+      self.getObjectClass.defined
   }
 
   # For storing Raku data types.
@@ -1447,6 +1457,8 @@ class GLib::Object does GLib::Roles::Object {
 
 }
 
+&GOBJECT = sub { GLib::Roles::Object }
+
 role GLib::Roles::Object::RegisteredType[$gtype] {
 
   method get_type is also<get-type> { $gtype };
@@ -1456,8 +1468,7 @@ role GLib::Roles::Object::RegisteredType[$gtype] {
 my @classes-to-register;
 
 role GLib::Object::RegisterClass {
-  INIT
-  @classes-to-register.push: ::?CLASS;
+  INIT @classes-to-register.push: ::?CLASS;
 }
 
 role GLib::Roles::Object::Registrar[$n] {
