@@ -35,7 +35,11 @@ class GLib::Object::ParamSpec::ValueArray { ... }
 class GLib::Object::ParamSpec {
   also does GLib::Roles::Implementor;
 
-  has GParamSpec $!ps is implementor handles<getTypeName>;
+  has GParamSpec $!ps is implementor handles<
+    value_type
+    value-type
+    getTypeName
+  >;
 
   method name  is g-pseudo-property { $!ps.name  }
   method flags is g-pseudo-property { $!ps.flags }
@@ -693,7 +697,7 @@ class GLib::Object::ParamSpec {
     g_param_spec_sink($!ps);
   }
 
-  method steal_qdata (GQuark $quark) is also<steal-qdata> {
+  method steal_qdata (GQuark() $quark) is also<steal-qdata> {
     g_param_spec_steal_qdata($!ps, $quark);
   }
 
@@ -715,68 +719,6 @@ class GLib::Object::ParamSpec {
     $ret.so ?? $ret !! $t
   }
 
-  method values_cmp (GValue() $value1, GValue() $value2) is also<values-cmp> {
-    so g_param_values_cmp($!ps, $value1, $value2);
-  }
-
-  method value_convert (
-    GValue() $src_value,
-    GValue() $dest_value,
-    Int()    $strict_validation
-  )
-    is also<value-convert>
-  {
-    my gboolean $s = (so $strict_validation).Int;
-
-    so g_param_value_convert($!ps, $src_value, $dest_value, $s);
-  }
-
-  method value_defaults (GValue() $value) is also<value-defaults> {
-    so g_param_value_defaults($!ps, $value);
-  }
-
-  method value_set_default (GValue() $value) is also<value-set-default> {
-    g_param_value_set_default($!ps, $value);
-  }
-
-  method value_validate (GValue() $value) is also<value-validate> {
-    so g_param_value_validate($!ps, $value);
-  }
-
-  method value_spec is also<value-spec> {
-    my \T := do given self.value_type {
-      when G_TYPE_CHAR     { GParamSpecChar    }
-      when G_TYPE_UCHAR    { GParamSpecUChar   }
-      when G_TYPE_BOOLEAN  { GParamSpecBoolean }
-      when G_TYPE_INT      { GParamSpecInt     }
-      when G_TYPE_UINT     { GParamSpecUInt    }
-      when G_TYPE_LONG     { GParamSpecLong    }
-      when G_TYPE_ULONG    { GParamSpecULong   }
-      when G_TYPE_INT64    { GParamSpecInt64   }
-      when G_TYPE_UINT64   { GParamSpecUInt64  }
-      when G_TYPE_ENUM     { GParamSpecEnum    }
-      when G_TYPE_FLAGS    { GParamSpecFlags   }
-      when G_TYPE_FLOAT    { GParamSpecFloat   }
-      when G_TYPE_DOUBLE   { GParamSpecDouble  }
-
-      # when G_TYPE_STRING   { self.string;     }
-      # when G_TYPE_POINTER  { self.pointer;    }
-      # when G_TYPE_BOXED    { self.boxed;      }
-      # when G_TYPE_PARAM   { }
-      # when G_TYPE_OBJECT   { self.object;     }
-      #when G_TYPE_VARIANT { }
-      default {
-        die "{ .Str } type NYI!";
-      }
-    }
-
-    cast(T, $!ps);
-  }
-
-  method value_type (:$obj = False) {
-    $obj ?? GLib::Object::Type.new( $!ps.value_type ) !! $!ps.value_type;
-  }
-
   method owner_type (:$obj = False) {
     $obj ?? GLib::Object::Type.new( $!ps.owner_type ) !! $!ps.owner_type;
   }
@@ -789,6 +731,71 @@ class GLib::Object::ParamSpec {
     })";
   }
 
+}
+
+class GLib::Object::ParamSpec::Value is GLib::Value {
+
+  method cmp (GValue() $value1, GValue() $value2) {
+    so g_param_values_cmp(self.GValue, $value1, $value2);
+  }
+
+  method convert (
+    GValue() $src_value,
+    GValue() $dest_value,
+    Int()    $strict_validation
+  ) {
+    my gboolean $s = (so $strict_validation).Int;
+
+    so g_param_value_convert(self.GValue, $src_value, $dest_value, $s);
+  }
+
+  method defaults (GValue() $value) {
+    so g_param_value_defaults(self.GValue, $value);
+  }
+
+  method set_default (GValue() $value)  {
+    g_param_value_set_default(self.GValue, $value);
+  }
+
+  method validate (GValue() $value) {
+    so g_param_value_validate(self.GValue, $value);
+  }
+
+  # cw: CONFIRM value_type!
+  # method spec {
+  #   my \T := do given self.value_type {
+  #     when G_TYPE_CHAR     { GParamSpecChar    }
+  #     when G_TYPE_UCHAR    { GParamSpecUChar   }
+  #     when G_TYPE_BOOLEAN  { GParamSpecBoolean }
+  #     when G_TYPE_INT      { GParamSpecInt     }
+  #     when G_TYPE_UINT     { GParamSpecUInt    }
+  #     when G_TYPE_LONG     { GParamSpecLong    }
+  #     when G_TYPE_ULONG    { GParamSpecULong   }
+  #     when G_TYPE_INT64    { GParamSpecInt64   }
+  #     when G_TYPE_UINT64   { GParamSpecUInt64  }
+  #     when G_TYPE_ENUM     { GParamSpecEnum    }
+  #     when G_TYPE_FLAGS    { GParamSpecFlags   }
+  #     when G_TYPE_FLOAT    { GParamSpecFloat   }
+  #     when G_TYPE_DOUBLE   { GParamSpecDouble  }
+  #
+  #     # when G_TYPE_STRING   { self.string;     }
+  #     # when G_TYPE_POINTER  { self.pointer;    }
+  #     # when G_TYPE_BOXED    { self.boxed;      }
+  #     # when G_TYPE_PARAM   { }
+  #     # when G_TYPE_OBJECT   { self.object;     }
+  #     #when G_TYPE_VARIANT { }
+  #     default {
+  #       die "{ .Str } type NYI!";
+  #     }
+  #   }
+  #
+  #   cast(T, $!ps);
+  # }
+
+  # cw: CONFIRM value_type!
+  method type (:$obj = False) {
+    $obj ?? GLib::Object::Type.new( self.value_type ) !! self.value_type;
+  }
 }
 
 
