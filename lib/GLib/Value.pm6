@@ -115,14 +115,21 @@ class GLib::Value {
     ).throw if T.defined;
 
     do given T {
-      when uint32   { G_TYPE_UINT    }
-      when int32    { G_TYPE_INT     }
-      when num32    { G_TYPE_FLOAT   }
-      when num64    { G_TYPE_DOUBLE  }
-      when uint64   { G_TYPE_UINT64  }
-      when int64    { G_TYPE_INT64   }
-      when Str      { G_TYPE_STRING  }
-      when Pointer  { G_TYPE_POINTER }
+      when uint32               { G_TYPE_UINT    }
+      when int32                { G_TYPE_INT     }
+      when num32                { G_TYPE_FLOAT   }
+      when num64                { G_TYPE_DOUBLE  }
+      when uint64               { G_TYPE_UINT64  }
+      when int64                { G_TYPE_INT64   }
+      when Str                  { G_TYPE_STRING  }
+      when Bool                 { G_TYPE_UINT    }
+      when Pointer              { G_TYPE_POINTER }
+      when T.REPR eq 'CStruct'  { G_TYPE_POINTER }
+      when T.REPR eq 'CPointer' { G_TYPE_POINTER }
+
+      when GOBJECT() {
+        .?get_type // G_TYPE_OBJECT
+      }
     }
   }
 
@@ -558,7 +565,7 @@ sub gv-obj ($o, :$type) is export
   { gv_obj($o, :$type) }
 sub gv_obj ($o, :$type is copy) is export {
   $type = $o.?get_type
-    if ( $o ~~ ::('GLib::Object') ) && $type.defined.not;
+    if ( $o ~~ ::('GLib::Roles::Object') ) && $type.defined.not;
   my $gv = GLib::Value.new( $type // G_TYPE_OBJECT );
   $gv.object = $o;
   $gv;
@@ -582,8 +589,10 @@ sub valueToGValue (
   $unsigned //= $signed.so.not;
   $double   //= $single.so.not;
 
+  when GValue                        { $_                 }
+  when .^can('GValue')               { .GValue            }
   when Str                           { gv_str($_)         }
-  when ::('GLib::Roles::Object')     { gv_obj( .GObject ) }
+  when GOBJECT()                     { gv_obj( .GObject ) }
   when GObject                       { gv_obj($_)         }
   when .REPR eq <CStruct CUnion>.any { gv_ptr($_)         }
 
@@ -600,9 +609,11 @@ sub valueToGValue (
   }
 
   default {
-    say "Do not know how to handle object of type {
-         .^name } in update!"
-
+    X::GLib::InvalidValue.new(
+      routine => &?ROUTINE.name,
+      message => "Do not know how to handle object of type {
+                  .^name } in update!"
+    ).throw
   }
 }
 
