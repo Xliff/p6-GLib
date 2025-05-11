@@ -88,8 +88,11 @@ class GLib::Bytes {
     is also<get-data>
   { * }
 
-  method Str {
+  method Buf {
     $.get_data( :!all );
+  }
+  method Blob {
+    $.Buf.Blob
   }
 
   multi method get_data ( :$all = True ){
@@ -106,7 +109,7 @@ class GLib::Bytes {
     my $d = g_bytes_get_data($!b, $s);
     $size = $s;
     unless $raw {
-      $d = Buf.new( $d[^$size] ).decode($encoding);
+      $d = Buf[uint8].new( $d[^$size] ).decode($encoding);
     }
     $all.not ?? $d !! ($d, $size);
   }
