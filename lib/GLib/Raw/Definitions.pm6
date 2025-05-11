@@ -16,6 +16,12 @@ our (%ERROR, %ERRORS) is export;
 our $ERROR-THROWS     is export;
 our @ERRORS           is export;
 
+our &GOBJECT is export = sub {
+  X::GLib::NYI.new(
+    message => 'GLib::Roles::Object has not been loaded!'
+  ).throw;
+}
+
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
 role RakuDistributionProvider is export { }
