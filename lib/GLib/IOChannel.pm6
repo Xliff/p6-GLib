@@ -27,7 +27,7 @@ class GLib::IOChannel {
   ) {
     self.new_fd($filedesc);
   }
-  method new_fd (Int() $filedesc)
+  method new_fd (Int() $filedesc = 0)
     is also<
       new-fd
       new_unix
@@ -149,15 +149,23 @@ class GLib::IOChannel {
   }
 
   method add_watch (
-    Int()    $condition,
-             &func,
-    gpointer $user_data  = gpointer
+    Int()     $condition,
+              &func,
+    gpointer  $user_data  = gpointer,
+             :$raw        = False
   )
     is also<add-watch>
   {
-    my guint $c = $condition,
+    my guint $c = $condition;
 
-    g_io_add_watch($!gio, $condition, &func, $user_data);
+    my &myFunc = &func;
+    unless $raw {
+      &myFunc = SUB {
+        &func( self, |$*A[1..2] )
+      }
+    }
+
+    g_io_add_watch($!gio, $c, &myFunc, $user_data);
   }
 
   method add_watch_full (
@@ -408,6 +416,10 @@ class GLib::IOChannel {
     $rc = GIOStatus($rc) if $enum;
     set_error($error);
     $rc;
+  }
+
+  method set_null_encoding ( CArray[Pointer[GError]] $error = gerror ) {
+    $.set_encoding(Str, $error);
   }
 
   method set_encoding (
