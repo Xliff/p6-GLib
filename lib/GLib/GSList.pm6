@@ -253,15 +253,28 @@ class GLib::GSList {
 }
 
 sub returnGSList (
-  $gl     is copy,
-  $glist,
-  $raw,
-  $T      =  Str,
-  $O?,
-  :$seq   =  True,
-  :$ref   =  False
+   $gl     is copy,
+   $glist,
+   $raw,
+   $T                =  Str,
+   $O?,
+  :$seq              =  True,
+  :$ref              =  False,
+  :$free   is copy
 )
   is export
 {
-  returnGenericList(GLib::GSList, $gl, $glist, $raw, $T, $O, :$seq, :$ref);
+  $free = SUB { g_slist_free($*A.head) } if $free && $free !~~ Callable;
+
+  returnGenericList(
+     GLib::GSList,
+     $gl,
+     $glist,
+     $raw,
+     $T,
+     $O, 
+    :$seq,
+    :$ref,
+    :$free
+  );
 }
