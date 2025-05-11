@@ -69,6 +69,13 @@ class GObject         is repr<CStruct> does GLib::Roles::Pointers is export {
   }
 }
 
+
+# cw: For GPointers that are actually a GObject with private data.
+class GObjectWithPrivate is repr<CStruct> is export {
+  HAS GObject  $.parent;
+  has gpointer $.private;
+}
+
 sub g_type_check_instance_is_a (
   GTypeInstance $instance,
   GType         $iface_type
@@ -87,19 +94,19 @@ sub g_object_new_with_properties (
   returns GObject
   is native(gobject)
   is export
- { * }
+{ * }
 
 sub g_object_freeze_notify (GObject)
   is native(gobject)
   is export
- { * }
+{ * }
 
- sub g_object_thaw_notify (GObject)
-   is native(gobject)
-   is export
-  { * }
+sub g_object_thaw_notify (GObject)
+  is native(gobject)
+  is export
+{ * }
 
 sub g_object_notify (GObject, Str)
   is native(gobject)
   is export
- { * }
+{ * }
