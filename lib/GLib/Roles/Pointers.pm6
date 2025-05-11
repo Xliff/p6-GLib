@@ -44,4 +44,9 @@ role GLib::Roles::Pointers {
     +self.p;
   }
 
+  method sizeof {
+    return nativesizeof(self) if self.REPR eq 'CStruct';
+    nativesizeof(Pointer);
+  }
+
 }
