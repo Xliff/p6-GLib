@@ -116,16 +116,16 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     self.bless( :$buffer, :$size, :!autosize );
   }
   multi method new-typedbuffer-obj (
-    $s,
+     $s,
     :$clear        =  True,
     :sized(:$size) is required
   ) {
     self.bless( size => $s, :$clear );
   }
   multi method new-typedbuffer-obj (
-    Pointer $buffer,
-    :$autosize = True,
-    :$clear    = False
+    Pointer  $buffer,
+            :$autosize = True,
+            :$clear    = False
   ) {
     $buffer ?? self.bless( :$buffer, :$autosize, :$clear ) !! Nil;
   }
@@ -135,24 +135,26 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
     die "TypedBuffer type must be a CStruct, not a { T.REPR } via { T.^name }"
       unless T.REPR eq 'CStruct';
 
-    @entries = @entries.map({
-      if $_ !~~ T {
+    my @new-entries = @entries.map({
+      my $nv = $_;
+      if $nv !~~ T {
         if .^lookup(T.^shortname) -> $m {
-          $_ = $m($_);
+          .^name.say;
+          $nv = $m($_);
         }
       }
 
-      die qq:to/D/.chomp unless $_ ~~ T;
+      die qq:to/D/.chomp unless $nv ~~ T;
         { ::?CLASS.^name } can only be initialized if all entries are a {
           T.^name }, not a { .^name }
         D
 
-      $_;
+      $nv;
     });
 
-    my $o = self.bless( size => @entries.elems );
-    for ^@entries.elems {
-      $o.bind( $_, @entries[$_] );
+    my $o = self.bless( size => @new-entries.elems );
+    for ^@new-entries.elems {
+      $o.bind( $_, @new-entries[$_] );
     }
 
     $o;
