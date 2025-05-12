@@ -139,7 +139,7 @@ role GLib::Roles::TypedBuffer[::T] does Positional {
       my $nv = $_;
       if $nv !~~ T {
         if .^lookup(T.^shortname) -> $m {
-          .^name.say;
+	  #.^name.say;
           $nv = $m($_);
         }
       }
