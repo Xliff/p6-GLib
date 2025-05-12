@@ -359,6 +359,10 @@ class GLib::Array::Pointer is GLib::Array {
     unstable_get_type( self.^name, &g_ptr_array_get_type, $n, $t );
   }
 
+  method getTypePair {
+    GPtrArray, GLib::Array::Pointer
+  }
+
 }
 
 class GLib::Array::Integer is GLib::Array {
@@ -381,6 +385,10 @@ class GLib::Array::Integer is GLib::Array {
     );
   }
 
+  method getTypePair {
+    GArray, GLib::Array::Integer
+  }
+
 }
 
 # cw: The intent is for this to be a distinct type, however without the
@@ -394,6 +402,10 @@ class GLib::Array::String is GLib::Array {
 
   method Array {
     nextwith( typed => Str )
+  }
+
+  method getTypePair {
+    GArray, GLib::Array::String
   }
 }
 
