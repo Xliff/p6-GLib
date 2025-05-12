@@ -9,6 +9,7 @@ use GLib::Raw::Types;
 use GLib::Raw::Value;
 
 use GLib::Object::Type;
+use GLib::Variant;
 
 use GLib::Roles::Implementor;
 use GLib::Roles::TypedBuffer;
@@ -72,6 +73,100 @@ class GLib::Value {
 
     ::?CLASS.init( GValue.new, $type );
   }
+
+  method get_boolean is also<get-boolean> {
+    g_value_get_boolean($!v);
+  }
+
+  method get_boxed is also<get-boxed> {
+    g_value_get_boxed($!v);
+  }
+
+  method get_char is also<get-char> {
+    g_value_get_char($!v);
+  }
+
+  method get_double is also<get-double> {
+    g_value_get_double($!v);
+  }
+
+  method get_enum is also<get-enum> {
+    g_value_get_enum($!v);
+  }
+
+  method get_flags is also<get-flags> {
+    g_value_get_enum($!v);
+  }
+
+  method get_float is also<get-float> {
+    g_value_get_float($!v);
+  }
+
+  method get_int is also<get-int> {
+    g_value_get_int($!v);
+  }
+
+  method get_int32 is also<get-int32> {
+    g_value_get_int($!v);
+  }
+
+  method get_int64 is also<get-int64> {
+    g_value_get_int64($!v);
+  }
+
+  method get_long is also<get-long> {
+    g_value_get_long($!v);
+  }
+
+  method get_pointer is also<get-pointer> {
+    g_value_get_pointer($!v);
+  }
+
+  # cw: -XXX- This one is dicey! A better method is in the works!
+  method get_object ( :$raw = False ) is also<get-object> {
+    propReturnObject(
+      g_value_get_object($!v),
+      $raw,
+      |GLib::Object.getTypePair
+    );
+  }
+
+  method get_schar is also<get-schar> {
+    g_value_get_schar($!v);
+  }
+
+  method get_string is also<get-string> {
+    g_value_get_string($!v);
+  }
+
+  method get_uchar is also<get-uchar> {
+    g_value_get_uchar($!v);
+  }
+
+  method get_uint is also<get-uint> {
+    g_value_get_uint($!v);
+  }
+
+  method get_uint32 is also<get-uint32> {
+    g_value_get_uint($!v);
+  }
+
+  method get_uint64 is also<get-uint64> {
+    g_value_get_uint64($!v);
+  }
+
+  method get_ulong is also<get-ulong> {
+    g_value_get_ulong($!v);
+  }
+
+  method get_variant ( :$raw = False ) is also<get-variant> {
+    propReturnObject(
+      g_value_get_variant($!v),
+      $raw,
+      |GLib::Variant.getTypePair
+    );
+  }
+
 
   method unref {
     g_object_unref( nativecast(Pointer, $!v) );
@@ -171,14 +266,14 @@ class GLib::Value {
   }
 
   method value is rw {
-    self.valueFromGType( self.type( :fundamental, :enum ) );
+    self.valueFromGType( self.type( :fundamental, :!enum ) );
   }
 
   # ↓↓↓↓ ATTRIBUTES ↓↓↓↓
   method boolean is rw {
     Proxy.new(
       FETCH => sub ($) {
-        so g_value_get_boolean($!v);
+        so $.get_boolean
       },
       STORE => sub ($, Int() $v_boolean is copy) {
         my gboolean $v = $v_boolean.so.Int;
@@ -191,7 +286,7 @@ class GLib::Value {
   method boxed is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_boxed($!v);
+        $.get_boxed;
       },
       STORE => -> $, $val is copy {
         g_value_set_boxed($!v, nativecast(Pointer, $val))
@@ -202,7 +297,7 @@ class GLib::Value {
   method char is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_char($!v);
+        $.get_char
       },
       STORE => sub ($, Str() $v_char is copy) {
         g_value_set_char($!v, $v_char);
@@ -213,7 +308,7 @@ class GLib::Value {
   method double is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_double($!v);
+        $.get_double;
       },
       STORE => sub ($, Num() $v_double is copy) {
         my num64 $vd = $v_double;
@@ -226,7 +321,7 @@ class GLib::Value {
   method float is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_float($!v);
+        $.get_float;
       },
       STORE => sub ($, Num() $v_float is copy) {
         my num32 $vf = $v_float;
@@ -237,16 +332,25 @@ class GLib::Value {
   }
 
   # Alias back to original name of gtype.
-  method type ( :$fundamental = False, :$enum = False ) is rw {
+  method type ( :$fundamental = False, :$enum = True ) is rw {
     Proxy.new(
       FETCH => sub ($) {
         my $t = $!v.g_type;
-        return $t if     $t == GTypeEnum.enums.values.any;
-        return $t unless $fundamental;
-        $t = GLib::Object::Type.new($t).fundamental;
+        return $t unless $enum;
+        my $ap = GTypeEnum.enums.antipairs.Hash;
+        unless $fundamental {
+          if $ap{$t} -> $e {
+            return $e;
+          }
+          return $t
+        }
+        $t = GLib::Object::Type.new($t).fundamental.Int;
         return Nil    unless $t.defined;
-        return $t.Int unless $enum;
-        $t.GTypeEnum;
+        return $t unless $enum;
+        if $ap{$t} -> $e {
+          return $e;
+        }
+        $t;
       },
 
       STORE => sub ($, Int() $v_gtype is copy) {
@@ -258,7 +362,7 @@ class GLib::Value {
   method enum is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_enum($!v);
+        $.get_enum;
       },
       STORE => sub ($, Int() $v_int is copy) {
         g_value_set_enum($!v, $v_int);
@@ -269,7 +373,7 @@ class GLib::Value {
   method flags is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_enum($!v);
+        $.get_enum;
       },
       STORE => sub ($, Int() $v_uint is copy) {
         g_value_set_enum($!v, $v_uint);
@@ -280,7 +384,7 @@ class GLib::Value {
   method int is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_int($!v);
+        $.get_int;
       },
       STORE => sub ($, Int() $v_int is copy) {
         g_value_set_int($!v, $v_int);
@@ -291,7 +395,7 @@ class GLib::Value {
   method int64 is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_int64($!v);
+        $.get_int64;
       },
       STORE => sub ($, Int() $v_int64 is copy) {
         g_value_set_int64($!v, $v_int64);
@@ -302,7 +406,7 @@ class GLib::Value {
   method long is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_long($!v);
+        $.get_long;
       },
       STORE => sub ($, $v_long is copy) {
         g_value_set_long($!v, $v_long);
@@ -313,7 +417,7 @@ class GLib::Value {
   method pointer is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_pointer($!v);
+        $.get_pointer;
       },
       STORE => sub ($, $v_pointer is copy) {
         g_value_set_pointer($!v, nativecast(Pointer, $v_pointer) );
@@ -321,10 +425,10 @@ class GLib::Value {
     );
   }
 
-  method object ( :$type = GObject ) is rw {
+  method object ( :$raw = False ) is rw {
     Proxy.new(
       FETCH => -> $ {
-        cast( $type, g_value_get_object($!v) )
+        $.get_object( :$raw );
       },
 
       STORE => -> $, $obj is copy where *.^can('p') {
@@ -336,7 +440,7 @@ class GLib::Value {
   method schar is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_schar($!v);
+        $.get_schar;
       },
       STORE => sub ($, $v_char is copy) {
         g_value_set_schar($!v, $v_char);
@@ -347,7 +451,7 @@ class GLib::Value {
   method string is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_string($!v);
+        $.get_string;
       },
       STORE => sub ($, Str() $v_string is copy) {
         g_value_set_string($!v, $v_string);
@@ -358,7 +462,7 @@ class GLib::Value {
   method uchar is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_uchar($!v);
+        $.get_uchar;
       },
       STORE => sub ($, $v_uchar is copy) {
         g_value_set_uchar($!v, $v_uchar);
@@ -369,7 +473,7 @@ class GLib::Value {
   method uint is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_uint($!v);
+        $.get_uint;
       },
       STORE => sub ($, Int() $v_uint is copy) {
         g_value_set_uint($!v, $v_uint);
@@ -380,7 +484,7 @@ class GLib::Value {
   method uint64 is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_uint64($!v);
+        $.get_uint64;
       },
       STORE => sub ($, Int() $v_uint64 is copy) {
         g_value_set_uint64($!v, $v_uint64);
@@ -391,7 +495,7 @@ class GLib::Value {
   method ulong is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_ulong($!v);
+        $.get_ulong;
       },
       STORE => sub ($, Int() $v_ulong is copy) {
         g_value_set_ulong($!v, $v_ulong);
@@ -402,7 +506,7 @@ class GLib::Value {
   method variant is rw {
     Proxy.new(
       FETCH => sub ($) {
-        g_value_get_variant($!v);
+        $.get_variant;
       },
       STORE => sub ($, $variant is copy) {
         g_value_set_variant($!v, $variant);
@@ -491,9 +595,13 @@ class GLib::Value {
 
 sub gv-str (Str() $s) is export
   { gv_str($s) }
-sub gv_str (Str() $s) is export {
+sub gv_str (Str() $s is copy) is export {
+  $s = '' if $s === Str;
+
+  say "Using gv_str for '{ $s // '»NIL«' }'..." if checkDEBUG(3);
   my $gv = GLib::Value.new( G_TYPE_STRING );
   $gv.string = $s;
+  say "Resulting value is '{ $gv.value // '»NIL«' }'..." if checkDEBUG(3);
   $gv;
 }
 
@@ -588,6 +696,8 @@ sub valueToGValue (
 ) is export {
   $unsigned //= $signed.so.not;
   $double   //= $single.so.not;
+
+  say "valueToGValue - Converting [{ $_ // '»NIL«' }]..." if checkDEBUG(3);
 
   when GValue                        { $_                 }
   when .^can('GValue')               { .GValue            }
