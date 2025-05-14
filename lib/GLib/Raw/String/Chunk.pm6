@@ -5,7 +5,7 @@ use NativeCall;
 use GLib::Raw::Definitions;
 use GLib::Raw::Structs;
 
-unit package GLib::Raw::GString::Chunk;
+unit package GLib::Raw::String::Chunk;
 
 ### /usr/src/glib/glib/gstringchunk.h
 
