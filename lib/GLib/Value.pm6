@@ -127,7 +127,7 @@ class GLib::Value {
     propReturnObject(
       g_value_get_object($!v),
       $raw,
-      |GLib::Object.getTypePair
+      |GLIB-OBJECT().getTypePair
     );
   }
 
@@ -236,7 +236,7 @@ class GLib::Value {
     typeFromGType(T);
   }
 
-  method valueFromGType (GTypeEnum $_) is rw {
+  method valueFromGType (GTypeEnum $_, :obj(:$object) = False) is rw {
     when G_TYPE_CHAR     { self.char;       }
     when G_TYPE_UCHAR    { self.uchar;      }
     when G_TYPE_BOOLEAN  { self.boolean;    }
@@ -258,15 +258,20 @@ class GLib::Value {
     when G_TYPE_POINTER  { self.pointer;    }
     when G_TYPE_BOXED    { self.boxed;      }
     #when G_TYPE_PARAM   { }
-    when G_TYPE_OBJECT   { self.object;     }
-    #when G_TYPE_VARIANT { }
+
+    when G_TYPE_OBJECT   { self.object( :$object); }
+    when G_TYPE_VARIANT  { self.variant(:$object); }
+
     default {
       "<< { $_.Str } type NYI >>";
     }
   }
 
-  method value is rw {
-    self.valueFromGType( self.type( :fundamental, :!enum ) );
+  method value ( :obj(:$object) = False ) is rw {
+    self.valueFromGType(
+      self.type( :fundamental, :!enum ),
+      :$object
+    );
   }
 
   # ↓↓↓↓ ATTRIBUTES ↓↓↓↓
@@ -425,10 +430,10 @@ class GLib::Value {
     );
   }
 
-  method object ( :$raw = False ) is rw {
+  method object ( :obj(:$object) = False ) is rw {
     Proxy.new(
       FETCH => -> $ {
-        $.get_object( :$raw );
+        $.get_object( raw => $object.not );
       },
 
       STORE => -> $, $obj is copy where *.^can('p') {
@@ -503,10 +508,10 @@ class GLib::Value {
     );
   }
 
-  method variant is rw {
+  method variant ( :obj(:$object) = False ) is rw {
     Proxy.new(
       FETCH => sub ($) {
-        $.get_variant;
+        $.get_variant( raw => $object.not );
       },
       STORE => sub ($, $variant is copy) {
         g_value_set_variant($!v, $variant);
@@ -673,7 +678,7 @@ sub gv-obj ($o, :$type) is export
   { gv_obj($o, :$type) }
 sub gv_obj ($o, :$type is copy) is export {
   $type = $o.?get_type
-    if ( $o ~~ ::('GLib::Roles::Object') ) && $type.defined.not;
+    if ( $o ~~ GOBJECT() ) && $type.defined.not;
   my $gv = GLib::Value.new( $type // G_TYPE_OBJECT );
   $gv.object = $o;
   $gv;
@@ -688,43 +693,50 @@ sub gv_ptr ($p) is export {
 }
 
 sub valueToGValue (
-  $_,
+   $_,
   :$signed,
   :$unsigned  is copy,
   :$single,
-  :$double    is copy
+  :$double    is copy,
+  :$raw
 ) is export {
   $unsigned //= $signed.so.not;
   $double   //= $single.so.not;
 
   say "valueToGValue - Converting [{ $_ // '»NIL«' }]..." if checkDEBUG(3);
 
-  when GValue                        { $_                 }
-  when .^can('GValue')               { .GValue            }
-  when Str                           { gv_str($_)         }
-  when GOBJECT()                     { gv_obj( .GObject ) }
-  when GObject                       { gv_obj($_)         }
-  when .REPR eq <CStruct CUnion>.any { gv_ptr($_)         }
+  my $v = do {
+    when GValue                        { $_                 }
+    when .^can('GValue')               { .GValue            }
+    when Str                           { gv_str($_)         }
+    when GOBJECT()                     { gv_obj( .GObject ) }
+    when GObject                       { gv_obj($_)         }
+    when .REPR eq <CStruct CUnion>.any { gv_ptr($_)         }
+    when Bool                          { gv_bool($_)        }
 
-  when Num                           { $double ?? gv_dbl($_) !! gv_flt($_) }
+    when Num                           { $double ?? gv_dbl($_) !! gv_flt($_) }
 
-  when Int                           {
-    # cw: Beware the law of unintended consequences!
-    if $_ < 0 && $signed.not && $single {
-      .abs.log(2) < 32 ?? gv_int($_) !! gv_int64($_);
-    } else {
-      $signed ?? ( $single ?? gv_int($_)  !! gv_int64($_)  )
-              !! ( $single ?? gv_uint($_) !! gv_uint64($_) )
+    when Int                           {
+      # cw: Beware the law of unintended consequences!
+      if $_ < 0 && $signed.not && $single {
+        .abs.log(2) < 32 ?? gv_int($_) !! gv_int64($_);
+      } else {
+        $signed ?? ( $single ?? gv_int($_)  !! gv_int64($_)  )
+                !! ( $single ?? gv_uint($_) !! gv_uint64($_) )
+      }
+    }
+
+    default {
+      X::GLib::InvalidValue.new(
+        routine => &?ROUTINE.name,
+        message => "Do not know how to handle object of type {
+                    .^name } in update!"
+      ).throw
     }
   }
 
-  default {
-    X::GLib::InvalidValue.new(
-      routine => &?ROUTINE.name,
-      message => "Do not know how to handle object of type {
-                  .^name } in update!"
-    ).throw
-  }
+  $v .= GValue if $raw;
+  $v
 }
 
 class GLib::Value::Array {
