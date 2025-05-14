@@ -1457,7 +1457,8 @@ class GLib::Object does GLib::Roles::Object {
 
 }
 
-&GOBJECT = sub { GLib::Roles::Object }
+&GOBJECT     = sub { GLib::Roles::Object }
+&GLIB-OBJECT = sub { GLib::Object        }
 
 role GLib::Roles::Object::RegisteredType[$gtype] {
 
