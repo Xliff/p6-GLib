@@ -101,7 +101,7 @@ sub g_log_set_handler_full (
   guint    $log_levels,
            &log_func (Str, GLogLevelFlags, Str, gpointer),
   gpointer $user_data,
-           &destroy
+           &destroy (gpointer)
 )
   returns guint
   is      native(glib)
@@ -116,7 +116,7 @@ sub g_log_set_writer_func (
              Pointer --> GLogWriterOutput
            ),
   gpointer $user_data,
-           $user_data_free
+           &user_data_free (gpointer)
 )
   is native(glib)
   is export
