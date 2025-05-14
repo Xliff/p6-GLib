@@ -22,6 +22,12 @@ our &GOBJECT is export = sub {
   ).throw;
 }
 
+our &GLIB-OBJECT is export = sub {
+  X::GLib::NYI.new(
+    message => 'GLib::Roles::Object has not been loaded!'
+  ).throw;
+}
+
 our (%typeClass, %typeOrigin, %object-type-manifest) is export;
 
 role RakuDistributionProvider is export { }
