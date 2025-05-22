@@ -1,6 +1,7 @@
 use v6.c;
 
 use experimental :macros;
+use experimental :rakuast;
 
 unit package GLib::Raw::Macros;
 
@@ -35,3 +36,58 @@ unit package GLib::Raw::Macros;
 #     }
 #   }
 # }
+
+sub GENERATE-NEED-STATEMENTS (\sym) is export {
+  my @e = sym.pairs.grep( *.key.ends-with("exports") );
+
+  RakuAST::StatementList.new(
+    |(
+      (
+        do for @e {
+          do for .value {
+            RakuAST::Statement::Need.new(
+              module-names => [
+                RakuAST::Name.from-identifier($_)
+              ]
+            )
+          }
+        }
+      ).flat
+    ),
+    RakuAST::Statement::Expression.new(
+      expression => RakuAST::StatementPrefix::Phaser::Begin.new(
+        RakuAST::Block.new(
+          body => RakuAST::Blockoid.new(
+            RakuAST::StatementList.new(
+              RakuAST::Statement::Expression.new(
+                expression => RakuAST::Call::Name.new(
+                  name => RakuAST::Name.from-identifier('glib-re-export'),
+                  args => RakuAST::ArgList.new(
+                    RakuAST::Var::Lexical.new('$_')
+                  )
+                ),
+                loop-modifier => RakuAST::StatementModifier::For.new(
+                  RakuAST::ApplyListInfix.new(
+                    infix    => RakuAST::Infix.new(","),
+                    operands => |(
+                      (
+                        do for @e {
+                          do for .key {
+                            RakuAST::ApplyPrefix.new(
+                              prefix  => RakuAST::Prefix.new("|"),
+                              operand => RakuAST::Var::Lexical.new($_)
+                            )
+                          }
+                        }
+                      ).flat
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  );
+}
