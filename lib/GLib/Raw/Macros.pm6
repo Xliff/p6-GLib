@@ -37,6 +37,31 @@ unit package GLib::Raw::Macros;
 #   }
 # }
 
+macro NEED-STATEMENTS (\sym) is export {
+  my @e = sym.pairs.grep( *.key.ends-with("exports") );
+
+  for @e {
+    quasi { need {{{ $_ }}}; }
+  }
+
+  quasi {
+    BEGIN {{
+  }
+
+  quasi { glib-re-export($_) for }
+
+  for @e {
+    for .key {
+      |{{{ $_ }}}
+    }
+  }
+
+  quasi {
+    }}
+  }
+
+}
+
 sub GENERATE-NEED-STATEMENTS (\sym) is export {
   my @e = sym.pairs.grep( *.key.ends-with("exports") );
 
