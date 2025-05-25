@@ -218,10 +218,9 @@ class GTokenValue              is repr<CPointer> is export does GLib::Roles::Poi
 #class GVariant                 is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantBuilder          is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GVariantDict             is repr<CPointer> is export does GLib::Roles::Pointers { }
+class GVariantType             is repr<CPointer> is export does GLib::Roles::Pointers { }
 #class GVariantIter             is repr<CPointer> is export does GLib::Roles::Pointers { }
 class GUri                     is repr<CPointer> is export does GLib::Roles::Pointers { }
-
-constant GVariantType is export := CArray[uint8];
 
 constant G_LITTLE_ENDIAN is export = 1234;
 constant G_BIG_ENDIAN    is export = 4321;
