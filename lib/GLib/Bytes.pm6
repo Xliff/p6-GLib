@@ -14,7 +14,7 @@ class GLib::Bytes {
   has GBytes $!b is implementor handles<p>;
 
   submethod BUILD (GBytes :$bytes) {
-    $!b = $bytes;
+    $!b = $_ with $bytes;
   }
 
   # method Str {
@@ -88,12 +88,9 @@ class GLib::Bytes {
     is also<get-data>
   { * }
 
-  method Buf {
-    $.get_data( :!all );
-  }
-  method Blob {
-    $.Buf.Blob
-  }
+
+  method Buf  { $.get_data( :!all ) }
+  method Blob { $.Buf.Blob          }
 
   multi method get_data ( :$all = True ){
     samewith($, :$all);
@@ -101,6 +98,7 @@ class GLib::Bytes {
   multi method get_data (
      $size      is rw,
     :$all              = False,
+    :$buf              = True,
     :$raw              = False,
     :$encoding         = 'utf8'
   ) {
@@ -109,7 +107,9 @@ class GLib::Bytes {
     my $d = g_bytes_get_data($!b, $s);
     $size = $s;
     unless $raw {
-      $d = Buf[uint8].new( $d[^$size] ).decode($encoding);
+      $d = Buf[uint8].new( $d[^$size] );
+      return $d if $buf;
+      $d.decode($encoding);
     }
     $all.not ?? $d !! ($d, $size);
   }

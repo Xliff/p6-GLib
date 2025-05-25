@@ -11,11 +11,11 @@ use GLib::Roles::Implementor;
 
 class GLib::ByteArray {
   also does GLib::Roles::Implementor;
-  
+
   has GByteArray $!ba is implementor handles<len Blob p>;
 
   submethod BUILD (:$byte-array) {
-    $!ba = $byte-array;
+    $!ba = $_ with $byte-array;
   }
 
   method GLib::Raw::Structs::GByteArray
