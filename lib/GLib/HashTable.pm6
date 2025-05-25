@@ -19,6 +19,16 @@ use GLib::Roles::Implementor;
 
 # --- START -- For Role Associative
 role AssociativeLike does Associative {
+  method keys { ... }
+
+  multi method pairs (\T = gpointer) {
+    do for self.keys[] {
+      my $v = self{$_};
+      $v = cast(T, $v);
+      Pair.new($_, $v)
+    }
+  }
+
   method ASSIGN-KEY (\k, \v) {
     my $k = cast(Pointer, k);
 
@@ -105,9 +115,9 @@ class GLib::HashTable {
     }
   }
 
-  submethod DESTROY {
-    self.downref
-  }
+  # submethod DESTROY {
+  #   self.downref
+  # }
 
   method GLib::Raw::Definitions::GHashTable
     is also<GHashTable>
@@ -504,7 +514,7 @@ class GLib::HashTable {
   }
 
 
-  method pairs (:$reversed = False) {
+  multi method pairs ( :$reversed is required = False ) {
     my ($k, $v) = (self.get_keys_as_array, self.get_values);
 
     do for ^self.elems {
