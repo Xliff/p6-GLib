@@ -21,8 +21,6 @@ Revision history for GLib
     - Prevents get_paramspec_types() from loading at INIT time due to a defect in ::Raw::Enums
     - Adds X::GLib::InvalidState to ::Raw::Exceptions
 
-{{$NEXT}}
-
 0.0.8  2025-05-25T11:05:26-04:00
 
       - Fixes for ::VariantType
@@ -77,3 +75,9 @@ Revision history for GLib
       - Adds change to set the precomp directory to ${HOME}/.raku
       - Adds TYPE-TO-OBJECT function in ::Object::Type
       - Changes required for setting the .set_property and .get_property methods for GObject
+
+{{$NEXT}}
+
+0.0.8.1  2025-05-25T14:13:23-04:00
+
+      - Fixes errors from 0.0.8 that were preventing install.
