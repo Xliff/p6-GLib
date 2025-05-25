@@ -90,11 +90,11 @@ sub g_variant_check_format_string (
   is      export
 { * }
 
-# sub g_variant_classify (GVariant $value)
-#   returns GVariantClass
-#   is native(glib)
-#   is export
-# { * }
+sub g_variant_classify (GVariant $value)
+  returns GVariantClass
+  is native(glib)
+  is export
+{ * }
 
 sub g_variant_compare (GVariant $one, GVariant $two)
   returns gint
@@ -538,7 +538,7 @@ sub g_variant_new_from_data (
   gconstpointer  $data,
   gsize          $size,
   gboolean       $trusted,
-  GDestroyNotify $notify,
+                 &notify (gpointer),
   gpointer       $user_data
 )
   returns GVariant
@@ -601,6 +601,15 @@ sub g_variant_new_string (Str $string)
 { * }
 
 sub g_variant_new_take_string (Str $string)
+  returns GVariant
+  is native(glib)
+  is export
+{ * }
+
+sub g_variant_new_tuple (
+  CArray[Pointer[GVariant]] $tuple,
+  gsize                     $num
+)
   returns GVariant
   is native(glib)
   is export

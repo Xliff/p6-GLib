@@ -7,22 +7,24 @@ use GLib::Raw::Traits;
 use GLib::Raw::Types;
 use GLib::Raw::Variant;
 
+use GLib::Bytes;
 use GLib::VariantType;
 
 use GLib::Roles::Implementor;
 
 class GLib::Variant {
   also does Positional;
+  also does Iterable;
   also does GLib::Roles::Implementor;
 
   has GVariant $!v is implementor handles<p>;
 
-  submethod BUILD (:$variant) {
-    $!v = $variant;
+  submethod BUILD ( :$variant ) {
+    $!v = $_ with $variant;
   }
 
   submethod DESTROY {
-    self.downref;
+    # self.downref;
   }
 
   method GLib::Raw::Structs::GVariant
@@ -63,14 +65,12 @@ class GLib::Variant {
   {
     self.new_byte($byte_val);
   }
-  method new_byte(
-    Int() $byte
-  )
+  method new_byte( Int() $byte )
     is static
     is also<new-byte>
   {
     my uint8 $b = $byte;
-    my $v = g_variant_new_byte($b);
+    my       $v = g_variant_new_byte($b);
 
     $v ?? self.bless( variant => $v ) !! Nil;
   }
@@ -95,8 +95,8 @@ class GLib::Variant {
   }
 
   multi method new (
-    GVariant() $key,
-    GVariant() $value,
+    GVariant()  $key,
+    GVariant()  $value,
                :entry(:dict_entry(:$dict-entry)) is required
   )
     is static
@@ -204,10 +204,10 @@ class GLib::Variant {
   }
   method new_from_data (
     GVariantType() $type,
-    gconstpointer  $data,
+    gpointer       $data,
     Int()          $size,
     Int()          $trusted,
-    GDestroyNotify $notify    = Pointer,
+                   &notify    = %DEFAULT-CALLBACKS<GDestroyNotify>,
     gpointer       $user_data = Pointer
   )
     is static
@@ -215,12 +215,13 @@ class GLib::Variant {
   {
     my uint64   $s = $size;
     my gboolean $t = $trusted;
+
     my $v = g_variant_new_from_data(
       $type,
       $data,
       $s,
       $t,
-      $notify,
+      &notify,
       $user_data
     );
 
@@ -316,13 +317,28 @@ class GLib::Variant {
   {
     self.new_maybe($type, $child);
   }
-  method new_maybe (
-    GVariantType() $type,
-    GVariant()     $child
-  )
+
+  proto method new_maybe (|)
     is static
     is also<new-maybe>
-  {
+  { * }
+
+  multi method new_maybe (
+    GVariantType()  $type,
+                   :$null is required where *.so
+  ) {
+    samewith($type, GVariant);
+  }
+  multi method new_maybe (
+    GVariant()      $child,
+    GVariantType() :$type   = GVariantType
+  ) {
+    samewith($type, $child);
+  }
+  multi method new_maybe (
+    GVariantType() $type,
+    GVariant()     $child
+  ) {
     my $v = g_variant_new_maybe($type, $child);
 
     $v ?? self.bless( variant => $v ) !! Nil;
@@ -400,6 +416,43 @@ class GLib::Variant {
   #   g_variant_new_take_string($!v);
   # }
 
+  multi method new (@tuple) {
+    GLib::Value.new_tuple(@tuple, @tuple.elems);
+  }
+  multi method new (
+    CArray[Pointer[GVariant]]  $t,
+    Int()                      $size,
+                              :$tuple             is required where *.so,
+                              :$deep      = True,
+                              :$recursive = True
+  ) {
+    GLib::Variant.new_tuple($t, $size)
+  }
+
+  proto method new_tuple (|)
+    is also<new-tuple>
+  { * }
+
+  multi method new_tuple (@tuple, :$deep = False, :$recursive = False) {
+    samewith(
+      ArrayToCArray(
+        GVariant,
+        GLib::Variant.pack('av', @tuple, :$deep, :$recursive)
+      )
+    )
+  }
+  multi method new_tuple (
+    CArray[Pointer[GVariant]] $tuple,
+    Int()                     $size
+  ) {
+    my gsize $s = $size;
+
+    my $v = g_variant_new_tuple($tuple, $s);
+
+    $v ?? self.bless( variant => $v ) !! Nil;
+  }
+
+
   multi method new (
     Int()  $value,
           :q(:$uint16) is required
@@ -408,9 +461,7 @@ class GLib::Variant {
   {
     self.new_uint16($value);
   }
-  method new_uint16 (
-    Int() $value
-  )
+  method new_uint16 ( Int() $value )
     is static
     is also<new-uint16>
   {
@@ -428,9 +479,7 @@ class GLib::Variant {
   {
     self.new_uint32($value);
   }
-  method new_uint32 (
-    Int() $value
-  )
+  method new_uint32 ( Int() $value )
     is static
     is also<new-uint32>
   {
@@ -448,9 +497,7 @@ class GLib::Variant {
   {
     self.new_uint64($value);
   }
-  method new_uint64 (
-    Int() $value
-  )
+  method new_uint64 ( Int() $value )
     is static
     is also<new-uint64>
   {
@@ -472,9 +519,7 @@ class GLib::Variant {
   {
     self.new_variant($value);
   }
-  method new_variant (
-    GVariant() $value
-  )
+  method new_variant ( GVariant() $value )
     is static
     is also<new-variant>
   {
@@ -523,6 +568,8 @@ class GLib::Variant {
                             :$all           = False,
                             :$raw           = False
   ) {
+    say "Type: { $type.gist }";
+
     my $ep = CArray[Str].new;
     $ep[0] = Str;
 
@@ -573,10 +620,244 @@ class GLib::Variant {
     g_variant_check_format_string($!v, $format_string, $co);
   }
 
-  # Uses GVariantClass, so not in-scope.
-  # method classify {
-  #   g_variant_classify($!v);
-  # }
+  # cw: GVariantClass is an enum!
+  method classify ( :$enum = True ) {
+    my $c = g_variant_classify($!v);
+    return $c unless $enum;
+    GVariantClassEnum($c);
+  }
+
+  constant SIMPLE_TYPES = <b y n q i u x t h d s o g>;
+
+  method readSingleType (
+     $sig,
+    :force_simple(:force-simple(:force(:simple(:$forceSimple))))
+  ) {
+    my $c  = $sig.head;
+    my $is = False;
+
+    if SIMPLE_TYPES.first($c).defined {
+      X::GLib::InvalidValue.new(
+        message => 'Invalid GVariant signature (a simple type was expected)'
+      ).throw if $forceSimple;
+    } else {
+      $is = True;
+    }
+
+    if $c eq <m a>.any {
+      return $c ~ $.readSingleType($sig)
+    }
+
+    if $c eq '{' {
+      my $k  = $.readSingleType($sig, :simple);
+      my $v  = $.readSingleType($sig);
+      my $cl = $sig.shift;
+      X::GLib::InvalidValue.new(
+        'Invalid GVariant signature for type DICT_ENTRY (expected "}"'
+      ).throw unless $cl eq '}';
+
+      return [~]($c, $k, $v, $cl);
+    }
+
+    if $c eq '(' {
+      my $res = $c;
+      loop {
+        X::GLib::InvalidValue.new(
+          'Invalid GVariant signature for type TUPLE (expected ")")'
+        ).throw unless $sig.chars;
+        my $n = $sig.head;
+        if $n eq ')' {
+          $sig.shift;
+          return $res ~ next;
+        }
+
+        $res ~= $.readSingleType($sig);
+      }
+    }
+
+    X::GLib::InvalidValue.new(
+      message => "Invalid GVariant signature { $c } is not a valid type)"
+    ).throw unless $forceSimple || $c eq 'v';
+
+    return $c.Array;
+  }
+
+  method pack ($sig, $val, :$encoding = 'utf8' ) {
+    X::GLib::InvalidArgument.new(
+      message => 'GVariant signature cannot be empty'
+    ).throw unless $sig.chars;
+
+    for $sig[] {
+      when 'b' { return GLib::Variant.new_boolean($val)      }
+      when 'y' { return GLib::Variant.new_byte($val)         }
+      when 'n' { return GLib::Variant.new_int16($val)        }
+      when 'q' { return GLib::Variant.new_uint16($val)       }
+      when 'i' { return GLib::Variant.new_int32($val)        }
+      when 'u' { return GLib::Variant.new_uint32($val)       }
+      when 'x' { return GLib::Variant.new_int64($val)        }
+      when 't' { return GLib::Variant.new_uint64($val)       }
+      when 'h' { return GLib::Variant.new_handle($val)       }
+      when 'd' { return GLib::Variant.new_double($val)       }
+      when 's' { return GLib::Variant.new_string($val)       }
+      when 'o' { return GLib::Variant.new_object_path($val)  }
+      when 'g' { return GLib::Variant.new_signature($val)    }
+      when 'v' { return GLib::Variant.new_variant($val)      }
+
+      when 'm' {
+        return $val.defined
+          ?? GLib.Variant.new_maybe( $.pack($sig, $val, :$encoding) )
+          !! GLib.Variant.new_maybe(
+              GLib.VariantType.new(
+                $.readSingleType($sig).join(''),
+                :null
+              )
+            );
+      }
+
+      when 'a' {
+        my $at = $.readSingleType($sig);
+
+        if ($at.head eq 's') {
+            # special case for array of strings
+            return GLib::Variant.new_strv($val);
+        }
+
+        if ($at.head eq 'y') {
+          # special case for array of bytes
+          if $val ~~ Str {
+            $val = $val.encode($encoding)
+          }
+
+          return GLib::Variant.new_from_bytes(
+            GLib::VariantType.new('ay'),
+            GLib::Bytes.new($val),
+            :trusted
+          );
+        }
+
+        my $av = [];
+        if $at.head eq '{' {
+          # special case for dictionaries
+          $av.push(
+            $.pack( $at.Array, [ .key, .value ] )
+          ) for $val.pairs
+        } else {
+          $av.push( $.pack($at.Array, $_) ) for $val[];
+        }
+
+        return GLib::Variant.new_array(
+          GLib::VariantType.new($at.join),
+          $av
+        );
+      }
+
+      when '(' {
+        my @c;
+
+        for $val[] {
+          my $n = $sig.head;
+          next if $n eq ')';
+          @c.push: $.pack($sig, $_);
+        }
+
+        X::GLib::InvalidValue.new(
+          message => 'Invalid GVariant signature for type TUPLE (expected ")")'
+        ).throw unless $sig.head eq ')';
+        $sig.shift;
+
+        return GLib::Variant.new_tuple(@c);
+      }
+
+      when '{' {
+        my $k = $.pack($sig, $val.head);
+        my $v = $.pack($sig, $val.tail);
+
+        X::GLib::InvalidValue.new(
+          message => "Invalid GVariant signature for type DICT_ENTRY {
+            '' }(expected '}')"
+        ).throw unless $sig.head eq '}';
+        $sig.shift;
+
+        return GLib::Variant.new_dict_entry($k, $v);
+      }
+
+      default {
+        X::GLib::InvalidValue.new(
+          message => "Invalid GVariant signature (unexpected character {
+            '' } { $_ })"
+        );
+      }
+    }
+  }
+
+  method unpack ( :$deep = False, :$recursive = False ) {
+    do given $.classify {
+      when 'v' {
+        my $r = $.variant;
+        return $r unless $deep && $recursive;
+        $r.unpack( :$deep, :$recursive );
+      }
+
+      when 'm' {
+        my $val = $.maybe;
+        return $val unless $deep && $val;
+        $val.unpack( :$deep, :$recursive );
+      }
+
+      when 'b'         { $.boolean          }
+      when 'y'         { $.byte             }
+      when 'n'         { $.int16            }
+      when 'q'         { $.uint16           }
+      when 'i'         { $.int32            }
+      when 'u'         { $.uint32           }
+      when 'x'         { $.int64            }
+      when 't'         { $.uint64           }
+      when 'h'         { $.handle           }
+      when 'd'         { $.double           }
+      when <o g s>.any { $.string.comb.head }
+
+      when 'a' {
+        if $.is_of_type( GLib::VariantType.new('a{?*}') ) {
+          my $r = %();
+
+          for self {
+            my $v = .unpack( :$deep, :$recursive);
+
+            my $k = $deep.not
+              ?? $v[0].unpack( :deep )
+              !! $v[0];
+
+            my $r;
+            $r{ $k } = $v[1];
+          }
+          return $r
+        }
+
+        if $.is_of_type( GLib.VariantType('ay').new ) {
+          # special case byte arrays
+          return $.get_data_as_bytes.Array;
+        }
+        proceed;
+      }
+
+      when <( {>.any {
+        my $r = [];
+
+        $r.push: $deep
+          ?? .unpack( :$deep, :$recursive )
+          !! $_
+        for self;
+
+        $r
+      }
+
+      default {
+        X::GLib.new(
+          message => 'Assertion failure: this code should not be reached'
+        ).throw;
+      }
+    }
+  }
 
   method compare (GVariant() $two) {
     g_variant_compare($!v, $two);
@@ -680,14 +961,18 @@ class GLib::Variant {
     g_variant_get_data($!v);
   }
 
-  method get_data_as_bytes
+  method get_data_as_bytes ( :$raw = False )
     is also<
       get-data-as-bytes
       data_as_bytes
       data-as-bytes
     >
   {
-    g_variant_get_data_as_bytes($!v);
+    propReturnObject(
+      g_variant_get_data_as_bytes($!v),
+      $raw,
+      |GLib::Bytes.getTypePair
+    );
   }
 
   method get_double
@@ -865,18 +1150,18 @@ class GLib::Variant {
   #   g_variant_get_va($!v, $format_string, $endptr, $app);
   # }
 
-  method get_variant (:$raw = False)
+  method get_variant ( :$raw = False, :$ref = False )
     is also<
       get-variant
       variant
     >
   {
-    my $v = g_variant_get_variant($!v);
-
-    $v ??
-      ( $raw ?? $v !! GLib::Variant.new($v, :!ref) )
-      !!
-      Nil;
+    propReturnObject(
+      g_variant_get_variant($!v),
+      $raw,
+      |self.getTypePair
+      :$ref
+    )
   }
 
   method getObjPath {
@@ -886,91 +1171,92 @@ class GLib::Variant {
     return $s;
   }
 
-  method Hash ( :$raw = False, :$variant = False ) {
-    my $i = GVariantIter.new;
-    my $t = self.get_type_string;
-
-    die "'{ $t }' is not Hash compatible!"
-      unless $t ~~ /^ 'a' $<subtype>=[ '{s' (\w) '}' ] $/;
-
-    my ($subtype, $vt) = ($/<subtype>.Str, $vt.Str);
-
-    my $typename =
-    my \valueType = do given $vt {
-      when 'v'       { $typename = 'gvariant'; Pointer[GVariant] }
-      when 'b'       { $typename = 'uint32'  ; CArray[uint32]    }
-      when 'y'       { $typename = 'uint8'   ; CArray[uint8]     }
-      when 'n'       { $typename = 'int16'   ; CArray[int16]     }
-      when 'q'       { $typename = 'uint16'  ; CArray[uint16]    }
-      when 'i' | 'h' { $typename = 'int32'   ; CArray[int32]     }
-      when 'u'       { $typename = 'uint32'  ; CArray[uint32]    }
-      when 'x'       { $typename = 'int64'   ; CArray[int64]     }
-      when 't'       { $typename = 'uint64'  ; CArray[uint64]    }
-      when 'd'       { $typename = 'num64'   ; CArray[num64]     }
-      when 's' | 'g' { $typename = 'Str'     ; Str               }
-
-      default {
-        die "Unknown value type '{ $_ }'";
-      }
-    }
-
-    my ($k, $v, %h) = ( newCArray(Str), newCArray(valueType) );
-
-    g_variant_iter_init($i, self.GVariant);
-
-    my &s = ::("g_variant_hash_{ $typename }_loop");
-    while ( &s($i, $subtype, $k, $v) ) {
-      unless $raw {
-        $v = do given valueType {
-          when Pointer[GVariant] {
-            my $v1 = propReturnObject($v[0].deref, $raw, |self.getTypePair);
-            $v1 .= getValue;
-            $v1
-          }
-
-          when Str {
-            $v[0];
-          }
-
-          default {
-            $v[0][0]
-          }
-        }
-      }
-      %h{ $k[0] } = $v;
-    }
-    %h;
-  }
-
-  method getValue {
-    my $t = self.get_type_string;
-
-    # cw: Handle known patterns - a{s[a-z]} is a hash
-    return self.Hash  if $t ~~ / 'a{s' \w '}' /;
-    # cw: The first token set needs to use regex to pull nested expressions!
-    return self.Array if $t ~~ /'a(' .+? ')' | 'a'\w | '(a' \w ')' /;
-
-    do given $t {
-      when 'm'             { my $var = self.get_maybe;   $var.getValue }
-      when 'v'             { my $var = self.get_variant; $var.getValue }
-
-      when 'b'             { self.get_boolean }
-      when 'y'             { self.get_byte    }
-      when 'n'             { self.get_int16   }
-      when 'q'             { self.get_uint16  }
-      when 'i' | 'h'       { self.get_int32   }
-      when 'u'             { self.get_uint32  }
-      when 'x'             { self.get_int64   }
-      when 't'             { self.get_uint64  }
-      when 'd'             { self.get_double  }
-      when 's' | 'g'       { self.get_string  }
-      when 'o'             { self.getObjPath  }
-
-      default {
-        die "'{ $_ }' is an invalid type string!"
-      }
-    }
-  }
+  # cw: There are better alternatives, now. See .unpack
+  #
+  # method Hash ( :$raw = False, :$variant = False ) {
+  #   my $i = GVariantIter.new;
+  #   my $t = self.get_type_string;
+  #
+  #   die "'{ $t }' is not Hash compatible!"
+  #     unless $t ~~ /^ 'a' $<subtype>=[ '{s' (\w) '}' ] $/;
+  #
+  #   my ($subtype, $vt) = ($/<subtype>.Str, $vt.Str);
+  #
+  #   my \valueType = do given $vt {
+  #     when 'v'       { $typename = 'gvariant'; Pointer[GVariant] }
+  #     when 'b'       { $typename = 'uint32'  ; CArray[uint32]    }
+  #     when 'y'       { $typename = 'uint8'   ; CArray[uint8]     }
+  #     when 'n'       { $typename = 'int16'   ; CArray[int16]     }
+  #     when 'q'       { $typename = 'uint16'  ; CArray[uint16]    }
+  #     when 'i' | 'h' { $typename = 'int32'   ; CArray[int32]     }
+  #     when 'u'       { $typename = 'uint32'  ; CArray[uint32]    }
+  #     when 'x'       { $typename = 'int64'   ; CArray[int64]     }
+  #     when 't'       { $typename = 'uint64'  ; CArray[uint64]    }
+  #     when 'd'       { $typename = 'num64'   ; CArray[num64]     }
+  #     when 's' | 'g' { $typename = 'Str'     ; Str               }
+  #
+  #     default {
+  #       die "Unknown value type '{ $_ }'";
+  #     }
+  #   }
+  #
+  #   my ($k, $v, %h) = ( newCArray(Str), newCArray(valueType) );
+  #
+  #   g_variant_iter_init($i, self.GVariant);
+  #
+  #   my &s = ::("g_variant_hash_{ $typename }_loop");
+  #   while ( &s($i, $subtype, $k, $v) ) {
+  #     unless $raw {
+  #       $v = do given valueType {
+  #         when Pointer[GVariant] {
+  #           my $v1 = propReturnObject($v[0].deref, $raw, |self.getTypePair);
+  #           $v1 .= getValue;
+  #           $v1
+  #         }
+  #
+  #         when Str {
+  #           $v[0];
+  #         }
+  #
+  #         default {
+  #           $v[0][0]
+  #         }
+  #       }
+  #     }
+  #     %h{ $k[0] } = $v;
+  #   }
+  #   %h;
+  # }
+  #
+  # method getValue {
+  #   my $t = self.get_type_string;
+  #
+  #   # cw: Handle known patterns - a{s[a-z]} is a hash
+  #   return self.Hash  if $t ~~ / 'a{s' \w '}' /;
+  #   # cw: The first token set needs to use regex to pull nested expressions!
+  #   return self.Array if $t ~~ /'a(' .+? ')' | 'a'\w | '(a' \w ')' /;
+  #
+  #   do given $t {
+  #     when 'm'             { my $var = self.get_maybe;   $var.getValue }
+  #     when 'v'             { my $var = self.get_variant; $var.getValue }
+  #
+  #     when 'b'             { self.get_boolean }
+  #     when 'y'             { self.get_byte    }
+  #     when 'n'             { self.get_int16   }
+  #     when 'q'             { self.get_uint16  }
+  #     when 'i' | 'h'       { self.get_int32   }
+  #     when 'u'             { self.get_uint32  }
+  #     when 'x'             { self.get_int64   }
+  #     when 't'             { self.get_uint64  }
+  #     when 'd'             { self.get_double  }
+  #     when 's' | 'g'       { self.get_string  }
+  #     when 'o'             { self.getObjPath  }
+  #
+  #     default {
+  #       die "'{ $_ }' is an invalid type string!"
+  #     }
+  #   }
+  # }
 
   multi method isList {
     samewith( self.get-type-string );
@@ -1152,7 +1438,18 @@ class GLib::Variant {
     self.get_child_value(i);
   }
 
+  # Iterable
+  method iterator {
+    generate-iterator(
+      SUB { self.elems },
+
+      SUB { self.AT-POS(@*A.head) }
+    )
+  }
+
 }
+
+my $aa = 1;
 
 class GLib::Variant::Builder {
   has GVariantBuilder $!vb;
