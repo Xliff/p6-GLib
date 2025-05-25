@@ -23,6 +23,8 @@ Revision history for GLib
 
 0.0.8  2025-05-25T11:05:26-04:00
 
+0.0.8  2025-05-25T11:05:26-04:00
+
       - Fixes for ::VariantType
       - Major improvements for ::Variant, including .pack and .unpack, which were
         transcoded from gjs.
