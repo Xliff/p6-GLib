@@ -78,6 +78,6 @@ Revision history for GLib
 
 {{$NEXT}}
 
-0.0.9  2025-05-25T14:16:33-04:00
+0.0.10  2025-05-25T14:34:25-04:00
 
       - Fixes errors from 0.0.8 that were preventing install.
