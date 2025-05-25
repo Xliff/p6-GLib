@@ -10,8 +10,6 @@ Revision history for GLib
 0.0.6  2024-03-26T13:54:03-04:00
     - Point release with minor updates.
 
-{{$NEXT}}
-
 0.0.7  2024-05-13T10:59:37-04:00
     - Adds details for Linux Mint 'virginia'
     - Updated ::Raw::Types
@@ -22,3 +20,58 @@ Revision history for GLib
     - Removes use of .absolute on a Distribution::Resource in ::Raw::Distro
     - Prevents get_paramspec_types() from loading at INIT time due to a defect in ::Raw::Enums
     - Adds X::GLib::InvalidState to ::Raw::Exceptions
+
+{{$NEXT}}
+
+      - Fixes for ::VariantType
+      - Major improvements for ::Variant, including .pack and .unpack, which were
+        transcoded from gjs.
+      - Fixes GVariantType definition
+      - Adds .pairs for ::HashTable
+      - Removes the 'file_' prefix from most method names in ::FileUtils
+      - Init fixes for ::ByteArray and ::Bytes
+      - Adds GENERATE-NEED-STATEMENTS to ::Raw::Macros
+      - Fixes compunit name in ::Raw::String::Chunk
+      - Adds proper callbacks for ::Raw::Log
+      - Adds GLIB-OBJECT to ::Raw::Definitions
+      - Move .get_* routines form pseudo-attribute in ::Value.
+      - Remove debugging statement in ::Roles::TtpedBuffer
+      - Adds missing .getTypePair to the various classes in ::Array
+      - Fixes some type handling in valueToGValue in ::Value
+      - Minor update for "immutable value" issue in ::Roles::TypedBuffer
+      - Minor update for ::Roles::Signals::Generic
+      - Adds .sizeof to GLib::Roles::Pointers
+      - Adds GOBJECT() to assist in late binding in GLib::Roles::Object
+      - Minor updates for ::Raw::Debug
+      - Minor fix for returnGSList in ::GSList
+      - Minor fix for returnGList() in ::GList
+      - Adds .Buf and .Blob to ::Bytes with a minor fix for .get_data
+      - Adds connect-ulong to ::Roles::Signals::Generic
+      - Adds X::GLib::CArrayUnknownSize to ::Raw::Exceptions
+      - Adds .clear to ::Object::Supplyish
+      - Fixes .getClass in ::Roles::Object and ::Class::Object
+      - Adds GLib::String::Chunk with raw compunit and type declaration
+      - Adds subclassing test (with flappers)
+      - Adds Structure size test for GObjectClass
+      - Updated structure size test.
+      - Adds GObjectClass to structure size shared lib
+      - Adds GVariantType options for new constructors in ::Variant
+      - Adds parameter to GIdleId role in ::Source that accepts a closure for cancelling the timer
+      - Adds connect-intuint to ::Roles::Signals::Generic
+      - Adds .equals to ::Roles::Pointers
+      - Adds GLib::Roles::HashObject
+      - Changes return value of g_variant_get_type to Str in ::Raw::Variant
+      - Adds X::GLib::GError in ::Raw::Structs
+      - Exposes $?DISTRIBUTION object in ::Raw::Definitions
+      - Now accepting RAKU_GLIB_DEBUG environment variable and phasing out P6_GLIB_DEBUG in 
+        ::Raw::Debug
+      - More refinements to subclassing process. Still VERY *WIP*
+      - More additions to ::Object::Supplyish
+      - As before, but allows a user to register new GParamSpec sub types
+      - GLib::Roles::Object.getClass.list-properties now provides another vector for
+        listing properties. This mechanism will return typed subclasses of 
+        GLib::Object::ParamSpec with further information depending on the type of property.
+        (Used mostly by GStreamer but an important addition for Gnome Shell and future project)
+      - Adds change to set the precomp directory to ${HOME}/.raku
+      - Adds TYPE-TO-OBJECT function in ::Object::Type
+      - Changes required for setting the .set_property and .get_property methods for GObject
