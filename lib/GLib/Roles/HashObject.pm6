@@ -8,7 +8,7 @@ role GLib::Roles::HashObject {
     $n .= subst: / <after <:Ll>> (<:Lu>|<:digit>+) /, {'-' ~ $0.lc}, :g;
     return self{$n} if self{$n}:exists;
 
-    $n .= subst: / '-' /, '_', :g
+    $n .= subst( / '-' /, '_', :g );
     return self{$n} if self{$n}:exists;
 
     Nil
