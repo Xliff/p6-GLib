@@ -32,6 +32,10 @@ role AccessorMethod       is export { }
 role TypeManifest         is export { }
 role NotInManifest        is export { }
 
+role EnumEndingToken[$t = 1] {
+  method distinguished-by { $t }
+}
+
 role BoxedType[$type?] is export {
 
   method boxed-type {
@@ -83,6 +87,12 @@ role RangedAttribute[$R] is export {
 }
 
 role OverridedAttribute[%O] is export {
+}
+
+multi sub trait_mod:<is> ( Mu \c, Int() :$ending-token! )
+  is export
+{
+  c does EnumEndingToken[$ending-token];
 }
 
 multi sub trait_mod:<is> (Method:D \m, :a_property(:$a-property)! )
