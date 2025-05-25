@@ -12,8 +12,8 @@ use GLib::Raw::VariantType;
 class GLib::VariantType {
   has GVariantType $!vt is implementor handles<p>;
 
-  submethod BUILD (:$type) {
-    $!vt = $type;
+  submethod BUILD ( :$type ) {
+    $!vt = $_ with $type
   }
 
   method GLib::Raw::Definitions::GVariantType
@@ -30,8 +30,8 @@ class GLib::VariantType {
   }
 
   multi method new (
-    GVariantType() $element,
-    :$array is required
+    GVariantType()  $element,
+                   :$array    is required
   ) {
     self.new_array($element);
   }
@@ -42,9 +42,9 @@ class GLib::VariantType {
   }
 
   multi method new (
-    GVariantType() $key,
-    GVariantType() $value,
-    :dict_entry(:dict-entry(:$entry)) is required
+    GVariantType()  $key,
+    GVariantType()  $value,
+                   :dict_entry(:dict-entry(:$entry)) is required
   ) {
     self.new_dict_entry($key, $value);
   }
@@ -58,9 +58,9 @@ class GLib::VariantType {
 
   # yyy- Multi to take @!
   multi method new (
-    CArray[Pointer[GVariantType]] $items,
-    Int() $length,
-    :$tuple is required
+    CArray[Pointer[GVariantType]]  $items,
+    Int()                          $length,
+                                  :$tuple   is required
   ) {
     self.new_tuple($items, $length);
   }
@@ -76,8 +76,8 @@ class GLib::VariantType {
   }
 
   multi method new (
-    GVariantType() $element,
-    :$maybe is required
+    GVariantType()  $element,
+                   :$maybe is required
   ) {
     self.new_maybe($element);
   }
@@ -262,9 +262,9 @@ class GLib::VariantType {
   }
 
   method string_scan (
-    Str() $string,
-    Str() $limit,
-    CArray[Str] $endptr = CArray[Str].new
+    Str()       $string,
+    Str()       $limit,
+    CArray[Str] $endptr  = CArray[Str].new
   )
     is also<string-scan>
   {
@@ -287,9 +287,6 @@ class GLib::VariantType {
 multi sub infix:<eqv> (GVariantType $a, GVariantType $b) {
   g_variant_type_equal($a, $b);
 }
-multi sub infix:<eqv> (
-  GLib::VariantType $a,
-  GLib::VariantType $b
-) {
+multi sub infix:<eqv> (GLib::VariantType $a, GLib::VariantType $b) {
   $a.equal($b);
 }
