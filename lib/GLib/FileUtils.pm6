@@ -71,25 +71,25 @@ class GLib::FileUtils {
     $td;
   }
 
-  method file_error_from_errno (Int() $err_no) is also<file-error-from-errno> {
+  method error_from_errno (Int() $err_no) is also<error-from-errno> {
     my gint $e = $err_no;
     g_file_error_from_errno($e);
   }
 
-  method file_error_quark is also<file-error-quark> {
+  method error_quark is also<error-quark> {
     g_file_error_quark();
   }
 
-  proto method file_get_contents (|)
-    is also<file-get-contents>
+  proto method get_contents (|)
+    is also<get-contents>
   { * }
 
-  multi method file_get_contents (IO::Path $path) {
+  multi method get_contents (IO::Path $path) {
     my $rv = samewith($path.absolute, $, $, :all);
 
     $rv[0] ?? $rv[1] !! Nil;
   }
-  multi method file_get_contents (
+  multi method get_contents (
     Str()                   $filename,
     CArray[Pointer[GError]] $error    =  gerror,
     :$all = False
@@ -100,7 +100,7 @@ class GLib::FileUtils {
 
     $rv[0] ?? $rv[1] !! Nil;
   }
-  multi method file_get_contents (
+  multi method get_contents (
     Str()                   $filename,
     CArray[Str]             $contents,
                             $length    is rw,
@@ -117,12 +117,12 @@ class GLib::FileUtils {
     $all.not ?? $rv !! ( $rv, ppr($contents) );
   }
 
-  method file_open_tmp (
+  method open_tmp (
     Str()                   $tmpl,
     Str()                   $name_used,
     CArray[Pointer[GError]] $error      = gerror
   )
-    is also<file-open-tmp>
+    is also<open-tmp>
   {
     clear_error;
     my $fd = g_file_open_tmp($tmpl, $name_used, $error);
@@ -130,17 +130,17 @@ class GLib::FileUtils {
     $fd
   }
 
-  proto method file_read_link (|)
+  proto method read_link (|)
     is also<file-read-link>
   { * }
 
-  multi method file_read_link (
+  multi method read_link (
     IO::Path                $path,
     CArray[Pointer[GError]] $error = gerror
   ) {
     samewith($path.absolute, $error);
   }
-  multi method file_read_link (
+  multi method read_link (
     Str()                   $filename,
     CArray[Pointer[GError]] $error     = gerror
   ) {
@@ -150,11 +150,11 @@ class GLib::FileUtils {
     $l
   }
 
-  proto method file_set_contents (|)
-    is also<file-set-contents>
+  proto method set_contents (|)
+    is also<set-contents>
   { * }
 
-  multi method file_set_contents (
+  multi method set_contents (
     IO::Path                $path,
     Str()                   $contents,
     Int()                   $length    = -1,
@@ -162,7 +162,7 @@ class GLib::FileUtils {
   ) {
     samewith($path.absolute, $contents, $length, $error);
   }
-  multi method file_set_contents (
+  multi method set_contents (
     Str()                   $filename,
     Str()                   $contents,
     Int()                   $length    = -1,
@@ -176,14 +176,14 @@ class GLib::FileUtils {
     $rv;
   }
 
-  proto method file_test (|)
+  proto method test (|)
     is also<file-test>
   { * }
 
-  multi method file_test (IO::Path $path, Int() $test) {
+  multi method test (IO::Path $path, Int() $test) {
     samewith($path, $test);
   }
-  multi method file_test (Str() $filename, Int() $test) {
+  multi method test (Str() $filename, Int() $test) {
     my GFileTest $t = $test;
 
     so g_file_test($filename, $t);
@@ -233,19 +233,19 @@ class GLib::FileUtils {
     g_mkstemp_full($tmpl, $f, $m);
   }
 
-  method path_get_basename (Str() $file_name) is also<path-get-basename> {
+  method get_basename (Str() $file_name) is also<get-basename> {
     g_path_get_basename($file_name);
   }
 
-  method path_get_dirname (Str() $file_name) is also<path-get-dirname> {
+  method get_dirname (Str() $file_name) is also<get-dirname> {
     g_path_get_dirname($file_name);
   }
 
-  method path_is_absolute (Str() $file_name) is also<path-is-absolute> {
+  method is_absolute (Str() $file_name) is also<is-absolute> {
     so g_path_is_absolute($file_name);
   }
 
-  method path_skip_root (Str() $file_name) is also<path-skip-root> {
+  method skip_root (Str() $file_name) is also<skip-root> {
     g_path_skip_root($file_name);
   }
 
