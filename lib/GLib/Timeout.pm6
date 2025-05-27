@@ -125,4 +125,20 @@ class GLib::Timeout {
     GLib::Source.remove($tag);
   }
 
+  method idle_add (
+              &function,
+    gpointer  $data      = gpointer,
+    Str()    :$name      = Str,
+             :$priority  = G_PRIORITY_DEFAULT
+  )
+    is also<idle-add>
+  {
+    GLib::Source.idle_add_full(
+       $priority,
+       &function,
+       $data,
+      :$name
+    );
+  } 
+
 }
