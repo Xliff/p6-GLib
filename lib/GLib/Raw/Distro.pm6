@@ -19,6 +19,17 @@ my %glib-adjustments = do {
 
         latest => $lmlatest
       ).Hash,
+      Fedora => (
+        DEFAULTS => (
+          lib-append => '-2.0'
+        ),
+
+        42 => my $fedtest = (
+          version => v0
+        ).Hash,
+
+        latest => $fedtest
+      ).Hash,
       Ubuntu => (
         DEFAULTS => (
           lib-append => '-2.0'
