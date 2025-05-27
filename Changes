@@ -20,7 +20,7 @@ Revision history for GLib
     - Prevents get_paramspec_types() from loading at INIT time due to a defect in ::Raw::Enums
     - Adds X::GLib::InvalidState to ::Raw::Exceptions
 
-0.0.8
+0.0.10
 
       - Fixes for ::VariantType
       - Major improvements for ::Variant, including .pack and .unpack, which were
@@ -75,7 +75,9 @@ Revision history for GLib
       - Adds TYPE-TO-OBJECT function in ::Object::Type
       - Changes required for setting the .set_property and .get_property methods for GObject
 
-0.0.10  2025-05-25T14:34:25-04:00
+{{$NEXT}}
+
+0.0.11  2025-05-27T09:21:07-04:00
 
       - Updated ::Raw::Distro for Fedora 42
       - Adds LGPL license
