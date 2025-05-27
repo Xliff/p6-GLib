@@ -21,9 +21,7 @@ Revision history for GLib
     - Prevents get_paramspec_types() from loading at INIT time due to a defect in ::Raw::Enums
     - Adds X::GLib::InvalidState to ::Raw::Exceptions
 
-0.0.8  2025-05-25T11:05:26-04:00
-
-0.0.8  2025-05-25T11:05:26-04:00
+0.0.8
 
       - Fixes for ::VariantType
       - Major improvements for ::Variant, including .pack and .unpack, which were
@@ -78,8 +76,12 @@ Revision history for GLib
       - Adds TYPE-TO-OBJECT function in ::Object::Type
       - Changes required for setting the .set_property and .get_property methods for GObject
 
-{{$NEXT}}
-
 0.0.10  2025-05-25T14:34:25-04:00
 
-      - Fixes errors from 0.0.8 that were preventing install.
+      - Updated ::Raw::Distro for Fedora 42
+      - Adds LGPL license
+      - Adds .idle_add (with alias) to GLib::Timeout, as that's the more logical place to find it. It is a stub to GLib::Source .idle_add_full
+      - Fixes crash resulting in a double-free by raku and mimalloc in ::Raw::Variant and ::Variant
+      - Fixes errors in ::Roles::HashObject
+      - Remove some experimental routines from ::Raw::Macros that are preventing the distro from installing
+

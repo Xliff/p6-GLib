@@ -570,8 +570,8 @@ class GLib::Variant {
   ) {
     say "Type: { $type.gist }";
 
-    my $ep = CArray[Str].new;
-    $ep[0] = Str;
+    # my $ep = CArray[Str].new;
+    # $ep[0] = Str;
 
     say "PARSE";
 
@@ -588,24 +588,25 @@ class GLib::Variant {
 
     clear_error;
     # try using explicitly-manage on $text?
-    my $v = g_variant_parse(
+    my $v = g_variant_parse_ptr(
       $type // GVariantType,
       $t,
       $pl,
-      $ep,
+      gpointer,
       $error
     );
     set_error($error);
 
     # cw: -XXX- Raku will always try to decode as UTF8 if using ppr()
     #     ...please circle back!
-    $endptr = $ep;
+    # $endptr = $ep;
 
     say "V: { $v }";
 
     my $retVal = propReturnObject($v, $raw, |GLib::Variant.getTypePair);
 
-    $all.not ?? $retVal !! ($retVal, $endptr);
+    #$all.not ?? $retVal !! ($retVal, $endptr);
+    $retVal;
   }
 
   method byteswap {

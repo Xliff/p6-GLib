@@ -657,6 +657,19 @@ sub g_variant_parse (
   is export
 { * }
 
+sub g_variant_parse_ptr (
+  GVariantType            $type,
+  CArray[uint8]           $text,
+  CArray[uint8]           $limit,
+  gpointer                $endptr,
+  CArray[Pointer[GError]] $error
+)
+  returns GVariant
+  is native(glib)
+  is symbol('g_variant_parse')
+  is export
+{ * }
+
 sub g_variant_parse_error_print_context (
   GError $error,  # NOT **GError!
   Str    $source_str
