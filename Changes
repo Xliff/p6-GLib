@@ -1,6 +1,5 @@
 Revision history for GLib
 
-
 0.0.4  2023-11-22T17:12:59-05:00
     - Initial version
 
@@ -63,13 +62,13 @@ Revision history for GLib
       - Changes return value of g_variant_get_type to Str in ::Raw::Variant
       - Adds X::GLib::GError in ::Raw::Structs
       - Exposes $?DISTRIBUTION object in ::Raw::Definitions
-      - Now accepting RAKU_GLIB_DEBUG environment variable and phasing out P6_GLIB_DEBUG in 
+      - Now accepting RAKU_GLIB_DEBUG environment variable and phasing out P6_GLIB_DEBUG in
         ::Raw::Debug
       - More refinements to subclassing process. Still VERY *WIP*
       - More additions to ::Object::Supplyish
       - As before, but allows a user to register new GParamSpec sub types
       - GLib::Roles::Object.getClass.list-properties now provides another vector for
-        listing properties. This mechanism will return typed subclasses of 
+        listing properties. This mechanism will return typed subclasses of
         GLib::Object::ParamSpec with further information depending on the type of property.
         (Used mostly by GStreamer but an important addition for Gnome Shell and future project)
       - Adds change to set the precomp directory to ${HOME}/.raku
