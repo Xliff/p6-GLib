@@ -128,6 +128,9 @@ multi sub version-by-distro ($prefix is copy, :$linux is required) is export {
   my ($distro, $codename) =
     ( qqx{$lr -d -s}.split(/\s/)[0], qqx{$lr -c -s} )».chomp;
 
+  $distro .= subst('"', '', :g);
+  $codename = qqx{$lr -r -s}.chomp if $codename.not || $codename.lc eq "n/a";
+
   say "DISTRO: $distro\nCODENAME: $codename" if $DEBUG;
 
   say 'LIBRARY SETTING: ' ~
