@@ -532,28 +532,24 @@ class GLib::Variant {
     GLib::Variant:U:
 
     Str()  $text,
-          :$all = False,
           :$raw = False
   ) {
-    samewith(GVariantType, $text, Str, $, :$all);
+    samewith(GVariantType, $text, Str, :$raw);
   }
   multi method parse (
     GLib::Variant:U:
 
-    Str()                    $type,
-    Str()                    $text,
-    Str()                    $limit = Str,
-    CArray[Pointer[GError]]  $error = gerror,
-                            :$all   = False,
-                            :$raw   = False;
+     $type,
+     $text,
+     $limit = Str,
+     $error = gerror,
+    :$raw   = False
   ) {
     samewith(
        GLib::VariantType.check($type),
        $text,
        $limit,
-       $,
        $error,
-      :$all,
       :$raw
     );
   }
@@ -563,17 +559,15 @@ class GLib::Variant {
     GVariantType()           $type,
     Str()                    $text,
     Str()                    $limit,
-                             $endptr is rw,
     CArray[Pointer[GError]]  $error         = gerror,
-                            :$all           = False,
                             :$raw           = False
   ) {
-    say "Type: { $type.gist }";
+    #say "Type: { $type.gist }";
 
     # my $ep = CArray[Str].new;
     # $ep[0] = Str;
 
-    say "PARSE";
+    #say "PARSE";
 
     # my $pt = CArray[uint8].new( $text.encode );
     # $pt[$text.chars] = 0;
@@ -582,16 +576,16 @@ class GLib::Variant {
                   !! CArray[uint8].new;
     $t[ ($text // '' ).chars ] = 0;
 
-    my $pl = $limit ?? CArray[uint8].new( $limit.encode )
-                    !! CArray[uint8].new;;
-    $pl[ ($limit // '').chars ] = 0;
+    # my $pl = $limit ?? CArray[uint8].new( $limit.encode )
+    #                 !! CArray[uint8].new;;
+    # $pl[ ($limit // '').chars ] = 0;
 
     clear_error;
     # try using explicitly-manage on $text?
     my $v = g_variant_parse_ptr(
       $type // GVariantType,
       $t,
-      $pl,
+      gpointer,
       gpointer,
       $error
     );
@@ -601,12 +595,9 @@ class GLib::Variant {
     #     ...please circle back!
     # $endptr = $ep;
 
-    say "V: { $v }";
+    # say "V: { $v }";
 
-    my $retVal = propReturnObject($v, $raw, |GLib::Variant.getTypePair);
-
-    #$all.not ?? $retVal !! ($retVal, $endptr);
-    $retVal;
+    propReturnObject($v, $raw, |GLib::Variant.getTypePair)
   }
 
   method byteswap {

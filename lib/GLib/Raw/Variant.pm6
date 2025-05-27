@@ -660,7 +660,8 @@ sub g_variant_parse (
 sub g_variant_parse_ptr (
   GVariantType            $type,
   CArray[uint8]           $text,
-  CArray[uint8]           $limit,
+  # cw: DO NOT USE THE NEXT TWO PARAMETERS. Leave them gpointer!
+  gpointer                $limit,
   gpointer                $endptr,
   CArray[Pointer[GError]] $error
 )
