@@ -59,10 +59,23 @@ class GLib::Array {
   { * }
 
   # $ref is false due to warning when wrapping GPtrArrays
-  multi method new (GArray $array, :$typed, :$ref = False) {
+  multi method new (
+    GArray  $array,
+           :$typed,
+           :$signed,
+           :$double,
+           :$direct,
+           :$ref     = False
+  ) {
     return Nil unless $array;
 
-    my $o = self.bless( :$array, :$typed );
+    my $o = self.bless(
+      :$array,
+      :$typed,
+      :$signed,
+      :$double,
+      :$direct
+    );
     $o.upref if $ref;
     $o;
   }
